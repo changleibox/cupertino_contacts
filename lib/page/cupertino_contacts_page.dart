@@ -109,6 +109,7 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
                   minSize: 0,
                   onPressed: () {},
                 ),
+                border: null,
               ),
               SliverPersistentHeader(
                 pinned: true,

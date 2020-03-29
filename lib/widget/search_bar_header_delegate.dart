@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
@@ -27,45 +29,53 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      height: height,
-      padding: EdgeInsets.only(
-        left: 16,
-        top: 4,
-        right: 16,
-        bottom: 16,
-      ),
-      decoration: BoxDecoration(
-        color: CupertinoTheme.of(context).barBackgroundColor,
-        border: _kDefaultNavBarBorder,
-      ),
-      child: CupertinoTextField(
-        controller: queryController,
-        placeholder: '搜索',
-        onChanged: onChanged,
-        decoration: BoxDecoration(
-          color: CupertinoDynamicColor.withBrightness(
-            color: CupertinoColors.white,
-            darkColor: CupertinoColors.black,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          height: height,
+          padding: EdgeInsets.only(
+            left: 16,
+            top: 4,
+            right: 16,
+            bottom: 16,
           ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        prefix: Padding(
-          padding: const EdgeInsetsDirectional.only(
-            start: 6,
-          ),
-          child: Icon(
-            CupertinoIcons.search,
+          decoration: BoxDecoration(
             color: CupertinoDynamicColor.resolve(
-              CupertinoColors.placeholderText,
+              CupertinoTheme.of(context).barBackgroundColor,
               context,
             ),
-            size: 22,
+            border: _kDefaultNavBarBorder,
           ),
-        ),
-        clearButtonMode: OverlayVisibilityMode.editing,
-        padding: EdgeInsets.symmetric(
-          horizontal: 4,
+          child: CupertinoTextField(
+            controller: queryController,
+            placeholder: '搜索',
+            onChanged: onChanged,
+            decoration: BoxDecoration(
+              color: CupertinoDynamicColor.withBrightness(
+                color: CupertinoColors.tertiarySystemFill,
+                darkColor: CupertinoColors.black,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            prefix: Padding(
+              padding: const EdgeInsetsDirectional.only(
+                start: 6,
+              ),
+              child: Icon(
+                CupertinoIcons.search,
+                color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.placeholderText,
+                  context,
+                ),
+                size: 22,
+              ),
+            ),
+            clearButtonMode: OverlayVisibilityMode.editing,
+            padding: EdgeInsets.symmetric(
+              horizontal: 4,
+            ),
+          ),
         ),
       ),
     );
