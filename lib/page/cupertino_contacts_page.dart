@@ -30,6 +30,34 @@ class CupertinoContactsPage extends StatefulWidget {
 class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> {
   _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
 
+  List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
+    return [
+      CupertinoSliverNavigationBar(
+        largeTitle: Text('通讯录'),
+        leading: CupertinoButton(
+          child: Text('群组'),
+          padding: EdgeInsets.zero,
+          minSize: 0,
+          onPressed: () {},
+        ),
+        trailing: CupertinoButton(
+          child: Text('添加'),
+          padding: EdgeInsets.zero,
+          minSize: 0,
+          onPressed: () {},
+        ),
+        border: null,
+      ),
+      SliverPersistentHeader(
+        pinned: true,
+        delegate: SearchBarHeaderDelegate(
+          height: _kSearchBarHeight,
+          onChanged: presenter.onQuery,
+        ),
+      ),
+    ];
+  }
+
   Widget _buildBody() {
     if (presenter.isLoading && presenter.isEmpty) {
       return Center(
@@ -38,6 +66,8 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         ),
       );
     }
+    var textTheme = CupertinoTheme.of(context).textTheme;
+    var padding = MediaQuery.of(context).padding;
     return FastIndexContainer(
       indexs: presenter.indexs,
       itemKeys: presenter.contactKeys,
@@ -51,7 +81,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
               child: Center(
                 child: Text(
                   '暂无联系人',
-                  style: CupertinoTheme.of(context).textTheme.textStyle,
+                  style: textTheme.textStyle,
                 ),
               ),
             )
@@ -67,9 +97,9 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
                 ),
               ),
           SliverPadding(
-            padding: MediaQuery.of(context).padding.copyWith(
-                  top: 0.0,
-                ),
+            padding: padding.copyWith(
+              top: 0.0,
+            ),
           ),
         ],
       ),
@@ -85,33 +115,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           pinnedHeaderSliverHeightBuilder: (context) {
             return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
           },
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              CupertinoSliverNavigationBar(
-                largeTitle: Text('通讯录'),
-                leading: CupertinoButton(
-                  child: Text('群组'),
-                  padding: EdgeInsets.zero,
-                  minSize: 0,
-                  onPressed: () {},
-                ),
-                trailing: CupertinoButton(
-                  child: Text('添加'),
-                  padding: EdgeInsets.zero,
-                  minSize: 0,
-                  onPressed: () {},
-                ),
-                border: null,
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: SearchBarHeaderDelegate(
-                  height: _kSearchBarHeight,
-                  onChanged: presenter.onQuery,
-                ),
-              ),
-            ];
-          },
+          headerSliverBuilder: _buildHeaderSliver,
           body: _buildBody(),
         ),
       ),
