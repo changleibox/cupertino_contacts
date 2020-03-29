@@ -29,7 +29,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       height: indexHeight,
       alignment: Alignment.centerLeft,
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemGroupedBackground,
+        labelColor,
         context,
       ),
       padding: EdgeInsets.symmetric(
@@ -101,7 +101,10 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   },
                   separatorBuilder: (context, index) {
                     return Container(
-                      color: separatorColor,
+                      color: CupertinoDynamicColor.resolve(
+                        separatorColor,
+                        context,
+                      ),
                       height: dividerHeight,
                       margin: EdgeInsets.symmetric(
                         horizontal: 10,

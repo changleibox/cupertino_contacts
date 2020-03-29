@@ -4,6 +4,7 @@
 
 import 'dart:ui';
 
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:flutter/cupertino.dart';
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
@@ -54,11 +55,18 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
             placeholder: '搜索',
             onChanged: onChanged,
             decoration: BoxDecoration(
-              color: CupertinoDynamicColor.withBrightness(
-                color: CupertinoColors.tertiarySystemFill,
-                darkColor: CupertinoColors.black,
+              color: CupertinoDynamicColor.resolve(
+                systemFill,
+                context,
               ),
               borderRadius: BorderRadius.circular(8),
+            ),
+            placeholderStyle: TextStyle(
+              fontSize: 17,
+              color: CupertinoDynamicColor.resolve(
+                placeholderColor,
+                context,
+              ),
             ),
             prefix: Padding(
               padding: const EdgeInsetsDirectional.only(
@@ -67,7 +75,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: Icon(
                 CupertinoIcons.search,
                 color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.placeholderText,
+                  placeholderColor,
                   context,
                 ),
                 size: 22,
