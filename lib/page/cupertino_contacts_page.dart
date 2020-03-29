@@ -84,6 +84,52 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
     return firstLetter;
   }
 
+  Widget _buildBody() {
+    if (_isLoading && _contactsMap.isEmpty) {
+      return Center(
+        child: CupertinoActivityIndicator(
+          radius: 14,
+        ),
+      );
+    }
+    return FastIndexContainer(
+      indexs: _contactsMap.keys.toList(),
+      itemKeys: _contactKeys,
+      child: CustomScrollView(
+        slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: _requestContacts,
+          ),
+          if (_contactsMap.isEmpty)
+            SliverFillRemaining(
+              child: Center(
+                child: Text(
+                  '暂无联系人',
+                  style: CupertinoTheme.of(context).textTheme.textStyle,
+                ),
+              ),
+            )
+          else
+            for (int index = 0; index < _contactsMap.length; index++)
+              SliverPersistentHeader(
+                key: _contactKeys[index],
+                delegate: ContactPersistentHeaderDelegate(
+                  contactEntry: _contactsMap.entries.elementAt(index),
+                  dividerHeight: 0.3,
+                  indexHeight: 26,
+                  itemHeight: 85,
+                ),
+              ),
+          SliverPadding(
+            padding: MediaQuery.of(context).padding.copyWith(
+                  top: 0.0,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -119,36 +165,7 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
               ),
             ];
           },
-          body: _isLoading
-              ? CupertinoActivityIndicator(
-                  radius: 20,
-                )
-              : FastIndexContainer(
-                  indexs: _contactsMap.keys.toList(),
-                  itemKeys: _contactKeys,
-                  child: CustomScrollView(
-                    slivers: [
-                      CupertinoSliverRefreshControl(
-                        onRefresh: _requestContacts,
-                      ),
-                      for (int index = 0; index < _contactsMap.length; index++)
-                        SliverPersistentHeader(
-                          key: _contactKeys[index],
-                          delegate: ContactPersistentHeaderDelegate(
-                            contactEntry: _contactsMap.entries.elementAt(index),
-                            dividerHeight: 0.3,
-                            indexHeight: 26,
-                            itemHeight: 85,
-                          ),
-                        ),
-                      SliverPadding(
-                        padding: MediaQuery.of(context).padding.copyWith(
-                              top: 0.0,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
+          body: _buildBody(),
         ),
       ),
     );
