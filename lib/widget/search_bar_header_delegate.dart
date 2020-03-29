@@ -61,6 +61,9 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               borderRadius: BorderRadius.circular(8),
             ),
+            style: TextStyle(
+              fontSize: 17,
+            ),
             placeholderStyle: TextStyle(
               fontSize: 17,
               color: CupertinoDynamicColor.resolve(
