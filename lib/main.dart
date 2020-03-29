@@ -13,9 +13,12 @@ class CupertinoContactsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
     return CupertinoApp(
       title: '通讯录',
-      theme: CupertinoTheme.of(context),
+      theme: themeData.copyWith(
+        scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
+      ),
       home: CupertinoContactsPage(),
     );
   }
