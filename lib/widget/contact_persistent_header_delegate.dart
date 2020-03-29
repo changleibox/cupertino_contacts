@@ -4,6 +4,7 @@
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_item_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,9 +95,17 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   itemCount: contacts.length,
                   itemBuilder: (context, index) {
                     final contact = contacts[index];
-                    return ContactItemWidget(
-                      contact: contact,
-                      height: itemHeight,
+                    return CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      minSize: 0,
+                      borderRadius: BorderRadius.zero,
+                      child: ContactItemWidget(
+                        contact: contact,
+                        height: itemHeight,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, RouteProvider.contactDetail);
+                      },
                     );
                   },
                   separatorBuilder: (context, index) {

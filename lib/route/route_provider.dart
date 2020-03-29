@@ -2,7 +2,11 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/page/add_contact_page.dart';
+import 'package:cupertinocontacts/page/contact_detail_page.dart';
+import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/route/dialog_route.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,9 +17,17 @@ class RouteProvider {
   RouteProvider._();
 
   static const String home = Navigator.defaultRouteName;
+  static const String addContact = '/addContact';
+  static const String editContact = '/editContact';
+  static const String contactDetail = '/contactDetail';
+  static const String contactGroup = '/contactGroup';
 
   static Map<String, WidgetBuilder> routes = {
     home: (context) => CupertinoContactsPage(),
+    addContact: (context) => AddContactPage(),
+    editContact: (context) => EditContactPage(),
+    contactDetail: (context) => ContactDetailPage(),
+    contactGroup: (context) => ContactGroupPage(),
   };
 
   static RouteFactory buildGenerateRoute(BuildContext context) {

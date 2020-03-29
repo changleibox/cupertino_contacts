@@ -4,6 +4,7 @@
 
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
@@ -42,14 +43,20 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         leading: CupertinoButton(
           child: Text('群组'),
           padding: EdgeInsets.zero,
+          borderRadius: BorderRadius.zero,
           minSize: 0,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, RouteProvider.contactGroup);
+          },
         ),
         trailing: CupertinoButton(
           child: Text('添加'),
           padding: EdgeInsets.zero,
+          borderRadius: BorderRadius.zero,
           minSize: 0,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, RouteProvider.addContact);
+          },
         ),
         border: null,
         backgroundColor: headerColor,
