@@ -38,7 +38,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         index,
         style: TextStyle(
           fontSize: 17,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
           color: CupertinoDynamicColor.resolve(
             CupertinoColors.label,
             context,
@@ -69,39 +69,43 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           child: Align(
             alignment: AlignmentDirectional(0.0, 1.0),
             heightFactor: 1.0 - (shrinkOffset / _contentHeight).clamp(0.0, 1.0),
-            child: WidgetGroup.spacing(
-              alignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              direction: Axis.vertical,
-              children: contacts.map((contact) {
-                return Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
-                  decoration: BoxDecoration(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: dividerHeight,
                     color: CupertinoDynamicColor.resolve(
-                      CupertinoTheme.of(context).barBackgroundColor,
+                      CupertinoColors.separator,
                       context,
                     ),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.separator,
-                          context,
-                        ),
-                        width: dividerHeight,
-                      ),
-                    ),
                   ),
-                  child: SizedBox(
+                ),
+              ),
+              child: WidgetGroup.separated(
+                alignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                direction: Axis.vertical,
+                itemCount: contacts.length,
+                itemBuilder: (context, index) {
+                  final contact = contacts[index];
+                  return ContactItemWidget(
+                    contact: contact,
                     height: itemHeight,
-                    child: ContactItemWidget(
-                      contact: contact,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Container(
+                    color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.separator,
+                      context,
                     ),
-                  ),
-                );
-              }).toList(),
+                    height: dividerHeight,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
