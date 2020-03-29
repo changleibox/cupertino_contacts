@@ -2,23 +2,23 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:collection';
-
-import 'package:contacts_service/contacts_service.dart';
+import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
+import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:lpinyin/lpinyin.dart';
 
 /// Created by box on 2020/3/29.
 ///
 /// iOS风格联系人页面
 const double _kSearchBarHeight = 56.0;
 const double _kNavBarPersistentHeight = 44.0;
-const String _kOctothorpe = '#';
+const double _kIndexHeight = 26.0;
+const double _kDividerSize = 0.3;
+const double _kItemHeight = 85.0;
 
 class CupertinoContactsPage extends StatefulWidget {
   const CupertinoContactsPage({Key key}) : super(key: key);
@@ -27,72 +27,11 @@ class CupertinoContactsPage extends StatefulWidget {
   _CupertinoContactsPageState createState() => _CupertinoContactsPageState();
 }
 
-class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
-  bool _isLoading = false;
-
-  final _contactsMap = LinkedHashMap<String, List<Contact>>();
-  final _contactKeys = List<GlobalKey>();
-
-  @override
-  void initState() {
-    _requestContacts();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<void> _requestContacts() async {
-    _isLoading = true;
-    await ContactsService.getContacts(query: null, orderByGivenName: false).then((contacts) {
-      final contactsMap = Map<String, List<Contact>>();
-      for (var contact in contacts) {
-        var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
-        var contacts = contactsMap[firstLetter];
-        if (contacts == null) {
-          contacts = List<Contact>();
-        }
-        contacts.add(contact);
-        contactsMap[firstLetter] = contacts;
-      }
-      var entries = List.of(contactsMap.entries);
-      entries.sort((a, b) {
-        var key1 = a.key;
-        var key2 = b.key;
-        if (key1 == _kOctothorpe || key2 == _kOctothorpe) {
-          return -1;
-        }
-        return key1.compareTo(key2);
-      });
-
-      _contactsMap.clear();
-      _contactsMap.addEntries(entries);
-
-      _contactKeys.clear();
-      _contactKeys.addAll(List.generate(contactsMap.length, (index) => GlobalKey()));
-    }).whenComplete(() {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
-
-  _analysisFirstLetter(String name) {
-    String firstLetter = _kOctothorpe;
-    if (name != null && name.isNotEmpty) {
-      final upperCase = PinyinHelper.getShortPinyin(name)?.substring(0, 1)?.toUpperCase();
-      firstLetter = upperCase == null || upperCase.isEmpty || !RegExp('[A-Z]').hasMatch(upperCase) ? _kOctothorpe : upperCase;
-    }
-    return firstLetter;
-  }
+class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> {
+  _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
 
   Widget _buildBody() {
-    if (_isLoading && _contactsMap.isEmpty) {
+    if (presenter.isLoading && presenter.isEmpty) {
       return Center(
         child: CupertinoActivityIndicator(
           radius: 14,
@@ -100,14 +39,14 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
       );
     }
     return FastIndexContainer(
-      indexs: _contactsMap.keys.toList(),
-      itemKeys: _contactKeys,
+      indexs: presenter.indexs,
+      itemKeys: presenter.contactKeys,
       child: CustomScrollView(
         slivers: [
           CupertinoSliverRefreshControl(
-            onRefresh: _requestContacts,
+            onRefresh: presenter.onRefresh,
           ),
-          if (_contactsMap.isEmpty)
+          if (presenter.isEmpty)
             SliverFillRemaining(
               child: Center(
                 child: Text(
@@ -117,14 +56,14 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
               ),
             )
           else
-            for (int index = 0; index < _contactsMap.length; index++)
+            for (int index = 0; index < presenter.count; index++)
               SliverPersistentHeader(
-                key: _contactKeys[index],
+                key: presenter.contactKeys[index],
                 delegate: ContactPersistentHeaderDelegate(
-                  contactEntry: _contactsMap.entries.elementAt(index),
-                  dividerHeight: 0.3,
-                  indexHeight: 26,
-                  itemHeight: 85,
+                  contactEntry: presenter.contactsMap.entries.elementAt(index),
+                  dividerHeight: _kDividerSize,
+                  indexHeight: _kIndexHeight,
+                  itemHeight: _kItemHeight,
                 ),
               ),
           SliverPadding(
@@ -138,7 +77,7 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
       child: DragDismissKeyboardContainer(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -168,6 +107,7 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
                 pinned: true,
                 delegate: SearchBarHeaderDelegate(
                   height: _kSearchBarHeight,
+                  onChanged: presenter.onQuery,
                 ),
               ),
             ];
