@@ -18,6 +18,7 @@ import 'package:lpinyin/lpinyin.dart';
 /// iOS风格联系人页面
 const double _kSearchBarHeight = 56.0;
 const double _kNavBarPersistentHeight = 44.0;
+const String _kOctothorpe = '#';
 
 class CupertinoContactsPage extends StatefulWidget {
   const CupertinoContactsPage({Key key}) : super(key: key);
@@ -45,8 +46,8 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
 
   Future<void> _requestContacts() async {
     _isLoading = true;
-    await ContactsService.getContacts(query: null, orderByGivenName: true).then((contacts) {
-      final contactsMap = LinkedHashMap<String, List<Contact>>();
+    await ContactsService.getContacts(query: null, orderByGivenName: false).then((contacts) {
+      final contactsMap = Map<String, List<Contact>>();
       for (var contact in contacts) {
         var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
         var contacts = contactsMap[firstLetter];
@@ -56,9 +57,15 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
         contacts.add(contact);
         contactsMap[firstLetter] = contacts;
       }
-      var entries = contactsMap.entries.toList();
-      entries.sort((a, b) => a.key.compareTo(b.key));
-      contactsMap.entries.toList().sort((a, b) => a.key.compareTo(b.key));
+      var entries = List.of(contactsMap.entries);
+      entries.sort((a, b) {
+        var key1 = a.key;
+        var key2 = b.key;
+        if (key1 == _kOctothorpe || key2 == _kOctothorpe) {
+          return -1;
+        }
+        return key1.compareTo(key2);
+      });
 
       _contactsMap.clear();
       _contactsMap.addEntries(entries);
@@ -76,10 +83,10 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
   }
 
   _analysisFirstLetter(String name) {
-    String firstLetter = '#';
+    String firstLetter = _kOctothorpe;
     if (name != null && name.isNotEmpty) {
       final upperCase = PinyinHelper.getShortPinyin(name)?.substring(0, 1)?.toUpperCase();
-      firstLetter = upperCase == null || upperCase.isEmpty || !RegExp('[A-Z]').hasMatch(upperCase) ? '#' : upperCase;
+      firstLetter = upperCase == null || upperCase.isEmpty || !RegExp('[A-Z]').hasMatch(upperCase) ? _kOctothorpe : upperCase;
     }
     return firstLetter;
   }
