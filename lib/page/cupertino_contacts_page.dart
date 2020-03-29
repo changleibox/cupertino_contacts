@@ -30,6 +30,10 @@ class CupertinoContactsPage extends StatefulWidget {
 class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> {
   _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
 
+  double _buildPinnedHeaderSliverHeight(BuildContext context) {
+    return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
+  }
+
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     return [
       CupertinoSliverNavigationBar(
@@ -112,9 +116,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       child: DragDismissKeyboardContainer(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: SupportNestedScrollView(
-          pinnedHeaderSliverHeightBuilder: (context) {
-            return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
-          },
+          pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
           headerSliverBuilder: _buildHeaderSliver,
           body: _buildBody(),
         ),
