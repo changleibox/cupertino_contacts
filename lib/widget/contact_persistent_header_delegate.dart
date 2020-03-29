@@ -81,7 +81,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   ),
                   decoration: BoxDecoration(
                     color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemGroupedBackground,
+                      CupertinoTheme.of(context).barBackgroundColor,
                       context,
                     ),
                     border: Border(
