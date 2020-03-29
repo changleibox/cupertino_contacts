@@ -49,7 +49,7 @@ const Color placeholderColor = CupertinoDynamicColor(
 );
 const CupertinoDynamicColor systemFill = CupertinoDynamicColor(
   debugLabel: 'systemFill',
-  color: Color.fromARGB(255, 229, 229, 229),
+  color: Color.fromARGB(255, 239, 239, 240),
   darkColor: Color.fromARGB(255, 28, 28, 31),
   highContrastColor: Color.fromARGB(51, 118, 118, 128),
   darkHighContrastColor: Color.fromARGB(81, 118, 118, 128),
