@@ -125,26 +125,27 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
               : FastIndexContainer(
                   indexs: _contactsMap.keys.toList(),
                   itemKeys: _contactKeys,
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop: true,
-                    child: CustomScrollView(
-                      slivers: [
-                        CupertinoSliverRefreshControl(
-                          onRefresh: _requestContacts,
-                        ),
-                        for (int index = 0; index < _contactsMap.length; index++)
-                          SliverPersistentHeader(
-                            key: _contactKeys[index],
-                            delegate: ContactPersistentHeaderDelegate(
-                              contactEntry: _contactsMap.entries.elementAt(index),
-                              dividerHeight: 0.5,
-                              indexHeight: 26,
-                              itemHeight: 85,
-                            ),
+                  child: CustomScrollView(
+                    slivers: [
+                      CupertinoSliverRefreshControl(
+                        onRefresh: _requestContacts,
+                      ),
+                      for (int index = 0; index < _contactsMap.length; index++)
+                        SliverPersistentHeader(
+                          key: _contactKeys[index],
+                          delegate: ContactPersistentHeaderDelegate(
+                            contactEntry: _contactsMap.entries.elementAt(index),
+                            dividerHeight: 0.5,
+                            indexHeight: 26,
+                            itemHeight: 85,
                           ),
-                      ],
-                    ),
+                        ),
+                      SliverPadding(
+                        padding: MediaQuery.of(context).padding.copyWith(
+                              top: 0.0,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
         ),
