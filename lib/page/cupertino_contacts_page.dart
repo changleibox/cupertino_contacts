@@ -136,7 +136,7 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
                           key: _contactKeys[index],
                           delegate: ContactPersistentHeaderDelegate(
                             contactEntry: _contactsMap.entries.elementAt(index),
-                            dividerHeight: 0.5,
+                            dividerHeight: 0.3,
                             indexHeight: 26,
                             itemHeight: 85,
                           ),
