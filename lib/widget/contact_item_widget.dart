@@ -42,7 +42,7 @@ class ContactItemWidget extends StatelessWidget {
               Text(
                 contact.displayName ?? '',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                   color: CupertinoDynamicColor.resolve(
                     CupertinoColors.label,
                     context,

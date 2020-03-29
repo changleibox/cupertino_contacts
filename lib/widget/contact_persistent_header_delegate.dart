@@ -37,7 +37,8 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       child: Text(
         index,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 17,
+          fontWeight: FontWeight.w500,
           color: CupertinoDynamicColor.resolve(
             CupertinoColors.label,
             context,
