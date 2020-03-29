@@ -6,6 +6,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cupertinocontacts/resource/assets.dart';
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/animated_fade_in.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -46,7 +47,7 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
           shape: CircleBorder(
             side: BorderSide(
               color: CupertinoDynamicColor.resolve(
-                CupertinoColors.separator,
+                separatorColor,
                 context,
               ),
             ),

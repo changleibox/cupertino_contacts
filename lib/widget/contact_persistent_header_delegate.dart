@@ -3,6 +3,7 @@
  */
 
 import 'package:contacts_service/contacts_service.dart';
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_item_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,7 +59,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       direction: Axis.vertical,
       divider: Container(
         color: CupertinoDynamicColor.resolve(
-          CupertinoColors.separator,
+          separatorColor,
           context,
         ),
         height: dividerHeight,
@@ -75,7 +76,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   bottom: BorderSide(
                     width: dividerHeight,
                     color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.separator,
+                      separatorColor,
                       context,
                     ),
                   ),
@@ -83,7 +84,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               child: Container(
                 color: CupertinoDynamicColor.resolve(
-                  CupertinoTheme.of(context).barBackgroundColor,
+                  headerColor,
                   context,
                 ),
                 child: WidgetGroup.separated(
@@ -100,10 +101,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   },
                   separatorBuilder: (context, index) {
                     return Container(
-                      color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.separator,
-                        context,
-                      ),
+                      color: separatorColor,
                       height: dividerHeight,
                       margin: EdgeInsets.symmetric(
                         horizontal: 10,

@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
@@ -17,7 +18,7 @@ import 'package:flutter/cupertino.dart';
 const double _kSearchBarHeight = 56.0;
 const double _kNavBarPersistentHeight = 44.0;
 const double _kIndexHeight = 26.0;
-const double _kDividerSize = 0.3;
+const double _kDividerSize = 0.5;
 const double _kItemHeight = 85.0;
 
 class CupertinoContactsPage extends StatefulWidget {
@@ -51,12 +52,14 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           onPressed: () {},
         ),
         border: null,
+        backgroundColor: headerColor,
       ),
       SliverPersistentHeader(
         pinned: true,
         delegate: SearchBarHeaderDelegate(
           height: _kSearchBarHeight,
           onChanged: presenter.onQuery,
+          backgroundColor: headerColor,
         ),
       ),
     ];

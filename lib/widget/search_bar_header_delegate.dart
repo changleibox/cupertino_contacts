@@ -20,11 +20,13 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
   final double height;
+  final Color backgroundColor;
 
   const SearchBarHeaderDelegate({
     this.queryController,
     this.onChanged,
     @required this.height,
+    this.backgroundColor,
   }) : assert(height != null);
 
   @override
@@ -42,7 +44,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
           ),
           decoration: BoxDecoration(
             color: CupertinoDynamicColor.resolve(
-              CupertinoTheme.of(context).barBackgroundColor,
+              backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor,
               context,
             ),
             border: _kDefaultNavBarBorder,
