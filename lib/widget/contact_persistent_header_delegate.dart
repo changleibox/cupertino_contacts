@@ -81,30 +81,36 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   ),
                 ),
               ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
-                  final contact = contacts[index];
-                  return ContactItemWidget(
-                    contact: contact,
-                    height: itemHeight,
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Container(
-                    color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.separator,
-                      context,
-                    ),
-                    height: dividerHeight,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                  );
-                },
+              child: Container(
+                color: CupertinoDynamicColor.resolve(
+                  CupertinoTheme.of(context).barBackgroundColor,
+                  context,
+                ),
+                child: WidgetGroup.separated(
+                  alignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  direction: Axis.vertical,
+                  itemCount: contacts.length,
+                  itemBuilder: (context, index) {
+                    final contact = contacts[index];
+                    return ContactItemWidget(
+                      contact: contact,
+                      height: itemHeight,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Container(
+                      color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.separator,
+                        context,
+                      ),
+                      height: dividerHeight,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
