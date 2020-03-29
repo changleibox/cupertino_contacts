@@ -4,7 +4,6 @@
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,10 +35,6 @@ class ContactItemWidget extends StatelessWidget {
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.symmetric(
         horizontal: 10,
-      ),
-      color: CupertinoDynamicColor.resolve(
-        itemColor,
-        context,
       ),
       child: WidgetGroup.spacing(
         alignment: MainAxisAlignment.start,
