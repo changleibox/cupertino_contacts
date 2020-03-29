@@ -72,40 +72,42 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     }
     var textTheme = CupertinoTheme.of(context).textTheme;
     var padding = MediaQuery.of(context).padding;
+    final slivers = List<Widget>();
+    slivers.add(CupertinoSliverRefreshControl(
+      onRefresh: presenter.onRefresh,
+    ));
+    if (presenter.isEmpty) {
+      slivers.add(SliverFillRemaining(
+        child: Center(
+          child: Text(
+            '暂无联系人',
+            style: textTheme.textStyle,
+          ),
+        ),
+      ));
+    } else {
+      slivers.addAll(List.generate(presenter.count, (index) {
+        return SliverPersistentHeader(
+          key: presenter.contactKeys[index],
+          delegate: ContactPersistentHeaderDelegate(
+            contactEntry: presenter.entries.elementAt(index),
+            dividerHeight: _kDividerSize,
+            indexHeight: _kIndexHeight,
+            itemHeight: _kItemHeight,
+          ),
+        );
+      }));
+    }
+    slivers.add(SliverPadding(
+      padding: padding.copyWith(
+        top: 0.0,
+      ),
+    ));
     return FastIndexContainer(
       indexs: presenter.indexs,
       itemKeys: presenter.contactKeys,
       child: CustomScrollView(
-        slivers: [
-          CupertinoSliverRefreshControl(
-            onRefresh: presenter.onRefresh,
-          ),
-          if (presenter.isEmpty)
-            SliverFillRemaining(
-              child: Center(
-                child: Text(
-                  '暂无联系人',
-                  style: textTheme.textStyle,
-                ),
-              ),
-            )
-          else
-            for (int index = 0; index < presenter.count; index++)
-              SliverPersistentHeader(
-                key: presenter.contactKeys[index],
-                delegate: ContactPersistentHeaderDelegate(
-                  contactEntry: presenter.contactsMap.entries.elementAt(index),
-                  dividerHeight: _kDividerSize,
-                  indexHeight: _kIndexHeight,
-                  itemHeight: _kItemHeight,
-                ),
-              ),
-          SliverPadding(
-            padding: padding.copyWith(
-              top: 0.0,
-            ),
-          ),
-        ],
+        slivers: slivers,
       ),
     );
   }

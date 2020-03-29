@@ -25,11 +25,11 @@ class CupertinoContactsPresenter extends Presenter<CupertinoContactsPage> {
 
   int get count => _contactsMap.length;
 
-  Map<String, List<Contact>> get contactsMap => _contactsMap;
-
   List<GlobalKey> get contactKeys => _contactKeys;
 
   List<String> get indexs => _contactsMap.keys.toList();
+
+  Iterable<MapEntry<String, List<Contact>>> get entries => _contactsMap.entries;
 
   @override
   void initState() {
