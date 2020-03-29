@@ -43,9 +43,9 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
     super.dispose();
   }
 
-  _requestContacts() {
+  Future<void> _requestContacts() async {
     _isLoading = true;
-    ContactsService.getContacts(query: null, orderByGivenName: true).then((contacts) {
+    await ContactsService.getContacts(query: null, orderByGivenName: true).then((contacts) {
       final contactsMap = LinkedHashMap<String, List<Contact>>();
       for (var contact in contacts) {
         var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
@@ -129,18 +129,21 @@ class _CupertinoContactsPageState extends State<CupertinoContactsPage> {
                     context: context,
                     removeTop: true,
                     child: CustomScrollView(
-                      slivers: List.generate(_contactKeys.length, (index) {
-                        final contactEntry = _contactsMap.entries.elementAt(index);
-                        return SliverPersistentHeader(
-                          key: _contactKeys[index],
-                          delegate: ContactPersistentHeaderDelegate(
-                            contactEntry: contactEntry,
-                            dividerHeight: 0.5,
-                            indexHeight: 26,
-                            itemHeight: 85,
+                      slivers: [
+                        CupertinoSliverRefreshControl(
+                          onRefresh: _requestContacts,
+                        ),
+                        for (int index = 0; index < _contactsMap.length; index++)
+                          SliverPersistentHeader(
+                            key: _contactKeys[index],
+                            delegate: ContactPersistentHeaderDelegate(
+                              contactEntry: _contactsMap.entries.elementAt(index),
+                              dividerHeight: 0.5,
+                              indexHeight: 26,
+                              itemHeight: 85,
+                            ),
                           ),
-                        );
-                      }),
+                      ],
                     ),
                   ),
                 ),
