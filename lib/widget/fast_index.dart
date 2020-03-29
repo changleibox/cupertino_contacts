@@ -12,6 +12,7 @@ import 'package:flutter/scheduler.dart';
 ///
 /// 快速索引
 const Duration _duration = Duration(milliseconds: 200);
+const Color _containerColor = CupertinoColors.tertiarySystemGroupedBackground;
 
 typedef _FastIndexPositionGetter = FastIndexPosition Function(int index);
 
@@ -230,7 +231,7 @@ class FastIndex extends StatefulWidget {
 class _FastIndexState extends State<FastIndex> {
   final _indexKeys = List<GlobalKey>();
 
-  Color _color = CupertinoColors.black.withOpacity(0.0);
+  Color _color;
   FastIndexDetails _currentDetails = FastIndexDetails.empty;
 
   _onVerticalDragDown(DragDownDetails details) {
@@ -314,12 +315,9 @@ class _FastIndexState extends State<FastIndex> {
       return;
     }
     if (details == FastIndexDetails.empty) {
-      _color = CupertinoColors.black.withOpacity(0.0);
+      _color = _containerColor.withOpacity(0.0);
     } else {
-      _color = CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemGroupedBackground,
-        context,
-      );
+      _color = _containerColor;
     }
     final isIndexChanged = _currentDetails.index != details.index;
     _currentDetails = details;
@@ -385,7 +383,10 @@ class _FastIndexState extends State<FastIndex> {
       child: AnimatedContainer(
         duration: _duration,
         decoration: BoxDecoration(
-          color: _color,
+          color: CupertinoDynamicColor.resolve(
+            _color,
+            context,
+          ),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
