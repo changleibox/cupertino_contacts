@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/page/add_contact_page.dart';
+import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
@@ -46,7 +48,13 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           borderRadius: BorderRadius.zero,
           minSize: 0,
           onPressed: () {
-            Navigator.pushNamed(context, RouteProvider.contactGroup);
+            Navigator.push(
+              context,
+              RouteProvider.buildRoute(
+                ContactGroupPage(),
+                fullscreenDialog: true,
+              ),
+            );
           },
         ),
         trailing: CupertinoButton(
@@ -55,7 +63,13 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           borderRadius: BorderRadius.zero,
           minSize: 0,
           onPressed: () {
-            Navigator.pushNamed(context, RouteProvider.addContact);
+            Navigator.push(
+              context,
+              RouteProvider.buildRoute(
+                AddContactPage(),
+                fullscreenDialog: true,
+              ),
+            );
           },
         ),
         border: null,

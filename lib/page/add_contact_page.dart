@@ -34,7 +34,9 @@ class _AddContactPageState extends State<AddContactPage> {
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.maybePop(context);
+          },
         ),
       ),
       child: Container(),
