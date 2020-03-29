@@ -2,7 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
@@ -25,7 +25,13 @@ class CupertinoContactsApp extends StatelessWidget {
           ),
         ),
       ),
-      home: CupertinoContactsPage(),
+      supportedLocales: [
+        Locale('zh', 'CN'),
+      ],
+      routes: RouteProvider.routes,
+      initialRoute: RouteProvider.home,
+      onGenerateRoute: RouteProvider.buildGenerateRoute(context),
+      onUnknownRoute: RouteProvider.unknownRoute,
     );
   }
 }
