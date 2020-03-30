@@ -54,7 +54,7 @@ class SupportRefreshIndicator extends StatelessWidget {
     double refreshIndicatorExtent,
   ) {
     const Curve opacityCurve = Interval(0.4, 0.8, curve: Curves.easeInOut);
-    final offset = math.min(pulledExtent / refreshIndicatorExtent, 1.0);
+    final offset = math.min(pulledExtent / refreshTriggerPullDistance, 1.0);
     Widget child = Transform(
       transform: Matrix4.identity()..rotateZ(math.pi),
       alignment: Alignment.center,
