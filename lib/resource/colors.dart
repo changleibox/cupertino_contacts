@@ -20,6 +20,11 @@ const Color headerColor = CupertinoDynamicColor.withBrightness(
   darkColor: Color(0xF0000000),
   // Values extracted from navigation bar. For toolbar or tabbar the dark color is 0xF0161616.
 );
+const Color secondaryHeaderColor = CupertinoDynamicColor.withBrightness(
+  color: Color(0xF0ffffff),
+  darkColor: Color(0xF0111111),
+  // Values extracted from navigation bar. For toolbar or tabbar the dark color is 0xF0161616.
+);
 const Color itemColor = CupertinoDynamicColor.withBrightness(
   color: Color(0xF0ffffff),
   darkColor: Color(0xF0000000),

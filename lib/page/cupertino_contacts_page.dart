@@ -43,6 +43,10 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
+    var backgroundColor = headerColor;
+    if (innerBoxIsScrolled) {
+      backgroundColor = secondaryHeaderColor;
+    }
     return [
       CupertinoSliverNavigationBar(
         largeTitle: Text('通讯录'),
@@ -84,14 +88,14 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           end: 10,
         ),
         border: null,
-        backgroundColor: headerColor,
+        backgroundColor: backgroundColor,
       ),
       SliverPersistentHeader(
         pinned: true,
         delegate: SearchBarHeaderDelegate(
           height: _kSearchBarHeight,
           onChanged: presenter.onQuery,
-          backgroundColor: headerColor,
+          backgroundColor: backgroundColor,
         ),
       ),
     ];
