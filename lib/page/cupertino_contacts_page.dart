@@ -13,6 +13,7 @@ import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
+import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/support_refresh_indicator.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,7 @@ import 'package:flutter/cupertino.dart';
 /// iOS风格联系人页面
 const double _kSearchBarHeight = 56.0;
 const double _kNavBarPersistentHeight = 44.0;
+const double _kNavBarLargeTitleHeightExtension = 52.0;
 const double _kIndexHeight = 26.0;
 const double _kDividerSize = 0.5;
 const double _kItemHeight = 85.0;
@@ -169,6 +171,9 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         child: SupportNestedScrollView(
           pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
           headerSliverBuilder: _buildHeaderSliver,
+          physics: SnappingScrollPhysics(
+            midScrollOffset: _kNavBarLargeTitleHeightExtension,
+          ),
           body: _buildBody(),
         ),
       ),
