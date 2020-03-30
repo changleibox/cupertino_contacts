@@ -15,6 +15,7 @@ import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/painting.dart';
 
 /// Created by box on 2020/3/29.
 ///
@@ -59,7 +60,10 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           },
         ),
         trailing: CupertinoButton(
-          child: Text('添加'),
+          child: Icon(
+            CupertinoIcons.add,
+            size: 30,
+          ),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
@@ -72,6 +76,10 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
               ),
             );
           },
+        ),
+        padding: EdgeInsetsDirectional.only(
+          start: 16,
+          end: 10,
         ),
         border: null,
         backgroundColor: headerColor,
