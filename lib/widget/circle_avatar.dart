@@ -16,18 +16,20 @@ import 'package:flutter/cupertino.dart';
 class CupertinoCircleAvatarContainer extends StatelessWidget {
   final Widget child;
   final double size;
-  final bool hasBorder;
+  final BorderSide borderSide;
   final VoidCallback onPressed;
 
   const CupertinoCircleAvatarContainer({
     Key key,
     @required this.child,
     this.size,
-    this.hasBorder = true,
+    this.borderSide = const BorderSide(
+      color: separatorColor,
+      width: 0.5,
+    ),
     this.onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
         assert(child != null),
-        assert(hasBorder != null),
         super(key: key);
 
   @override
@@ -41,13 +43,13 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
         child: this.child,
       ),
     );
-    if (hasBorder) {
+    if (borderSide != null) {
       child = Container(
         decoration: ShapeDecoration(
           shape: CircleBorder(
-            side: BorderSide(
+            side: borderSide.copyWith(
               color: CupertinoDynamicColor.resolve(
-                separatorColor,
+                borderSide.color,
                 context,
               ),
             ),
@@ -67,17 +69,19 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
 
 class CupertinoCircleAvatar extends StatelessWidget {
   final double size;
-  final bool hasBorder;
+  final BorderSide borderSide;
   final Widget _child;
 
   CupertinoCircleAvatar({
     Key key,
     @required Widget child,
     this.size,
-    this.hasBorder = true,
+    this.borderSide = const BorderSide(
+      color: separatorColor,
+      width: 0.5,
+    ),
     VoidCallback onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
-        assert(hasBorder != null),
         _child = child,
         super(key: key);
 
@@ -89,11 +93,13 @@ class CupertinoCircleAvatar extends StatelessWidget {
     bool clickable = true,
     dynamic previewTag,
     bool canPreview = true,
-    this.hasBorder = true,
+    this.borderSide = const BorderSide(
+      color: separatorColor,
+      width: 0.5,
+    ),
     VoidCallback onPressed,
     WidgetBuilder bottomBarBuilder,
   })  : assert(size != null && size != double.infinity && size > 0),
-        assert(hasBorder != null),
         assert(assetName != null || file != null),
         assert(canPreview != null),
         _child = _LocationImage(
@@ -107,10 +113,12 @@ class CupertinoCircleAvatar extends StatelessWidget {
     Key key,
     @required String name,
     this.size,
-    this.hasBorder = true,
+    this.borderSide = const BorderSide(
+      color: separatorColor,
+      width: 0.5,
+    ),
     VoidCallback onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
-        assert(hasBorder != null),
         assert(name != null),
         _child = _LocationImage(
           assetName: name,
@@ -123,10 +131,12 @@ class CupertinoCircleAvatar extends StatelessWidget {
     String assetName,
     @required Uint8List bytes,
     this.size,
-    this.hasBorder = true,
+    this.borderSide = const BorderSide(
+      color: separatorColor,
+      width: 0.5,
+    ),
     VoidCallback onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
-        assert(hasBorder != null),
         assert(assetName != null || bytes != null),
         _child = _LocationImage.memory(
           size: size,
@@ -142,7 +152,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
         child: _child,
       ),
       size: size,
-      hasBorder: hasBorder,
+      borderSide: borderSide,
     );
   }
 }
