@@ -106,7 +106,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     var textTheme = CupertinoTheme.of(context).textTheme;
     var padding = MediaQuery.of(context).padding;
     final slivers = List<Widget>();
-    slivers.add(SupportRefreshIndicator(
+    slivers.add(SupportSliverRefreshIndicator(
       onRefresh: presenter.onRefresh,
     ));
     slivers.add(SliverToBoxAdapter(

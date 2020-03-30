@@ -13,12 +13,12 @@ import 'package:flutter/cupertino.dart';
 const double _defaultRefreshTriggerPullDistance = 100.0;
 const double _defaultRefreshIndicatorExtent = 60.0;
 
-class SupportRefreshIndicator extends StatelessWidget {
+class SupportSliverRefreshIndicator extends StatelessWidget {
   final RefreshCallback onRefresh;
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
 
-  const SupportRefreshIndicator({
+  const SupportSliverRefreshIndicator({
     Key key,
     this.onRefresh,
     this.refreshTriggerPullDistance = _defaultRefreshTriggerPullDistance,
