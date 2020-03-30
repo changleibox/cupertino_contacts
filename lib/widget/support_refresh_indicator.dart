@@ -4,7 +4,7 @@
 
 import 'dart:math' as math;
 
-import 'package:cupertinocontacts/widget/activity_indicator.dart';
+import 'package:cupertinocontacts/widget/support_activity_indicator.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/3/30.
