@@ -136,10 +136,10 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     final int activeTick = (_kTickCount * (progress ?? position.value)).floor();
 
     for (int i = 0; i < _kTickCount; ++i) {
-      final int t = (i + activeTick) % _kTickCount;
+      final int t = (i + activeTick + 3) % _kTickCount;
       int alpha = _alphaValues[t];
       if (progress != null) {
-        alpha = (_kTickCount - i - 3) % _kTickCount <= activeTick ? 255 : 0;
+        alpha = (_kTickCount - i - 3) % _kTickCount <= activeTick ? _alphaValues.first : 0;
       }
       paint.color = activeColor.withAlpha(alpha);
       canvas.drawRRect(tickFundamentalRRect, paint);

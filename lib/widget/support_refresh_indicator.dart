@@ -4,6 +4,7 @@
 
 import 'dart:math' as math;
 
+import 'package:cupertinocontacts/widget/activity_indicator.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/3/30.
@@ -53,23 +54,19 @@ class SupportRefreshIndicator extends StatelessWidget {
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
   ) {
-    const Curve opacityCurve = Interval(0.4, 0.8, curve: Curves.easeInOut);
+    const Curve opacityCurve = Interval(0.4, 1.0, curve: Curves.easeInOut);
     final offset = math.min(pulledExtent / refreshTriggerPullDistance, 1.0);
     Widget child = Opacity(
       opacity: opacityCurve.transform(offset),
-      child: CupertinoActivityIndicator(radius: 12.0),
+      child: SupportCupertinoActivityIndicator(
+        radius: 12.0,
+      ),
     );
     if (refreshState == RefreshIndicatorMode.drag) {
-      child = Transform.rotate(
-        angle: math.pi * 2 * offset,
-        alignment: Alignment.center,
-        child: Opacity(
-          opacity: offset <= 0 ? 0.1 : offset,
-          child: CupertinoActivityIndicator(
-            radius: 12.0,
-            animating: false,
-          ),
-        ),
+      child = SupportCupertinoActivityIndicator(
+        radius: 12.0,
+        animating: false,
+        position: offset * 0.9,
       );
     }
     return Align(
