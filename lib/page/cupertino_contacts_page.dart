@@ -41,6 +41,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   AnimationController _animationController;
   Animation<double> _animation;
+  ColorTween _colorTween;
 
   @override
   void initState() {
@@ -52,6 +53,21 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       curve: Curves.easeIn,
     ));
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _colorTween = ColorTween(
+      begin: CupertinoDynamicColor.resolve(
+        secondaryHeaderColor,
+        context,
+      ),
+      end: CupertinoDynamicColor.resolve(
+        headerColor,
+        context,
+      ),
+    );
+    super.didChangeDependencies();
   }
 
   @override
@@ -73,9 +89,11 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     return [
       _AnimatedCupertinoSliverNavigationBar(
         animation: _animation,
+        colorTween: _colorTween,
       ),
       _AnimatedSliverSearchBar(
         animation: _animation,
+        colorTween: _colorTween,
         onQuery: presenter.onQuery,
       ),
     ];
@@ -194,35 +212,34 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 }
 
-abstract class _BackgroundColorAnimatedWidget extends AnimatedWidget {
-  const _BackgroundColorAnimatedWidget({
+abstract class _AnimatedColorWidget extends AnimatedWidget {
+  final ColorTween colorTween;
+
+  const _AnimatedColorWidget({
     Key key,
+    @required this.colorTween,
     @required Listenable listenable,
-  })  : assert(listenable != null),
+  })  : assert(colorTween != null),
+        assert(listenable != null),
         super(key: key, listenable: listenable);
-
-  Color evaluate(BuildContext context) {
-    return ColorTween(
-      begin: CupertinoDynamicColor.resolve(
-        secondaryHeaderColor,
-        context,
-      ),
-      end: CupertinoDynamicColor.resolve(
-        headerColor,
-        context,
-      ),
-    ).evaluate(listenable);
-  }
-}
-
-class _AnimatedCupertinoSliverNavigationBar extends _BackgroundColorAnimatedWidget {
-  const _AnimatedCupertinoSliverNavigationBar({
-    Key key,
-    @required Animation<double> animation,
-  }) : super(key: key, listenable: animation);
 
   @override
   Widget build(BuildContext context) {
+    return evaluateBuild(context, colorTween.evaluate(listenable));
+  }
+
+  Widget evaluateBuild(BuildContext context, Color color);
+}
+
+class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
+  const _AnimatedCupertinoSliverNavigationBar({
+    Key key,
+    @required ColorTween colorTween,
+    @required Animation<double> animation,
+  }) : super(key: key, colorTween: colorTween, listenable: animation);
+
+  @override
+  Widget evaluateBuild(BuildContext context, Color color) {
     return CupertinoSliverNavigationBar(
       largeTitle: Text('通讯录'),
       padding: EdgeInsetsDirectional.only(
@@ -230,7 +247,7 @@ class _AnimatedCupertinoSliverNavigationBar extends _BackgroundColorAnimatedWidg
         end: 10,
       ),
       border: null,
-      backgroundColor: evaluate(context),
+      backgroundColor: color,
       leading: NavigationBarAction(
         child: Text('群组'),
         onPressed: () {
@@ -262,23 +279,24 @@ class _AnimatedCupertinoSliverNavigationBar extends _BackgroundColorAnimatedWidg
   }
 }
 
-class _AnimatedSliverSearchBar extends _BackgroundColorAnimatedWidget {
+class _AnimatedSliverSearchBar extends _AnimatedColorWidget {
   final ValueChanged<String> onQuery;
 
   const _AnimatedSliverSearchBar({
     Key key,
+    @required ColorTween colorTween,
     @required Animation<double> animation,
     @required this.onQuery,
-  }) : super(key: key, listenable: animation);
+  }) : super(key: key, colorTween: colorTween, listenable: animation);
 
   @override
-  Widget build(BuildContext context) {
+  Widget evaluateBuild(BuildContext context, Color color) {
     return SliverPersistentHeader(
       pinned: true,
       delegate: SearchBarHeaderDelegate(
         height: _kSearchBarHeight,
         onChanged: onQuery,
-        backgroundColor: evaluate(context),
+        backgroundColor: color,
       ),
     );
   }
