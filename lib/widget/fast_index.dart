@@ -232,6 +232,10 @@ class FastIndex extends StatefulWidget {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<FastIndexController>('controller', controller));
     properties.add(IterableProperty('indexs', indexs));
+    properties.add(ColorProperty('containerColor', containerColor));
+    properties.add(ColorProperty('containerActiveColor', containerActiveColor));
+    properties.add(ColorProperty('indexColor', indexColor));
+    properties.add(ColorProperty('indexActiveColor', indexActiveColor));
   }
 }
 
