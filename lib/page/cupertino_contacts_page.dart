@@ -130,7 +130,12 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         child: Center(
           child: Text(
             '暂无联系人',
-            style: textTheme.textStyle,
+            style: textTheme.textStyle.copyWith(
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel,
+                context,
+              ),
+            ),
           ),
         ),
       ));
@@ -155,7 +160,12 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           child: Center(
             child: Text(
               '${presenter.contactCount}位联系人',
-              style: textTheme.textStyle,
+              style: textTheme.textStyle.copyWith(
+                color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel,
+                  context,
+                ),
+              ),
             ),
           ),
         ),
