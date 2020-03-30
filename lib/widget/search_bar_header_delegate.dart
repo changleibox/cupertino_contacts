@@ -4,8 +4,9 @@
 
 import 'dart:ui';
 
-import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/widget/search_bar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 
@@ -16,6 +17,54 @@ const Border _kDefaultNavBarBorder = Border(
     style: BorderStyle.solid,
   ),
 );
+
+Widget _wrapWithBackground({
+  Border border,
+  Color backgroundColor,
+  Brightness brightness,
+  Widget child,
+  bool updateSystemUiOverlay = true,
+}) {
+  Widget result = child;
+  if (updateSystemUiOverlay) {
+    final bool isDark = backgroundColor.computeLuminance() < 0.179;
+    final Brightness newBrightness = brightness ?? (isDark ? Brightness.dark : Brightness.light);
+    SystemUiOverlayStyle overlayStyle;
+    switch (newBrightness) {
+      case Brightness.dark:
+        overlayStyle = SystemUiOverlayStyle.light;
+        break;
+      case Brightness.light:
+      default:
+        overlayStyle = SystemUiOverlayStyle.dark;
+        break;
+    }
+    result = AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle,
+      sized: true,
+      child: result,
+    );
+  }
+  final DecoratedBox childWithBackground = DecoratedBox(
+    decoration: BoxDecoration(
+      border: border,
+      color: backgroundColor,
+    ),
+    child: result,
+  );
+
+  if (backgroundColor.alpha == 0xFF) return childWithBackground;
+
+  return ClipRect(
+    child: BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaX: 10.0,
+        sigmaY: 10.0,
+      ),
+      child: childWithBackground,
+    ),
+  );
+}
 
 class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController queryController;
@@ -32,64 +81,16 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: Container(
-          height: height,
-          padding: EdgeInsets.only(
-            left: 16,
-            top: 6,
-            right: 16,
-            bottom: 14,
-          ),
-          decoration: BoxDecoration(
-            color: CupertinoDynamicColor.resolve(
-              backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor,
-              context,
-            ),
-            border: _kDefaultNavBarBorder,
-          ),
-          child: CupertinoTextField(
-            controller: queryController,
-            placeholder: '搜索',
-            onChanged: onChanged,
-            decoration: BoxDecoration(
-              color: CupertinoDynamicColor.resolve(
-                systemFill,
-                context,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            style: TextStyle(
-              fontSize: 17,
-            ),
-            placeholderStyle: TextStyle(
-              fontSize: 17,
-              color: CupertinoDynamicColor.resolve(
-                placeholderColor,
-                context,
-              ),
-            ),
-            prefix: Padding(
-              padding: const EdgeInsetsDirectional.only(
-                start: 6,
-              ),
-              child: Icon(
-                CupertinoIcons.search,
-                color: CupertinoDynamicColor.resolve(
-                  placeholderColor,
-                  context,
-                ),
-                size: 22,
-              ),
-            ),
-            clearButtonMode: OverlayVisibilityMode.editing,
-            padding: EdgeInsets.symmetric(
-              horizontal: 4,
-            ),
-          ),
-        ),
+    return _wrapWithBackground(
+      border: _kDefaultNavBarBorder,
+      backgroundColor: CupertinoDynamicColor.resolve(
+        backgroundColor,
+        context,
+      ),
+      child: SearchBar(
+        height: height,
+        queryController: queryController,
+        onChanged: onChanged,
       ),
     );
   }
