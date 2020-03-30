@@ -13,10 +13,9 @@ import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
-import 'package:cupertinocontacts/widget/support_refresh_indicator.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
+import 'package:cupertinocontacts/widget/support_refresh_indicator.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/painting.dart';
 
 /// Created by box on 2020/3/29.
 ///
