@@ -12,7 +12,6 @@ import 'package:flutter/scheduler.dart';
 ///
 /// 快速索引
 const Duration _duration = Duration(milliseconds: 200);
-const Color _containerColor = CupertinoColors.tertiarySystemGroupedBackground;
 
 typedef _FastIndexPositionGetter = FastIndexPosition Function(int index);
 
@@ -209,11 +208,19 @@ class FastIndexController extends ChangeNotifier implements ValueListenable<Fast
 class FastIndex extends StatefulWidget {
   final FastIndexController controller;
   final List<String> indexs;
+  final Color containerColor;
+  final Color containerActiveColor;
+  final Color indexColor;
+  final Color indexActiveColor;
 
   const FastIndex({
     Key key,
     this.controller,
     @required this.indexs,
+    this.containerColor,
+    this.containerActiveColor,
+    this.indexColor,
+    this.indexActiveColor,
   })  : assert(indexs != null),
         super(key: key);
 
@@ -231,7 +238,6 @@ class FastIndex extends StatefulWidget {
 class _FastIndexState extends State<FastIndex> {
   final _indexKeys = List<GlobalKey>();
 
-  Color _color;
   FastIndexDetails _currentDetails = FastIndexDetails.empty;
 
   _onVerticalDragDown(DragDownDetails details) {
@@ -314,11 +320,6 @@ class _FastIndexState extends State<FastIndex> {
     if (_currentDetails == details) {
       return;
     }
-    if (details == FastIndexDetails.empty) {
-      _color = _containerColor.withOpacity(0.0);
-    } else {
-      _color = _containerColor;
-    }
     final isIndexChanged = _currentDetails.index != details.index;
     _currentDetails = details;
     setState(() {});
@@ -373,6 +374,7 @@ class _FastIndexState extends State<FastIndex> {
 
   @override
   Widget build(BuildContext context) {
+    var primaryColor = CupertinoTheme.of(context).primaryColor;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onVerticalDragDown: _onVerticalDragDown,
@@ -384,7 +386,7 @@ class _FastIndexState extends State<FastIndex> {
         duration: _duration,
         decoration: BoxDecoration(
           color: CupertinoDynamicColor.resolve(
-            _color,
+            _currentDetails.isValid ? widget.containerActiveColor : widget.containerColor,
             context,
           ),
           borderRadius: BorderRadius.circular(5),
@@ -401,12 +403,10 @@ class _FastIndexState extends State<FastIndex> {
                 duration: _duration,
                 style: DefaultTextStyle.of(context).style.copyWith(
                       fontSize: 14,
-                      color: isActive
-                          ? CupertinoTheme.of(context).primaryColor
-                          : CupertinoDynamicColor.resolve(
-                              CupertinoColors.label,
-                              context,
-                            ),
+                      color: CupertinoDynamicColor.resolve(
+                        (isActive ? widget.indexActiveColor : widget.indexColor) ?? primaryColor,
+                        context,
+                      ),
                       height: 1.0,
                     ),
                 child: Text(
