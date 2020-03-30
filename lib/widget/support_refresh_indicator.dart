@@ -55,20 +55,16 @@ class SupportRefreshIndicator extends StatelessWidget {
   ) {
     const Curve opacityCurve = Interval(0.4, 0.8, curve: Curves.easeInOut);
     final offset = math.min(pulledExtent / refreshTriggerPullDistance, 1.0);
-    Widget child = Transform(
-      transform: Matrix4.identity()..rotateZ(math.pi),
-      alignment: Alignment.center,
-      child: Opacity(
-        opacity: opacityCurve.transform(offset),
-        child: CupertinoActivityIndicator(radius: 12.0),
-      ),
+    Widget child = Opacity(
+      opacity: opacityCurve.transform(offset),
+      child: CupertinoActivityIndicator(radius: 12.0),
     );
     if (refreshState == RefreshIndicatorMode.drag) {
-      child = Transform(
-        transform: Matrix4.identity()..rotateZ(math.pi * offset),
+      child = Transform.rotate(
+        angle: math.pi * 2 * offset,
         alignment: Alignment.center,
         child: Opacity(
-          opacity: (offset <= 0 ? 0.1 : offset),
+          opacity: offset <= 0 ? 0.1 : offset,
           child: CupertinoActivityIndicator(
             radius: 12.0,
             animating: false,
