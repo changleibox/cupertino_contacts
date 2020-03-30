@@ -40,6 +40,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
 
   AnimationController _animationController;
+  Animation<double> _animation;
 
   @override
   void initState() {
@@ -47,6 +48,9 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       duration: Duration(milliseconds: 200),
       vsync: this,
     );
+    _animation = _animationController.drive(CurveTween(
+      curve: Curves.easeIn,
+    ));
     super.initState();
   }
 
@@ -61,70 +65,18 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
-    var backgroundTween = ColorTween(
-      begin: CupertinoDynamicColor.resolve(secondaryHeaderColor, context),
-      end: CupertinoDynamicColor.resolve(headerColor, context),
-    );
-    var animation = _animationController.drive(CurveTween(curve: Curves.easeIn));
     if (innerBoxIsScrolled) {
       _animationController.reverse();
     } else {
       _animationController.forward();
     }
     return [
-      AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return CupertinoSliverNavigationBar(
-            largeTitle: Text('通讯录'),
-            padding: EdgeInsetsDirectional.only(
-              start: 16,
-              end: 10,
-            ),
-            border: null,
-            backgroundColor: backgroundTween.evaluate(animation),
-            leading: NavigationBarAction(
-              child: Text('群组'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  RouteProvider.buildRoute(
-                    ContactGroupPage(),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-            ),
-            trailing: NavigationBarAction(
-              child: Icon(
-                CupertinoIcons.add,
-                size: 30,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  RouteProvider.buildRoute(
-                    AddContactPage(),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-            ),
-          );
-        },
+      _AnimatedCupertinoSliverNavigationBar(
+        animation: _animation,
       ),
-      AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return SliverPersistentHeader(
-            pinned: true,
-            delegate: SearchBarHeaderDelegate(
-              height: _kSearchBarHeight,
-              onChanged: presenter.onQuery,
-              backgroundColor: backgroundTween.evaluate(animation),
-            ),
-          );
-        },
+      _AnimatedSliverSearchBar(
+        animation: _animation,
+        onQuery: presenter.onQuery,
       ),
     ];
   }
@@ -237,6 +189,96 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
             body: _buildBody(),
           ),
         ),
+      ),
+    );
+  }
+}
+
+abstract class _BackgroundColorAnimatedWidget extends AnimatedWidget {
+  const _BackgroundColorAnimatedWidget({
+    Key key,
+    @required Listenable listenable,
+  })  : assert(listenable != null),
+        super(key: key, listenable: listenable);
+
+  Color evaluate(BuildContext context) {
+    return ColorTween(
+      begin: CupertinoDynamicColor.resolve(
+        secondaryHeaderColor,
+        context,
+      ),
+      end: CupertinoDynamicColor.resolve(
+        headerColor,
+        context,
+      ),
+    ).evaluate(listenable);
+  }
+}
+
+class _AnimatedCupertinoSliverNavigationBar extends _BackgroundColorAnimatedWidget {
+  const _AnimatedCupertinoSliverNavigationBar({
+    Key key,
+    @required Animation<double> animation,
+  }) : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoSliverNavigationBar(
+      largeTitle: Text('通讯录'),
+      padding: EdgeInsetsDirectional.only(
+        start: 16,
+        end: 10,
+      ),
+      border: null,
+      backgroundColor: evaluate(context),
+      leading: NavigationBarAction(
+        child: Text('群组'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            RouteProvider.buildRoute(
+              ContactGroupPage(),
+              fullscreenDialog: true,
+            ),
+          );
+        },
+      ),
+      trailing: NavigationBarAction(
+        child: Icon(
+          CupertinoIcons.add,
+          size: 30,
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            RouteProvider.buildRoute(
+              AddContactPage(),
+              fullscreenDialog: true,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _AnimatedSliverSearchBar extends _BackgroundColorAnimatedWidget {
+  final ValueChanged<String> onQuery;
+
+  const _AnimatedSliverSearchBar({
+    Key key,
+    @required Animation<double> animation,
+    @required this.onQuery,
+  }) : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: SearchBarHeaderDelegate(
+        height: _kSearchBarHeight,
+        onChanged: onQuery,
+        backgroundColor: evaluate(context),
       ),
     );
   }
