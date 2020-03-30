@@ -12,6 +12,7 @@ import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
+import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
@@ -35,68 +36,95 @@ class CupertinoContactsPage extends StatefulWidget {
   _CupertinoContactsPageState createState() => _CupertinoContactsPageState();
 }
 
-class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> {
+class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> with SingleTickerProviderStateMixin {
   _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
+
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 200),
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   double _buildPinnedHeaderSliverHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
-    var backgroundColor = headerColor;
+    var backgroundTween = ColorTween(
+      begin: CupertinoDynamicColor.resolve(secondaryHeaderColor, context),
+      end: CupertinoDynamicColor.resolve(headerColor, context),
+    );
+    var animation = _animationController.drive(CurveTween(curve: Curves.easeIn));
     if (innerBoxIsScrolled) {
-      backgroundColor = secondaryHeaderColor;
+      _animationController.reverse();
+    } else {
+      _animationController.forward();
     }
     return [
-      CupertinoSliverNavigationBar(
-        largeTitle: Text('通讯录'),
-        leading: CupertinoButton(
-          child: Text('群组'),
-          padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.zero,
-          minSize: 0,
-          onPressed: () {
-            Navigator.push(
-              context,
-              RouteProvider.buildRoute(
-                ContactGroupPage(),
-                fullscreenDialog: true,
+      AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return CupertinoSliverNavigationBar(
+            largeTitle: Text('通讯录'),
+            padding: EdgeInsetsDirectional.only(
+              start: 16,
+              end: 10,
+            ),
+            border: null,
+            backgroundColor: backgroundTween.evaluate(animation),
+            leading: NavigationBarAction(
+              child: Text('群组'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  RouteProvider.buildRoute(
+                    ContactGroupPage(),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+            ),
+            trailing: NavigationBarAction(
+              child: Icon(
+                CupertinoIcons.add,
+                size: 30,
               ),
-            );
-          },
-        ),
-        trailing: CupertinoButton(
-          child: Icon(
-            CupertinoIcons.add,
-            size: 30,
-          ),
-          padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.zero,
-          minSize: 0,
-          onPressed: () {
-            Navigator.push(
-              context,
-              RouteProvider.buildRoute(
-                AddContactPage(),
-                fullscreenDialog: true,
-              ),
-            );
-          },
-        ),
-        padding: EdgeInsetsDirectional.only(
-          start: 16,
-          end: 10,
-        ),
-        border: null,
-        backgroundColor: backgroundColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  RouteProvider.buildRoute(
+                    AddContactPage(),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
-      SliverPersistentHeader(
-        pinned: true,
-        delegate: SearchBarHeaderDelegate(
-          height: _kSearchBarHeight,
-          onChanged: presenter.onQuery,
-          backgroundColor: backgroundColor,
-        ),
+      AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return SliverPersistentHeader(
+            pinned: true,
+            delegate: SearchBarHeaderDelegate(
+              height: _kSearchBarHeight,
+              onChanged: presenter.onQuery,
+              backgroundColor: backgroundTween.evaluate(animation),
+            ),
+          );
+        },
       ),
     ];
   }
