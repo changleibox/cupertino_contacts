@@ -39,9 +39,9 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
           height: height,
           padding: EdgeInsets.only(
             left: 16,
-            top: 4,
+            top: 6,
             right: 16,
-            bottom: 16,
+            bottom: 14,
           ),
           decoration: BoxDecoration(
             color: CupertinoDynamicColor.resolve(

@@ -182,16 +182,28 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   @override
   Widget builds(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: DragDismissKeyboardContainer(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: SupportNestedScrollView(
-          pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
-          headerSliverBuilder: _buildHeaderSliver,
-          physics: SnappingScrollPhysics(
-            midScrollOffset: _kNavBarLargeTitleHeightExtension,
+    var themeData = CupertinoTheme.of(context);
+    var textTheme = themeData.textTheme;
+    var navLargeTitleTextStyle = textTheme.navLargeTitleTextStyle;
+    return CupertinoTheme(
+      data: themeData.copyWith(
+        textTheme: textTheme.copyWith(
+          navLargeTitleTextStyle: navLargeTitleTextStyle.copyWith(
+            height: 0.0,
           ),
-          body: _buildBody(),
+        ),
+      ),
+      child: CupertinoPageScaffold(
+        child: DragDismissKeyboardContainer(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: SupportNestedScrollView(
+            pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
+            headerSliverBuilder: _buildHeaderSliver,
+            physics: SnappingScrollPhysics(
+              midScrollOffset: _kNavBarLargeTitleHeightExtension,
+            ),
+            body: _buildBody(),
+          ),
         ),
       ),
     );
