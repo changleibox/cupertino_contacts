@@ -112,11 +112,17 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       onRefresh: presenter.onRefresh,
     ));
     slivers.add(SliverToBoxAdapter(
-      child: CustomContactItemWidget(
-        avatar: null,
-        name: 'Box',
-        describe: '我的名片',
-        height: _kItemHeight,
+      child: Container(
+        color: CupertinoDynamicColor.resolve(
+          itemColor,
+          context,
+        ),
+        child: CustomContactItemWidget(
+          avatar: null,
+          name: 'Box',
+          describe: '我的名片',
+          height: _kItemHeight,
+        ),
       ),
     ));
     if (presenter.isEmpty) {
