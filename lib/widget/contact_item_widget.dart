@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:typed_data';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
@@ -30,6 +32,32 @@ class ContactItemWidget extends StatelessWidget {
     if (phones != null && phones.isNotEmpty) {
       phone = phones.first.value;
     }
+    return CustomContactItemWidget(
+      avatar: contact.avatar,
+      name: contact.displayName,
+      describe: phone,
+      height: height,
+    );
+  }
+}
+
+class CustomContactItemWidget extends StatelessWidget {
+  final Uint8List avatar;
+  final String name;
+  final String describe;
+  final double height;
+
+  const CustomContactItemWidget({
+    Key key,
+    @required this.avatar,
+    @required this.name,
+    @required this.describe,
+    @required this.height,
+  })  : assert(height != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: height,
       alignment: Alignment.centerLeft,
@@ -41,7 +69,7 @@ class ContactItemWidget extends StatelessWidget {
         spacing: 10,
         children: <Widget>[
           CupertinoCircleAvatar.memory(
-            bytes: contact.avatar,
+            bytes: avatar,
             assetName: Images.ic_default_avatar,
             size: 65,
           ),
@@ -54,9 +82,9 @@ class ContactItemWidget extends StatelessWidget {
               spacing: 8,
               children: <Widget>[
                 Text(
-                  contact.displayName ?? '',
+                  name ?? '',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
                     color: CupertinoDynamicColor.resolve(
                       CupertinoColors.label,
                       context,
@@ -64,7 +92,7 @@ class ContactItemWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  phone ?? '',
+                  describe ?? '',
                   style: TextStyle(
                     fontSize: 15,
                     color: CupertinoDynamicColor.resolve(

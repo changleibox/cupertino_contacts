@@ -7,6 +7,7 @@ import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
+import 'package:cupertinocontacts/widget/contact_item_widget.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
@@ -100,6 +101,14 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     slivers.add(CupertinoSliverRefreshControl(
       onRefresh: presenter.onRefresh,
     ));
+    slivers.add(SliverToBoxAdapter(
+      child: CustomContactItemWidget(
+        avatar: null,
+        name: 'Box',
+        describe: '我的名片',
+        height: _kItemHeight,
+      ),
+    ));
     if (presenter.isEmpty) {
       slivers.add(SliverFillRemaining(
         child: Center(
@@ -110,7 +119,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         ),
       ));
     } else {
-      slivers.addAll(List.generate(presenter.count, (index) {
+      slivers.addAll(List.generate(presenter.keyCount, (index) {
         return SliverPersistentHeader(
           key: presenter.contactKeys[index],
           delegate: ContactPersistentHeaderDelegate(
@@ -124,7 +133,15 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     }
     slivers.add(SliverPadding(
       padding: padding.copyWith(
-        top: 0.0,
+        top: 10.0,
+      ),
+      sliver: SliverToBoxAdapter(
+        child: Center(
+          child: Text(
+            '${presenter.contactCount}位联系人',
+            style: textTheme.textStyle,
+          ),
+        ),
       ),
     ));
     return FastIndexContainer(

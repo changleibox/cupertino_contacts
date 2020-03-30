@@ -18,12 +18,15 @@ class CupertinoContactsPresenter extends Presenter<CupertinoContactsPage> {
 
   bool _isLoading = false;
   String _query;
+  int _contactCount = 0;
 
   bool get isLoading => _isLoading;
 
   bool get isEmpty => _contactsMap.isEmpty;
 
-  int get count => _contactsMap.length;
+  int get keyCount => _contactKeys.length;
+
+  int get contactCount => _contactCount;
 
   List<GlobalKey> get contactKeys => _contactKeys;
 
@@ -77,6 +80,8 @@ class CupertinoContactsPresenter extends Presenter<CupertinoContactsPage> {
 
       _contactKeys.clear();
       _contactKeys.addAll(List.generate(contactsMap.length, (index) => GlobalKey()));
+
+      _contactCount = contacts.length;
     }).whenComplete(() {
       _isLoading = false;
       notifyDataSetChanged();
