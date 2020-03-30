@@ -146,20 +146,21 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           ),
         );
       }));
-    }
-    slivers.add(SliverPadding(
-      padding: padding.copyWith(
-        top: 10.0,
-      ),
-      sliver: SliverToBoxAdapter(
-        child: Center(
-          child: Text(
-            '${presenter.contactCount}位联系人',
-            style: textTheme.textStyle,
+      slivers.add(SliverPadding(
+        padding: padding.copyWith(
+          top: 10.0,
+          bottom: padding.bottom + 10,
+        ),
+        sliver: SliverToBoxAdapter(
+          child: Center(
+            child: Text(
+              '${presenter.contactCount}位联系人',
+              style: textTheme.textStyle,
+            ),
           ),
         ),
-      ),
-    ));
+      ));
+    }
     return FastIndexContainer(
       indexs: presenter.indexs,
       itemKeys: presenter.contactKeys,
