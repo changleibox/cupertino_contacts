@@ -21,16 +21,22 @@ class AddContactInfoTextField extends StatelessWidget {
         spacing: 10,
         children: [
           CupertinoButton(
+            child: Icon(
+              CupertinoIcons.minus_circled,
+              color: CupertinoColors.systemRed,
+            ),
+            padding: EdgeInsets.zero,
+            borderRadius: BorderRadius.zero,
+            minSize: 0,
+            onPressed: () {},
+          ),
+          CupertinoButton(
             minSize: 44,
             borderRadius: BorderRadius.zero,
             padding: EdgeInsets.zero,
             child: WidgetGroup.spacing(
               spacing: 10,
               children: [
-                Icon(
-                  CupertinoIcons.minus_circled,
-                  color: CupertinoColors.systemRed,
-                ),
                 Text(
                   '住宅',
                 ),
