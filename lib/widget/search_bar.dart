@@ -65,6 +65,7 @@ class SearchBar extends StatelessWidget {
             size: 22,
           ),
         ),
+        textInputAction: TextInputAction.search,
         clearButtonMode: OverlayVisibilityMode.editing,
         padding: EdgeInsets.symmetric(
           horizontal: 4,
