@@ -39,19 +39,20 @@ class CupertinoContactsPage extends StatefulWidget {
 class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> with SingleTickerProviderStateMixin {
   _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
 
-  AnimationController _animationController;
+  AnimationController _controller;
   Animation<double> _animation;
   ColorTween _colorTween;
 
   @override
   void initState() {
-    _animationController = AnimationController(
+    _controller = AnimationController(
       duration: Duration(milliseconds: 200),
       vsync: this,
     );
-    _animation = _animationController.drive(CurveTween(
+    _animation = _controller.drive(CurveTween(
       curve: Curves.easeIn,
     ));
+    _controller.value = _controller.upperBound;
     super.initState();
   }
 
@@ -72,7 +73,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -82,9 +83,9 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     if (innerBoxIsScrolled) {
-      _animationController.reverse();
+      _controller.reverse();
     } else {
-      _animationController.forward();
+      _controller.forward();
     }
     return [
       _AnimatedCupertinoSliverNavigationBar(
