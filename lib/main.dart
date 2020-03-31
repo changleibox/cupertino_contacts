@@ -21,6 +21,11 @@ class CupertinoContactsApp extends StatelessWidget {
         scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
         textTheme: textTheme.copyWith(
           textStyle: textTheme.textStyle.copyWith(
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.label,
+              context,
+            ),
+            fontSize: 15,
             height: 1.5,
           ),
         ),
