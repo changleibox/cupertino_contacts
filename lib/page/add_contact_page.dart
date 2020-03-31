@@ -2,16 +2,17 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/presenter/add_contact_presenter.dart';
 import 'package:cupertinocontacts/widget/add_contact_choose_ring_tone_button.dart';
 import 'package:cupertinocontacts/widget/add_contact_group_container.dart';
 import 'package:cupertinocontacts/widget/add_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/add_contact_normal_text_field.dart';
 import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
+import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -23,9 +24,11 @@ class AddContactPage extends StatefulWidget {
   _AddContactPageState createState() => _AddContactPageState();
 }
 
-class _AddContactPageState extends State<AddContactPage> {
+class _AddContactPageState extends PresenterState<AddContactPage, AddContactPresenter> {
+  _AddContactPageState() : super(AddContactPresenter());
+
   @override
-  Widget build(BuildContext context) {
+  Widget builds(BuildContext context) {
     var themeData = CupertinoTheme.of(context);
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
