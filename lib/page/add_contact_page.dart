@@ -8,6 +8,7 @@ import 'package:cupertinocontacts/widget/add_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/add_contact_normal_text_field.dart';
 import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
+import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,20 +32,14 @@ class _AddContactPageState extends State<AddContactPage> {
         middle: Text('新建联系人'),
         backgroundColor: CupertinoColors.tertiarySystemBackground,
         border: null,
-        leading: CupertinoButton(
+        leading: NavigationBarAction(
           child: Text('取消'),
-          padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.zero,
-          minSize: 0,
           onPressed: () {
             Navigator.maybePop(context);
           },
         ),
-        trailing: CupertinoButton(
+        trailing: NavigationBarAction(
           child: Text('完成'),
-          padding: EdgeInsets.zero,
-          borderRadius: BorderRadius.zero,
-          minSize: 0,
           onPressed: () {
             Navigator.maybePop(context);
           },
