@@ -5,6 +5,7 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
+import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -141,11 +142,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       alignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       direction: Axis.vertical,
-      divider: Container(
-        color: CupertinoDynamicColor.resolve(
-          separatorColor,
-          context,
-        ),
+      divider: CupertinoDivider(
         height: dividerHeight,
       ),
       children: <Widget>[

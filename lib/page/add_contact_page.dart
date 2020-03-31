@@ -18,8 +18,10 @@ class _AddContactPageState extends State<AddContactPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.secondarySystemBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('新建联系人'),
+        backgroundColor: CupertinoColors.tertiarySystemBackground,
         leading: CupertinoButton(
           child: Text('取消'),
           padding: EdgeInsets.zero,
