@@ -402,11 +402,11 @@ class _FastIndexState extends State<FastIndex> {
             var isActive = _currentDetails.index == index;
             return Padding(
               key: _indexKeys[index],
-              padding: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(1.0),
               child: AnimatedDefaultTextStyle(
                 duration: _duration,
                 style: DefaultTextStyle.of(context).style.copyWith(
-                      fontSize: 14,
+                      fontSize: 13,
                       color: CupertinoDynamicColor.resolve(
                         (isActive ? widget.indexActiveColor : widget.indexColor) ?? primaryColor,
                         context,
