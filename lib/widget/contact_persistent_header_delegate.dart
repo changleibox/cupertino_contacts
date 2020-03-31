@@ -50,6 +50,59 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
+  Widget _buildContent(BuildContext context, List<Contact> contacts) {
+    return Container(
+      decoration: BoxDecoration(
+        color: CupertinoDynamicColor.resolve(
+          itemColor,
+          context,
+        ),
+        border: Border(
+          bottom: BorderSide(
+            width: dividerHeight,
+            color: CupertinoDynamicColor.resolve(
+              separatorColor,
+              context,
+            ),
+          ),
+        ),
+      ),
+      child: WidgetGroup.separated(
+        alignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        direction: Axis.vertical,
+        itemCount: contacts.length,
+        itemBuilder: (context, index) {
+          final contact = contacts[index];
+          return CupertinoButton(
+            padding: EdgeInsets.zero,
+            minSize: 0,
+            borderRadius: BorderRadius.zero,
+            child: ContactItemWidget(
+              contact: contact,
+              height: itemHeight,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, RouteProvider.contactDetail);
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Container(
+            color: CupertinoDynamicColor.resolve(
+              separatorColor,
+              context,
+            ),
+            height: dividerHeight,
+            margin: EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     var index = contactEntry.key;
@@ -71,56 +124,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           child: Align(
             alignment: AlignmentDirectional(0.0, 1.0),
             heightFactor: 1.0 - (shrinkOffset / _contentHeight).clamp(0.0, 1.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: CupertinoDynamicColor.resolve(
-                  itemColor,
-                  context,
-                ),
-                border: Border(
-                  bottom: BorderSide(
-                    width: dividerHeight,
-                    color: CupertinoDynamicColor.resolve(
-                      separatorColor,
-                      context,
-                    ),
-                  ),
-                ),
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
-                  final contact = contacts[index];
-                  return CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    minSize: 0,
-                    borderRadius: BorderRadius.zero,
-                    child: ContactItemWidget(
-                      contact: contact,
-                      height: itemHeight,
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, RouteProvider.contactDetail);
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Container(
-                    color: CupertinoDynamicColor.resolve(
-                      separatorColor,
-                      context,
-                    ),
-                    height: dividerHeight,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                  );
-                },
-              ),
-            ),
+            child: _buildContent(context, contacts),
           ),
         ),
       ],
