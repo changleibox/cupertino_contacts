@@ -2,13 +2,14 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:ui';
-
-import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/widget/add_contact_choose_ring_tone_button.dart';
+import 'package:cupertinocontacts/widget/add_contact_group_container.dart';
+import 'package:cupertinocontacts/widget/add_contact_info_button.dart';
+import 'package:cupertinocontacts/widget/add_contact_info_text_field.dart';
+import 'package:cupertinocontacts/widget/add_contact_normal_text_field.dart';
 import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.dart';
-import 'package:cupertinocontacts/widget/cupertino_divider.dart';
+import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
-import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/3/30.
@@ -63,746 +64,156 @@ class _AddContactPageState extends State<AddContactPage> {
         },
         body: ListView(
           children: <Widget>[
-            Container(
+            AddContactGroupContainer(
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return AddContactNormalTextField();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactChooseRingToneButton(),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactChooseRingToneButton(),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactGroupContainer(
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                if (index < 1) {
+                  return AddContactInfoTextField();
+                }
+                return AddContactInfoButton();
+              },
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            AddContactRemarksTextField(),
+            SizedBox(
+              height: 40,
+            ),
+            CupertinoButton(
+              minSize: 44,
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 10,
+              ),
+              borderRadius: BorderRadius.zero,
               color: CupertinoDynamicColor.resolve(
                 CupertinoColors.tertiarySystemBackground,
                 context,
               ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    height: 44,
-                    child: CupertinoTextField(
-                      placeholder: '姓氏',
-                      placeholderStyle: TextStyle(
-                        color: CupertinoDynamicColor.resolve(
-                          placeholderColor,
-                          context,
-                        ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '添加信息栏',
+                  style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
+                        fontSize: 15,
                       ),
-                      decoration: BoxDecoration(
-                        color: CupertinoColors.tertiarySystemBackground,
-                      ),
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        right: 10,
-                      ),
-                      clearButtonMode: OverlayVisibilityMode.editing,
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
+                ),
               ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 11,
-                itemBuilder: (context, index) {
-                  if (index < 10) {
-                    return Container(
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        right: 10,
-                      ),
-                      child: WidgetGroup.spacing(
-                        spacing: 10,
-                        children: [
-                          CupertinoButton(
-                            minSize: 44,
-                            borderRadius: BorderRadius.zero,
-                            padding: EdgeInsets.zero,
-                            child: WidgetGroup.spacing(
-                              spacing: 10,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.minus_circled,
-                                  color: CupertinoColors.systemRed,
-                                ),
-                                Text(
-                                  '住宅',
-                                ),
-                                Icon(
-                                  CupertinoIcons.forward,
-                                  color: CupertinoDynamicColor.resolve(
-                                    CupertinoColors.secondaryLabel,
-                                    context,
-                                  ),
-                                ),
-                                Container(
-                                  width: 0.5,
-                                  height: 32,
-                                  color: CupertinoDynamicColor.resolve(
-                                    separatorColor.withOpacity(0.1),
-                                    context,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {},
-                          ),
-                          Expanded(
-                            child: SizedBox(
-                              height: 44,
-                              child: CupertinoTextField(
-                                placeholder: '姓氏',
-                                placeholderStyle: TextStyle(
-                                  color: CupertinoDynamicColor.resolve(
-                                    placeholderColor,
-                                    context,
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: CupertinoColors.tertiarySystemBackground,
-                                ),
-                                padding: EdgeInsets.only(
-                                  left: 10,
-                                  right: 10,
-                                ),
-                                clearButtonMode: OverlayVisibilityMode.editing,
-                                scrollPadding: EdgeInsets.only(
-                                  bottom: 54,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 16,
-                      children: [
-                        Text(
-                          '电话铃声',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                        Expanded(
-                          child: Text(
-                            '默认',
-                          ),
-                        ),
-                        Icon(
-                          CupertinoIcons.forward,
-                          color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.secondaryLabel,
-                            context,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 16,
-                      children: [
-                        Text(
-                          '短信铃声',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                        Expanded(
-                          child: Text(
-                            '默认',
-                          ),
-                        ),
-                        Icon(
-                          CupertinoIcons.forward,
-                          color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.secondaryLabel,
-                            context,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: WidgetGroup.spacing(
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        Text(
-                          '添加电话',
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              child: WidgetGroup.spacing(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                direction: Axis.vertical,
-                children: [
-                  Text(
-                    '备注',
-                    style: CupertinoTheme.of(context).textTheme.textStyle,
-                  ),
-                  CupertinoTextField(
-                    decoration: null,
-                    minLines: 3,
-                    maxLines: null,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              child: WidgetGroup.separated(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '添加信息栏',
-                      ),
-                    ),
-                    onPressed: () {},
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(
-                      color: separatorColor.withOpacity(0.1),
-                    ),
-                  );
-                },
-              ),
+              onPressed: () {},
             ),
           ],
         ),
