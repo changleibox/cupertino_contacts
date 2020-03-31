@@ -75,6 +75,23 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
+          final names = [
+            Text(
+              contact.prefix,
+            ),
+            Text(
+              contact.givenName,
+            ),
+            Text(
+              contact.familyName,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              contact.suffix,
+            ),
+          ];
           return CupertinoButton(
             padding: EdgeInsets.zero,
             minSize: 0,
@@ -85,9 +102,16 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                 horizontal: _kHorizontalPadding,
               ),
               alignment: Alignment.centerLeft,
-              child: Text(
-                contact.displayName,
+              child: DefaultTextStyle(
                 style: CupertinoTheme.of(context).textTheme.textStyle,
+                child: WidgetGroup.spacing(
+                  alignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 5,
+                  children: names.where((element) {
+                    return element.data != null && element.data.isNotEmpty;
+                  }).toList(),
+                ),
               ),
             ),
             onPressed: () {
