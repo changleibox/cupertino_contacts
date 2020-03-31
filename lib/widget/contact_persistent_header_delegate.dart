@@ -5,9 +5,10 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
-import 'package:cupertinocontacts/widget/contact_item_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+
+const double _kHorizontalPadding = 16.0;
 
 class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final MapEntry<String, List<Contact>> contactEntry;
@@ -34,7 +35,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         context,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: 10,
+        horizontal: _kHorizontalPadding,
       ),
       child: Text(
         index,
@@ -78,9 +79,16 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             padding: EdgeInsets.zero,
             minSize: 0,
             borderRadius: BorderRadius.zero,
-            child: ContactItemWidget(
-              contact: contact,
+            child: Container(
               height: itemHeight,
+              padding: EdgeInsets.symmetric(
+                horizontal: _kHorizontalPadding,
+              ),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                contact.displayName,
+                style: CupertinoTheme.of(context).textTheme.textStyle,
+              ),
             ),
             onPressed: () {
               Navigator.pushNamed(context, RouteProvider.contactDetail);
@@ -95,7 +103,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             ),
             height: dividerHeight,
             margin: EdgeInsets.symmetric(
-              horizontal: 10,
+              horizontal: _kHorizontalPadding,
             ),
           );
         },

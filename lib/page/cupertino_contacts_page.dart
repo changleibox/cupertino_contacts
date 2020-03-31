@@ -27,7 +27,7 @@ const double _kNavBarPersistentHeight = 44.0;
 const double _kNavBarLargeTitleHeightExtension = 52.0;
 const double _kIndexHeight = 26.0;
 const double _kDividerSize = 0.5;
-const double _kItemHeight = 85.0;
+const double _kItemHeight = 44.0;
 
 class CupertinoContactsPage extends StatefulWidget {
   const CupertinoContactsPage({Key key}) : super(key: key);
@@ -123,7 +123,6 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           avatar: null,
           name: 'Box',
           describe: '我的名片',
-          height: _kItemHeight,
         ),
       ),
     ));

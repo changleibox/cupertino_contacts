@@ -15,14 +15,11 @@ import 'package:flutter/cupertino.dart';
 /// 联系人列表item
 class ContactItemWidget extends StatelessWidget {
   final Contact contact;
-  final double height;
 
   const ContactItemWidget({
     Key key,
     @required this.contact,
-    @required this.height,
   })  : assert(contact != null),
-        assert(height != null),
         super(key: key);
 
   @override
@@ -36,7 +33,6 @@ class ContactItemWidget extends StatelessWidget {
       avatar: contact.avatar,
       name: contact.displayName,
       describe: phone,
-      height: height,
     );
   }
 }
@@ -45,24 +41,21 @@ class CustomContactItemWidget extends StatelessWidget {
   final Uint8List avatar;
   final String name;
   final String describe;
-  final double height;
 
   const CustomContactItemWidget({
     Key key,
     @required this.avatar,
     @required this.name,
     @required this.describe,
-    @required this.height,
-  })  : assert(height != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.symmetric(
-        horizontal: 10,
+        horizontal: 16,
+        vertical: 10,
       ),
       child: WidgetGroup.spacing(
         alignment: MainAxisAlignment.start,
