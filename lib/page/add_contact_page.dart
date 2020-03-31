@@ -192,7 +192,6 @@ class _AddContactPageState extends State<AddContactPage> {
                                 ),
                                 Text(
                                   '住宅',
-                                  style: CupertinoTheme.of(context).textTheme.textStyle,
                                 ),
                                 Icon(
                                   CupertinoIcons.forward,
@@ -203,7 +202,7 @@ class _AddContactPageState extends State<AddContactPage> {
                                 ),
                                 Container(
                                   width: 0.5,
-                                  height: 44,
+                                  height: 32,
                                   color: CupertinoDynamicColor.resolve(
                                     separatorColor.withOpacity(0.1),
                                     context,
