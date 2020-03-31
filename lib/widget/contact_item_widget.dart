@@ -72,12 +72,13 @@ class CustomContactItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               direction: Axis.vertical,
-              spacing: 8,
+              spacing: 4,
               children: <Widget>[
                 Text(
                   name ?? '',
                   style: TextStyle(
                     fontSize: 17,
+                    fontWeight: FontWeight.w600,
                     color: CupertinoDynamicColor.resolve(
                       CupertinoColors.label,
                       context,
