@@ -82,6 +82,9 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               contact.givenName,
             ),
             Text(
+              contact.middleName,
+            ),
+            Text(
               contact.familyName,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
