@@ -29,6 +29,10 @@ class AddContactNormalTextField extends StatelessWidget {
           right: 10,
         ),
         clearButtonMode: OverlayVisibilityMode.editing,
+        textInputAction: TextInputAction.next,
+        onEditingComplete: () {
+          FocusScope.of(context).nextFocus();
+        },
       ),
     );
   }
