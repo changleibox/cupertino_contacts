@@ -4,8 +4,7 @@
 
 import 'package:cupertinocontacts/widget/add_contact_choose_ring_tone_button.dart';
 import 'package:cupertinocontacts/widget/add_contact_group_container.dart';
-import 'package:cupertinocontacts/widget/add_contact_info_button.dart';
-import 'package:cupertinocontacts/widget/add_contact_info_text_field.dart';
+import 'package:cupertinocontacts/widget/add_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/add_contact_normal_text_field.dart';
 import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
@@ -73,26 +72,14 @@ class _AddContactPageState extends State<AddContactPage> {
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
@@ -105,86 +92,44 @@ class _AddContactPageState extends State<AddContactPage> {
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
             ),
-            AddContactGroupContainer(
+            AddContactInfoGroup(
               itemCount: 2,
-              itemBuilder: (context, index) {
-                if (index < 1) {
-                  return AddContactInfoTextField();
-                }
-                return AddContactInfoButton();
-              },
             ),
             SizedBox(
               height: 40,
