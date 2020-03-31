@@ -12,6 +12,8 @@ import 'package:flutter/cupertino.dart';
 const double _kHorizontalPadding = 16.0;
 
 class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  static final RegExp letterRegExp = RegExp(r'[A-Z|a-z]');
+
   final MapEntry<String, List<Contact>> contactEntry;
   final double indexHeight;
   final double dividerHeight;
@@ -109,7 +111,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: WidgetGroup.spacing(
                   alignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 5,
+                  spacing: letterRegExp.hasMatch(contact.displayName) ? 5 : 0,
                   children: names.where((element) {
                     return element.data != null && element.data.isNotEmpty;
                   }).toList(),
