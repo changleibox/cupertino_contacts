@@ -10,6 +10,7 @@ import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -61,106 +62,117 @@ class _AddContactPageState extends State<AddContactPage> {
             ),
           ];
         },
-        body: ListView(
-          children: <Widget>[
-            AddContactGroupContainer(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return AddContactNormalTextField();
-              },
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactChooseRingToneButton(),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactChooseRingToneButton(),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactInfoGroup(
-              itemCount: 2,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AddContactRemarksTextField(),
-            SizedBox(
-              height: 40,
-            ),
-            CupertinoButton(
-              minSize: 44,
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 10,
+        body: Scrollbar(
+          child: ListView(
+            children: <Widget>[
+              AddContactGroupContainer(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return AddContactNormalTextField();
+                },
               ),
-              borderRadius: BorderRadius.zero,
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
+              SizedBox(
+                height: 40,
               ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '添加信息栏',
-                  style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
-                        fontSize: 15,
-                      ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加电话',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加电子邮件',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactChooseRingToneButton(),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactChooseRingToneButton(),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加URL',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加地址',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加生日',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加日期',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加关联人',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加个人社交资料',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactInfoGroup(
+                itemCount: 2,
+                buttonText: '添加即时信息',
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              AddContactRemarksTextField(),
+              SizedBox(
+                height: 40,
+              ),
+              CupertinoButton(
+                minSize: 44,
+                padding: EdgeInsets.only(
+                  left: 16,
+                  right: 10,
                 ),
+                borderRadius: BorderRadius.zero,
+                color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.tertiarySystemBackground,
+                  context,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '添加信息栏',
+                    style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
+                          fontSize: 15,
+                        ),
+                  ),
+                ),
+                onPressed: () {},
               ),
-              onPressed: () {},
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

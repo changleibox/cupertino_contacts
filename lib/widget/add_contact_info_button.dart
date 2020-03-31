@@ -9,6 +9,14 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-按钮
 class AddContactInfoButton extends StatelessWidget {
+  final String text;
+
+  const AddContactInfoButton({
+    Key key,
+    @required this.text,
+  })  : assert(text != null),
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
@@ -26,7 +34,7 @@ class AddContactInfoButton extends StatelessWidget {
             color: CupertinoColors.systemGreen,
           ),
           Text(
-            '添加电话',
+            text,
             style: CupertinoTheme.of(context).textTheme.textStyle,
           ),
         ],

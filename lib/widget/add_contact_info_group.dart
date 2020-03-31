@@ -12,11 +12,14 @@ import 'package:flutter/material.dart';
 /// 添加联系人-信息组
 class AddContactInfoGroup extends StatelessWidget {
   final int itemCount;
+  final String buttonText;
 
   const AddContactInfoGroup({
     Key key,
     @required this.itemCount,
+    @required this.buttonText,
   })  : assert(itemCount != null),
+        assert(buttonText != null),
         super(key: key);
 
   @override
@@ -27,7 +30,9 @@ class AddContactInfoGroup extends StatelessWidget {
         if (index < itemCount - 1) {
           return AddContactInfoTextField();
         }
-        return AddContactInfoButton();
+        return AddContactInfoButton(
+          text: buttonText,
+        );
       },
     );
   }
