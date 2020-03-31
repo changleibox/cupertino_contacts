@@ -26,6 +26,9 @@ class AddContactPage extends StatefulWidget {
 class _AddContactPageState extends State<AddContactPage> {
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var textTheme = themeData.textTheme;
+    var textStyle = textTheme.textStyle;
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemBackground,
       navigationBar: CupertinoNavigationBar(
@@ -35,7 +38,34 @@ class _AddContactPageState extends State<AddContactPage> {
         leading: NavigationBarAction(
           child: Text('取消'),
           onPressed: () {
-            Navigator.maybePop(context);
+            showCupertinoModalPopup(
+              context: context,
+              builder: (context) {
+                return CupertinoActionSheet(
+                  message: Text('您确定要放弃此新联系人吗？'),
+                  actions: <Widget>[
+                    CupertinoActionSheetAction(
+                      isDestructiveAction: true,
+                      child: Text('放弃更改'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(this.context);
+                      },
+                    ),
+                  ],
+                  cancelButton: CupertinoActionSheetAction(
+                    isDefaultAction: true,
+                    child: Text(
+                      '继续编辑',
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+            );
+            //Navigator.maybePop(context);
           },
         ),
         trailing: NavigationBarAction(
@@ -57,116 +87,125 @@ class _AddContactPageState extends State<AddContactPage> {
             ),
           ];
         },
-        body: Scrollbar(
-          child: ListView(
-            children: <Widget>[
-              AddContactGroupContainer(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return AddContactNormalTextField();
-                },
+        body: CupertinoTheme(
+          data: themeData.copyWith(
+            textTheme: textTheme.copyWith(
+              textStyle: textStyle.copyWith(
+                fontSize: 15,
               ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加电话',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加电子邮件',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactChooseRingToneButton(),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactChooseRingToneButton(),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加URL',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加地址',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加生日',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加日期',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加关联人',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加个人社交资料',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactInfoGroup(
-                itemCount: 2,
-                buttonText: '添加即时信息',
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              AddContactRemarksTextField(),
-              SizedBox(
-                height: 40,
-              ),
-              CupertinoButton(
-                minSize: 44,
-                padding: EdgeInsets.only(
-                  left: 16,
-                  right: 10,
+            ),
+          ),
+          child: CupertinoScrollbar(
+            child: ListView(
+              children: <Widget>[
+                AddContactGroupContainer(
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return AddContactNormalTextField();
+                  },
                 ),
-                borderRadius: BorderRadius.zero,
-                color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.tertiarySystemBackground,
-                  context,
+                SizedBox(
+                  height: 40,
                 ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '添加信息栏',
-                    style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
-                          fontSize: 15,
-                        ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加电话',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加电子邮件',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactChooseRingToneButton(),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactChooseRingToneButton(),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加URL',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加地址',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加生日',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加日期',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加关联人',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加个人社交资料',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactInfoGroup(
+                  itemCount: 2,
+                  buttonText: '添加即时信息',
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AddContactRemarksTextField(),
+                SizedBox(
+                  height: 40,
+                ),
+                CupertinoButton(
+                  minSize: 44,
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 10,
                   ),
+                  borderRadius: BorderRadius.zero,
+                  color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.tertiarySystemBackground,
+                    context,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '添加信息栏',
+                      style: textTheme.actionTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  onPressed: () {},
                 ),
-                onPressed: () {},
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

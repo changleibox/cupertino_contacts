@@ -25,7 +25,6 @@ class CupertinoContactsApp extends StatelessWidget {
               CupertinoColors.label,
               context,
             ),
-            fontSize: 15,
             height: 1.5,
           ),
         ),
