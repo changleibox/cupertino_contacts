@@ -37,14 +37,12 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
       padding: EdgeInsets.symmetric(
         horizontal: _kHorizontalPadding,
       ),
-      child: Text(
-        index,
-        style: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w400,
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.label,
-            context,
+      child: DefaultTextStyle(
+        style: CupertinoTheme.of(context).textTheme.textStyle,
+        child: Text(
+          index,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -85,7 +83,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             Text(
               contact.familyName,
               style: TextStyle(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
             Text(
