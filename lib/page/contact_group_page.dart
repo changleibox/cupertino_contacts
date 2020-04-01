@@ -76,14 +76,14 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                 alignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 direction: Axis.vertical,
-                itemCount: presenter.items.length,
+                itemCount: presenter.itemCount,
                 itemBuilder: (context, index) {
                   return CupertinoButton(
                     child: WidgetGroup.spacing(
                       alignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          presenter.items[index],
+                          presenter[index],
                           style: CupertinoTheme.of(context).textTheme.textStyle,
                         ),
                         Icon(

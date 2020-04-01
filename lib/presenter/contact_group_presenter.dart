@@ -3,26 +3,15 @@
  */
 
 import 'package:cupertinocontacts/page/contact_group_page.dart';
-import 'package:cupertinocontacts/presenter/presenter.dart';
+import 'package:cupertinocontacts/presenter/list_presenter.dart';
 
-class ContactGroupPresenter extends Presenter<ContactGroupPage> {
-  final _items = List<String>();
-
-  List<String> get items => List.unmodifiable(_items);
-
+class ContactGroupPresenter extends ListPresenter<ContactGroupPage, String> {
   @override
-  void initState() {
-    super.initState();
-    onRefresh();
-  }
-
-  Future<void> onRefresh() async {
-    _items.clear();
-    _items.addAll([
+  Future<List<String>> onLoad(bool showProgress) async {
+    return [
       '所有"iPhone"',
       'Friends',
       'Work',
-    ]);
-    notifyDataSetChanged();
+    ];
   }
 }
