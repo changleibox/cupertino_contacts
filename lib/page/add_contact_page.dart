@@ -55,11 +55,17 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
           infoGroup: contactInfo,
         ));
       } else if (contactInfo is DefaultSelectionContactInfo) {
-        children.add(AddContactChooseRingToneButton());
+        children.add(AddContactChooseRingToneButton(
+          info: contactInfo,
+        ));
       } else if (contactInfo is NormalSelectionContactInfo) {
-        children.add(AddContactNormalSelectionButton());
+        children.add(AddContactNormalSelectionButton(
+          info: contactInfo,
+        ));
       } else if (contactInfo is MultiEditableContactInfo) {
-        children.add(AddContactRemarksTextField());
+        children.add(AddContactRemarksTextField(
+          info: contactInfo,
+        ));
       }
     }
 

@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -11,6 +12,14 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-选择铃声
 class AddContactChooseRingToneButton extends StatelessWidget {
+  final DefaultSelectionContactInfo info;
+
+  const AddContactChooseRingToneButton({
+    Key key,
+    @required this.info,
+  })  : assert(info != null),
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +44,7 @@ class AddContactChooseRingToneButton extends StatelessWidget {
               spacing: 16,
               children: [
                 Text(
-                  '电话铃声',
+                  info.name,
                   style: CupertinoTheme.of(context).textTheme.textStyle,
                 ),
                 Expanded(

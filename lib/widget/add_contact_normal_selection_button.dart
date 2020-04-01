@@ -2,12 +2,21 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/4/1.
 ///
 /// 添加联系人-常用的选择按钮
 class AddContactNormalSelectionButton extends StatelessWidget {
+  final NormalSelectionContactInfo info;
+
+  const AddContactNormalSelectionButton({
+    Key key,
+    @required this.info,
+  })  : assert(info != null),
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
@@ -24,7 +33,7 @@ class AddContactNormalSelectionButton extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          '添加信息栏',
+          info.name,
           style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
                 fontSize: 15,
               ),
