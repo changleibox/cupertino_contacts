@@ -10,6 +10,12 @@ class ContactGroupPresenter extends Presenter<ContactGroupPage> {
 
   List<String> get items => List.unmodifiable(_items);
 
+  @override
+  void initState() {
+    super.initState();
+    onRefresh();
+  }
+
   Future<void> onRefresh() async {
     _items.clear();
     _items.addAll([
