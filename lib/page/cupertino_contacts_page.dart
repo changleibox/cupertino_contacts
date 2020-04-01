@@ -101,7 +101,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 
   Widget _buildBody() {
-    if (presenter.isLoading && presenter.isEmpty) {
+    if (presenter.showProgress) {
       return Center(
         child: CupertinoActivityIndicator(
           radius: 14,
@@ -161,7 +161,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         sliver: SliverToBoxAdapter(
           child: Center(
             child: Text(
-              '${presenter.contactCount}位联系人',
+              '${presenter.itemCount}位联系人',
               style: textTheme.textStyle.copyWith(
                 color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel,

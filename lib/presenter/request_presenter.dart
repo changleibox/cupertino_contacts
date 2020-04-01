@@ -16,8 +16,7 @@ mixin RequestPresenterMixin<T extends StatefulWidget, E> on Presenter<T> {
   @protected
   bool get defaultRefresh => true;
 
-  @protected
-  bool get showProgress;
+  bool get showProgress => isLoading && isEmpty;
 
   @protected
   E get element;

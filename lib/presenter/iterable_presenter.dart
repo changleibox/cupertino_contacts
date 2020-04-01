@@ -14,9 +14,6 @@ abstract class IterablePresenter<T extends StatefulWidget, E> extends RequestPre
   @override
   Iterable<E> get element => List.unmodifiable(_objects);
 
-  @override
-  bool get showProgress => false;
-
   int get itemCount => objects.length;
 
   @override

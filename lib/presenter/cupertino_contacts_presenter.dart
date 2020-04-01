@@ -6,27 +6,17 @@ import 'dart:collection';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
-import 'package:cupertinocontacts/presenter/presenter.dart';
+import 'package:cupertinocontacts/presenter/list_presenter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:lpinyin/lpinyin.dart';
 
 const String _kOctothorpe = '#';
 
-class CupertinoContactsPresenter extends Presenter<CupertinoContactsPage> {
+class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Contact> {
   final _contactsMap = LinkedHashMap<String, List<Contact>>();
   final _contactKeys = List<GlobalKey>();
 
-  bool _isLoading = false;
-  String _query;
-  int _contactCount = 0;
-
-  bool get isLoading => _isLoading;
-
-  bool get isEmpty => _contactsMap.isEmpty;
-
   int get keyCount => _contactKeys.length;
-
-  int get contactCount => _contactCount;
 
   List<GlobalKey> get contactKeys => _contactKeys;
 
@@ -35,57 +25,41 @@ class CupertinoContactsPresenter extends Presenter<CupertinoContactsPage> {
   Iterable<MapEntry<String, List<Contact>>> get entries => _contactsMap.entries;
 
   @override
-  void initState() {
-    onRefresh();
-    super.initState();
+  Future<List<Contact>> onLoad(bool showProgress) async {
+    return (await ContactsService.getContacts(query: queryText)).toList();
   }
 
-  Future<void> onQuery(String query) async {
-    query = query == null || query.length == 0 ? null : query;
-    if (_query == query) {
-      return;
-    }
-    _query = query;
-    return onRefresh();
-  }
-
-  Future<void> onRefresh() {
-    _isLoading = true;
-    return ContactsService.getContacts(query: _query).then((contacts) {
-      final contactsMap = Map<String, List<Contact>>();
-      for (var contact in contacts) {
-        var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
-        var contacts = contactsMap[firstLetter];
-        if (contacts == null) {
-          contacts = List<Contact>();
-        }
-        contacts.add(contact);
-        contactsMap[firstLetter] = contacts;
+  @override
+  void onLoaded(Iterable<Contact> contacts) {
+    final contactsMap = Map<String, List<Contact>>();
+    for (var contact in contacts) {
+      var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
+      var contacts = contactsMap[firstLetter];
+      if (contacts == null) {
+        contacts = List<Contact>();
       }
-      var entries = List.of(contactsMap.entries);
-      entries.sort((a, b) {
-        var key1 = a.key;
-        var key2 = b.key;
-        if (key1 == _kOctothorpe && key2 != _kOctothorpe) {
-          return 1;
-        }
-        if (key1 != _kOctothorpe && key2 == _kOctothorpe) {
-          return -1;
-        }
-        return key1.compareTo(key2);
-      });
-
-      _contactsMap.clear();
-      _contactsMap.addEntries(entries);
-
-      _contactKeys.clear();
-      _contactKeys.addAll(List.generate(contactsMap.length, (index) => GlobalKey()));
-
-      _contactCount = contacts.length;
-    }).whenComplete(() {
-      _isLoading = false;
-      notifyDataSetChanged();
+      contacts.add(contact);
+      contactsMap[firstLetter] = contacts;
+    }
+    var entries = List.of(contactsMap.entries);
+    entries.sort((a, b) {
+      var key1 = a.key;
+      var key2 = b.key;
+      if (key1 == _kOctothorpe && key2 != _kOctothorpe) {
+        return 1;
+      }
+      if (key1 != _kOctothorpe && key2 == _kOctothorpe) {
+        return -1;
+      }
+      return key1.compareTo(key2);
     });
+
+    _contactsMap.clear();
+    _contactsMap.addEntries(entries);
+
+    _contactKeys.clear();
+    _contactKeys.addAll(List.generate(contactsMap.length, (index) => GlobalKey()));
+    super.onLoaded(contacts);
   }
 
   _analysisFirstLetter(String name) {
