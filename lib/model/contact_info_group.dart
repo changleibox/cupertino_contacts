@@ -50,13 +50,14 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
   }) : super(name: name);
 }
 
-class ContactInfoGroup extends ContactInfo {
+class ContactInfoGroup<T extends _Item> extends ContactInfo {
   final List<_Item> items;
 
-  const ContactInfoGroup({
+  ContactInfoGroup({
     @required String name,
-    this.items,
+    @required this.items,
   })  : assert(name != null),
+        assert(items != null),
         super(name: name);
 }
 

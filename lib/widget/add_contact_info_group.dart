@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
-class AddContactInfoGroup extends StatelessWidget {
+class AddContactInfoGroup extends StatefulWidget {
   final ContactInfoGroup infoGroup;
 
   const AddContactInfoGroup({
@@ -21,8 +21,13 @@ class AddContactInfoGroup extends StatelessWidget {
         super(key: key);
 
   @override
+  _AddContactInfoGroupState createState() => _AddContactInfoGroupState();
+}
+
+class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
+  @override
   Widget build(BuildContext context) {
-    var itemCount = (infoGroup.items?.length ?? 0) + 1;
+    var itemCount = (widget.infoGroup.items?.length ?? 0) + 1;
     return AddContactGroupContainer(
       itemCount: itemCount,
       itemBuilder: (context, index) {
@@ -30,7 +35,11 @@ class AddContactInfoGroup extends StatelessWidget {
           return AddContactInfoTextField();
         }
         return AddContactInfoButton(
-          text: '添加${infoGroup.name}',
+          text: '添加${widget.infoGroup.name}',
+          onPressed: () {
+            widget.infoGroup.items.add(EditableItem());
+            setState(() {});
+          },
         );
       },
     );

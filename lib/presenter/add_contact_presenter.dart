@@ -23,11 +23,13 @@ class AddContactPresenter extends Presenter<AddContactPage> {
     baseInfos.add(EditableContactInfo(
       name: '公司',
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '电话',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '电子邮件',
+      items: List<EditableItem>(),
     ));
     groups.add(DefaultSelectionContactInfo(
       name: '电话铃声',
@@ -35,26 +37,33 @@ class AddContactPresenter extends Presenter<AddContactPage> {
     groups.add(DefaultSelectionContactInfo(
       name: '短信铃声',
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: 'URL',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '地址',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '生日',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '日期',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '关联人',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
+      items: List<EditableItem>(),
     ));
-    groups.add(ContactInfoGroup(
+    groups.add(ContactInfoGroup<EditableItem>(
       name: '即时信息',
+      items: List<EditableItem>(),
     ));
     groups.add(MultiEditableContactInfo(
       name: '备注',

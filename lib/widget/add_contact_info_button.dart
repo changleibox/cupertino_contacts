@@ -10,10 +10,12 @@ import 'package:flutter/cupertino.dart';
 /// 添加联系人-按钮
 class AddContactInfoButton extends StatelessWidget {
   final String text;
+  final VoidCallback onPressed;
 
   const AddContactInfoButton({
     Key key,
     @required this.text,
+    this.onPressed,
   })  : assert(text != null),
         super(key: key);
 
@@ -39,7 +41,7 @@ class AddContactInfoButton extends StatelessWidget {
           ),
         ],
       ),
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }
