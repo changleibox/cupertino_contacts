@@ -26,81 +26,75 @@ class AddContactInfoTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 10,
-      ),
-      child: WidgetGroup.spacing(
-        spacing: 10,
-        children: [
-          CupertinoButton(
-            child: Icon(
-              CupertinoIcons.minus_circled,
-              color: CupertinoColors.systemRed,
-            ),
-            padding: EdgeInsets.zero,
-            borderRadius: BorderRadius.zero,
-            minSize: 0,
-            onPressed: onDeletePressed,
+    return WidgetGroup.spacing(
+      spacing: 10,
+      children: [
+        CupertinoButton(
+          child: Icon(
+            CupertinoIcons.minus_circled,
+            color: CupertinoColors.systemRed,
           ),
-          CupertinoButton(
-            minSize: 44,
-            borderRadius: BorderRadius.zero,
-            padding: EdgeInsets.zero,
-            child: WidgetGroup.spacing(
-              spacing: 10,
-              children: [
-                Text(
-                  item.label,
+          padding: EdgeInsets.zero,
+          borderRadius: BorderRadius.zero,
+          minSize: 0,
+          onPressed: onDeletePressed,
+        ),
+        CupertinoButton(
+          minSize: 44,
+          borderRadius: BorderRadius.zero,
+          padding: EdgeInsets.zero,
+          child: WidgetGroup.spacing(
+            spacing: 10,
+            children: [
+              Text(
+                item.label,
+              ),
+              Icon(
+                CupertinoIcons.forward,
+                color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel,
+                  context,
                 ),
-                Icon(
-                  CupertinoIcons.forward,
-                  color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel,
-                    context,
-                  ),
+              ),
+              Container(
+                width: 0.5,
+                height: 32,
+                color: CupertinoDynamicColor.resolve(
+                  separatorColor.withOpacity(0.1),
+                  context,
                 ),
-                Container(
-                  width: 0.5,
-                  height: 32,
-                  color: CupertinoDynamicColor.resolve(
-                    separatorColor.withOpacity(0.1),
-                    context,
-                  ),
-                ),
-              ],
-            ),
-            onPressed: () {},
+              ),
+            ],
           ),
-          Expanded(
-            child: SizedBox(
-              height: 44,
-              child: CupertinoTextField(
-                controller: item.controller,
-                placeholder: name,
-                placeholderStyle: TextStyle(
-                  color: CupertinoDynamicColor.resolve(
-                    placeholderColor,
-                    context,
-                  ),
+          onPressed: () {},
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 44,
+            child: CupertinoTextField(
+              controller: item.controller,
+              placeholder: name,
+              placeholderStyle: TextStyle(
+                color: CupertinoDynamicColor.resolve(
+                  placeholderColor,
+                  context,
                 ),
-                decoration: BoxDecoration(
-                  color: CupertinoColors.tertiarySystemBackground,
-                ),
-                padding: EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                scrollPadding: EdgeInsets.only(
-                  bottom: 54,
-                ),
+              ),
+              decoration: BoxDecoration(
+                color: CupertinoColors.tertiarySystemBackground,
+              ),
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+              ),
+              clearButtonMode: OverlayVisibilityMode.editing,
+              scrollPadding: EdgeInsets.only(
+                bottom: 54,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
