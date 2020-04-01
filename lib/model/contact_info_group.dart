@@ -51,7 +51,7 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
 }
 
 class ContactInfoGroup<T extends _Item> extends ContactInfo {
-  final List<_Item> items;
+  final List<T> items;
 
   ContactInfoGroup({
     @required String name,
