@@ -13,14 +13,20 @@ import 'package:flutter/cupertino.dart';
 const double _kPaddingBottom = 16.0;
 const double _kSpacing = 10.0;
 const double _kTextHeight = 14.0;
-const double _kMaxAvatarSize = 144.0;
-const double _kMinAvatarSize = 48.0;
 
 class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double maxAvatarSize;
+  final double minAvatarSize;
+
+  const AddContactPersistentHeaderDelegate({
+    @required this.maxAvatarSize,
+    @required this.minAvatarSize,
+  })  : assert(maxAvatarSize != null),
+        assert(minAvatarSize != null);
+
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
-    final scrollExtent = _kMaxAvatarSize - _kMinAvatarSize;
+    final scrollExtent = maxAvatarSize - minAvatarSize;
     final offset = ((scrollExtent - shrinkOffset) / scrollExtent).clamp(0.0, 1.0);
     final offsetExtent = (_kSpacing + _kTextHeight) * (1.0 - offset);
     return Container(
@@ -52,7 +58,7 @@ class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             assetName: Images.ic_default_avatar,
             file: null,
             borderSide: BorderSide.none,
-            size: max(_kMaxAvatarSize - shrinkOffset + offsetExtent * (1.0 - offset), _kMinAvatarSize),
+            size: max(maxAvatarSize - shrinkOffset + offsetExtent * (1.0 - offset), minAvatarSize),
           ),
           if (offset > 0)
             SizedBox(
@@ -77,10 +83,10 @@ class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   double get _spacing => _kTextHeight + _kPaddingBottom + _kSpacing;
 
   @override
-  double get maxExtent => _kMaxAvatarSize + _spacing;
+  double get maxExtent => maxAvatarSize + _spacing;
 
   @override
-  double get minExtent => _kMinAvatarSize + _kPaddingBottom;
+  double get minExtent => minAvatarSize + _kPaddingBottom;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

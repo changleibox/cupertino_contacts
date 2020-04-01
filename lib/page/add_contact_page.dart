@@ -11,12 +11,16 @@ import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
+import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/3/30.
 ///
 /// 添加联系人
+const double _kMaxAvatarSize = 144.0;
+const double _kMinAvatarSize = 48.0;
+
 class AddContactPage extends StatefulWidget {
   const AddContactPage({Key key}) : super(key: key);
 
@@ -79,6 +83,9 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
         ),
       ),
       child: SupportNestedScrollView(
+        physics: SnappingScrollPhysics(
+          midScrollOffset: _kMaxAvatarSize,
+        ),
         pinnedHeaderSliverHeightBuilder: (context) {
           return 64.0;
         },
@@ -86,7 +93,10 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
           return [
             SliverPersistentHeader(
               pinned: true,
-              delegate: AddContactPersistentHeaderDelegate(),
+              delegate: AddContactPersistentHeaderDelegate(
+                maxAvatarSize: _kMaxAvatarSize,
+                minAvatarSize: _kMinAvatarSize,
+              ),
             ),
           ];
         },
