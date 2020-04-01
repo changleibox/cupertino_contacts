@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:io';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/add_contact_page.dart';
@@ -16,6 +18,8 @@ import 'package:cupertinocontacts/constant/selection.dart' as selection;
 class AddContactPresenter extends Presenter<AddContactPage> {
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
+
+  File avatar;
 
   @override
   void initState() {
@@ -95,7 +99,13 @@ class AddContactPresenter extends Presenter<AddContactPage> {
         EditContactAvatarPage(),
         fullscreenDialog: true,
       ),
-    );
+    ).then((value) {
+      if (value == null) {
+        return;
+      }
+      avatar = value;
+      notifyDataSetChanged();
+    });
   }
 
   onCancelPressed() {
@@ -108,6 +118,7 @@ class AddContactPresenter extends Presenter<AddContactPage> {
 
   onDonePressed() {
     var contact = Contact(
+      avatar: avatar?.readAsBytesSync(),
       familyName: baseInfos[0].value,
       givenName: baseInfos[1].value,
       company: baseInfos[2].value,

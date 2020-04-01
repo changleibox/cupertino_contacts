@@ -28,7 +28,7 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
       width: 0.5,
     ),
     this.onPressed,
-  })  : assert(size != null && size != double.infinity && size > 0),
+  })  : assert(size != null && size > 0),
         assert(child != null),
         super(key: key);
 
@@ -82,7 +82,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       width: 0.5,
     ),
     this.onPressed,
-  })  : assert(size != null && size != double.infinity && size > 0),
+  })  : assert(size != null && size > 0),
         _child = child,
         super(key: key);
 
@@ -100,7 +100,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
     ),
     this.onPressed,
     WidgetBuilder bottomBarBuilder,
-  })  : assert(size != null && size != double.infinity && size > 0),
+  })  : assert(size != null && size > 0),
         assert(assetName != null || file != null),
         assert(canPreview != null),
         _child = _LocationImage(
@@ -119,7 +119,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       width: 0.5,
     ),
     this.onPressed,
-  })  : assert(size != null && size != double.infinity && size > 0),
+  })  : assert(size != null && size > 0),
         assert(name != null),
         _child = _LocationImage(
           assetName: name,
@@ -137,7 +137,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       width: 0.5,
     ),
     this.onPressed,
-  })  : assert(size != null && size != double.infinity && size > 0),
+  })  : assert(size != null && size > 0),
         assert(assetName != null || bytes != null),
         _child = _LocationImage.memory(
           size: size,

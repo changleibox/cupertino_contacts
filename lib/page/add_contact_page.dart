@@ -96,6 +96,7 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
             SliverPersistentHeader(
               pinned: true,
               delegate: AddContactPersistentHeaderDelegate(
+                avatar: presenter.avatar,
                 maxAvatarSize: _kMaxAvatarSize,
                 minAvatarSize: _kMinAvatarSize,
                 onEditAvatarPressed: presenter.onEditAvatarPressed,
