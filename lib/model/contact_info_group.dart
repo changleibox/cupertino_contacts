@@ -70,11 +70,14 @@ abstract class _Item {
 class EditableItem extends _Item {
   final TextEditingController controller;
 
-  EditableItem({String label, String value})
+  EditableItem({@required String label, String value})
       : this.controller = TextEditingController(text: value),
+        assert(label != null),
         super(label);
 }
 
 class SelectionItem extends _Item {
-  const SelectionItem(String label) : super(label);
+  const SelectionItem({@required String label})
+      : assert(label != null),
+        super(label);
 }

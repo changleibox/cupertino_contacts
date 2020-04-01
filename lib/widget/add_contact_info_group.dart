@@ -32,12 +32,21 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (index < itemCount - 1) {
-          return AddContactInfoTextField();
+          return AddContactInfoTextField(
+            name: widget.infoGroup.name,
+            item: widget.infoGroup.items[index],
+            onDeletePressed: () {
+              widget.infoGroup.items.removeAt(index);
+              setState(() {});
+            },
+          );
         }
         return AddContactInfoButton(
           text: '添加${widget.infoGroup.name}',
           onPressed: () {
-            widget.infoGroup.items.add(EditableItem());
+            widget.infoGroup.items.add(EditableItem(
+              label: '住宅',
+            ));
             setState(() {});
           },
         );

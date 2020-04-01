@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,19 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-自定义信息输入框
 class AddContactInfoTextField extends StatelessWidget {
+  final String name;
+  final EditableItem item;
+  final VoidCallback onDeletePressed;
+
+  const AddContactInfoTextField({
+    Key key,
+    @required this.name,
+    @required this.item,
+    this.onDeletePressed,
+  })  : assert(name != null),
+        assert(item != null),
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +42,7 @@ class AddContactInfoTextField extends StatelessWidget {
             padding: EdgeInsets.zero,
             borderRadius: BorderRadius.zero,
             minSize: 0,
-            onPressed: () {},
+            onPressed: onDeletePressed,
           ),
           CupertinoButton(
             minSize: 44,
@@ -38,7 +52,7 @@ class AddContactInfoTextField extends StatelessWidget {
               spacing: 10,
               children: [
                 Text(
-                  '住宅',
+                  item.label,
                 ),
                 Icon(
                   CupertinoIcons.forward,
@@ -63,7 +77,8 @@ class AddContactInfoTextField extends StatelessWidget {
             child: SizedBox(
               height: 44,
               child: CupertinoTextField(
-                placeholder: '姓氏',
+                controller: item.controller,
+                placeholder: name,
                 placeholderStyle: TextStyle(
                   color: CupertinoDynamicColor.resolve(
                     placeholderColor,
