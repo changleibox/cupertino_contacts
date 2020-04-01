@@ -9,7 +9,9 @@ import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_item_widget.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
+import 'package:cupertinocontacts/widget/cupertino_progress.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
+import 'package:cupertinocontacts/widget/error_tips.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
@@ -102,11 +104,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   Widget _buildBody() {
     if (presenter.showProgress) {
-      return Center(
-        child: CupertinoActivityIndicator(
-          radius: 14,
-        ),
-      );
+      return CupertinoProgress();
     }
     var textTheme = CupertinoTheme.of(context).textTheme;
     var padding = MediaQuery.of(context).padding;
@@ -129,17 +127,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     ));
     if (presenter.isEmpty) {
       slivers.add(SliverFillRemaining(
-        child: Center(
-          child: Text(
-            '暂无联系人',
-            style: textTheme.textStyle.copyWith(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.secondaryLabel,
-                context,
-              ),
-            ),
-          ),
-        ),
+        child: ErrorTips(),
       ));
     } else {
       slivers.addAll(List.generate(presenter.keyCount, (index) {
