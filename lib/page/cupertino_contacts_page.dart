@@ -38,25 +38,10 @@ class CupertinoContactsPage extends StatefulWidget {
   _CupertinoContactsPageState createState() => _CupertinoContactsPageState();
 }
 
-class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> with SingleTickerProviderStateMixin {
+class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> {
   _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
 
-  AnimationController _controller;
-  Animation<double> _animation;
   ColorTween _colorTween;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-      duration: Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _animation = _controller.drive(CurveTween(
-      curve: Curves.easeIn,
-    ));
-    _controller.value = _controller.upperBound;
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -73,29 +58,16 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   double _buildPinnedHeaderSliverHeight(BuildContext context) {
     return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
-    if (innerBoxIsScrolled) {
-      _controller.reverse();
-    } else {
-      _controller.forward();
-    }
     return [
       _AnimatedCupertinoSliverNavigationBar(
-        animation: _animation,
         colorTween: _colorTween,
       ),
       _AnimatedSliverSearchBar(
-        animation: _animation,
         colorTween: _colorTween,
         onQuery: presenter.onQuery,
       ),
@@ -202,31 +174,53 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 }
 
-abstract class _AnimatedColorWidget extends AnimatedWidget {
+abstract class _AnimatedColorWidget extends StatefulWidget {
   final ColorTween colorTween;
 
   const _AnimatedColorWidget({
     Key key,
     @required this.colorTween,
-    @required Listenable listenable,
   })  : assert(colorTween != null),
-        assert(listenable != null),
-        super(key: key, listenable: listenable);
+        super(key: key);
+
+  Widget evaluateBuild(BuildContext context, Color color);
+
+  @override
+  __AnimatedColorWidgetState createState() => __AnimatedColorWidgetState();
+}
+
+class __AnimatedColorWidgetState extends State<_AnimatedColorWidget> {
+  double _value = 1.0;
+  ScrollController _scrollController;
+
+  _onScrollListener() {
+    if (_scrollController == null || !_scrollController.hasClients) {
+      return;
+    }
+    var position = _scrollController.position;
+    _value = 1.0 - position.pixels / position.maxScrollExtent;
+    setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    _scrollController?.removeListener(_onScrollListener);
+    _scrollController = PrimaryScrollController.of(context);
+    _scrollController?.addListener(_onScrollListener);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return evaluateBuild(context, colorTween.evaluate(listenable));
+    return widget.evaluateBuild(context, widget.colorTween.transform(_value));
   }
-
-  Widget evaluateBuild(BuildContext context, Color color);
 }
 
 class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
-    @required Animation<double> animation,
-  }) : super(key: key, colorTween: colorTween, listenable: animation);
+  }) : super(key: key, colorTween: colorTween);
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
@@ -275,9 +269,8 @@ class _AnimatedSliverSearchBar extends _AnimatedColorWidget {
   const _AnimatedSliverSearchBar({
     Key key,
     @required ColorTween colorTween,
-    @required Animation<double> animation,
     @required this.onQuery,
-  }) : super(key: key, colorTween: colorTween, listenable: animation);
+  }) : super(key: key, colorTween: colorTween);
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
