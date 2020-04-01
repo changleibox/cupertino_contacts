@@ -52,12 +52,15 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
 
 class ContactInfoGroup<T extends _Item> extends ContactInfo {
   final List<T> items;
+  final List<String> selections;
 
-  ContactInfoGroup({
+  const ContactInfoGroup({
     @required String name,
     @required this.items,
+    @required this.selections,
   })  : assert(name != null),
         assert(items != null),
+        assert(selections != null && selections.length > 0),
         super(name: name);
 }
 

@@ -27,16 +27,17 @@ class AddContactInfoGroup extends StatefulWidget {
 class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   @override
   Widget build(BuildContext context) {
-    var itemCount = (widget.infoGroup.items?.length ?? 0) + 1;
+    var items = widget.infoGroup.items;
+    var itemCount = items.length + 1;
     return AddContactGroupContainer(
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (index < itemCount - 1) {
           return AddContactInfoTextField(
             name: widget.infoGroup.name,
-            item: widget.infoGroup.items[index],
+            item: items[index],
             onDeletePressed: () {
-              widget.infoGroup.items.removeAt(index);
+              items.removeAt(index);
               setState(() {});
             },
           );
@@ -44,8 +45,10 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
         return AddContactInfoButton(
           text: '添加${widget.infoGroup.name}',
           onPressed: () {
-            widget.infoGroup.items.add(EditableItem(
-              label: '住宅',
+            var length = items.length;
+            var selections = widget.infoGroup.selections;
+            items.add(EditableItem(
+              label: selections[length % selections.length],
             ));
             setState(() {});
           },
