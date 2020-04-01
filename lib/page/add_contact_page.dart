@@ -98,6 +98,7 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
               delegate: AddContactPersistentHeaderDelegate(
                 maxAvatarSize: _kMaxAvatarSize,
                 minAvatarSize: _kMinAvatarSize,
+                onEditAvatarPressed: presenter.onEditAvatarPressed,
               ),
             ),
           ];

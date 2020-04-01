@@ -71,6 +71,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
   final double size;
   final BorderSide borderSide;
   final Widget _child;
+  final VoidCallback onPressed;
 
   CupertinoCircleAvatar({
     Key key,
@@ -80,7 +81,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       color: separatorColor,
       width: 0.5,
     ),
-    VoidCallback onPressed,
+    this.onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
         _child = child,
         super(key: key);
@@ -97,7 +98,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       color: separatorColor,
       width: 0.5,
     ),
-    VoidCallback onPressed,
+    this.onPressed,
     WidgetBuilder bottomBarBuilder,
   })  : assert(size != null && size != double.infinity && size > 0),
         assert(assetName != null || file != null),
@@ -117,7 +118,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       color: separatorColor,
       width: 0.5,
     ),
-    VoidCallback onPressed,
+    this.onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
         assert(name != null),
         _child = _LocationImage(
@@ -135,7 +136,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       color: separatorColor,
       width: 0.5,
     ),
-    VoidCallback onPressed,
+    this.onPressed,
   })  : assert(size != null && size != double.infinity && size > 0),
         assert(assetName != null || bytes != null),
         _child = _LocationImage.memory(
@@ -153,6 +154,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
       ),
       size: size,
       borderSide: borderSide,
+      onPressed: onPressed,
     );
   }
 }

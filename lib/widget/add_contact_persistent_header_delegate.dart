@@ -17,10 +17,12 @@ const double _kTextHeight = 14.0;
 class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double maxAvatarSize;
   final double minAvatarSize;
+  final VoidCallback onEditAvatarPressed;
 
   const AddContactPersistentHeaderDelegate({
     @required this.maxAvatarSize,
     @required this.minAvatarSize,
+    this.onEditAvatarPressed,
   })  : assert(maxAvatarSize != null),
         assert(minAvatarSize != null);
 
@@ -59,18 +61,25 @@ class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             file: null,
             borderSide: BorderSide.none,
             size: max(maxAvatarSize - shrinkOffset + offsetExtent * (1.0 - offset), minAvatarSize),
+            onPressed: onEditAvatarPressed,
           ),
           if (offset > 0)
-            SizedBox(
-              height: _kTextHeight * offset,
-              child: Opacity(
-                opacity: offset,
-                child: Text(
-                  '添加照片',
-                  style: TextStyle(
-                    fontSize: _kTextHeight * offset,
-                    color: CupertinoTheme.of(context).primaryColor,
-                    height: 1.0,
+            CupertinoButton(
+              minSize: 0,
+              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.zero,
+              onPressed: onEditAvatarPressed,
+              child: SizedBox(
+                height: _kTextHeight * offset,
+                child: Opacity(
+                  opacity: offset,
+                  child: Text(
+                    '添加照片',
+                    style: TextStyle(
+                      fontSize: _kTextHeight * offset,
+                      color: CupertinoTheme.of(context).primaryColor,
+                      height: 1.0,
+                    ),
                   ),
                 ),
               ),
