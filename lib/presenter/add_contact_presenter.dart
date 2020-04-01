@@ -97,7 +97,15 @@ class AddContactPresenter extends Presenter<AddContactPage> {
 
   onDonePressed() {
     var contact = Contact(
-
+      familyName: baseInfos[0].value,
+      givenName: baseInfos[1].value,
+      company: baseInfos[2].value,
+      phones: (groups[0] as ContactInfoGroup<EditableItem>).items.map((e) {
+        return Item(label: e.label, value: e.value);
+      }),
+      emails: (groups[1] as ContactInfoGroup<EditableItem>).items.map((e) {
+        return Item(label: e.label, value: e.value);
+      }),
     );
     ContactsService.addContact(contact).then((value) {
       Navigator.pushReplacementNamed(context, RouteProvider.contactDetail);
