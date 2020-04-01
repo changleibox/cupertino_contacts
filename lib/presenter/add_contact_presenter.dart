@@ -2,10 +2,13 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/add_contact_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
+import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
 
@@ -93,6 +96,13 @@ class AddContactPresenter extends Presenter<AddContactPage> {
   }
 
   onDonePressed() {
-    Navigator.maybePop(context);
+    var contact = Contact(
+
+    );
+    ContactsService.addContact(contact).then((value) {
+      Navigator.pushReplacementNamed(context, RouteProvider.contactDetail);
+    }).catchError((error) {
+      showText(error.toString(), context);
+    });
   }
 }

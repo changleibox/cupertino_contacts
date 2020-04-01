@@ -95,7 +95,10 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             Text(
               contact.suffix,
             ),
-          ];
+          ].where((element) {
+            return element.data != null && element.data.isNotEmpty;
+          }).toList();
+          final hasSpacing = contact.displayName != null && letterRegExp.hasMatch(contact.displayName);
           return CupertinoButton(
             padding: EdgeInsets.zero,
             minSize: 0,
@@ -108,14 +111,14 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               alignment: Alignment.centerLeft,
               child: DefaultTextStyle(
                 style: CupertinoTheme.of(context).textTheme.textStyle,
-                child: WidgetGroup.spacing(
-                  alignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: letterRegExp.hasMatch(contact.displayName) ? 5 : 0,
-                  children: names.where((element) {
-                    return element.data != null && element.data.isNotEmpty;
-                  }).toList(),
-                ),
+                child: names.isEmpty
+                    ? Text('无姓名')
+                    : WidgetGroup.spacing(
+                        alignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: hasSpacing ? 5 : 0,
+                        children: names,
+                      ),
               ),
             ),
             onPressed: () {
