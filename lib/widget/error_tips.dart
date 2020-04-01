@@ -13,15 +13,16 @@ class ErrorTips extends StatelessWidget {
 
   const ErrorTips({
     Key key,
-    this.exception,
-  }) : super(key: key);
+    this.exception = '暂无数据',
+  })  : assert(exception != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var textTheme = CupertinoTheme.of(context).textTheme;
     return Center(
       child: Text(
-        exception?.toString() ?? '暂无联系人',
+        exception.toString(),
         style: textTheme.textStyle.copyWith(
           color: CupertinoDynamicColor.resolve(
             CupertinoColors.secondaryLabel,

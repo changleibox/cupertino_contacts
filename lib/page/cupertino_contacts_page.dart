@@ -127,7 +127,9 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     ));
     if (presenter.isEmpty) {
       slivers.add(SliverFillRemaining(
-        child: ErrorTips(),
+        child: ErrorTips(
+          exception: '暂无联系人',
+        ),
       ));
     } else {
       slivers.addAll(List.generate(presenter.keyCount, (index) {
