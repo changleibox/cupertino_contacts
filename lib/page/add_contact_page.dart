@@ -44,42 +44,11 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
         border: null,
         leading: NavigationBarAction(
           child: Text('取消'),
-          onPressed: () {
-            showCupertinoModalPopup(
-              context: context,
-              builder: (context) {
-                return CupertinoActionSheet(
-                  message: Text('您确定要放弃此新联系人吗？'),
-                  actions: <Widget>[
-                    CupertinoActionSheetAction(
-                      isDestructiveAction: true,
-                      child: Text('放弃更改'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(this.context);
-                      },
-                    ),
-                  ],
-                  cancelButton: CupertinoActionSheetAction(
-                    isDefaultAction: true,
-                    child: Text(
-                      '继续编辑',
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                );
-              },
-            );
-            //Navigator.maybePop(context);
-          },
+          onPressed: presenter.onCancelPressed,
         ),
         trailing: NavigationBarAction(
           child: Text('完成'),
-          onPressed: () {
-            Navigator.maybePop(context);
-          },
+          onPressed: presenter.onDonePressed,
         ),
       ),
       child: SupportNestedScrollView(
