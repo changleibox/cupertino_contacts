@@ -222,9 +222,9 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
         _image = imageInfo.image;
         _scale = imageInfo.scale;
 
-        _ratio = min(
-          _boundaries.width / _image.width,
-          _boundaries.height / _image.height,
+        _ratio = max(
+          (widget.chipRadius * 2) / _image.width,
+          (widget.chipRadius * 2) / _image.height,
         );
 
         final viewWidth = _boundaries.width / (_image.width * _scale * _ratio);
