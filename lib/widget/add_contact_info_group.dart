@@ -7,6 +7,7 @@ import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/add_contact_info_button.dart';
 import 'package:cupertinocontacts/widget/add_contact_info_text_field.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
+import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -29,8 +30,10 @@ class AddContactInfoGroup extends StatefulWidget {
 
 class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   final _animatedListKey = GlobalKey<AnimatedListState>();
-  final _slidableController = SlidableController();
   final _globalKeys = List<GlobalKey<SlidableState>>();
+
+  int _selectedIndex;
+  SlidableController _slidableController;
 
   @override
   void initState() {
@@ -40,7 +43,17 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
     super.initState();
   }
 
-  int _selectedIndex;
+  @override
+  void didChangeDependencies() {
+    _slidableController = PrimarySlidableController.of(context);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _slidableController?.activeState = null;
+    super.dispose();
+  }
 
   Widget _buildItemAsItem(EditableItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
     var items = widget.infoGroup.value;
@@ -48,6 +61,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
     return Slidable.builder(
       controller: _slidableController,
       key: index < 0 ? null : _globalKeys[index],
+      closeOnScroll: false,
       actionPane: SlidableScrollActionPane(),
       secondaryActionDelegate: SlideActionListDelegate(
         actions: [
@@ -124,7 +138,11 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
 
   _onRemovePressed(int index) {
     _selectedIndex = index;
-    _slidableController.activeState = _globalKeys[index].currentState;
+    var currentState = _globalKeys[index].currentState;
+    if (currentState == null) {
+      return;
+    }
+    currentState.open(actionType: SlideActionType.secondary);
   }
 
   @override

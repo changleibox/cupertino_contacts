@@ -14,9 +14,12 @@ import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
+import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -33,6 +36,29 @@ class AddContactPage extends StatefulWidget {
 
 class _AddContactPageState extends PresenterState<AddContactPage, AddContactPresenter> {
   _AddContactPageState() : super(AddContactPresenter());
+
+  SlidableController _slidableController;
+  bool _isSlidableOpen = false;
+
+  @override
+  void initState() {
+    _slidableController = SlidableController(
+      onSlideAnimationChanged: (value) {},
+      onSlideIsOpenChanged: (value) {
+        _isSlidableOpen = value;
+        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+          notifyDataSetChanged();
+        });
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void onRootTap() {
+    _slidableController.activeState = null;
+    super.onRootTap();
+  }
 
   @override
   Widget builds(BuildContext context) {
@@ -119,17 +145,25 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
               ),
             ),
           ),
-          child: CupertinoScrollbar(
-            child: ListView.separated(
-              itemCount: children.length,
-              itemBuilder: (context, index) {
-                return children[index];
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(
-                  height: 40,
-                );
-              },
+          child: PrimarySlidableController(
+            controller: _slidableController,
+            child: IgnorePointer(
+              ignoring: _isSlidableOpen && _slidableController.activeState != null,
+              ignoringSemantics: _isSlidableOpen && _slidableController.activeState != null,
+              child: CupertinoScrollbar(
+                child: ListView.separated(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  itemCount: children.length,
+                  itemBuilder: (context, index) {
+                    return children[index];
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 40,
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ),

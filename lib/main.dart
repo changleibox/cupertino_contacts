@@ -4,6 +4,7 @@
 
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(CupertinoContactsApp());
@@ -29,6 +30,10 @@ class CupertinoContactsApp extends StatelessWidget {
           ),
         ),
       ),
+      localizationsDelegates: [
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       supportedLocales: [
         Locale('zh', 'CN'),
       ],
