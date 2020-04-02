@@ -2,8 +2,10 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/page/crop_image_page.dart';
 import 'package:cupertinocontacts/page/edit_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:flutter/cupertino.dart';
 
 enum EditAvatarType {
@@ -22,9 +24,20 @@ class EditAvatarPresenter extends Presenter<EditAvatarPage> {
   }
 
   onEditPressed() {
-    Navigator.pop(context, {
-      'data': widget.avatar,
-      'type': EditAvatarType.edit,
+    Navigator.push(
+      context,
+      RouteProvider.buildRoute(
+        CropImagePage(bytes: widget.avatar),
+      ),
+    ).then((value) {
+      if (value == null) {
+        return;
+      }
+      Navigator.pop(context, {
+        'data': widget.avatar,
+        'editedData': value,
+        'type': EditAvatarType.edit,
+      });
     });
   }
 

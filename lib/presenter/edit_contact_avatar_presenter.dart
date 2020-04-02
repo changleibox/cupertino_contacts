@@ -70,9 +70,14 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
         _picture = avatar;
         break;
       case EditAvatarType.edit:
-        _proposals.removeAt(index);
-        _proposals.insert(index, avatar);
-        _picture = avatar;
+        var editedData = result['editedData'];
+        if (index >= 0 && index < _proposals.length) {
+          _proposals.removeAt(index);
+          _proposals.insert(index, editedData);
+        } else {
+          _proposals.add(editedData);
+        }
+        _picture = editedData;
         break;
       case EditAvatarType.copy:
         _proposals.insert(index + 1, avatar);
