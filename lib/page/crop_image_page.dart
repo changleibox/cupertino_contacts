@@ -13,6 +13,8 @@ import 'dart:ui' as ui;
 /// Created by box on 2020/4/2.
 ///
 /// 截图
+const double _padding = 16;
+
 class CropImagePage extends StatefulWidget {
   final Uint8List bytes;
 
@@ -116,6 +118,7 @@ class _CropImagePageState extends State<CropImagePage> {
             ImageCrop(
               key: _cropKey,
               image: _memoryImage,
+              chipRadius: MediaQuery.of(context).size.width / 2 - _padding,
               chipShape: BoxShape.circle,
             ),
             Positioned(
@@ -143,6 +146,7 @@ class _CropImagePageState extends State<CropImagePage> {
                           color: CupertinoColors.white,
                         ),
                       ),
+                      padding: EdgeInsets.all(_padding),
                       onPressed: () {
                         Navigator.maybePop(context);
                       },
@@ -155,6 +159,7 @@ class _CropImagePageState extends State<CropImagePage> {
                           color: CupertinoColors.white,
                         ),
                       ),
+                      padding: EdgeInsets.all(_padding),
                       onPressed: _onCropPressed,
                     ),
                   ],
