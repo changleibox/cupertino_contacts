@@ -32,7 +32,6 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   final _animatedListKey = GlobalKey<AnimatedListState>();
   final _globalKeys = List<GlobalKey<SlidableState>>();
 
-  int _selectedIndex;
   SlidableController _slidableController;
 
   @override
@@ -73,14 +72,9 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
             closeOnTap: true,
             color: CupertinoColors.destructiveRed,
             onTap: () {
-              if (_selectedIndex == null) {
-                return;
-              }
-              _animatedListKey.currentState.removeItem(_selectedIndex, (context, animation) {
-                var item = widget.infoGroup.value[_selectedIndex];
-                widget.infoGroup.removeAt(_selectedIndex);
-                _globalKeys.removeAt(_selectedIndex);
-                _selectedIndex = null;
+              widget.infoGroup.removeAt(index);
+              _globalKeys.removeAt(index);
+              _animatedListKey.currentState.removeItem(index, (context, animation) {
                 return _buildItemAsItem(item, animation);
               });
             },
@@ -141,7 +135,6 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
     if (currentState == null) {
       return;
     }
-    _selectedIndex = index;
     currentState.open(actionType: SlideActionType.secondary);
   }
 
