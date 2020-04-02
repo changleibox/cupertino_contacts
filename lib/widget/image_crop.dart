@@ -20,14 +20,14 @@ class ImageCrop extends StatefulWidget {
   final double maximumScale;
   final ImageErrorListener onImageError;
   final double chipRadius; // 裁剪半径
-  final String chipShape; // 裁剪区域形状
+  final BoxShape chipShape; // 裁剪区域形状
   const ImageCrop({
     Key key,
     this.image,
     this.maximumScale: 2.0,
     this.onImageError,
     this.chipRadius = 150,
-    this.chipShape = 'circle',
+    this.chipShape = BoxShape.circle,
   })  : assert(image != null),
         assert(maximumScale != null),
         super(key: key);
@@ -39,7 +39,7 @@ class ImageCrop extends StatefulWidget {
     this.maximumScale: 2.0,
     this.onImageError,
     this.chipRadius = 150,
-    this.chipShape = 'circle',
+    this.chipShape = BoxShape.circle,
   })  : image = FileImage(file, scale: scale),
         assert(maximumScale != null),
         super(key: key);
@@ -52,7 +52,7 @@ class ImageCrop extends StatefulWidget {
     this.chipRadius = 150,
     this.maximumScale: 2.0,
     this.onImageError,
-    this.chipShape = 'circle',
+    this.chipShape = BoxShape.circle,
   })  : image = AssetImage(
           assetName,
           bundle: bundle,
@@ -350,9 +350,17 @@ class _CropPainter extends CustomPainter {
   final Rect area;
   final double scale;
   final double active;
-  final String chipShape;
+  final BoxShape chipShape;
 
-  _CropPainter({this.image, this.view, this.ratio, this.area, this.scale, this.active, this.chipShape});
+  _CropPainter({
+    this.image,
+    this.view,
+    this.ratio,
+    this.area,
+    this.scale,
+    this.active,
+    this.chipShape,
+  });
 
   @override
   bool shouldRepaint(_CropPainter oldDelegate) {
@@ -416,7 +424,7 @@ class _CropPainter extends CustomPainter {
     final boundaries = currentBoundaries(size);
     final _path1 = Path()..addRect(Rect.fromLTRB(0.0, 0.0, rect.width, rect.height));
     Path _path2;
-    if (chipShape == 'rect') {
+    if (chipShape == BoxShape.rectangle) {
       _path2 = Path()..addRect(boundaries);
     } else {
       _path2 = Path()
@@ -435,7 +443,7 @@ class _CropPainter extends CustomPainter {
       ..color = CupertinoColors.white
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
-    if (chipShape == 'rect') {
+    if (chipShape == BoxShape.rectangle) {
       canvas.drawRect(
         Rect.fromLTRB(
           boundaries.left - 1,

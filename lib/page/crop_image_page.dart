@@ -116,7 +116,7 @@ class _CropImagePageState extends State<CropImagePage> {
             ImageCrop(
               key: _cropKey,
               image: _memoryImage,
-              chipShape: 'circle',
+              chipShape: BoxShape.circle,
             ),
             Positioned(
               top: 20,
