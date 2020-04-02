@@ -2,8 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -16,7 +16,7 @@ const double _kSpacing = 10.0;
 const double _kTextHeight = 14.0;
 
 class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final File avatar;
+  final Uint8List avatar;
   final double maxAvatarSize;
   final double minAvatarSize;
   final VoidCallback onEditAvatarPressed;
@@ -59,9 +59,9 @@ class AddContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
         direction: Axis.vertical,
         spacing: _kSpacing * offset,
         children: [
-          CupertinoCircleAvatar.file(
+          CupertinoCircleAvatar.memory(
             assetName: Images.ic_default_avatar,
-            file: avatar,
+            bytes: avatar,
             borderSide: BorderSide.none,
             size: max(maxAvatarSize - shrinkOffset + offsetExtent * (1.0 - offset), minAvatarSize),
             onPressed: onEditAvatarPressed,

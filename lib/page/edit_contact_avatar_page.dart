@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:typed_data';
+
 import 'package:cupertinocontacts/presenter/edit_contact_avatar_presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
@@ -19,7 +21,9 @@ const double _padding = 16;
 const double _spacing = 24;
 
 class EditContactAvatarPage extends StatefulWidget {
-  const EditContactAvatarPage({Key key}) : super(key: key);
+  final Uint8List picture;
+
+  const EditContactAvatarPage({Key key, this.picture}) : super(key: key);
 
   @override
   _EditContactAvatarPageState createState() => _EditContactAvatarPageState();
@@ -63,9 +67,9 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                 alignment: MainAxisAlignment.start,
                 direction: Axis.vertical,
                 children: [
-                  CupertinoCircleAvatar.file(
+                  CupertinoCircleAvatar.memory(
                     assetName: Images.ic_default_avatar,
-                    file: presenter.picture,
+                    bytes: presenter.picture,
                     borderSide: BorderSide.none,
                     size: 144,
                   ),
