@@ -187,7 +187,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
   }
 
   Size get _boundaries {
-    return _surfaceKey.currentContext.size - Offset.zero;
+    return _surfaceKey.currentContext.size;
   }
 
   void _settleAnimationChanged() {
