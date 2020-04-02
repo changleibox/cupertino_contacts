@@ -19,8 +19,8 @@ class ImageCrop extends StatefulWidget {
   final ImageProvider image;
   final double maximumScale;
   final ImageErrorListener onImageError;
-  final double chipRadius; // 裁剪半径
-  final BoxShape chipShape; // 裁剪区域形状
+  final double chipRadius;
+  final BoxShape chipShape;
   const ImageCrop({
     Key key,
     this.image,
@@ -114,7 +114,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
     _activeController = AnimationController(
       vsync: this,
       value: 0.0,
-    )..addListener(() => setState(() {})); // 裁剪背景灰度控制
+    )..addListener(() => setState(() {}));
     _settleController = AnimationController(vsync: this)..addListener(_settleAnimationChanged);
   }
 
@@ -184,14 +184,13 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
     );
   }
 
-  // NOTE: 区域性缩小 总区域 - 10 * 10 区域
   Size get _boundaries {
     return _surfaceKey.currentContext.size - Offset.zero;
   }
 
   void _settleAnimationChanged() {
     setState(() {
-      _scale = _scaleTween.transform(_settleController.value); // 将0 ～ 1的动画转变过程，转换至 _scaleTween 的begin ~ end
+      _scale = _scaleTween.transform(_settleController.value);
       _view = _viewTween.transform(_settleController.value);
     });
   }
@@ -221,13 +220,11 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
         _image = imageInfo.image;
         _scale = imageInfo.scale;
 
-        // NOTE: conver img  _ratio value >= 0
         _ratio = max(
           _boundaries.width / _image.width,
           _boundaries.height / _image.height,
         );
 
-        // NOTE: 计算图片显示比值，最大1.0为全部显示
         final viewWidth = _boundaries.width / (_image.width * _scale * _ratio);
         final viewHeight = _boundaries.height / (_image.height * _scale * _ratio);
         _area = _calculateDefaultArea(
@@ -237,7 +234,6 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
           imageHeight: _image.height,
         );
 
-        // NOTE: 相对于整体图片已显示的view大小， viewWidth - 1.0 为未显示区域， / 2 算出 left的比例模型
         _view = Rect.fromLTWH(
           (viewWidth - 1.0) / 2,
           (viewHeight - 1.0) / 2,
@@ -289,7 +285,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
   void _handleScaleEnd(ScaleEndDetails details) {
     _activate(0);
 
-    final targetScale = _scale.clamp(_minimumScale, _maximumScale); //NOTE: 处理缩放边界值
+    final targetScale = _scale.clamp(_minimumScale, _maximumScale);
     _scaleTween = Tween<double>(
       begin: _scale,
       end: targetScale,
@@ -309,16 +305,14 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
     );
   }
 
-  // 手势触发过程 判断action 类型:移动或者缩放, 跟新view 重绘image
   void _handleScaleUpdate(ScaleUpdateDetails details) {
     _action = details.rotation == 0.0 && details.scale == 1.0 ? _CropAction.moving : _CropAction.scaling;
 
     if (_action == _CropAction.moving) {
-      final delta = details.focalPoint - _lastFocalPoint; // offset相减 得出一次相对移动距离
+      final delta = details.focalPoint - _lastFocalPoint;
       _lastFocalPoint = details.focalPoint;
 
       setState(() {
-        // move只做两维方向移动
         _view = _view.translate(
           delta.dx / (_image.width * _scale * _ratio),
           delta.dy / (_image.height * _scale * _ratio),
@@ -328,7 +322,6 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
       setState(() {
         _scale = _startScale * details.scale;
 
-        // 计算已缩放的比值；
         final dx = _boundaries.width * (1.0 - details.scale) / (_image.width * _scale * _ratio);
         final dy = _boundaries.height * (1.0 - details.scale) / (_image.height * _scale * _ratio);
 
