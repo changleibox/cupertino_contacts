@@ -171,6 +171,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
             scale: _scale,
             active: _activeController.value,
             chipShape: widget.chipShape,
+            borderColor: CupertinoTheme.of(context).primaryColor,
           ),
         ),
       ),
@@ -345,6 +346,7 @@ class _CropPainter extends CustomPainter {
   final double scale;
   final double active;
   final BoxShape chipShape;
+  final Color borderColor;
 
   _CropPainter({
     this.image,
@@ -354,6 +356,7 @@ class _CropPainter extends CustomPainter {
     this.scale,
     this.active,
     this.chipShape,
+    this.borderColor,
   });
 
   @override
@@ -434,7 +437,7 @@ class _CropPainter extends CustomPainter {
     canvas.drawRect(Rect.fromLTRB(0.0, 0.0, rect.width, rect.height), paint);
     paint
       ..isAntiAlias = true
-      ..color = CupertinoColors.white
+      ..color = borderColor
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
     if (chipShape == BoxShape.rectangle) {
