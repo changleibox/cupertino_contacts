@@ -53,7 +53,7 @@ Uint8List _cropImageAsSync(_CropInfos infos) {
     cropRect.width.floor(),
     cropRect.height.floor(),
   );
-  return image.encodePng(copyCropImage);
+  return Uint8List.fromList(image.encodePng(copyCropImage));
 }
 
 Future<Uint8List> _cropImage(_CropInfos cropInfos) {
@@ -127,8 +127,11 @@ class _CropImagePageState extends State<CropImagePage> {
 
     var loadPrompt = LoadPrompt(context)..show();
     _cropImage(cropInfos).then((value) {
+      loadPrompt.dismiss();
       Navigator.pop(context, value);
-    }).whenComplete(() => loadPrompt.dismiss());
+    }).catchError((_) {
+      loadPrompt.dismiss();
+    });
   }
 
   @override
