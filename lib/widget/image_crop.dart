@@ -4,14 +4,66 @@
 
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:image/image.dart' as image;
 import 'dart:ui' as ui;
 
 const _kCropOverlayActiveOpacity = 0.3;
 const _kCropOverlayInactiveOpacity = 0.7;
+
+class _CropInfos {
+  final int srcWidth;
+  final int srcHeight;
+  final Uint8List bytes;
+  final double scale;
+  final Rect area;
+
+  _CropInfos({
+    this.srcWidth,
+    this.srcHeight,
+    this.bytes,
+    this.scale,
+    this.area,
+  });
+}
+
+Uint8List _cropImageAsSync(_CropInfos infos) {
+  var scaleRect = Rect.fromLTWH(
+    0,
+    0,
+    infos.srcWidth / infos.scale,
+    infos.srcHeight / infos.scale,
+  );
+  var cropRect = Rect.fromLTRB(
+    scaleRect.width * infos.area.left,
+    scaleRect.height * infos.area.top,
+    scaleRect.width * infos.area.right,
+    scaleRect.height * infos.area.bottom,
+  );
+
+  var resizeImage = image.copyResize(
+    image.decodeImage(infos.bytes),
+    width: scaleRect.width.floor(),
+    height: scaleRect.height.floor(),
+  );
+  var copyCropImage = image.copyCrop(
+    resizeImage,
+    cropRect.left.floor(),
+    cropRect.top.floor(),
+    cropRect.width.floor(),
+    cropRect.height.floor(),
+  );
+  return image.encodePng(copyCropImage);
+}
+
+Future<Uint8List> _cropImage(_CropInfos cropInfos) {
+  return compute(_cropImageAsSync, cropInfos);
+}
 
 enum _CropAction { none, moving, scaling }
 
@@ -102,6 +154,21 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
   }
 
   bool get _isEnabled => !_view.isEmpty && _image != null;
+
+  Future<Uint8List> cropImage() async {
+    if (_image == null) {
+      return Future.error('图片解析失败');
+    }
+    var byteData = await _image.toByteData(format: ui.ImageByteFormat.png);
+    var cropInfos = _CropInfos(
+      srcWidth: _image.width,
+      srcHeight: _image.height,
+      bytes: Uint8List.view(byteData.buffer),
+      area: area,
+      scale: scale,
+    );
+    return _cropImage(cropInfos);
+  }
 
   @override
   void initState() {

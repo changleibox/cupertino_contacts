@@ -9,56 +9,12 @@ import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:image/image.dart' as image;
 import 'dart:ui' as ui;
 
 /// Created by box on 2020/4/2.
 ///
 /// 截图
 const double _padding = 16;
-
-class _CropInfos {
-  final int srcWidth;
-  final int srcHeight;
-  final Uint8List bytes;
-  final double scale;
-  final Rect area;
-
-  _CropInfos({this.srcWidth, this.srcHeight, this.bytes, this.scale, this.area});
-}
-
-Uint8List _cropImageAsSync(_CropInfos infos) {
-  var scaleRect = Rect.fromLTWH(
-    0,
-    0,
-    infos.srcWidth / infos.scale,
-    infos.srcHeight / infos.scale,
-  );
-  var cropRect = Rect.fromLTRB(
-    scaleRect.width * infos.area.left,
-    scaleRect.height * infos.area.top,
-    scaleRect.width * infos.area.right,
-    scaleRect.height * infos.area.bottom,
-  );
-
-  var resizeImage = image.copyResize(
-    image.decodeImage(infos.bytes),
-    width: scaleRect.width.floor(),
-    height: scaleRect.height.floor(),
-  );
-  var copyCropImage = image.copyCrop(
-    resizeImage,
-    cropRect.left.floor(),
-    cropRect.top.floor(),
-    cropRect.width.floor(),
-    cropRect.height.floor(),
-  );
-  return image.encodePng(copyCropImage);
-}
-
-Future<Uint8List> _cropImage(_CropInfos cropInfos) {
-  return compute(_cropImageAsSync, cropInfos);
-}
 
 class CropImagePage extends StatefulWidget {
   final Uint8List bytes;
@@ -117,19 +73,12 @@ class _CropImagePageState extends State<CropImagePage> {
     if (_image == null || currentState == null) {
       return;
     }
-    var cropInfos = _CropInfos(
-      srcWidth: _image.width,
-      srcHeight: _image.height,
-      bytes: widget.bytes,
-      area: currentState.area,
-      scale: currentState.scale,
-    );
 
     var loadPrompt = LoadPrompt(context)..show();
-    _cropImage(cropInfos).then((value) {
+    currentState.cropImage().then((value) {
       loadPrompt.dismiss();
       Navigator.pop(context, value);
-    }).catchError((_) {
+    }).catchError((errot) {
       loadPrompt.dismiss();
     });
   }
