@@ -128,14 +128,14 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     sliver: SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return CupertinoCircleAvatar.file(
+                          return CupertinoCircleAvatar.memory(
                             assetName: Images.ic_default_avatar,
-                            file: null,
+                            bytes: presenter.proposals.elementAt(index),
                             borderSide: BorderSide.none,
                             size: double.infinity,
                           );
                         },
-                        childCount: 1,
+                        childCount: presenter.proposals.length,
                         addAutomaticKeepAlives: true,
                         addRepaintBoundaries: true,
                         addSemanticIndexes: true,
