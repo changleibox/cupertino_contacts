@@ -21,7 +21,10 @@ class EditableContactInfo extends ContactInfo {
   })  : this.controller = TextEditingController(text: value),
         super(name: name);
 
-  String get value => controller.text;
+  String get value {
+    var text = controller.text;
+    return text == null || text.isEmpty ? null : text;
+  }
 }
 
 class MultiEditableContactInfo extends EditableContactInfo {
@@ -80,7 +83,10 @@ class EditableItem extends _Item {
         assert(label != null),
         super(label);
 
-  String get value => controller.text;
+  String get value {
+    var text = controller.text;
+    return text == null || text.isEmpty ? null : text;
+  }
 }
 
 class SelectionItem extends _Item {

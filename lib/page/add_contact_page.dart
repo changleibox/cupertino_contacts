@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/add_contact_presenter.dart';
 import 'package:cupertinocontacts/widget/add_contact_choose_ring_tone_button.dart';
@@ -79,9 +80,15 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
           child: Text('取消'),
           onPressed: presenter.onCancelPressed,
         ),
-        trailing: NavigationBarAction(
-          child: Text('完成'),
-          onPressed: presenter.onDonePressed,
+        trailing: ValueListenableBuilder<Contact>(
+          valueListenable: presenter,
+          builder: (context, value, child) {
+            final bool isInvalid = value == Contact();
+            return NavigationBarAction(
+              child: Text('完成'),
+              onPressed: isInvalid == null ? null : presenter.onDonePressed,
+            );
+          },
         ),
       ),
       child: SupportNestedScrollView(

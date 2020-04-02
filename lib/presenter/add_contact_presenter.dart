@@ -14,8 +14,10 @@ import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
+import 'package:flutter/foundation.dart';
 
-class AddContactPresenter extends Presenter<AddContactPage> {
+class AddContactPresenter extends Presenter<AddContactPage> implements ValueListenable<Contact> {
+  ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
 
@@ -92,6 +94,12 @@ class AddContactPresenter extends Presenter<AddContactPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _listeners = null;
+    super.dispose();
+  }
+
   onEditAvatarPressed() {
     Navigator.push(
       context,
@@ -117,22 +125,67 @@ class AddContactPresenter extends Presenter<AddContactPage> {
   }
 
   onDonePressed() {
-    var contact = Contact(
-      avatar: avatar?.readAsBytesSync(),
-      familyName: baseInfos[0].value,
-      givenName: baseInfos[1].value,
-      company: baseInfos[2].value,
-      phones: (groups[0] as ContactInfoGroup<EditableItem>).items.map((e) {
-        return Item(label: e.label, value: e.value);
-      }),
-      emails: (groups[1] as ContactInfoGroup<EditableItem>).items.map((e) {
-        return Item(label: e.label, value: e.value);
-      }),
-    );
-    ContactsService.addContact(contact).then((value) {
+    ContactsService.addContact(value).then((value) {
       Navigator.pushReplacementNamed(context, RouteProvider.contactDetail);
     }).catchError((error) {
       showText(error.toString(), context);
     });
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    _listeners.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _listeners.remove(listener);
+  }
+
+  @override
+  Contact get value {
+    return Contact(
+      avatar: avatar?.readAsBytesSync(),
+      familyName: baseInfos[0].value,
+      givenName: baseInfos[1].value,
+      company: baseInfos[2].value,
+      phones: (groups[0] as ContactInfoGroup<EditableItem>).items.where((element) {
+        return element.value != null && element.value.isNotEmpty;
+      }).map((e) {
+        return Item(label: e.label, value: e.value);
+      }),
+      emails: (groups[1] as ContactInfoGroup<EditableItem>).items.where((element) {
+        return element.value != null && element.value.isNotEmpty;
+      }).map((e) {
+        return Item(label: e.label, value: e.value);
+      }),
+    );
+  }
+
+  @protected
+  @visibleForTesting
+  void notifyListeners() {
+    if (_listeners != null) {
+      final List<VoidCallback> localListeners = List<VoidCallback>.from(_listeners);
+      for (final VoidCallback listener in localListeners) {
+        try {
+          if (_listeners.contains(listener)) listener();
+        } catch (exception, stack) {
+          FlutterError.reportError(FlutterErrorDetails(
+            exception: exception,
+            stack: stack,
+            library: 'foundation library',
+            context: ErrorDescription('while dispatching notifications for $runtimeType'),
+            informationCollector: () sync* {
+              yield DiagnosticsProperty<AddContactPresenter>(
+                'The $runtimeType sending notification was',
+                this,
+                style: DiagnosticsTreeStyle.errorProperty,
+              );
+            },
+          ));
+        }
+      }
+    }
   }
 }
