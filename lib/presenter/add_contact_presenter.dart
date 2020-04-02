@@ -18,7 +18,11 @@ import 'package:flutter/foundation.dart';
 
 class AddContactPresenter extends Presenter<AddContactPage> implements ValueListenable<Contact> {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
-  final emptyContact = Contact();
+  final emptyContact = Contact(
+    phones: [],
+    emails: [],
+    postalAddresses: [],
+  );
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
 
@@ -122,7 +126,7 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
       Navigator.maybePop(context);
     } else {
       showGriveUpEditDialog(context).then((value) {
-        if (value) {
+        if (value ?? false) {
           Navigator.maybePop(context);
         }
       });
@@ -158,12 +162,13 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
         return element.value != null && element.value.isNotEmpty;
       }).map((e) {
         return Item(label: e.label, value: e.value);
-      }),
+      }).toList(),
       emails: (groups[1] as ContactInfoGroup<EditableItem>).items.where((element) {
         return element.value != null && element.value.isNotEmpty;
       }).map((e) {
         return Item(label: e.label, value: e.value);
-      }),
+      }).toList(),
+      postalAddresses: [],
     );
   }
 

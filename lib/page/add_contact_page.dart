@@ -83,7 +83,7 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
         trailing: ValueListenableBuilder<Contact>(
           valueListenable: presenter,
           builder: (context, value, child) {
-            final bool isInvalid = value == Contact();
+            final bool isInvalid = value == presenter.emptyContact;
             return NavigationBarAction(
               child: Text('完成'),
               onPressed: isInvalid == null ? null : presenter.onDonePressed,
