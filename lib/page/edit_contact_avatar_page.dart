@@ -46,7 +46,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
         ),
         trailing: NavigationBarAction(
           child: Text('完成'),
-          onPressed: presenter.picture == widget.picture ? null : presenter.onDonePressed,
+          onPressed: presenter.picture == null ? null : presenter.onDonePressed,
         ),
       ),
       child: SafeArea(
@@ -72,7 +72,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     bytes: presenter.picture,
                     borderSide: BorderSide.none,
                     size: 144,
-                    onPressed: presenter.picture == null
+                    onPressed: presenter.isInvalidAvatar
                         ? null
                         : () {
                             presenter.editPicture(presenter.picture);
@@ -85,7 +85,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     onPressed: () {
                       presenter.editPicture(presenter.picture);
                     },
-                    child: presenter.picture == null
+                    child: presenter.isInvalidAvatar
                         ? SizedBox.shrink()
                         : Text(
                             '编辑',

@@ -19,18 +19,23 @@ import 'package:image_picker/image_picker.dart';
 class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   final _proposals = List<Uint8List>();
 
-  Uint8List picture;
+  Uint8List _picture;
+  Uint8List _defaultAvatar;
 
   Iterable<Uint8List> get proposals => _proposals;
 
+  Uint8List get picture => _picture;
+
+  bool get isInvalidAvatar => _picture == null || _picture == _defaultAvatar;
+
   @override
   void initState() {
-    picture = widget.picture;
-    if (picture != null) {
-      _proposals.add(picture);
-    }
     rootBundle.load(Images.ic_default_avatar).then((value) {
-      _proposals.insert(0, value.buffer.asUint8List());
+      _defaultAvatar = value.buffer.asUint8List();
+      _proposals.add(_defaultAvatar);
+      if (widget.picture != null) {
+        _proposals.add(widget.picture);
+      }
       notifyDataSetChanged();
     });
     super.initState();
@@ -61,21 +66,21 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
     var index = _proposals.indexOf(avatar);
     switch (editType) {
       case EditAvatarType.formulate:
-        picture = avatar;
+        _picture = avatar;
         break;
       case EditAvatarType.edit:
         _proposals.removeAt(index);
         _proposals.insert(index, avatar);
-        picture = avatar;
+        _picture = avatar;
         break;
       case EditAvatarType.copy:
         _proposals.insert(index + 1, avatar);
-        picture = avatar;
+        _picture = avatar;
         break;
       case EditAvatarType.delete:
         _proposals.remove(avatar);
         var length = _proposals.length;
-        picture = index >= length ? _proposals[length - 1] : _proposals[index];
+        _picture = index >= length ? _proposals[length - 1] : _proposals[index];
         break;
     }
     notifyDataSetChanged();
@@ -87,17 +92,17 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
         return;
       }
       var newPicture = value.readAsBytesSync();
-      if (Collections.equals(picture, newPicture)) {
+      if (Collections.equals(_picture, newPicture)) {
         return;
       }
-      picture = newPicture;
-      _proposals.add(picture);
+      _picture = newPicture;
+      _proposals.add(_picture);
       notifyDataSetChanged();
     });
   }
 
   onCancelPressed() {
-    if (Collections.equals(picture, widget.picture)) {
+    if (Collections.equals(_picture, widget.picture)) {
       Navigator.maybePop(context);
     } else {
       showGriveUpEditDialog(context).then((value) {
@@ -109,6 +114,6 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   }
 
   onDonePressed() {
-    Navigator.pop(context, picture);
+    Navigator.pop(context, _picture);
   }
 }
