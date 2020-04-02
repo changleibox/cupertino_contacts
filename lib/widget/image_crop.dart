@@ -222,19 +222,31 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
         _image = imageInfo.image;
         _scale = imageInfo.scale;
 
+        var imageWidth = _image.width;
+        var imageHeight = _image.height;
+
+        var boundariesWidth = _boundaries.width;
+        var boundariesHeight = _boundaries.height;
+
         final chipDiameter = widget.chipRadius * 2;
         _ratio = max(
-          chipDiameter / _image.width,
-          chipDiameter / _image.height,
+          chipDiameter / imageWidth,
+          chipDiameter /imageHeight,
         );
+        if (imageWidth * _ratio < boundariesWidth && imageHeight * _ratio < boundariesHeight) {
+          _ratio = min(
+            boundariesWidth / imageWidth,
+            boundariesHeight / imageHeight,
+          );
+        }
 
-        final viewWidth = _boundaries.width / (_image.width * _scale * _ratio);
-        final viewHeight = _boundaries.height / (_image.height * _scale * _ratio);
+        final viewWidth = boundariesWidth / (imageWidth * _scale * _ratio);
+        final viewHeight = boundariesHeight / (imageHeight * _scale * _ratio);
         _area = _calculateDefaultArea(
           viewWidth: viewWidth,
           viewHeight: viewHeight,
-          imageWidth: _image.width,
-          imageHeight: _image.height,
+          imageWidth: imageWidth,
+          imageHeight: imageHeight,
         );
 
         _view = Rect.fromLTWH(
