@@ -9,7 +9,6 @@ import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:ui' as ui;
 
 /// Created by box on 2020/4/2.
 ///
@@ -31,46 +30,10 @@ class CropImagePage extends StatefulWidget {
 
 class _CropImagePageState extends State<CropImagePage> {
   final _cropKey = GlobalKey<ImageCropState>();
-  ImageStream _imageStream;
-  ui.Image _image;
-  ImageStreamListener _imageListener;
-  ImageProvider _memoryImage;
-
-  @override
-  void initState() {
-    _memoryImage = MemoryImage(widget.bytes);
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _getImage();
-  }
-
-  @override
-  void dispose() {
-    _imageStream?.removeListener(_imageListener);
-    super.dispose();
-  }
-
-  void _getImage({bool force: false}) {
-    final oldImageStream = _imageStream;
-    _imageStream = _memoryImage.resolve(createLocalImageConfiguration(context));
-    if (_imageStream.key != oldImageStream?.key || force) {
-      oldImageStream?.removeListener(_imageListener);
-      _imageListener = ImageStreamListener(_updateImage);
-      _imageStream.addListener(_imageListener);
-    }
-  }
-
-  void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
-    _image = imageInfo.image;
-  }
 
   _onCropPressed() {
     var currentState = _cropKey.currentState;
-    if (_image == null || currentState == null) {
+    if (currentState == null) {
       return;
     }
 
@@ -94,7 +57,7 @@ class _CropImagePageState extends State<CropImagePage> {
           children: <Widget>[
             ImageCrop(
               key: _cropKey,
-              image: _memoryImage,
+              image: MemoryImage(widget.bytes),
               chipRadius: MediaQuery.of(context).size.width / 2 - _padding,
               chipShape: BoxShape.circle,
             ),
