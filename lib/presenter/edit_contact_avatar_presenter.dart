@@ -4,10 +4,10 @@
 
 import 'dart:typed_data';
 
-import 'package:collection/collection.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
+import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +39,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
         return;
       }
       var newPicture = value.readAsBytesSync();
-      if (DeepCollectionEquality.unordered().equals(picture, newPicture)) {
+      if (Collections.equals(picture, newPicture)) {
         return;
       }
       picture = newPicture;
@@ -49,7 +49,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   }
 
   onCancelPressed() {
-    if (DeepCollectionEquality.unordered().equals(picture, widget.picture)) {
+    if (Collections.equals(picture, widget.picture)) {
       Navigator.maybePop(context);
     } else {
       showGriveUpEditDialog(context).then((value) {
