@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:cupertinocontacts/widget/image_crop.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as image;
 import 'dart:ui' as ui;
 
@@ -14,6 +15,30 @@ import 'dart:ui' as ui;
 ///
 /// 截图
 const double _padding = 16;
+
+class _CropRects {
+  final Rect scaleRect;
+  final Rect cropRect;
+  final Uint8List bytes;
+
+  _CropRects(this.scaleRect, this.cropRect, this.bytes);
+}
+
+Uint8List _cropImage(_CropRects rects) {
+  var resizeImage = image.copyResize(
+    image.decodeImage(rects.bytes),
+    width: rects.scaleRect.width.floor(),
+    height: rects.scaleRect.height.floor(),
+  );
+  var copyCropImage = image.copyCrop(
+    resizeImage,
+    rects.cropRect.left.floor(),
+    rects.cropRect.top.floor(),
+    rects.cropRect.width.floor(),
+    rects.cropRect.height.floor(),
+  );
+  return image.encodePng(copyCropImage);
+}
 
 class CropImagePage extends StatefulWidget {
   final Uint8List bytes;
@@ -91,19 +116,10 @@ class _CropImagePageState extends State<CropImagePage> {
       scaleRect.height * area.bottom,
     );
 
-    var resizeImage = image.copyResize(
-      image.decodeImage(widget.bytes),
-      width: scaleRect.width.floor(),
-      height: scaleRect.height.floor(),
-    );
-    var copyCropImage = image.copyCrop(
-      resizeImage,
-      cropRect.left.floor(),
-      cropRect.top.floor(),
-      cropRect.width.floor(),
-      cropRect.height.floor(),
-    );
-    Navigator.pop(context, image.encodePng(copyCropImage));
+    var cropRects = _CropRects(scaleRect, cropRect, widget.bytes);
+    compute(_cropImage, cropRects).then((value) {
+      Navigator.pop(context, value);
+    });
   }
 
   @override
