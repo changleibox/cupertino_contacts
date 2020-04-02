@@ -4,9 +4,12 @@
 
 import 'dart:typed_data';
 
+import 'package:cupertinocontacts/page/edit_avatar_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
+import 'package:cupertinocontacts/presenter/edit_avatar_presenter.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +34,51 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       notifyDataSetChanged();
     });
     super.initState();
+  }
+
+  void editPicture(Uint8List avatar) {
+    if (avatar == null) {
+      return;
+    }
+    Navigator.push(
+      context,
+      RouteProvider.buildRoute(
+        EditAvatarPage(
+          avatar: avatar,
+          isDefault: _proposals.indexOf(avatar) == 0,
+        ),
+        fullscreenDialog: true,
+      ),
+    ).then(_onEditAvatarResult);
+  }
+
+  _onEditAvatarResult(dynamic result) {
+    if (result == null || !(result is Map<String, dynamic>)) {
+      return;
+    }
+    var editType = result['type'] as EditAvatarType;
+    var avatar = result['data'] as Uint8List;
+    var index = _proposals.indexOf(avatar);
+    switch (editType) {
+      case EditAvatarType.formulate:
+        picture = avatar;
+        break;
+      case EditAvatarType.edit:
+        _proposals.removeAt(index);
+        _proposals.insert(index, avatar);
+        picture = avatar;
+        break;
+      case EditAvatarType.copy:
+        _proposals.insert(index + 1, avatar);
+        picture = avatar;
+        break;
+      case EditAvatarType.delete:
+        _proposals.remove(avatar);
+        var length = _proposals.length;
+        picture = index >= length ? _proposals[length - 1] : _proposals[index];
+        break;
+    }
+    notifyDataSetChanged();
   }
 
   onAllPicturePressed() {

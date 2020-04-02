@@ -72,20 +72,29 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     bytes: presenter.picture,
                     borderSide: BorderSide.none,
                     size: 144,
+                    onPressed: presenter.picture == null
+                        ? null
+                        : () {
+                            presenter.editPicture(presenter.picture);
+                          },
                   ),
                   CupertinoButton(
-                    minSize: 0,
+                    minSize: 14,
                     padding: EdgeInsets.zero,
                     borderRadius: BorderRadius.zero,
-                    onPressed: () {},
-                    child: Text(
-                      '编辑',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: CupertinoTheme.of(context).primaryColor,
-                        height: 1.0,
-                      ),
-                    ),
+                    onPressed: () {
+                      presenter.editPicture(presenter.picture);
+                    },
+                    child: presenter.picture == null
+                        ? SizedBox.shrink()
+                        : Text(
+                            '编辑',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: CupertinoTheme.of(context).primaryColor,
+                              height: 1.0,
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -128,11 +137,15 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     sliver: SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
+                          var avatar = presenter.proposals.elementAt(index);
                           return CupertinoCircleAvatar.memory(
                             assetName: Images.ic_default_avatar,
-                            bytes: presenter.proposals.elementAt(index),
+                            bytes: avatar,
                             borderSide: BorderSide.none,
                             size: double.infinity,
+                            onPressed: () {
+                              presenter.editPicture(avatar);
+                            },
                           );
                         },
                         childCount: presenter.proposals.length,

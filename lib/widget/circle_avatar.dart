@@ -149,9 +149,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoCircleAvatarContainer(
-      child: _ColorFiltered(
-        child: _child,
-      ),
+      child: _child,
       size: size,
       borderSide: borderSide,
       onPressed: onPressed,
@@ -244,32 +242,6 @@ class _LocationImage extends StatelessWidget {
       errorBuilder: (context, error, stackTrace) {
         return _image(image: placeHolder);
       },
-    );
-  }
-}
-
-class _ColorFiltered extends StatelessWidget {
-  final Widget child;
-
-  const _ColorFiltered({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ColorFiltered(
-      colorFilter: ColorFilter.mode(
-        CupertinoDynamicColor.resolve(
-          CupertinoDynamicColor.withBrightness(
-            color: CupertinoColors.black.withOpacity(0.0),
-            darkColor: CupertinoColors.black.withOpacity(0.2),
-          ),
-          context,
-        ),
-        BlendMode.dstOut,
-      ),
-      child: child,
     );
   }
 }
