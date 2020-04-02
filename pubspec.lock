@@ -163,13 +163,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
-  simple_image_crop:
-    dependency: "direct main"
-    description:
-      name: simple_image_crop
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.3"
   sky_engine:
     dependency: transitive
     description: flutter

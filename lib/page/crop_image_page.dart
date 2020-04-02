@@ -4,9 +4,9 @@
 
 import 'dart:typed_data';
 
+import 'package:cupertinocontacts/widget/image_crop.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:simple_image_crop/simple_image_crop.dart';
 import 'package:image/image.dart' as image;
 import 'dart:ui' as ui;
 
@@ -27,7 +27,7 @@ class CropImagePage extends StatefulWidget {
 }
 
 class _CropImagePageState extends State<CropImagePage> {
-  final _cropKey = GlobalKey<ImgCropState>();
+  final _cropKey = GlobalKey<ImageCropState>();
   ImageStream _imageStream;
   ui.Image _image;
   ImageStreamListener _imageListener;
@@ -113,7 +113,7 @@ class _CropImagePageState extends State<CropImagePage> {
           fit: StackFit.expand,
           alignment: Alignment.center,
           children: <Widget>[
-            ImgCrop(
+            ImageCrop(
               key: _cropKey,
               image: _memoryImage,
               chipShape: 'circle',
