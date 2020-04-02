@@ -56,7 +56,7 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
 
   @override
   void onRootTap() {
-    _slidableController.activeState = null;
+    _slidableController.activeState?.close();
     super.onRootTap();
   }
 

@@ -137,11 +137,11 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   }
 
   _onRemovePressed(int index) {
-    _selectedIndex = index;
     var currentState = _globalKeys[index].currentState;
     if (currentState == null) {
       return;
     }
+    _selectedIndex = index;
     currentState.open(actionType: SlideActionType.secondary);
   }
 
