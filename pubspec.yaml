@@ -27,6 +27,7 @@ dependencies:
   contacts_service: ^0.3.10
   lpinyin: ^1.0.9
   image_picker: ^0.6.4
+  collection: ^1.14.11
 
 dev_dependencies:
   flutter_test:

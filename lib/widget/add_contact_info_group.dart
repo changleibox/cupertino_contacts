@@ -30,7 +30,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   final _listKey = GlobalKey<AnimatedListState>();
 
   Widget _buildItemAsItem(EditableItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
-    var items = widget.infoGroup.items;
+    var items = widget.infoGroup.value;
     return Container(
       foregroundDecoration: BoxDecoration(
         border: Border(
@@ -58,7 +58,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   }
 
   Widget _buildItem(int index, Animation<double> animation) {
-    var items = widget.infoGroup.items;
+    var items = widget.infoGroup.value;
     var item = items[index];
     return _buildItemAsItem(
       item,
@@ -70,20 +70,18 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
   }
 
   _onAddPressed() {
-    var items = widget.infoGroup.items;
-    var length = items.length;
+    var length = widget.infoGroup.value.length;
     var selections = widget.infoGroup.selections;
-    items.add(EditableItem(
+    widget.infoGroup.add(EditableItem(
       label: selections[length % selections.length],
     ));
     _listKey.currentState.insertItem(length);
   }
 
   _onRemovePressed(int index) {
-    var items = widget.infoGroup.items;
     _listKey.currentState.removeItem(index, (context, animation) {
-      var item = items[index];
-      items.removeAt(index);
+      var item = widget.infoGroup.value[index];
+      widget.infoGroup.removeAt(index);
       return _buildItemAsItem(item, animation);
     });
   }
@@ -110,7 +108,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
         children: <Widget>[
           AnimatedList(
             key: _listKey,
-            initialItemCount: widget.infoGroup.items.length,
+            initialItemCount: widget.infoGroup.value.length,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index, animation) {

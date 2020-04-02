@@ -96,6 +96,9 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
     groups.add(NormalSelectionContactInfo(
       name: '添加信息栏',
     ));
+
+    baseInfos.forEach((element) => element.addListener(notifyListeners));
+    groups.forEach((element) => element.addListener(notifyListeners));
     super.initState();
   }
 
@@ -160,12 +163,12 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
       familyName: baseInfos[0].value,
       givenName: baseInfos[1].value,
       company: baseInfos[2].value,
-      phones: (groups[0] as ContactInfoGroup<EditableItem>).items.where((element) {
+      phones: (groups[0] as ContactInfoGroup<EditableItem>).value.where((element) {
         return element.value != null && element.value.isNotEmpty;
       }).map((e) {
         return Item(label: e.label, value: e.value);
       }).toList(),
-      emails: (groups[1] as ContactInfoGroup<EditableItem>).items.where((element) {
+      emails: (groups[1] as ContactInfoGroup<EditableItem>).value.where((element) {
         return element.value != null && element.value.isNotEmpty;
       }).map((e) {
         return Item(label: e.label, value: e.value);
@@ -182,21 +185,7 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
       for (final VoidCallback listener in localListeners) {
         try {
           if (_listeners.contains(listener)) listener();
-        } catch (exception, stack) {
-          FlutterError.reportError(FlutterErrorDetails(
-            exception: exception,
-            stack: stack,
-            library: 'foundation library',
-            context: ErrorDescription('while dispatching notifications for $runtimeType'),
-            informationCollector: () sync* {
-              yield DiagnosticsProperty<AddContactPresenter>(
-                'The $runtimeType sending notification was',
-                this,
-                style: DiagnosticsTreeStyle.errorProperty,
-              );
-            },
-          ));
-        }
+        } catch (exception) {}
       }
     }
   }
