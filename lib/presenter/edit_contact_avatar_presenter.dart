@@ -50,7 +50,8 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       RouteProvider.buildRoute(
         EditAvatarPage(
           avatar: avatar,
-          isDefault: _proposals.indexOf(avatar) == 0,
+          isDefault: Collections.equals(avatar, _defaultAvatar),
+          isFirst: _proposals.indexOf(avatar) == 0,
         ),
         fullscreenDialog: true,
       ),

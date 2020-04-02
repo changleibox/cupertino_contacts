@@ -21,13 +21,16 @@ const double _spacing = 10;
 class EditAvatarPage extends StatefulWidget {
   final Uint8List avatar;
   final bool isDefault;
+  final bool isFirst;
 
   const EditAvatarPage({
     Key key,
     @required this.avatar,
-    this.isDefault = false,
+    this.isDefault = true,
+    this.isFirst = true,
   })  : assert(avatar != null),
         assert(isDefault != null),
+        assert(isFirst != null),
         super(key: key);
 
   @override
@@ -94,7 +97,7 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
                       text: '复制',
                       onPressed: presenter.onCopyPressed,
                     ),
-                  if (!widget.isDefault)
+                  if (!widget.isFirst)
                     _CupertinoSheetAction(
                       text: '删除',
                       isDestructive: true,
