@@ -86,7 +86,7 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
             final bool isInvalid = value == presenter.emptyContact;
             return NavigationBarAction(
               child: Text('完成'),
-              onPressed: isInvalid == null ? null : presenter.onDonePressed,
+              onPressed: isInvalid ? null : presenter.onDonePressed,
             );
           },
         ),
