@@ -4,6 +4,7 @@
 
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
 import 'package:cupertinocontacts/model/contact_info_group.dart';
@@ -121,6 +122,9 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
       ),
     ).then((value) {
       if (value == null) {
+        return;
+      }
+      if (DeepCollectionEquality.unordered().equals(avatar, value)) {
         return;
       }
       avatar = value;

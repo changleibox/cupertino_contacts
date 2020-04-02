@@ -4,6 +4,7 @@
 
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
@@ -37,13 +38,18 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       if (value == null) {
         return;
       }
-      picture = value.readAsBytesSync();
+      var newPicture = value.readAsBytesSync();
+      if (DeepCollectionEquality.unordered().equals(picture, newPicture)) {
+        return;
+      }
+      picture = newPicture;
+      _proposals.add(picture);
       notifyDataSetChanged();
     });
   }
 
   onCancelPressed() {
-    if (picture == widget.picture) {
+    if (DeepCollectionEquality.unordered().equals(picture, widget.picture)) {
       Navigator.maybePop(context);
     } else {
       showGriveUpEditDialog(context).then((value) {
