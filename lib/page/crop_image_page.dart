@@ -5,6 +5,7 @@
 import 'dart:typed_data';
 
 import 'package:cupertinocontacts/widget/image_crop.dart';
+import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,28 +17,47 @@ import 'dart:ui' as ui;
 /// 截图
 const double _padding = 16;
 
-class _CropRects {
-  final Rect scaleRect;
-  final Rect cropRect;
+class _CropInfos {
+  final int srcWidth;
+  final int srcHeight;
   final Uint8List bytes;
+  final double scale;
+  final Rect area;
 
-  _CropRects(this.scaleRect, this.cropRect, this.bytes);
+  _CropInfos({this.srcWidth, this.srcHeight, this.bytes, this.scale, this.area});
 }
 
-Uint8List _cropImage(_CropRects rects) {
+Uint8List _cropImageAsSync(_CropInfos rects) {
+  var scaleRect = Rect.fromLTWH(
+    0,
+    0,
+    rects.srcWidth / rects.scale,
+    rects.srcHeight / rects.scale,
+  );
+  var cropRect = Rect.fromLTRB(
+    scaleRect.width * rects.area.left,
+    scaleRect.height * rects.area.top,
+    scaleRect.width * rects.area.right,
+    scaleRect.height * rects.area.bottom,
+  );
+
   var resizeImage = image.copyResize(
     image.decodeImage(rects.bytes),
-    width: rects.scaleRect.width.floor(),
-    height: rects.scaleRect.height.floor(),
+    width: scaleRect.width.floor(),
+    height: scaleRect.height.floor(),
   );
   var copyCropImage = image.copyCrop(
     resizeImage,
-    rects.cropRect.left.floor(),
-    rects.cropRect.top.floor(),
-    rects.cropRect.width.floor(),
-    rects.cropRect.height.floor(),
+    cropRect.left.floor(),
+    cropRect.top.floor(),
+    cropRect.width.floor(),
+    cropRect.height.floor(),
   );
   return image.encodePng(copyCropImage);
+}
+
+Future<Uint8List> _cropImage(_CropInfos cropInfos) {
+  return compute(_cropImageAsSync, cropInfos);
 }
 
 class CropImagePage extends StatefulWidget {
@@ -97,29 +117,18 @@ class _CropImagePageState extends State<CropImagePage> {
     if (_image == null || currentState == null) {
       return;
     }
-    var srcWidth = _image.width;
-    var srcHeight = _image.height;
-
-    var area = currentState.area;
-    var scale = currentState.scale;
-
-    var scaleRect = Rect.fromLTWH(
-      0,
-      0,
-      srcWidth / scale,
-      srcHeight / scale,
-    );
-    var cropRect = Rect.fromLTRB(
-      scaleRect.width * area.left,
-      scaleRect.height * area.top,
-      scaleRect.width * area.right,
-      scaleRect.height * area.bottom,
+    var cropInfos = _CropInfos(
+      srcWidth: _image.width,
+      srcHeight: _image.height,
+      bytes: widget.bytes,
+      area: currentState.area,
+      scale: currentState.scale,
     );
 
-    var cropRects = _CropRects(scaleRect, cropRect, widget.bytes);
-    compute(_cropImage, cropRects).then((value) {
+    var loadPrompt = LoadPrompt(context)..show();
+    _cropImage(cropInfos).then((value) {
       Navigator.pop(context, value);
-    });
+    }).whenComplete(() => loadPrompt.dismiss());
   }
 
   @override
