@@ -27,22 +27,22 @@ class _CropInfos {
   _CropInfos({this.srcWidth, this.srcHeight, this.bytes, this.scale, this.area});
 }
 
-Uint8List _cropImageAsSync(_CropInfos rects) {
+Uint8List _cropImageAsSync(_CropInfos infos) {
   var scaleRect = Rect.fromLTWH(
     0,
     0,
-    rects.srcWidth / rects.scale,
-    rects.srcHeight / rects.scale,
+    infos.srcWidth / infos.scale,
+    infos.srcHeight / infos.scale,
   );
   var cropRect = Rect.fromLTRB(
-    scaleRect.width * rects.area.left,
-    scaleRect.height * rects.area.top,
-    scaleRect.width * rects.area.right,
-    scaleRect.height * rects.area.bottom,
+    scaleRect.width * infos.area.left,
+    scaleRect.height * infos.area.top,
+    scaleRect.width * infos.area.right,
+    scaleRect.height * infos.area.bottom,
   );
 
   var resizeImage = image.copyResize(
-    image.decodeImage(rects.bytes),
+    image.decodeImage(infos.bytes),
     width: scaleRect.width.floor(),
     height: scaleRect.height.floor(),
   );
