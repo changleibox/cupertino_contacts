@@ -9,6 +9,7 @@ import 'package:cupertinocontacts/widget/add_contact_info_text_field.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// Created by box on 2020/3/31.
 ///
@@ -27,31 +28,73 @@ class AddContactInfoGroup extends StatefulWidget {
 }
 
 class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
-  final _listKey = GlobalKey<AnimatedListState>();
+  final _animatedListKey = GlobalKey<AnimatedListState>();
+  final _slidableController = SlidableController();
+  final _globalKeys = List<GlobalKey<SlidableState>>();
+
+  @override
+  void initState() {
+    widget.infoGroup.value.forEach((element) {
+      _globalKeys.add(GlobalKey());
+    });
+    super.initState();
+  }
+
+  int _selectedIndex;
 
   Widget _buildItemAsItem(EditableItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
     var items = widget.infoGroup.value;
-    return Container(
-      foregroundDecoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: separatorColor.withOpacity(0.1),
-            width: 0.5,
-            style: items.indexOf(item) == items.length - 1 ? BorderStyle.none : BorderStyle.solid,
+    var index = items.indexOf(item);
+    return Slidable.builder(
+      controller: _slidableController,
+      key: index < 0 ? null : _globalKeys[index],
+      actionPane: SlidableScrollActionPane(),
+      secondaryActionDelegate: SlideActionListDelegate(
+        actions: [
+          SlideAction(
+            child: Text(
+              '删除',
+              style: CupertinoTheme.of(context).textTheme.textStyle,
+            ),
+            closeOnTap: true,
+            color: CupertinoColors.destructiveRed,
+            onTap: () {
+              if (_selectedIndex == null) {
+                return;
+              }
+              _animatedListKey.currentState.removeItem(_selectedIndex, (context, animation) {
+                var item = widget.infoGroup.value[_selectedIndex];
+                widget.infoGroup.removeAt(_selectedIndex);
+                _globalKeys.removeAt(_selectedIndex);
+                _selectedIndex = null;
+                return _buildItemAsItem(item, animation);
+              });
+            },
+          ),
+        ],
+      ),
+      child: Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: separatorColor.withOpacity(0.1),
+              width: 0.5,
+              style: items.indexOf(item) == items.length - 1 ? BorderStyle.none : BorderStyle.solid,
+            ),
           ),
         ),
-      ),
-      margin: EdgeInsets.only(
-        left: 16,
-        right: 10,
-      ),
-      child: SizeTransition(
-        sizeFactor: animation,
-        axisAlignment: 1.0,
-        child: AddContactInfoTextField(
-          name: widget.infoGroup.name,
-          item: item,
-          onDeletePressed: onDeletePressed,
+        margin: EdgeInsets.only(
+          left: 16,
+          right: 10,
+        ),
+        child: SizeTransition(
+          sizeFactor: animation,
+          axisAlignment: 1.0,
+          child: AddContactInfoTextField(
+            name: widget.infoGroup.name,
+            item: item,
+            onDeletePressed: onDeletePressed,
+          ),
         ),
       ),
     );
@@ -75,15 +118,13 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
     widget.infoGroup.add(EditableItem(
       label: selections[length % selections.length],
     ));
-    _listKey.currentState.insertItem(length);
+    _globalKeys.add(GlobalKey());
+    _animatedListKey.currentState.insertItem(length);
   }
 
   _onRemovePressed(int index) {
-    _listKey.currentState.removeItem(index, (context, animation) {
-      var item = widget.infoGroup.value[index];
-      widget.infoGroup.removeAt(index);
-      return _buildItemAsItem(item, animation);
-    });
+    _selectedIndex = index;
+    _slidableController.activeState = _globalKeys[index].currentState;
   }
 
   @override
@@ -107,7 +148,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
         ),
         children: <Widget>[
           AnimatedList(
-            key: _listKey,
+            key: _animatedListKey,
             initialItemCount: widget.infoGroup.value.length,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,

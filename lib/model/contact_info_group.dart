@@ -51,10 +51,10 @@ class EditableContactInfo extends ContactInfo<String> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller.text == other.controller.text;
+      identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller == other.controller;
 
   @override
-  int get hashCode => controller.text.hashCode;
+  int get hashCode => controller.hashCode;
 }
 
 class MultiEditableContactInfo extends EditableContactInfo {
@@ -196,10 +196,10 @@ class EditableItem extends _Item<String> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller.text == other.controller.text;
+      identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller == other.controller;
 
   @override
-  int get hashCode => controller.text.hashCode;
+  int get hashCode => controller.hashCode;
 }
 
 class SelectionItem extends _Item {
