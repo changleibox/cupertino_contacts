@@ -123,6 +123,7 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
       }
       avatar = value;
       notifyDataSetChanged();
+      notifyListeners();
     });
   }
 
