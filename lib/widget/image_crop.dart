@@ -12,7 +12,6 @@ import 'dart:ui' as ui;
 
 const _kCropOverlayActiveOpacity = 0.3;
 const _kCropOverlayInactiveOpacity = 0.7;
-const _kCropHandleSize = 10.0;
 
 enum _CropAction { none, moving, scaling }
 
@@ -139,7 +138,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
     if (widget.image != oldWidget.image) {
       _getImage();
     }
-    _activate(1.0);
+    _activate(0.0);
   }
 
   void _getImage({bool force: false}) {
@@ -187,7 +186,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
 
   // NOTE: 区域性缩小 总区域 - 10 * 10 区域
   Size get _boundaries {
-    return _surfaceKey.currentContext.size - Offset(_kCropHandleSize, _kCropHandleSize);
+    return _surfaceKey.currentContext.size - Offset.zero;
   }
 
   void _settleAnimationChanged() {
@@ -207,7 +206,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
       return Rect.zero;
     }
 
-    final _deviceWidth = MediaQuery.of(context).size.width - (2 * _kCropHandleSize);
+    final _deviceWidth = MediaQuery.of(context).size.width;
     final _areaOffset = (_deviceWidth - (widget.chipRadius * 2));
     final _areaOffsetRadio = _areaOffset / _deviceWidth;
     final width = 1.0 - _areaOffsetRadio;
@@ -367,10 +366,10 @@ class _CropPainter extends CustomPainter {
 
   currentRact(size) {
     return Rect.fromLTWH(
-      _kCropHandleSize / 2,
-      _kCropHandleSize / 2,
-      size.width - _kCropHandleSize,
-      size.height - _kCropHandleSize,
+      0,
+      0,
+      size.width,
+      size.height,
     );
   }
 
