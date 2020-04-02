@@ -21,6 +21,7 @@ class ImageCrop extends StatefulWidget {
   final ImageErrorListener onImageError;
   final double chipRadius;
   final BoxShape chipShape;
+
   const ImageCrop({
     Key key,
     this.image,
