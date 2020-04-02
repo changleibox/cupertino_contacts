@@ -53,7 +53,7 @@ Uint8List _cropImageAsSync(_CropInfos infos) {
     cropRect.width.floor(),
     cropRect.height.floor(),
   );
-  return Uint8List.fromList(image.encodePng(copyCropImage));
+  return image.encodePng(copyCropImage);
 }
 
 Future<Uint8List> _cropImage(_CropInfos cropInfos) {
