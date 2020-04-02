@@ -10,6 +10,8 @@ abstract class ContactInfo {
   const ContactInfo({
     @required this.name,
   }) : assert(name != null);
+
+  void dispose();
 }
 
 class EditableContactInfo extends ContactInfo {
@@ -25,6 +27,11 @@ class EditableContactInfo extends ContactInfo {
     var text = controller.text;
     return text == null || text.isEmpty ? null : text;
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+  }
 }
 
 class MultiEditableContactInfo extends EditableContactInfo {
@@ -37,7 +44,7 @@ class MultiEditableContactInfo extends EditableContactInfo {
         );
 }
 
-class _SelectionContactInfo extends ContactInfo {
+abstract class _SelectionContactInfo extends ContactInfo {
   const _SelectionContactInfo({
     @required String name,
   }) : super(name: name);
@@ -47,12 +54,18 @@ class DefaultSelectionContactInfo extends _SelectionContactInfo {
   const DefaultSelectionContactInfo({
     @required String name,
   }) : super(name: name);
+
+  @override
+  void dispose() {}
 }
 
 class NormalSelectionContactInfo extends _SelectionContactInfo {
   const NormalSelectionContactInfo({
     @required String name,
   }) : super(name: name);
+
+  @override
+  void dispose() {}
 }
 
 class ContactInfoGroup<T extends _Item> extends ContactInfo {
@@ -67,12 +80,19 @@ class ContactInfoGroup<T extends _Item> extends ContactInfo {
         assert(items != null),
         assert(selections != null && selections.length > 0),
         super(name: name);
+
+  @override
+  void dispose() {
+    items?.forEach((element) => element.dispose());
+  }
 }
 
 abstract class _Item {
   final String label;
 
   const _Item(this.label);
+
+  void dispose();
 }
 
 class EditableItem extends _Item {
@@ -87,10 +107,18 @@ class EditableItem extends _Item {
     var text = controller.text;
     return text == null || text.isEmpty ? null : text;
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+  }
 }
 
 class SelectionItem extends _Item {
   const SelectionItem({@required String label})
       : assert(label != null),
         super(label);
+
+  @override
+  void dispose() {}
 }

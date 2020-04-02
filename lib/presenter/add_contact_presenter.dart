@@ -102,6 +102,8 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
   @override
   void dispose() {
     _listeners = null;
+    baseInfos.forEach((element) => element.dispose());
+    groups.forEach((element) => element.dispose());
     super.dispose();
   }
 
