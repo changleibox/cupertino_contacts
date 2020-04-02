@@ -70,7 +70,7 @@ class ImageCrop extends StatefulWidget {
   }
 }
 
-class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Drag {
+class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
   final _surfaceKey = GlobalKey();
   AnimationController _activeController;
   AnimationController _settleController;
@@ -222,7 +222,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
         _image = imageInfo.image;
         _scale = imageInfo.scale;
 
-        _ratio = max(
+        _ratio = min(
           _boundaries.width / _image.width,
           _boundaries.height / _image.height,
         );
