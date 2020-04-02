@@ -22,13 +22,26 @@ class ImageCrop extends StatefulWidget {
   final ImageErrorListener onImageError;
   final double chipRadius; // 裁剪半径
   final String chipShape; // 裁剪区域形状
-  const ImageCrop({Key key, this.image, this.maximumScale: 2.0, this.onImageError, this.chipRadius = 150, this.chipShape = 'circle'})
-      : assert(image != null),
+  const ImageCrop({
+    Key key,
+    this.image,
+    this.maximumScale: 2.0,
+    this.onImageError,
+    this.chipRadius = 150,
+    this.chipShape = 'circle',
+  })  : assert(image != null),
         assert(maximumScale != null),
         super(key: key);
 
-  ImageCrop.file(File file, {Key key, double scale = 1.0, this.maximumScale: 2.0, this.onImageError, this.chipRadius = 150, this.chipShape = 'circle'})
-      : image = FileImage(file, scale: scale),
+  ImageCrop.file(
+    File file, {
+    Key key,
+    double scale = 1.0,
+    this.maximumScale: 2.0,
+    this.onImageError,
+    this.chipRadius = 150,
+    this.chipShape = 'circle',
+  })  : image = FileImage(file, scale: scale),
         assert(maximumScale != null),
         super(key: key);
 
@@ -41,7 +54,11 @@ class ImageCrop extends StatefulWidget {
     this.maximumScale: 2.0,
     this.onImageError,
     this.chipShape = 'circle',
-  })  : image = AssetImage(assetName, bundle: bundle, package: package),
+  })  : image = AssetImage(
+          assetName,
+          bundle: bundle,
+          package: package,
+        ),
         assert(maximumScale != null),
         super(key: key);
 
@@ -146,8 +163,15 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin, Dra
         onScaleUpdate: _isEnabled ? _handleScaleUpdate : null,
         onScaleEnd: _isEnabled ? _handleScaleEnd : null,
         child: CustomPaint(
-          painter:
-              _CropPainter(image: _image, ratio: _ratio, view: _view, area: _area, scale: _scale, active: _activeController.value, chipShape: widget.chipShape),
+          painter: _CropPainter(
+            image: _image,
+            ratio: _ratio,
+            view: _view,
+            area: _area,
+            scale: _scale,
+            active: _activeController.value,
+            chipShape: widget.chipShape,
+          ),
         ),
       ),
     );
@@ -396,9 +420,16 @@ class _CropPainter extends CustomPainter {
     if (chipShape == 'rect') {
       _path2 = Path()..addRect(boundaries);
     } else {
-      _path2 = Path()..addRRect(RRect.fromLTRBR(boundaries.left, boundaries.top, boundaries.right, boundaries.bottom, Radius.circular(boundaries.height / 2)));
+      _path2 = Path()
+        ..addRRect(RRect.fromLTRBR(
+          boundaries.left,
+          boundaries.top,
+          boundaries.right,
+          boundaries.bottom,
+          Radius.circular(boundaries.height / 2),
+        ));
     }
-    canvas.clipPath(Path.combine(PathOperation.difference, _path1, _path2)); //MARK: 合并路径，选择交叉选区
+    canvas.clipPath(Path.combine(PathOperation.difference, _path1, _path2));
     canvas.drawRect(Rect.fromLTRB(0.0, 0.0, rect.width, rect.height), paint);
     paint
       ..isAntiAlias = true
@@ -406,10 +437,26 @@ class _CropPainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
     if (chipShape == 'rect') {
-      canvas.drawRect(Rect.fromLTRB(boundaries.left - 1, boundaries.top - 1, boundaries.right + 1, boundaries.bottom + 1), paint);
+      canvas.drawRect(
+        Rect.fromLTRB(
+          boundaries.left - 1,
+          boundaries.top - 1,
+          boundaries.right + 1,
+          boundaries.bottom + 1,
+        ),
+        paint,
+      );
     } else {
       canvas.drawRRect(
-          RRect.fromLTRBR(boundaries.left - 1, boundaries.top - 1, boundaries.right + 1, boundaries.bottom + 1, Radius.circular(boundaries.height / 2)), paint);
+        RRect.fromLTRBR(
+          boundaries.left - 1,
+          boundaries.top - 1,
+          boundaries.right + 1,
+          boundaries.bottom + 1,
+          Radius.circular(boundaries.height / 2),
+        ),
+        paint,
+      );
     }
 
     canvas.restore();
