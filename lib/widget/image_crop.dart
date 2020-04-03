@@ -178,7 +178,9 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
       vsync: this,
       value: 0.0,
     )..addListener(() => setState(() {}));
-    _settleController = AnimationController(vsync: this)..addListener(_settleAnimationChanged);
+    _settleController = AnimationController(
+      vsync: this,
+    )..addListener(_settleAnimationChanged);
   }
 
   @override
@@ -324,6 +326,8 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
 
   void _handleScaleStart(ScaleStartDetails details) {
     _activate(1.0);
+    _scale = _scaleTween.transform(1.0);
+    _view = _viewTween.transform(1.0);
     _settleController.stop(canceled: false);
     _lastFocalPoint = details.focalPoint;
     _action = _CropAction.none;
@@ -360,7 +364,19 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
       return;
     }
 
-    final targetScale = _scale.clamp(_minimumScale, _maximumScale);
+    var targetScale;
+    var targetView;
+    if (_scale < _minimumScale) {
+      targetScale = _minimumScale;
+      targetView = _calculateView(targetScale);
+    } else if (_scale > _maximumScale) {
+      targetScale = _maximumScale;
+      targetView = _calculateView(targetScale);
+    } else {
+      targetScale = _scale;
+      targetView = _getViewInBoundaries(targetScale);
+    }
+
     _scaleTween = Tween<double>(
       begin: _scale,
       end: targetScale,
@@ -369,7 +385,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     _startView = _view;
     _viewTween = RectTween(
       begin: _view,
-      end: _getViewInBoundaries(targetScale),
+      end: targetView,
     );
 
     _settleController.value = 0.0;
@@ -396,18 +412,22 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     } else if (_action == _CropAction.scaling) {
       setState(() {
         _scale = _startScale * details.scale;
-
-        final dx = _boundaries.width * (1.0 - details.scale) / (_image.width * _scale * _ratio);
-        final dy = _boundaries.height * (1.0 - details.scale) / (_image.height * _scale * _ratio);
-
-        _view = Rect.fromLTWH(
-          _startView.left + dx / 2,
-          _startView.top + dy / 2,
-          _startView.width,
-          _startView.height,
-        );
+        _view = _calculateView(_scale);
       });
     }
+  }
+
+  _calculateView(double targetScale) {
+    var scale = targetScale / _startScale;
+    final dx = _boundaries.width * (1.0 - scale) / (_image.width * targetScale * _ratio);
+    final dy = _boundaries.height * (1.0 - scale) / (_image.height * targetScale * _ratio);
+
+    return Rect.fromLTWH(
+      _startView.left + dx / 2,
+      _startView.top + dy / 2,
+      _startView.width,
+      _startView.height,
+    );
   }
 }
 
