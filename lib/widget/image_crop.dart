@@ -335,12 +335,12 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     _startView = _view;
   }
 
-  Rect _getViewInBoundaries(double scale) {
-    var left = min(_view.left, _area.left * _view.width / scale);
-    var right = _area.right * _view.width / scale - 1.0;
-    var top = min(_view.top, _area.top * _view.height / scale);
-    var bottom = _area.bottom * _view.height / scale - 1.0;
-    return Offset(max(left, right), max(top, bottom)) & _view.size;
+  Rect _getViewInBoundaries(double scale, Rect view) {
+    var left = min(view.left, _area.left * view.width / scale);
+    var right = _area.right * view.width / scale - 1.0;
+    var top = min(view.top, _area.top * view.height / scale);
+    var bottom = _area.bottom * view.height / scale - 1.0;
+    return Offset(max(left, right), max(top, bottom)) & view.size;
   }
 
   double get _maximumScale {
@@ -374,7 +374,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
       targetView = _calculateView(targetScale);
     } else {
       targetScale = _scale;
-      targetView = _getViewInBoundaries(targetScale);
+      targetView = _view;
     }
 
     _scaleTween = Tween<double>(
@@ -385,7 +385,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     _startView = _view;
     _viewTween = RectTween(
       begin: _view,
-      end: targetView,
+      end: _getViewInBoundaries(targetScale, targetView),
     );
 
     _settleController.value = 0.0;
