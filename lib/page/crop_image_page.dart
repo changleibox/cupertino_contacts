@@ -49,7 +49,7 @@ class _CropImagePageState extends State<CropImagePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.black,
+      backgroundColor: CupertinoColors.secondarySystemBackground,
       child: SizedBox.expand(
         child: Stack(
           fit: StackFit.expand,
