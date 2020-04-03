@@ -462,7 +462,7 @@ class _CropPainter extends CustomPainter {
         oldDelegate.scale != scale;
   }
 
-  currentRact(size) {
+  Rect currentRect(size) {
     return Rect.fromLTWH(
       0,
       0,
@@ -472,7 +472,7 @@ class _CropPainter extends CustomPainter {
   }
 
   Rect currentBoundaries(size) {
-    var rect = currentRact(size);
+    var rect = currentRect(size);
     return Rect.fromLTWH(
       rect.width * area.left,
       rect.height * area.top,
@@ -483,7 +483,7 @@ class _CropPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = currentRact(size);
+    final rect = currentRect(size);
 
     canvas.save();
     canvas.translate(rect.left, rect.top);
