@@ -34,6 +34,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       _defaultAvatar = value.buffer.asUint8List();
       _proposals.add(_defaultAvatar);
       if (widget.picture != null) {
+        _picture = widget.picture;
         _proposals.add(widget.picture);
       }
       notifyDataSetChanged();
