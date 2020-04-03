@@ -351,7 +351,14 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
         _view.size;
   }
 
-  double get _maximumScale => widget.maximumScale;
+  double get _maximumScale {
+    var ratioAsScreen = max(
+      _boundaries.width / _image.width,
+      _boundaries.height / _image.height,
+    );
+    final initialScale = ratioAsScreen / _ratio;
+    return max(widget.maximumScale, initialScale);
+  }
 
   double get _minimumScale {
     final scaleX = _boundaries.width * _area.width / (_image.width * _ratio);
