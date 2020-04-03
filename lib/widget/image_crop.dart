@@ -356,6 +356,9 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
 
   void _handleScaleEnd(ScaleEndDetails details) {
     _activate(0);
+    if (_action == _CropAction.none) {
+      return;
+    }
 
     final targetScale = _scale.clamp(_minimumScale, _maximumScale);
     _scaleTween = Tween<double>(
