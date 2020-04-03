@@ -509,11 +509,13 @@ class _CropPainter extends CustomPainter {
       imageHeight,
     );
     final targetScale = scale * ratio;
+    var scaleWidth = imageWidth * targetScale;
+    var scaleHeight = imageHeight * targetScale;
     final dst = Rect.fromLTWH(
-      view.left * imageWidth * targetScale,
-      view.top * imageHeight * targetScale,
-      imageWidth * targetScale,
-      imageHeight * targetScale,
+      view.left * scaleWidth,
+      view.top * scaleHeight,
+      scaleWidth,
+      scaleHeight,
     );
 
     canvas.save();
