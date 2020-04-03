@@ -439,7 +439,7 @@ class _CropPainter extends CustomPainter {
   final BoxShape chipShape;
   final Color borderColor;
 
-  _CropPainter({
+  const _CropPainter({
     this.image,
     this.view,
     this.ratio,
