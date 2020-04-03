@@ -491,17 +491,20 @@ class _CropPainter extends CustomPainter {
     final paint = Paint()..isAntiAlias = false;
 
     if (image != null) {
+      var imageWidth = image.width.toDouble();
+      var imageHeight = image.height.toDouble();
+
       final src = Rect.fromLTWH(
         0.0,
         0.0,
-        image.width.toDouble(),
-        image.height.toDouble(),
+        imageWidth,
+        imageHeight,
       );
       final dst = Rect.fromLTWH(
-        view.left * image.width * scale * ratio,
-        view.top * image.height * scale * ratio,
-        image.width * scale * ratio,
-        image.height * scale * ratio,
+        view.left * imageWidth * scale * ratio,
+        view.top * imageHeight * scale * ratio,
+        imageWidth * scale * ratio,
+        imageHeight * scale * ratio,
       );
 
       canvas.save();
