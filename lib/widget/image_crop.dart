@@ -13,8 +13,8 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as image;
 import 'dart:ui' as ui;
 
-const _kCropOverlayActiveOpacity = 0.3;
-const _kCropOverlayInactiveOpacity = 0.7;
+const _kActiveOpacity = 0.3;
+const _kInactiveOpacity = 0.7;
 
 class _CropInfos {
   final int srcWidth;
@@ -488,53 +488,63 @@ class _CropPainter extends CustomPainter {
 
     final paint = Paint()..isAntiAlias = false;
 
-    if (image != null) {
-      var imageWidth = image.width.toDouble();
-      var imageHeight = image.height.toDouble();
+    _drawImage(canvas, rect, paint);
 
-      final src = Rect.fromLTWH(
-        0.0,
-        0.0,
-        imageWidth,
-        imageHeight,
-      );
-      final targetScale = scale * ratio;
-      final dst = Rect.fromLTWH(
-        view.left * imageWidth * targetScale,
-        view.top * imageHeight * targetScale,
-        imageWidth * targetScale,
-        imageHeight * targetScale,
-      );
+    _drawOverlay(canvas, paint, rect, size);
 
-      canvas.save();
-      canvas.clipRect(Rect.fromLTWH(0.0, 0.0, rect.width, rect.height));
-      canvas.drawImageRect(image, src, dst, paint);
-      canvas.restore();
+    canvas.restore();
+  }
+
+  _drawImage(Canvas canvas, Rect rect, Paint paint) {
+    if (image == null) {
+      return;
     }
+    var imageWidth = image.width.toDouble();
+    var imageHeight = image.height.toDouble();
 
-    paint.color = Color.fromRGBO(0x0, 0x0, 0x0, _kCropOverlayActiveOpacity * active + _kCropOverlayInactiveOpacity * (1.0 - active));
+    final src = Rect.fromLTWH(
+      0.0,
+      0.0,
+      imageWidth,
+      imageHeight,
+    );
+    final targetScale = scale * ratio;
+    final dst = Rect.fromLTWH(
+      view.left * imageWidth * targetScale,
+      view.top * imageHeight * targetScale,
+      imageWidth * targetScale,
+      imageHeight * targetScale,
+    );
+
+    canvas.save();
+    canvas.clipRect(Rect.fromLTWH(0.0, 0.0, rect.width, rect.height));
+    canvas.drawImageRect(image, src, dst, paint);
+    canvas.restore();
+  }
+
+  _drawOverlay(Canvas canvas, Paint paint, Rect rect, Size size) {
+    paint.color = Color.fromRGBO(0x0, 0x0, 0x0, _kActiveOpacity * active + _kInactiveOpacity * (1.0 - active));
     final boundaries = currentBoundaries(size);
     final _path1 = Path()..addRect(Rect.fromLTRB(0.0, 0.0, rect.width, rect.height));
     Path _path2;
     if (chipShape == BoxShape.rectangle) {
       _path2 = Path()..addRect(boundaries);
     } else {
-      _path2 = Path()
-        ..addRRect(RRect.fromLTRBR(
-          boundaries.left,
-          boundaries.top,
-          boundaries.right,
-          boundaries.bottom,
-          Radius.circular(boundaries.height / 2),
-        ));
+      var rRect = RRect.fromLTRBR(
+        boundaries.left,
+        boundaries.top,
+        boundaries.right,
+        boundaries.bottom,
+        Radius.circular(boundaries.height / 2),
+      );
+      _path2 = Path()..addRRect(rRect);
     }
     canvas.clipPath(Path.combine(PathOperation.difference, _path1, _path2));
     canvas.drawRect(Rect.fromLTRB(0.0, 0.0, rect.width, rect.height), paint);
-    paint
-      ..isAntiAlias = true
-      ..color = borderColor
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
+    paint.isAntiAlias = true;
+    paint.color = borderColor;
+    paint.strokeWidth = 2;
+    paint.style = PaintingStyle.stroke;
     if (chipShape == BoxShape.rectangle) {
       canvas.drawRect(
         Rect.fromLTRB(
@@ -557,7 +567,5 @@ class _CropPainter extends CustomPainter {
         paint,
       );
     }
-
-    canvas.restore();
   }
 }
