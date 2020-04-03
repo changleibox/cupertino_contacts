@@ -409,7 +409,11 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
       });
     } else if (_action == _CropAction.scaling) {
       setState(() {
-        _scale = _startScale * details.scale;
+        if (details.scale < 1) {
+          _scale = _startScale - ((_startScale - _minimumScale * 0.8) * (1 - details.scale));
+        } else {
+          _scale = _startScale + ((_maximumScale * 1.2 - _startScale) * (1 - 1.0 / details.scale));
+        }
         _view = _calculateView(_scale);
       });
     }
