@@ -332,23 +332,11 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
   }
 
   Rect _getViewInBoundaries(double scale) {
-    return Offset(
-          max(
-            min(
-              _view.left,
-              _area.left * _view.width / scale,
-            ),
-            _area.right * _view.width / scale - 1.0,
-          ),
-          max(
-            min(
-              _view.top,
-              _area.top * _view.height / scale,
-            ),
-            _area.bottom * _view.height / scale - 1.0,
-          ),
-        ) &
-        _view.size;
+    var left = min(_view.left, _area.left * _view.width / scale);
+    var right = _area.right * _view.width / scale - 1.0;
+    var top = min(_view.top, _area.top * _view.height / scale);
+    var bottom = _area.bottom * _view.height / scale - 1.0;
+    return Offset(max(left, right), max(top, bottom)) & _view.size;
   }
 
   double get _maximumScale {
