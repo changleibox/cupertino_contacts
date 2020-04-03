@@ -326,8 +326,8 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
 
   void _handleScaleStart(ScaleStartDetails details) {
     _activate(1.0);
-    _scale = _scaleTween.transform(1.0);
-    _view = _viewTween.transform(1.0);
+    _scale = _scaleTween?.transform(1.0) ?? _scale;
+    _view = _viewTween?.transform(1.0) ?? _view;
     _settleController.stop(canceled: false);
     _lastFocalPoint = details.focalPoint;
     _action = _CropAction.none;
