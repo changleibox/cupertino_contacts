@@ -33,26 +33,21 @@ class _CropInfos {
 }
 
 Uint8List _cropImageAsSync(_CropInfos infos) {
-  var scaleRect = Rect.fromLTWH(
+  var srcRect = Rect.fromLTWH(
     0,
     0,
-    infos.srcWidth / infos.scale,
-    infos.srcHeight / infos.scale,
+    infos.srcWidth.toDouble(),
+    infos.srcHeight.toDouble(),
   );
   var cropRect = Rect.fromLTRB(
-    max(scaleRect.width * infos.area.left, scaleRect.left),
-    max(scaleRect.height * infos.area.top, scaleRect.top),
-    min(scaleRect.width * infos.area.right, scaleRect.right),
-    min(scaleRect.height * infos.area.bottom, scaleRect.bottom),
+    max(srcRect.width * infos.area.left, srcRect.left),
+    max(srcRect.height * infos.area.top, srcRect.top),
+    min(srcRect.width * infos.area.right, srcRect.right),
+    min(srcRect.height * infos.area.bottom, srcRect.bottom),
   );
 
-  var resizeImage = image.copyResize(
-    image.decodeImage(infos.bytes),
-    width: scaleRect.width.floor(),
-    height: scaleRect.height.floor(),
-  );
   var copyCropImage = image.copyCrop(
-    resizeImage,
+    image.decodeImage(infos.bytes),
     cropRect.left.floor(),
     cropRect.top.floor(),
     cropRect.width.floor(),
