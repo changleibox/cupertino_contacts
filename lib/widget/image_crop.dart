@@ -40,10 +40,10 @@ Uint8List _cropImageAsSync(_CropInfos infos) {
     infos.srcHeight / infos.scale,
   );
   var cropRect = Rect.fromLTRB(
-    scaleRect.width * infos.area.left,
-    scaleRect.height * infos.area.top,
-    scaleRect.width * infos.area.right,
-    scaleRect.height * infos.area.bottom,
+    max(scaleRect.width * infos.area.left, scaleRect.left),
+    max(scaleRect.height * infos.area.top, scaleRect.top),
+    min(scaleRect.width * infos.area.right, scaleRect.right),
+    min(scaleRect.height * infos.area.bottom, scaleRect.bottom),
   );
 
   var resizeImage = image.copyResize(
