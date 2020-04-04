@@ -3,6 +3,7 @@
  */
 import 'dart:typed_data';
 import 'dart:math' as math;
+import 'package:vector_math/vector_math_64.dart';
 
 import 'package:vector_math/hash.dart' as quiver;
 
@@ -121,18 +122,15 @@ class ColorMatrix {
       );
   }
 
-  /// Constructs Matrix4 with given [Float64List] as [storage].
   ColorMatrix.fromFloat64List(this._m5storage);
 
-  /// Constructs Matrix4 with a [storage] that views given [buffer] starting at
-  /// [offset]. [offset] has to be multiple of [Float64List.bytesPerElement].
   ColorMatrix.fromBuffer(ByteBuffer buffer, int offset) : _m5storage = Float64List.view(buffer, offset, 20);
 
-  /// Constructs a new mat4 from columns.
-  factory ColorMatrix.columns(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3) =>
-      ColorMatrix.zero()..setColumns(arg0, arg1, arg2, arg3);
+  factory ColorMatrix.columns(Vector4 arg0, Vector4 arg1, Vector4 arg2, Vector4 arg3, Vector4 arg4) =>
+      ColorMatrix.zero()..setColumns(arg0, arg1, arg2, arg3, arg4);
 
-  /// Sets the diagonal to [arg].
+  factory ColorMatrix.rows(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3) => ColorMatrix.zero()..setRows(arg0, arg1, arg2, arg3);
+
   void splatDiagonal(double arg) {
     _m5storage[0] = arg;
     _m5storage[6] = arg;
@@ -186,6 +184,36 @@ class ColorMatrix {
 
   /// Sets the entire matrix to the column values.
   void setColumns(
+    Vector4 arg0,
+    Vector4 arg1,
+    Vector4 arg2,
+    Vector4 arg3,
+    Vector4 arg4,
+  ) {
+    _m5storage[0] = arg0.storage[0];
+    _m5storage[5] = arg0.storage[1];
+    _m5storage[10] = arg0.storage[2];
+    _m5storage[15] = arg0.storage[3];
+    _m5storage[1] = arg1.storage[0];
+    _m5storage[6] = arg1.storage[1];
+    _m5storage[11] = arg1.storage[2];
+    _m5storage[16] = arg1.storage[3];
+    _m5storage[2] = arg2.storage[0];
+    _m5storage[7] = arg2.storage[1];
+    _m5storage[12] = arg2.storage[2];
+    _m5storage[17] = arg2.storage[3];
+    _m5storage[3] = arg3.storage[0];
+    _m5storage[8] = arg3.storage[1];
+    _m5storage[13] = arg3.storage[2];
+    _m5storage[18] = arg3.storage[3];
+    _m5storage[4] = arg4.storage[0];
+    _m5storage[9] = arg4.storage[1];
+    _m5storage[14] = arg4.storage[2];
+    _m5storage[19] = arg4.storage[3];
+  }
+
+  /// Sets the entire matrix to the row values.
+  void setRows(
     Vector5 arg0,
     Vector5 arg1,
     Vector5 arg2,
