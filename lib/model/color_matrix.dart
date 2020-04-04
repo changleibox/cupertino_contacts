@@ -17,6 +17,18 @@ class ColorMatrix {
 
   factory ColorMatrix.invert() => ColorMatrix.zero()..setInvert();
 
+  factory ColorMatrix.sepia() => ColorMatrix.zero()..setSepia();
+
+  factory ColorMatrix.greyscale() => ColorMatrix.zero()..setGreyscale();
+
+  factory ColorMatrix.luminosity(double luminosity) => ColorMatrix.zero()..setLuminosity(luminosity);
+
+  factory ColorMatrix.saturation(double saturation) => ColorMatrix.zero()..setSaturation(saturation);
+
+  factory ColorMatrix.contrast(double contrast) => ColorMatrix.zero()..setContrast(contrast);
+
+  factory ColorMatrix.threshold(double threshold) => ColorMatrix.zero()..setThreshold(threshold);
+
   factory ColorMatrix.copy(ColorMatrix other) => ColorMatrix.zero()..setFrom(other);
 
   int index(int row, int col) => (col * dimension) + row;
@@ -273,6 +285,148 @@ class ColorMatrix {
     _m5storage[12] = -1.0;
     _m5storage[13] = 0.0;
     _m5storage[14] = 255.0;
+    _m5storage[15] = 0.0;
+    _m5storage[16] = 0.0;
+    _m5storage[17] = 0.0;
+    _m5storage[18] = 1.0;
+    _m5storage[19] = 0.0;
+  }
+
+  void setSepia() {
+    _m5storage[0] = 0.393;
+    _m5storage[1] = 0.769;
+    _m5storage[2] = 0.189;
+    _m5storage[3] = 0.0;
+    _m5storage[4] = 0;
+    _m5storage[5] = 0.349;
+    _m5storage[6] = 0.686;
+    _m5storage[7] = 0.168;
+    _m5storage[8] = 0.0;
+    _m5storage[9] = 0.0;
+    _m5storage[10] = 0.272;
+    _m5storage[11] = 0.534;
+    _m5storage[12] = 0.131;
+    _m5storage[13] = 0.0;
+    _m5storage[14] = 0.0;
+    _m5storage[15] = 0.0;
+    _m5storage[16] = 0.0;
+    _m5storage[17] = 0.0;
+    _m5storage[18] = 1.0;
+    _m5storage[19] = 0.0;
+  }
+
+  void setGreyscale() {
+    _m5storage[0] = 0.2126;
+    _m5storage[1] = 0.7152;
+    _m5storage[2] = 0.0722;
+    _m5storage[3] = 0.0;
+    _m5storage[4] = 0.0;
+    _m5storage[5] = 0.2126;
+    _m5storage[6] = 0.7152;
+    _m5storage[7] = 0.0722;
+    _m5storage[8] = 0.0;
+    _m5storage[9] = 0.0;
+    _m5storage[10] = 0.2126;
+    _m5storage[11] = 0.7152;
+    _m5storage[12] = 0.0722;
+    _m5storage[13] = 0.0;
+    _m5storage[14] = 0.0;
+    _m5storage[15] = 0.0;
+    _m5storage[16] = 0.0;
+    _m5storage[17] = 0.0;
+    _m5storage[18] = 1.0;
+    _m5storage[19] = 0.0;
+  }
+
+  void setLuminosity(double luminosity) {
+    assert(luminosity != null && luminosity.abs() <= 255);
+    _m5storage[0] = 1.0;
+    _m5storage[1] = 0.0;
+    _m5storage[2] = 0.0;
+    _m5storage[3] = 0.0;
+    _m5storage[4] = luminosity;
+    _m5storage[5] = 0.0;
+    _m5storage[6] = 1.0;
+    _m5storage[7] = 0.0;
+    _m5storage[8] = 0.0;
+    _m5storage[9] = luminosity;
+    _m5storage[10] = 0.0;
+    _m5storage[11] = 0.0;
+    _m5storage[12] = 1.0;
+    _m5storage[13] = 0.0;
+    _m5storage[14] = luminosity;
+    _m5storage[15] = 0.0;
+    _m5storage[16] = 0.0;
+    _m5storage[17] = 0.0;
+    _m5storage[18] = 1.0;
+    _m5storage[19] = 0.0;
+  }
+
+  void setSaturation(double saturation) {
+    assert(saturation != null && saturation >= 0);
+    _m5storage[0] = 0.2126 * (1 - saturation) + saturation;
+    _m5storage[1] = 0.7152 * (1 - saturation);
+    _m5storage[2] = 0.0722 * (1 - saturation);
+    _m5storage[3] = 0.0;
+    _m5storage[4] = 0.0;
+    _m5storage[5] = 0.2126 * (1 - saturation);
+    _m5storage[6] = 0.7152 * (1 - saturation) + saturation;
+    _m5storage[7] = 0.0722 * (1 - saturation);
+    _m5storage[8] = 0.0;
+    _m5storage[9] = 0.0;
+    _m5storage[10] = 0.2126 * (1 - saturation);
+    _m5storage[11] = 0.7152 * (1 - saturation);
+    _m5storage[12] = 0.0722 * (1 - saturation) + saturation;
+    _m5storage[13] = 0.0;
+    _m5storage[14] = 0.0;
+    _m5storage[15] = 0.0;
+    _m5storage[16] = 0.0;
+    _m5storage[17] = 0.0;
+    _m5storage[18] = 1.0;
+    _m5storage[19] = 0.0;
+  }
+
+  void setContrast(double contrast) {
+    assert(contrast != null && contrast >= 0 && contrast <= 10);
+    _m5storage[0] = contrast;
+    _m5storage[1] = 0.0;
+    _m5storage[2] = 0.0;
+    _m5storage[3] = 0.0;
+    _m5storage[4] = 128 * (1 - contrast);
+    _m5storage[5] = 0.0;
+    _m5storage[6] = contrast;
+    _m5storage[7] = 0.0;
+    _m5storage[8] = 0.0;
+    _m5storage[9] = 128 * (1 - contrast);
+    _m5storage[10] = 0.0;
+    _m5storage[11] = 0.0;
+    _m5storage[12] = contrast;
+    _m5storage[13] = 0.0;
+    _m5storage[14] = 128 * (1 - contrast);
+    _m5storage[15] = 0.0;
+    _m5storage[16] = 0.0;
+    _m5storage[17] = 0.0;
+    _m5storage[18] = 1.0;
+    _m5storage[19] = 0.0;
+  }
+
+  void setThreshold(double threshold) {
+    assert(threshold != null && threshold >= 0 && threshold <= 255);
+    _m5storage[0] = 0.2126 * 256;
+    _m5storage[1] = 0.7152 * 256;
+    _m5storage[2] = 0.0722 * 256;
+    _m5storage[3] = 0.0;
+    _m5storage[4] = -256 * threshold;
+    _m5storage[5] = 0.2126 * 256;
+    _m5storage[6] = 0.7152 * 256;
+    _m5storage[7] = 0.0722 * 256;
+    _m5storage[8] = 0.0;
+    _m5storage[9] = -256 * threshold;
+    _m5storage[10] = 0.2126 * 256;
+    _m5storage[11] = 0.7152 * 256;
+    _m5storage[12] = 0.0722 * 256;
+    _m5storage[13] = 0.0;
+    _m5storage[14] = -256 * threshold;
     _m5storage[15] = 0.0;
     _m5storage[16] = 0.0;
     _m5storage[17] = 0.0;
