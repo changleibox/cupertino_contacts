@@ -271,6 +271,104 @@ class ColorMatrix {
     _m5storage[i] = v;
   }
 
+  setScale(double rScale, double gScale, double bScale, double aScale) {
+    for (int i = 19; i > 0; --i) {
+      _m5storage[i] = 0;
+    }
+    _m5storage[0] = rScale;
+    _m5storage[6] = gScale;
+    _m5storage[12] = bScale;
+    _m5storage[18] = aScale;
+  }
+
+  setRotate(int axis, double degrees) {
+    setIdentity();
+    double radians = degrees * math.pi / 180.0;
+    double cosine = math.cos(radians);
+    double sine = math.sin(radians);
+    switch (axis) {
+      // Rotation around the red color
+      case 0:
+        _m5storage[6] = _m5storage[12] = cosine;
+        _m5storage[7] = sine;
+        _m5storage[11] = -sine;
+        break;
+      // Rotation around the green color
+      case 1:
+        _m5storage[0] = _m5storage[12] = cosine;
+        _m5storage[2] = -sine;
+        _m5storage[10] = sine;
+        break;
+      // Rotation around the blue color
+      case 2:
+        _m5storage[0] = _m5storage[6] = cosine;
+        _m5storage[1] = sine;
+        _m5storage[5] = -sine;
+        break;
+      default:
+        throw UnimplementedError();
+    }
+  }
+
+  setConcat(ColorMatrix matA, ColorMatrix matB) {
+    Float64List tmp;
+    if (matA == this || matB == this) {
+      tmp = Float64List(20);
+    } else {
+      tmp = _m5storage;
+    }
+
+    final Float64List a = matA._m5storage;
+    final Float64List b = matB._m5storage;
+    int index = 0;
+    for (int j = 0; j < 20; j += 5) {
+      for (int i = 0; i < 4; i++) {
+        tmp[index++] = a[j + 0] * b[i + 0] + a[j + 1] * b[i + 5] + a[j + 2] * b[i + 10] + a[j + 3] * b[i + 15];
+      }
+      tmp[index++] = a[j + 0] * b[4] + a[j + 1] * b[9] + a[j + 2] * b[14] + a[j + 3] * b[19] + a[j + 4];
+    }
+
+    if (tmp != _m5storage) {
+      _m5storage.setRange(0, 20, tmp);
+    }
+  }
+
+  preConcat(ColorMatrix prematrix) {
+    setConcat(this, prematrix);
+  }
+
+  postConcat(ColorMatrix postmatrix) {
+    setConcat(postmatrix, this);
+  }
+
+  setRGB2YUV() {
+    setIdentity();
+    Float64List m = _m5storage;
+    // these coefficients match those in libjpeg
+    m[0] = 0.299;
+    m[1] = 0.587;
+    m[2] = 0.114;
+    m[5] = -0.16874;
+    m[6] = -0.33126;
+    m[7] = 0.5;
+    m[10] = 0.5;
+    m[11] = -0.41869;
+    m[12] = -0.08131;
+  }
+
+  setYUV2RGB() {
+    setIdentity();
+    Float64List m = _m5storage;
+    // these coefficients match those in libjpeg
+    m[2] = 1.402;
+    m[5] = 1;
+    m[6] = -0.34414;
+    m[7] = -0.71414;
+    m[10] = 1;
+    m[11] = 1.772;
+    m[12] = 0;
+  }
+
   void setIdentity() {
     _m5storage[0] = 1.0;
     _m5storage[1] = 0.0;
