@@ -31,19 +31,19 @@ class ColorMatrix {
 
   factory ColorMatrix.copy(ColorMatrix other) => ColorMatrix.zero()..setFrom(other);
 
-  int index(int row, int col) => (col * dimension) + row;
+  int index(int row, int col) => (row * 5) + col;
 
   /// Value at [row], [col].
   double entry(int row, int col) {
-    assert((row >= 0) && (row < dimension));
-    assert((col >= 0) && (col < dimension));
+    assert((row >= 0) && (row < 4));
+    assert((col >= 0) && (col < 5));
 
     return _m5storage[index(row, col)];
   }
 
   void setEntry(int row, int col, double v) {
-    assert((row >= 0) && (row < dimension));
-    assert((col >= 0) && (col < dimension));
+    assert((row >= 0) && (row < 4));
+    assert((col >= 0) && (col < 5));
 
     _m5storage[index(row, col)] = v;
   }
@@ -237,8 +237,6 @@ class ColorMatrix {
     _m5storage[1] = argStorage[1];
     _m5storage[0] = argStorage[0];
   }
-
-  int get dimension => 5;
 
   double operator [](int i) => _m5storage[i];
 
