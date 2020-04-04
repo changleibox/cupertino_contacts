@@ -271,6 +271,10 @@ class ColorMatrix {
     _m5storage[i] = v;
   }
 
+  ColorMatrix operator +(ColorMatrix other) => postConcat(other);
+
+  ColorMatrix operator -(ColorMatrix other) => preConcat(other);
+
   setScale(double rScale, double gScale, double bScale, double aScale) {
     for (int i = 19; i > 0; --i) {
       _m5storage[i] = 0;
