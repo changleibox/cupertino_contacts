@@ -129,8 +129,8 @@ class ColorMatrix {
   ColorMatrix.fromBuffer(ByteBuffer buffer, int offset) : _m5storage = Float64List.view(buffer, offset, 20);
 
   /// Constructs a new mat4 from columns.
-  factory ColorMatrix.columns(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3, Vector5 arg4) =>
-      ColorMatrix.zero()..setColumns(arg0, arg1, arg2, arg3, arg4);
+  factory ColorMatrix.columns(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3) =>
+      ColorMatrix.zero()..setColumns(arg0, arg1, arg2, arg3);
 
   /// Sets the diagonal to [arg].
   void splatDiagonal(double arg) {
@@ -190,28 +190,27 @@ class ColorMatrix {
     Vector5 arg1,
     Vector5 arg2,
     Vector5 arg3,
-    Vector5 arg4,
   ) {
     _m5storage[0] = arg0._v5storage[0];
     _m5storage[1] = arg0._v5storage[1];
     _m5storage[2] = arg0._v5storage[2];
     _m5storage[3] = arg0._v5storage[3];
-    _m5storage[4] = arg1._v5storage[0];
-    _m5storage[5] = arg1._v5storage[1];
-    _m5storage[6] = arg1._v5storage[2];
-    _m5storage[7] = arg1._v5storage[3];
-    _m5storage[8] = arg2._v5storage[0];
-    _m5storage[9] = arg2._v5storage[1];
-    _m5storage[10] = arg2._v5storage[2];
-    _m5storage[11] = arg2._v5storage[3];
-    _m5storage[12] = arg3._v5storage[0];
-    _m5storage[13] = arg3._v5storage[1];
-    _m5storage[14] = arg3._v5storage[2];
-    _m5storage[15] = arg3._v5storage[3];
-    _m5storage[16] = arg4._v5storage[0];
-    _m5storage[17] = arg4._v5storage[1];
-    _m5storage[18] = arg4._v5storage[2];
-    _m5storage[19] = arg4._v5storage[3];
+    _m5storage[4] = arg0._v5storage[4];
+    _m5storage[5] = arg1._v5storage[0];
+    _m5storage[6] = arg1._v5storage[1];
+    _m5storage[7] = arg1._v5storage[2];
+    _m5storage[8] = arg1._v5storage[3];
+    _m5storage[9] = arg1._v5storage[4];
+    _m5storage[10] = arg2._v5storage[0];
+    _m5storage[11] = arg2._v5storage[1];
+    _m5storage[12] = arg2._v5storage[2];
+    _m5storage[13] = arg2._v5storage[3];
+    _m5storage[14] = arg2._v5storage[4];
+    _m5storage[15] = arg3._v5storage[0];
+    _m5storage[16] = arg3._v5storage[1];
+    _m5storage[17] = arg3._v5storage[2];
+    _m5storage[18] = arg3._v5storage[3];
+    _m5storage[19] = arg3._v5storage[4];
   }
 
   void setFrom(ColorMatrix arg) {
