@@ -30,10 +30,11 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   @override
   void initState() {
     rootBundle.load(Images.ic_default_avatar).then((value) {
-      _defaultAvatar = Uint8ListAvatar(value.buffer.asUint8List(), editable: false);
+      var uint8list = value.buffer.asUint8List();
+      _defaultAvatar = Uint8ListAvatar(uint8list, editable: false);
       _proposals.add(_defaultAvatar);
       if (widget.picture != null) {
-        _avatar = Uint8ListAvatar(widget.picture);
+        _avatar = Uint8ListAvatar(widget.picture, editable: !Collections.equals(uint8list, widget.picture));
         _proposals.add(_avatar);
       }
       notifyDataSetChanged();
@@ -50,7 +51,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       RouteProvider.buildRoute(
         EditAvatarPage(
           avatar: avatar,
-          isDefault: avatar == _defaultAvatar,
+          editable: avatar.editable,
           isFirst: _proposals.indexOf(avatar) == 0,
         ),
         fullscreenDialog: true,

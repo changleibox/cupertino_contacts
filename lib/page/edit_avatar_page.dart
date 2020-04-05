@@ -19,16 +19,16 @@ const double _spacing = 10;
 
 class EditAvatarPage extends StatefulWidget {
   final Uint8ListAvatar avatar;
-  final bool isDefault;
+  final bool editable;
   final bool isFirst;
 
   const EditAvatarPage({
     Key key,
     @required this.avatar,
-    this.isDefault = true,
+    this.editable = true,
     this.isFirst = true,
   })  : assert(avatar != null),
-        assert(isDefault != null),
+        assert(editable != null),
         assert(isFirst != null),
         super(key: key);
 
@@ -86,12 +86,12 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
                     text: '指定给联系人',
                     onPressed: presenter.onFormulatePressed,
                   ),
-                  if (!widget.isDefault)
+                  if (widget.editable)
                     _CupertinoSheetAction(
                       text: '编辑',
                       onPressed: presenter.onEditPressed,
                     ),
-                  if (!widget.isDefault)
+                  if (widget.editable)
                     _CupertinoSheetAction(
                       text: '复制',
                       onPressed: presenter.onCopyPressed,

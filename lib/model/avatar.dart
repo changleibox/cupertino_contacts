@@ -4,8 +4,6 @@
 
 import 'dart:typed_data';
 
-import 'package:cupertinocontacts/util/collections.dart';
-
 class Avatar<T> {
   final bool editable;
   final T src;
@@ -34,12 +32,4 @@ class Uint8ListAvatar extends Avatar<Uint8List> {
           target: target,
           editable: editable,
         );
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) || other is Uint8ListAvatar && runtimeType == other.runtimeType && Collections.equals(src, other.src);
-  }
-
-  @override
-  int get hashCode => src.hashCode;
 }
