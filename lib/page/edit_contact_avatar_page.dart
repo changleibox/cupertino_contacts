@@ -46,7 +46,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
         ),
         trailing: NavigationBarAction(
           child: Text('完成'),
-          onPressed: presenter.picture == null ? null : presenter.onDonePressed,
+          onPressed: presenter.isChanged == null ? presenter.onDonePressed : null,
         ),
       ),
       child: SafeArea(
@@ -69,13 +69,13 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                 children: [
                   CupertinoCircleAvatar.memory(
                     assetName: Images.ic_default_avatar,
-                    bytes: presenter.picture?.avatar,
+                    bytes: presenter.avatar?.avatar,
                     borderSide: BorderSide.none,
                     size: 144,
-                    onPressed: presenter.isInvalidAvatar
+                    onPressed: presenter.isOnlyRead
                         ? null
                         : () {
-                            presenter.editPicture(presenter.picture);
+                            presenter.editPicture(presenter.avatar);
                           },
                   ),
                   CupertinoButton(
@@ -83,9 +83,9 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     padding: EdgeInsets.zero,
                     borderRadius: BorderRadius.zero,
                     onPressed: () {
-                      presenter.editPicture(presenter.picture);
+                      presenter.editPicture(presenter.avatar);
                     },
-                    child: presenter.isInvalidAvatar
+                    child: presenter.isOnlyRead
                         ? SizedBox.shrink()
                         : Text(
                             '编辑',

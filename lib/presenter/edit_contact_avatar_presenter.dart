@@ -23,9 +23,11 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
 
   Iterable<Uint8ListAvatar> get proposals => _proposals;
 
-  Uint8ListAvatar get picture => _avatar;
+  Uint8ListAvatar get avatar => _avatar;
 
-  bool get isInvalidAvatar => _avatar == null || _avatar == _defaultAvatar;
+  bool get isChanged => !Collections.equals(_avatar?.avatar, widget.picture);
+
+  bool get isOnlyRead => _avatar == null || _avatar == _defaultAvatar;
 
   @override
   void initState() {
@@ -106,7 +108,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   }
 
   onCancelPressed() {
-    if (Collections.equals(_avatar?.avatar, widget.picture)) {
+    if (!isChanged) {
       Navigator.maybePop(context);
     } else {
       showGriveUpEditDialog(context).then((value) {
