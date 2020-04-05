@@ -11,11 +11,14 @@ import 'package:flutter/cupertino.dart';
 /// 添加联系人-备注
 class AddContactRemarksTextField extends StatelessWidget {
   final MultiEditableContactInfo info;
+  final int minLines;
 
   const AddContactRemarksTextField({
     Key key,
     @required this.info,
+    this.minLines = 3,
   })  : assert(info != null),
+        assert(minLines != null),
         super(key: key);
 
   @override
@@ -40,8 +43,9 @@ class AddContactRemarksTextField extends StatelessWidget {
           ),
           CupertinoTextField(
             controller: info.controller,
+            padding: EdgeInsets.zero,
             decoration: null,
-            minLines: 3,
+            minLines: minLines,
             maxLines: null,
           ),
         ],
