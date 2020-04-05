@@ -4,6 +4,8 @@
 
 import 'dart:typed_data';
 
+import 'package:cupertinocontacts/page/stack_filter_page.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/image_crop.dart';
 import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -40,7 +42,15 @@ class _CropImagePageState extends State<CropImagePage> {
     var loadPrompt = LoadPrompt(context)..show();
     currentState.cropImage().then((value) {
       loadPrompt.dismiss();
-      Navigator.pop(context, value);
+      Navigator.push(
+        context,
+        RouteProvider.buildRoute(
+          StackFilterPage(bytes: value),
+          fullscreenDialog: true,
+        ),
+      ).then((value) {
+        Navigator.pop(context, value);
+      });
     }).catchError((errot) {
       loadPrompt.dismiss();
     });

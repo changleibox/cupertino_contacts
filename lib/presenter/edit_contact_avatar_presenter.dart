@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/model/avatar.dart';
+import 'package:cupertinocontacts/page/crop_image_page.dart';
 import 'package:cupertinocontacts/page/edit_avatar_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/edit_avatar_presenter.dart';
@@ -95,15 +96,25 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       if (value == null) {
         return;
       }
-      var newPicture = value.readAsBytesSync();
-      if (Collections.equals(_avatar, newPicture)) {
-        return;
-      }
-      _avatar = Uint8ListAvatar(newPicture);
-      _proposals.removeWhere((element) => Collections.equals(element.src, _defaultAvatar.src));
-      _proposals.insert(0, _defaultAvatar);
-      _proposals.add(_avatar);
-      notifyDataSetChanged();
+      Navigator.push(
+        context,
+        RouteProvider.buildRoute(
+          CropImagePage(bytes: value.readAsBytesSync()),
+          fullscreenDialog: true,
+        ),
+      ).then((value) {
+        if (value == null) {
+          return;
+        }
+        if (Collections.equals(_avatar, value)) {
+          return;
+        }
+        _avatar = Uint8ListAvatar(value);
+        _proposals.removeWhere((element) => Collections.equals(element.src, _defaultAvatar.src));
+        _proposals.insert(0, _defaultAvatar);
+        _proposals.add(_avatar);
+        notifyDataSetChanged();
+      });
     });
   }
 
