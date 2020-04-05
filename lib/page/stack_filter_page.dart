@@ -5,13 +5,11 @@
 import 'dart:typed_data';
 
 import 'package:cupertinocontacts/model/color_matrix.dart';
-import 'package:cupertinocontacts/presenter/edit_avatar_presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/util/image.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
-import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -23,12 +21,12 @@ const double _spacing = 20;
 const double _padding = 16;
 
 class StackFilterPage extends StatefulWidget {
-  final Uint8List picture;
+  final Uint8List bytes;
 
   const StackFilterPage({
     Key key,
-    @required this.picture,
-  })  : assert(picture != null),
+    @required this.bytes,
+  })  : assert(bytes != null),
         super(key: key);
 
   @override
@@ -115,25 +113,20 @@ class _StackFilterPageState extends State<StackFilterPage> {
           var storage = filter.matrix.storage;
           Widget imageChild = CupertinoCircleAvatar.memory(
             assetName: Images.ic_default_avatar,
-            bytes: widget.picture,
+            bytes: widget.bytes,
             borderSide: BorderSide.none,
             size: double.infinity,
             onPressed: () {
               var src = ImageFilterSrc(
-                image: widget.picture,
+                image: widget.bytes,
                 matrix: storage,
               );
               var loadPrompt = LoadPrompt(context)..show();
               ImageFilters.colorMatrixFilter(src).then((value) {
                 loadPrompt.dismiss();
-                Navigator.pop(context, {
-                  'data': widget.picture,
-                  'editedData': value,
-                  'type': EditAvatarType.edit,
-                });
+                Navigator.pop(context, value);
               }).catchError((_) {
                 loadPrompt.dismiss();
-                showText('滤镜叠加失败', context);
               });
             },
           );
