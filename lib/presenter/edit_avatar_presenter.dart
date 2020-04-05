@@ -28,6 +28,7 @@ class EditAvatarPresenter extends Presenter<EditAvatarPage> {
       context,
       RouteProvider.buildRoute(
         CropImagePage(bytes: widget.avatar.src),
+        fullscreenDialog: true,
       ),
     ).then((value) {
       if (value == null) {
