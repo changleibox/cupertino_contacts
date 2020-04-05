@@ -46,7 +46,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
         ),
         trailing: NavigationBarAction(
           child: Text('完成'),
-          onPressed: presenter.isChanged == null ? presenter.onDonePressed : null,
+          onPressed: presenter.isChanged ? presenter.onDonePressed : null,
         ),
       ),
       child: SafeArea(
