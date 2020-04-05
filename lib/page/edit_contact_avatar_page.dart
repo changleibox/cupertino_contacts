@@ -21,9 +21,9 @@ const double _padding = 16;
 const double _spacing = 24;
 
 class EditContactAvatarPage extends StatefulWidget {
-  final Uint8List picture;
+  final Uint8List avatar;
 
-  const EditContactAvatarPage({Key key, this.picture}) : super(key: key);
+  const EditContactAvatarPage({Key key, this.avatar}) : super(key: key);
 
   @override
   _EditContactAvatarPageState createState() => _EditContactAvatarPageState();

@@ -116,7 +116,7 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
       context,
       RouteProvider.buildRoute(
         EditContactAvatarPage(
-          picture: avatar,
+          avatar: avatar,
         ),
         fullscreenDialog: true,
       ),

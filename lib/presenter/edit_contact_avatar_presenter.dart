@@ -25,7 +25,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
 
   Uint8ListAvatar get avatar => _avatar;
 
-  bool get isChanged => !Collections.equals(_avatar?.avatar, widget.picture);
+  bool get isChanged => !Collections.equals(_avatar?.avatar, widget.avatar);
 
   bool get isOnlyRead => _avatar == null || _avatar == _defaultAvatar;
 
@@ -35,8 +35,8 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       var uint8list = value.buffer.asUint8List();
       _defaultAvatar = Uint8ListAvatar(uint8list, editable: false);
       _proposals.add(_defaultAvatar);
-      if (widget.picture != null) {
-        _avatar = Uint8ListAvatar(widget.picture, editable: !Collections.equals(uint8list, widget.picture));
+      if (widget.avatar != null) {
+        _avatar = Uint8ListAvatar(widget.avatar, editable: !Collections.equals(uint8list, widget.avatar));
         _proposals.add(_avatar);
       }
       notifyDataSetChanged();
