@@ -69,7 +69,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                 children: [
                   CupertinoCircleAvatar.memory(
                     assetName: Images.ic_default_avatar,
-                    bytes: presenter.picture,
+                    bytes: presenter.picture?.avatar,
                     borderSide: BorderSide.none,
                     size: 144,
                     onPressed: presenter.isInvalidAvatar
@@ -140,7 +140,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                           var avatar = presenter.proposals.elementAt(index);
                           return CupertinoCircleAvatar.memory(
                             assetName: Images.ic_default_avatar,
-                            bytes: avatar,
+                            bytes: avatar.avatar,
                             borderSide: BorderSide.none,
                             size: double.infinity,
                             onPressed: () {

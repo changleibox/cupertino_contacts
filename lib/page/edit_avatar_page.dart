@@ -2,8 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:typed_data';
-
+import 'package:cupertinocontacts/model/avatar.dart';
 import 'package:cupertinocontacts/presenter/edit_avatar_presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
@@ -19,7 +18,7 @@ const double _buttonHeight = 56;
 const double _spacing = 10;
 
 class EditAvatarPage extends StatefulWidget {
-  final Uint8List avatar;
+  final Uint8ListAvatar avatar;
   final bool isDefault;
   final bool isFirst;
 
@@ -65,7 +64,7 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
             Expanded(
               child: CupertinoCircleAvatar.memory(
                 assetName: Images.ic_default_avatar,
-                bytes: widget.avatar,
+                bytes: widget.avatar.avatar,
                 borderSide: BorderSide.none,
                 size: 220,
               ),

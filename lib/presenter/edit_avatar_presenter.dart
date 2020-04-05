@@ -27,15 +27,15 @@ class EditAvatarPresenter extends Presenter<EditAvatarPage> {
     Navigator.push(
       context,
       RouteProvider.buildRoute(
-        CropImagePage(bytes: widget.avatar),
+        CropImagePage(bytes: widget.avatar.src),
       ),
     ).then((value) {
       if (value == null) {
         return;
       }
+      widget.avatar.target = value;
       Navigator.pop(context, {
         'data': widget.avatar,
-        'editedData': value,
         'type': EditAvatarType.edit,
       });
     });
