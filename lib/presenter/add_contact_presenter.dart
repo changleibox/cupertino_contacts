@@ -8,6 +8,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/add_contact_page.dart';
+import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
@@ -147,7 +148,12 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
 
   onDonePressed() {
     ContactsService.addContact(value).then((value) {
-      Navigator.pushReplacementNamed(context, RouteProvider.contactDetail);
+      Navigator.pushReplacement(
+        context,
+        RouteProvider.buildRoute(
+          ContactDetailPage(contact: value),
+        ),
+      );
     }).catchError((error) {
       showText(error.toString(), context);
     });
