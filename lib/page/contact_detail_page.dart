@@ -3,16 +3,12 @@
  */
 
 import 'package:contacts_service/contacts_service.dart';
-import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
-import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
-import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
-import 'package:cupertinocontacts/widget/circle_avatar.dart';
+import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
-import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,96 +36,103 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
   Widget builds(BuildContext context) {
     var themeData = CupertinoTheme.of(context);
     var textTheme = themeData.textTheme;
+    var actionTextStyle = textTheme.actionTextStyle;
     var textStyle = textTheme.textStyle;
-    return CupertinoPageScaffold(
-      child: SupportNestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverToBoxAdapter(
-              child: CupertinoNavigationBar(
-                backgroundColor: CupertinoColors.tertiarySystemBackground,
-                border: null,
-                middle: Text('联系人'),
-                previousPageTitle: '通讯录',
-                trailing: NavigationBarAction(
-                  child: Text('编辑'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      RouteProvider.buildRoute(
-                        EditContactPage(),
-                      ),
-                    );
-                  },
-                ),
+
+    var phones = widget.contact.phones;
+    var emails = widget.contact.emails;
+    var postalAddresses = widget.contact.postalAddresses;
+
+    final children = List<Widget>();
+    if (phones != null && phones.isNotEmpty) {
+      children.addAll(phones.map((phone) {
+        return _NormalGroupInfoWidget(
+          name: phone.label,
+          value: phone.value,
+          valueColor: actionTextStyle.color,
+          onPressed: () {},
+        );
+      }));
+    }
+    if (emails != null && emails.isNotEmpty) {
+      children.addAll(emails.map((email) {
+        return _NormalGroupInfoWidget(
+          name: email.label,
+          value: email.value,
+          valueColor: actionTextStyle.color,
+          onPressed: () {},
+        );
+      }));
+    }
+    if (postalAddresses != null && postalAddresses.isNotEmpty) {
+      children.addAll(postalAddresses.map((address) {
+        return _NormalGroupInfoWidget(
+          name: address.label,
+          value: [
+            address.street,
+            address.region,
+            address.city,
+            address.postcode,
+            address.country,
+          ].join(' '),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Container(
+              width: 80,
+              height: 80,
+              foregroundDecoration: FlutterLogoDecoration(),
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemBackground,
+                context,
               ),
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.tertiarySystemBackground,
-                  context,
-                ),
-                foregroundDecoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: CupertinoDynamicColor.resolve(
-                        separatorColor.withOpacity(0.1),
-                        context,
-                      ),
-                      width: 0.0, // One physical pixel.
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                ),
-                padding: EdgeInsets.only(
-                  bottom: 16,
-                ),
-                child: WidgetGroup.spacing(
-                  alignment: MainAxisAlignment.center,
-                  direction: Axis.vertical,
-                  spacing: 8,
-                  children: <Widget>[
-                    CupertinoCircleAvatar.memory(
-                      assetName: Images.ic_default_avatar,
-                      bytes: widget.contact.avatar,
-                      borderSide: BorderSide.none,
-                      size: 80,
-                    ),
-                    Text(
-                      widget.contact.displayName,
-                      style: textTheme.textStyle.copyWith(
-                        fontSize: 26,
-                      ),
-                    ),
-                    WidgetGroup.spacing(
-                      alignment: MainAxisAlignment.center,
-                      spacing: 24,
-                      children: [
-                        _OperationButton(
-                          icon: CupertinoIcons.info,
-                          text: '信息',
-                          onPressed: () {},
-                        ),
-                        _OperationButton(
-                          icon: CupertinoIcons.info,
-                          text: '呼叫',
-                          onPressed: null,
-                        ),
-                        _OperationButton(
-                          icon: CupertinoIcons.info,
-                          text: '视频',
-                          onPressed: null,
-                        ),
-                        _OperationButton(
-                          icon: CupertinoIcons.info,
-                          text: '邮件',
-                          onPressed: null,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+            onPressed: () {},
+          ),
+          onPressed: () {},
+        );
+      }));
+    }
+    if (widget.contact.birthday != null) {
+      children.add(_NormalGroupInfoWidget(
+        name: '生日',
+        value: widget.contact.birthday.toString(),
+        valueColor: actionTextStyle.color,
+        onPressed: () {},
+      ));
+    }
+    children.add(AddContactRemarksTextField(
+      info: presenter.remarksInfo,
+      minLines: 2,
+    ));
+    children.add(_NormalButton(
+      text: '发送信息',
+    ));
+    children.add(_NormalButton(
+      text: '共享联系人',
+    ));
+    children.add(_NormalButton(
+      text: '添加到个人收藏',
+    ));
+    children.add(_NormalButton(
+      text: '添加到紧急联系人',
+    ));
+    children.add(_NormalButton(
+      text: '共享我的位置',
+    ));
+
+    return CupertinoPageScaffold(
+      child: SupportNestedScrollView(
+        pinnedHeaderSliverHeightBuilder: (context) {
+          return 198;
+        },
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: ContactDetailPersistentHeaderDelegate(
+                contact: widget.contact,
+                maxAvatarSize: 80,
+                minAvatarSize: 44,
               ),
             ),
           ];
@@ -146,39 +149,22 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             context: context,
             removeTop: true,
             child: CupertinoScrollbar(
-              child: ListView(
+              child: ListView.separated(
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                children: <Widget>[
-                  AddContactRemarksTextField(
-                    info: presenter.remarksInfo,
-                    minLines: 2,
-                  ),
-                  CupertinoDivider(
+                itemCount: children.length,
+                itemBuilder: (context, index) {
+                  return children[index];
+                },
+                separatorBuilder: (context, index) {
+                  if (index == children.length - 2) {
+                    return SizedBox(
+                      height: 40,
+                    );
+                  }
+                  return CupertinoDivider(
                     color: separatorColor.withOpacity(0.1),
-                  ),
-                  CupertinoButton(
-                    minSize: 44,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 10,
-                    ),
-                    borderRadius: BorderRadius.zero,
-                    color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.tertiarySystemBackground,
-                      context,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '共享联系人',
-                        style: textTheme.actionTextStyle.copyWith(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ),
@@ -188,44 +174,110 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
   }
 }
 
-class _OperationButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
+class _NormalGroupInfoWidget extends StatefulWidget {
+  final String name;
+  final String value;
+  final Color valueColor;
+  final Widget trailing;
   final VoidCallback onPressed;
 
-  const _OperationButton({
+  const _NormalGroupInfoWidget({
     Key key,
-    @required this.icon,
-    @required this.text,
+    @required this.name,
+    @required this.value,
+    this.valueColor,
+    this.trailing,
     this.onPressed,
-  })  : assert(icon != null),
-        assert(text != null),
+  })  : assert(name != null),
+        super(key: key);
+
+  @override
+  _NormalGroupInfoWidgetState createState() => _NormalGroupInfoWidgetState();
+}
+
+class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+    return GestureDetector(
+      onLongPress: () {},
+      child: CupertinoButton(
+        color: CupertinoDynamicColor.resolve(
+          CupertinoColors.tertiarySystemBackground,
+          context,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
+        borderRadius: BorderRadius.zero,
+        minSize: 0,
+        onPressed: widget.onPressed,
+        child: WidgetGroup.spacing(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 80,
+          children: <Widget>[
+            Expanded(
+              child: WidgetGroup.spacing(
+                alignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                direction: Axis.vertical,
+                children: [
+                  Text(
+                    widget.name,
+                    style: textStyle,
+                  ),
+                  Text(
+                    widget.value ?? '暂无',
+                    style: textStyle.copyWith(
+                      color: widget.valueColor ?? textStyle.color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (widget.trailing != null) widget.trailing,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NormalButton extends StatelessWidget {
+  final String text;
+
+  const _NormalButton({
+    Key key,
+    @required this.text,
+  })  : assert(text != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var textTheme = themeData.textTheme;
     return CupertinoButton(
-      padding: EdgeInsets.zero,
-      minSize: 0,
-      borderRadius: BorderRadius.zero,
-      child: WidgetGroup.spacing(
-        alignment: MainAxisAlignment.center,
-        direction: Axis.vertical,
-        spacing: 4,
-        children: [
-          Icon(
-            icon,
-            size: 44,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          ),
-        ],
+      minSize: 44,
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 10,
       ),
-      onPressed: onPressed,
+      borderRadius: BorderRadius.zero,
+      color: CupertinoDynamicColor.resolve(
+        CupertinoColors.tertiarySystemBackground,
+        context,
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: textTheme.actionTextStyle.copyWith(
+            fontSize: 15,
+          ),
+        ),
+      ),
+      onPressed: () {},
     );
   }
 }
