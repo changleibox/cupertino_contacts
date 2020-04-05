@@ -10,8 +10,10 @@ import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delega
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
+import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -195,53 +197,133 @@ class _NormalGroupInfoWidget extends StatefulWidget {
   _NormalGroupInfoWidgetState createState() => _NormalGroupInfoWidgetState();
 }
 
-class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget> {
+class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
+    with AutomaticKeepAliveClientMixin<_NormalGroupInfoWidget>
+    implements TextSelectionDelegate {
+  final LayerLink _toolbarLayerLink = LayerLink();
+
+  SimpleTextSelectionOverlay _selectionOverlay;
+
+  @override
+  void dispose() {
+    _selectionOverlay?.dispose();
+    _selectionOverlay = null;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-    return GestureDetector(
-      onLongPress: () {},
-      child: CupertinoButton(
-        color: CupertinoDynamicColor.resolve(
-          CupertinoColors.tertiarySystemBackground,
-          context,
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 10,
-        ),
-        borderRadius: BorderRadius.zero,
-        minSize: 0,
-        onPressed: widget.onPressed,
-        child: WidgetGroup.spacing(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 80,
-          children: <Widget>[
-            Expanded(
-              child: WidgetGroup.spacing(
-                alignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                direction: Axis.vertical,
-                children: [
-                  Text(
-                    widget.name,
-                    style: textStyle,
-                  ),
-                  Text(
-                    widget.value ?? '暂无',
-                    style: textStyle.copyWith(
-                      color: widget.valueColor ?? textStyle.color,
+    return CompositedTransformTarget(
+      link: _toolbarLayerLink,
+      child: GestureDetector(
+        onLongPress: () {
+          showToolbar();
+        },
+        child: CupertinoButton(
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.tertiarySystemBackground,
+            context,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 10,
+          ),
+          borderRadius: BorderRadius.zero,
+          minSize: 0,
+          onPressed: widget.onPressed,
+          child: WidgetGroup.spacing(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 80,
+            children: <Widget>[
+              Expanded(
+                child: WidgetGroup.spacing(
+                  alignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  direction: Axis.vertical,
+                  children: [
+                    Text(
+                      widget.name,
+                      style: textStyle,
                     ),
-                  ),
-                ],
+                    Text(
+                      widget.value ?? '暂无',
+                      style: textStyle.copyWith(
+                        color: widget.valueColor ?? textStyle.color,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (widget.trailing != null) widget.trailing,
-          ],
+              if (widget.trailing != null) widget.trailing,
+            ],
+          ),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  TextEditingValue get textEditingValue {
+    return TextEditingValue(
+      text: widget.value,
+      selection: TextSelection(
+        baseOffset: 0,
+        extentOffset: widget.value.length,
+      ),
+    );
+  }
+
+  @override
+  void bringIntoView(TextPosition position) {}
+
+  /// Toggles the visibility of the toolbar.
+  void toggleToolbar() {
+    assert(_selectionOverlay != null);
+    if (_selectionOverlay.toolbarIsVisible) {
+      hideToolbar();
+    } else {
+      showToolbar();
+    }
+  }
+
+  void showToolbar() {
+    _selectionOverlay?.hideToolbar();
+    _selectionOverlay = null;
+
+    _selectionOverlay = SimpleTextSelectionOverlay(
+      context: context,
+      toolbarLayerLink: _toolbarLayerLink,
+      renderObject: context.findRenderObject(),
+      delegate: this,
+    );
+    _selectionOverlay.showToolbar();
+  }
+
+  @override
+  void hideToolbar() {
+    _selectionOverlay?.hideToolbar();
+    _selectionOverlay = null;
+  }
+
+  @override
+  bool get copyEnabled => true;
+
+  @override
+  bool get cutEnabled => false;
+
+  @override
+  bool get pasteEnabled => false;
+
+  @override
+  bool get selectAllEnabled => false;
+
+  @override
+  set textEditingValue(TextEditingValue value) {}
 }
 
 class _NormalButton extends StatelessWidget {
