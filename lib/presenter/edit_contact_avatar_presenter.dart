@@ -98,7 +98,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
         return;
       }
       _avatar = Uint8ListAvatar(newPicture);
-      _proposals.removeWhere((element) => element == _defaultAvatar);
+      _proposals.removeWhere((element) => Collections.equals(element.src, _defaultAvatar.src));
       _proposals.insert(0, _defaultAvatar);
       _proposals.add(_avatar);
       notifyDataSetChanged();
