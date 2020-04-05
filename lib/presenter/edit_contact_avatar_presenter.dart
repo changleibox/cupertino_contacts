@@ -96,20 +96,18 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
       if (value == null) {
         return;
       }
+      final src = value.readAsBytesSync();
       Navigator.push(
         context,
         RouteProvider.buildRoute(
-          CropImagePage(bytes: value.readAsBytesSync()),
+          CropImagePage(bytes: src),
           fullscreenDialog: true,
         ),
       ).then((value) {
         if (value == null) {
           return;
         }
-        if (Collections.equals(_avatar, value)) {
-          return;
-        }
-        _avatar = Uint8ListAvatar(value);
+        _avatar = Uint8ListAvatar(src, target: value);
         _proposals.removeWhere((element) => Collections.equals(element.src, _defaultAvatar.src));
         _proposals.insert(0, _defaultAvatar);
         _proposals.add(_avatar);
