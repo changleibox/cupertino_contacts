@@ -90,21 +90,19 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             address.postcode,
             address.country,
           ].join(' '),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: Container(
-              width: 80,
-              height: 80,
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
-                context,
-              ),
-              alignment: Alignment.center,
-              child: Text('地图'),
+          trailing: Container(
+            width: 80,
+            height: 80,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.tertiarySystemBackground,
+              context,
             ),
-            onPressed: () {},
+            alignment: Alignment.center,
+            child: Text('地图'),
           ),
-          onPressed: () {},
+          onPressed: () {
+            launch('maps:');
+          },
         );
       }));
     }
@@ -113,7 +111,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         name: '生日',
         value: DateFormat('yyyy年MM月dd日').format(widget.contact.birthday),
         valueColor: actionTextStyle.color,
-        onPressed: () {},
+        onPressed: () {
+          launch('calshow:');
+        },
       ));
     }
     children.add(MultiLineTextField(
