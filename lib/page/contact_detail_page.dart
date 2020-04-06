@@ -4,10 +4,10 @@
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
-import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
+import 'package:cupertinocontacts/widget/multi_line_text_field.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -107,8 +107,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         onPressed: () {},
       ));
     }
-    children.add(AddContactRemarksTextField(
-      info: presenter.remarksInfo,
+    children.add(MultiLineTextField(
+      controller: presenter.remarksController,
+      name: '备注',
       minLines: 2,
       backgroundColor: CupertinoColors.secondarySystemBackground,
     ));
