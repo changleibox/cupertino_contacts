@@ -136,12 +136,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
           return [
             SliverPersistentHeader(
               pinned: true,
-              delegate: AddContactPersistentHeaderDelegate(
-                avatar: presenter.avatar,
-                maxAvatarSize: _kMaxAvatarSize,
-                minAvatarSize: _kMinAvatarSize,
-                onEditAvatarPressed: presenter.onEditAvatarPressed,
-              ),
+              delegate: persistentHeaderDelegate,
             ),
           ];
         },

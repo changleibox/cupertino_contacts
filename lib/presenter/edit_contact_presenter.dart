@@ -23,9 +23,11 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
 
-  Uint8List avatar;
+  Uint8List _avatar;
 
   Contact _initialContact;
+
+  Uint8List get avatar => _avatar;
 
   bool get isChanged => _initialContact != value;
 
@@ -33,7 +35,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
   void initState() {
     _initialContact = widget.contact ?? Contact();
 
-    avatar = _initialContact.avatar;
+    _avatar = _initialContact.avatar;
 
     baseInfos.add(EditableContactInfo(
       name: '姓氏',
@@ -127,7 +129,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
       context,
       RouteProvider.buildRoute(
         EditContactAvatarPage(
-          avatar: avatar,
+          avatar: _avatar,
         ),
         fullscreenDialog: true,
       ),
@@ -135,10 +137,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
       if (value == null) {
         return;
       }
-      if (Collections.equals(avatar, value)) {
+      if (Collections.equals(_avatar, value)) {
         return;
       }
-      avatar = value;
+      _avatar = value;
       notifyDataSetChanged();
       notifyListeners();
     });
@@ -189,7 +191,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
   Contact get value {
     final contactMap = {
       'identifier': _initialContact.identifier,
-      'avatar': avatar,
+      'avatar': _avatar,
       'familyName': baseInfos[0].value,
       'givenName': baseInfos[1].value,
       'company': baseInfos[2].value,
