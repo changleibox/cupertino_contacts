@@ -49,8 +49,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     var emails = widget.contact.emails;
     var postalAddresses = widget.contact.postalAddresses;
 
+    final hasPhone = phones != null && phones.isNotEmpty;
+
     final children = List<Widget>();
-    if (phones != null && phones.isNotEmpty) {
+    if (hasPhone) {
       children.addAll(phones.map((phone) {
         return _NormalGroupInfoWidget(
           name: phone.label,
@@ -111,21 +113,25 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       minLines: 2,
       backgroundColor: CupertinoColors.secondarySystemBackground,
     ));
-    children.add(_NormalButton(
-      text: '发送信息',
-    ));
+    if (hasPhone) {
+      children.add(_NormalButton(
+        text: '发送信息',
+      ));
+    }
     children.add(_NormalButton(
       text: '共享联系人',
     ));
-    children.add(_NormalButton(
-      text: '添加到个人收藏',
-    ));
-    children.add(_NormalButton(
-      text: '添加到紧急联系人',
-    ));
-    children.add(_NormalButton(
-      text: '共享我的位置',
-    ));
+    if (hasPhone) {
+      children.add(_NormalButton(
+        text: '添加到个人收藏',
+      ));
+      children.add(_NormalButton(
+        text: '添加到紧急联系人',
+      ));
+      children.add(_NormalButton(
+        text: '共享我的位置',
+      ));
+    }
 
     var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
       contact: widget.contact,
@@ -168,7 +174,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                   return children[index];
                 },
                 separatorBuilder: (context, index) {
-                  if (index == children.length - 2) {
+                  if (index == children.length - 2 && hasPhone) {
                     return SizedBox(
                       height: 40,
                     );
