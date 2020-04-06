@@ -58,6 +58,9 @@ class SimpleTextSelectionOverlay {
   }
 
   Widget _buildToolbar(BuildContext context) {
+    if (!renderObject.attached) {
+      return SizedBox.shrink();
+    }
     final Rect editingRegion = Rect.fromPoints(
       renderObject.localToGlobal(Offset.zero),
       renderObject.localToGlobal(renderObject.size.bottomRight(Offset.zero)),

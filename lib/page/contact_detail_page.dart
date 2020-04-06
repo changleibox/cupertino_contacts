@@ -201,6 +201,7 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
     with AutomaticKeepAliveClientMixin<_NormalGroupInfoWidget>
     implements TextSelectionDelegate {
   final LayerLink _toolbarLayerLink = LayerLink();
+  final FocusScopeNode _focusScopeNode = FocusScopeNode();
 
   SimpleTextSelectionOverlay _selectionOverlay;
 
@@ -208,6 +209,7 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
   void dispose() {
     _selectionOverlay?.dispose();
     _selectionOverlay = null;
+    _focusScopeNode.dispose();
     super.dispose();
   }
 
@@ -215,49 +217,57 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
   Widget build(BuildContext context) {
     super.build(context);
     var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-    return CompositedTransformTarget(
-      link: _toolbarLayerLink,
-      child: GestureDetector(
-        onLongPress: () {
-          showToolbar();
-        },
-        child: CupertinoButton(
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.tertiarySystemBackground,
-            context,
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 10,
-          ),
-          borderRadius: BorderRadius.zero,
-          minSize: 0,
-          onPressed: widget.onPressed,
-          child: WidgetGroup.spacing(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 80,
-            children: <Widget>[
-              Expanded(
-                child: WidgetGroup.spacing(
-                  alignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  direction: Axis.vertical,
-                  children: [
-                    Text(
-                      widget.name,
-                      style: textStyle,
-                    ),
-                    Text(
-                      widget.value ?? '暂无',
-                      style: textStyle.copyWith(
-                        color: widget.valueColor ?? textStyle.color,
+    return FocusScope(
+      node: _focusScopeNode,
+      onFocusChange: (value) {
+        if (!value) {
+          hideToolbar();
+        }
+      },
+      child: CompositedTransformTarget(
+        link: _toolbarLayerLink,
+        child: GestureDetector(
+          onLongPress: () {
+            showToolbar();
+          },
+          child: CupertinoButton(
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.tertiarySystemBackground,
+              context,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 10,
+            ),
+            borderRadius: BorderRadius.zero,
+            minSize: 0,
+            onPressed: widget.onPressed,
+            child: WidgetGroup.spacing(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 80,
+              children: <Widget>[
+                Expanded(
+                  child: WidgetGroup.spacing(
+                    alignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    direction: Axis.vertical,
+                    children: [
+                      Text(
+                        widget.name,
+                        style: textStyle,
                       ),
-                    ),
-                  ],
+                      Text(
+                        widget.value ?? '暂无',
+                        style: textStyle.copyWith(
+                          color: widget.valueColor ?? textStyle.color,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              if (widget.trailing != null) widget.trailing,
-            ],
+                if (widget.trailing != null) widget.trailing,
+              ],
+            ),
           ),
         ),
       ),
@@ -302,12 +312,17 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
       delegate: this,
     );
     _selectionOverlay.showToolbar();
+
+    _focusScopeNode.requestFocus();
   }
 
   @override
   void hideToolbar() {
     _selectionOverlay?.hideToolbar();
     _selectionOverlay = null;
+    if (_focusScopeNode.hasFocus) {
+      _focusScopeNode.unfocus();
+    }
   }
 
   @override
