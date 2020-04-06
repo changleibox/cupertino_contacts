@@ -43,7 +43,6 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     var themeData = CupertinoTheme.of(context);
     var textTheme = themeData.textTheme;
     var actionTextStyle = textTheme.actionTextStyle;
-    var textStyle = textTheme.textStyle;
 
     var phones = widget.contact.phones;
     var emails = widget.contact.emails;
@@ -127,6 +126,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       ));
       children.add(_NormalButton(
         text: '添加到紧急联系人',
+        isDestructive: true,
       ));
       children.add(_NormalButton(
         text: '共享我的位置',
@@ -155,43 +155,34 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             ),
           ];
         },
-        body: CupertinoTheme(
-          data: themeData.copyWith(
-            textTheme: textTheme.copyWith(
-              textStyle: textStyle.copyWith(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          child: MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: CupertinoScrollbar(
-              child: ListView.separated(
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                itemCount: children.length,
-                itemBuilder: (context, index) {
-                  return children[index];
-                },
-                separatorBuilder: (context, index) {
-                  if (index == children.length - 2 && hasPhone) {
-                    return SizedBox(
-                      height: 40,
-                    );
-                  }
-                  return Container(
-                    color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemBackground,
-                      context,
-                    ),
-                    padding: EdgeInsets.only(
-                      left: 16,
-                    ),
-                    height: 1.0,
-                    child: CupertinoDivider(),
+        body: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: CupertinoScrollbar(
+            child: ListView.separated(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              itemCount: children.length,
+              itemBuilder: (context, index) {
+                return children[index];
+              },
+              separatorBuilder: (context, index) {
+                if (index == children.length - 2 && hasPhone) {
+                  return SizedBox(
+                    height: 40,
                   );
-                },
-              ),
+                }
+                return Container(
+                  color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.secondarySystemBackground,
+                    context,
+                  ),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                  ),
+                  height: 1.0,
+                  child: CupertinoDivider(),
+                );
+              },
             ),
           ),
         ),
@@ -294,7 +285,9 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
                       children: [
                         Text(
                           widget.name,
-                          style: textStyle,
+                          style: textStyle.copyWith(
+                            fontSize: 15,
+                          ),
                         ),
                         Text(
                           widget.value ?? '暂无',
@@ -384,17 +377,26 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
 
 class _NormalButton extends StatelessWidget {
   final String text;
+  final bool isDestructive;
 
   const _NormalButton({
     Key key,
     @required this.text,
+    this.isDestructive = false,
   })  : assert(text != null),
+        assert(isDestructive != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var themeData = CupertinoTheme.of(context);
     var textTheme = themeData.textTheme;
+    var actionTextStyle = textTheme.actionTextStyle;
+    if (isDestructive) {
+      actionTextStyle = actionTextStyle.copyWith(
+        color: CupertinoColors.destructiveRed,
+      );
+    }
     return CupertinoButton(
       minSize: 44,
       padding: EdgeInsets.only(
@@ -410,9 +412,7 @@ class _NormalButton extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           text,
-          style: textTheme.actionTextStyle.copyWith(
-            fontSize: 15,
-          ),
+          style: actionTextStyle,
         ),
       ),
       onPressed: () {},
