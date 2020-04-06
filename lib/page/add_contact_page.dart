@@ -93,6 +93,13 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
       }
     }
 
+    var persistentHeaderDelegate = AddContactPersistentHeaderDelegate(
+      avatar: presenter.avatar,
+      maxAvatarSize: _kMaxAvatarSize,
+      minAvatarSize: _kMinAvatarSize,
+      onEditAvatarPressed: presenter.onEditAvatarPressed,
+    );
+
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemBackground,
       navigationBar: CupertinoNavigationBar(
@@ -119,7 +126,7 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
           midScrollOffset: _kMaxAvatarSize,
         ),
         pinnedHeaderSliverHeightBuilder: (context) {
-          return 64.0;
+          return persistentHeaderDelegate.minExtent;
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
