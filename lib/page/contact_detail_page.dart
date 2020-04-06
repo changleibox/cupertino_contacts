@@ -4,7 +4,6 @@
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
@@ -163,8 +162,16 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                       height: 40,
                     );
                   }
-                  return CupertinoDivider(
-                    color: separatorColor.withOpacity(0.1),
+                  return Container(
+                    color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.tertiarySystemBackground,
+                      context,
+                    ),
+                    padding: EdgeInsets.only(
+                      left: 16,
+                    ),
+                    height: 1.0,
+                    child: CupertinoDivider(),
                   );
                 },
               ),
