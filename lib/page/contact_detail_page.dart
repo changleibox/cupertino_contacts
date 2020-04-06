@@ -87,11 +87,12 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             child: Container(
               width: 80,
               height: 80,
-              foregroundDecoration: FlutterLogoDecoration(),
               color: CupertinoDynamicColor.resolve(
                 CupertinoColors.tertiarySystemBackground,
                 context,
               ),
+              alignment: Alignment.center,
+              child: Text('地图'),
             ),
             onPressed: () {},
           ),
