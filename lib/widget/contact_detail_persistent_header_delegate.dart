@@ -176,7 +176,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '视频',
-                      onPressed: _hasPhone ? () => launch('facetime:') : null,
+                      onPressed: _hasPhone || _hasEmail ? () => launch('facetime:') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
