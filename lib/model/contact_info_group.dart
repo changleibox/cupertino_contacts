@@ -105,7 +105,7 @@ class ContactInfoGroup<T extends _Item> extends ContactInfo<List<T>> {
   })  : assert(name != null),
         assert(selections != null && selections.length > 0),
         this._items = List<T>()..addAll(items ?? []),
-        super(name: name, value: items == null ? null : List.unmodifiable(items)) {
+        super(name: name, value: List.unmodifiable(items ?? [])) {
     _items.forEach((element) => element.addListener(_itemListener));
   }
 

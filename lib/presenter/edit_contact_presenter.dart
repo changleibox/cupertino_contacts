@@ -31,12 +31,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
 
   @override
   void initState() {
-    _initialContact = widget.contact ??
-        Contact(
-          phones: [],
-          emails: [],
-          postalAddresses: [],
-        );
+    _initialContact = widget.contact ?? Contact();
 
     avatar = _initialContact.avatar;
 
