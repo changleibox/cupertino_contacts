@@ -189,25 +189,27 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
 
   @override
   Contact get value {
+    var phones = _convert(groups[0]);
+    var emails = _convert(groups[1]);
     final contactMap = {
       'identifier': _initialContact.identifier,
       'avatar': _avatar,
       'familyName': baseInfos[0].value,
       'givenName': baseInfos[1].value,
       'company': baseInfos[2].value,
-      'phones': (groups[0] as ContactInfoGroup<EditableItem>).value.where((element) {
-        return element.value != null && element.value.isNotEmpty;
-      }).map((e) {
-        return Item(label: e.label, value: e.value);
-      }).toList(),
-      'emails': (groups[1] as ContactInfoGroup<EditableItem>).value.where((element) {
-        return element.value != null && element.value.isNotEmpty;
-      }).map((e) {
-        return Item(label: e.label, value: e.value);
-      }).toList(),
+      'phones': phones.isEmpty ? _initialContact.phones : phones,
+      'emails': emails.isEmpty ? _initialContact.emails : emails,
       'postalAddresses': _initialContact.postalAddresses,
     };
     return Contact.fromMap(contactMap);
+  }
+
+  List<Item> _convert(ContactInfoGroup<EditableItem> infoGroup) {
+    return infoGroup.value.where((element) {
+      return element.value != null && element.value.isNotEmpty;
+    }).map((e) {
+      return Item(label: e.label, value: e.value);
+    }).toList();
   }
 
   @protected
