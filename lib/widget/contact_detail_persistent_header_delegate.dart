@@ -111,7 +111,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
                   ),
                   WidgetGroup.spacing(
-                    alignment: MainAxisAlignment.center,
+                    alignment: MainAxisAlignment.start,
                     direction: Axis.vertical,
                     spacing: _kTextSpacing * offset,
                     children: [
@@ -123,27 +123,33 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                         ),
                       ),
                       if (_hasJob && offset > 0)
-                        Text(
-                          contact.jobTitle,
-                          style: textStyle.copyWith(
-                            color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.secondaryLabel,
-                              context,
+                        Opacity(
+                          opacity: offset,
+                          child: Text(
+                            contact.jobTitle,
+                            style: textStyle.copyWith(
+                              color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel,
+                                context,
+                              ),
+                              fontSize: _kNormalTextSize * offset,
+                              height: 1.0,
                             ),
-                            fontSize: _kNormalTextSize * offset,
-                            height: 1.0,
                           ),
                         ),
                       if (_hasCompany && offset > 0)
-                        Text(
-                          contact.company,
-                          style: textStyle.copyWith(
-                            color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.secondaryLabel,
-                              context,
+                        Opacity(
+                          opacity: offset,
+                          child: Text(
+                            contact.company,
+                            style: textStyle.copyWith(
+                              color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel,
+                                context,
+                              ),
+                              fontSize: _kNormalTextSize * offset,
+                              height: 1.0,
                             ),
-                            fontSize: _kNormalTextSize * offset,
-                            height: 1.0,
                           ),
                         ),
                     ],
