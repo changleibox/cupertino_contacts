@@ -20,8 +20,11 @@ class AddContactNormalTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 44,
+      padding: EdgeInsets.only(
+        right: 10,
+      ),
       child: CupertinoTextField(
         controller: info.controller,
         placeholder: info.name,
