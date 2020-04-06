@@ -11,10 +11,10 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-选择铃声
-class AddContactChooseRingToneButton extends StatelessWidget {
+class EditContactChooseRingToneButton extends StatelessWidget {
   final DefaultSelectionContactInfo info;
 
-  const AddContactChooseRingToneButton({
+  const EditContactChooseRingToneButton({
     Key key,
     @required this.info,
   })  : assert(info != null),

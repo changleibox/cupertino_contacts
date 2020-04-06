@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/4/1.
 ///
 /// 添加联系人-常用的选择按钮
-class AddContactNormalSelectionButton extends StatelessWidget {
+class EditContactNormalSelectionButton extends StatelessWidget {
   final NormalSelectionContactInfo info;
 
-  const AddContactNormalSelectionButton({
+  const EditContactNormalSelectionButton({
     Key key,
     @required this.info,
   })  : assert(info != null),

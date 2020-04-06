@@ -8,11 +8,11 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-按钮
-class AddContactInfoButton extends StatelessWidget {
+class EditContactInfoButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const AddContactInfoButton({
+  const EditContactInfoButton({
     Key key,
     @required this.text,
     this.onPressed,

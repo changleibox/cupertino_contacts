@@ -10,11 +10,11 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组的容器
-class AddContactGroupContainer extends StatelessWidget {
+class EditContactGroupContainer extends StatelessWidget {
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
 
-  const AddContactGroupContainer({
+  const EditContactGroupContainer({
     Key key,
     @required this.itemCount,
     @required this.itemBuilder,

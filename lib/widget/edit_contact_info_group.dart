@@ -4,8 +4,8 @@
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
-import 'package:cupertinocontacts/widget/add_contact_info_button.dart';
-import 'package:cupertinocontacts/widget/add_contact_info_text_field.dart';
+import 'package:cupertinocontacts/widget/edit_contact_info_button.dart';
+import 'package:cupertinocontacts/widget/edit_contact_info_text_field.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -15,20 +15,20 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
-class AddContactInfoGroup extends StatefulWidget {
+class EditContactInfoGroup extends StatefulWidget {
   final ContactInfoGroup infoGroup;
 
-  const AddContactInfoGroup({
+  const EditContactInfoGroup({
     Key key,
     @required this.infoGroup,
   })  : assert(infoGroup != null),
         super(key: key);
 
   @override
-  _AddContactInfoGroupState createState() => _AddContactInfoGroupState();
+  _EditContactInfoGroupState createState() => _EditContactInfoGroupState();
 }
 
-class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
+class _EditContactInfoGroupState extends State<EditContactInfoGroup> {
   final _animatedListKey = GlobalKey<AnimatedListState>();
   final _globalKeys = List<GlobalKey<SlidableState>>();
 
@@ -98,7 +98,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
         child: SizeTransition(
           sizeFactor: animation,
           axisAlignment: 1.0,
-          child: AddContactInfoTextField(
+          child: EditContactInfoTextField(
             name: widget.infoGroup.name,
             item: item,
             onDeletePressed: onDeletePressed,
@@ -167,7 +167,7 @@ class _AddContactInfoGroupState extends State<AddContactInfoGroup> {
               return _buildItem(index, animation);
             },
           ),
-          AddContactInfoButton(
+          EditContactInfoButton(
             text: '添加${widget.infoGroup.name}',
             onPressed: _onAddPressed,
           ),

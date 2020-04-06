@@ -9,12 +9,12 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-备注
-class AddContactRemarksTextField extends StatelessWidget {
+class EditContactRemarksTextField extends StatelessWidget {
   final MultiEditableContactInfo info;
   final int minLines;
   final Color backgroundColor;
 
-  const AddContactRemarksTextField({
+  const EditContactRemarksTextField({
     Key key,
     @required this.info,
     this.minLines = 3,

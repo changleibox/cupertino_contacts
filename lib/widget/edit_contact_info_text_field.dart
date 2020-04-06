@@ -10,12 +10,12 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-自定义信息输入框
-class AddContactInfoTextField extends StatelessWidget {
+class EditContactInfoTextField extends StatelessWidget {
   final String name;
   final EditableItem item;
   final VoidCallback onDeletePressed;
 
-  const AddContactInfoTextField({
+  const EditContactInfoTextField({
     Key key,
     @required this.name,
     @required this.item,

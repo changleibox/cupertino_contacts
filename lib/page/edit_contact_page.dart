@@ -5,15 +5,14 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
-import 'package:cupertinocontacts/widget/add_contact_choose_ring_tone_button.dart';
-import 'package:cupertinocontacts/widget/add_contact_group_container.dart';
-import 'package:cupertinocontacts/widget/add_contact_info_group.dart';
-import 'package:cupertinocontacts/widget/add_contact_normal_selection_button.dart';
-import 'package:cupertinocontacts/widget/add_contact_normal_text_field.dart';
-import 'package:cupertinocontacts/widget/add_contact_persistent_header_delegate.dart';
-import 'package:cupertinocontacts/widget/add_contact_remarks_text_field.dart';
+import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
+import 'package:cupertinocontacts/widget/edit_contact_group_container.dart';
+import 'package:cupertinocontacts/widget/edit_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/edit_contact_normal_selection_button.dart';
+import 'package:cupertinocontacts/widget/edit_contact_normal_text_field.dart';
+import 'package:cupertinocontacts/widget/edit_contact_remarks_text_field.dart';
+import 'package:cupertinocontacts/widget/edit_contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
-import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
@@ -69,62 +68,49 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     var textStyle = textTheme.textStyle;
 
     final children = List<Widget>();
-    children.add(AddContactGroupContainer(
+    children.add(EditContactGroupContainer(
       itemCount: presenter.baseInfos.length,
       itemBuilder: (context, index) {
         var baseInfo = presenter.baseInfos[index];
-        return AddContactNormalTextField(
+        return EditContactNormalTextField(
           info: baseInfo,
         );
       },
     ));
     for (var contactInfo in presenter.groups) {
       if (contactInfo is ContactInfoGroup) {
-        children.add(AddContactInfoGroup(
+        children.add(EditContactInfoGroup(
           infoGroup: contactInfo,
         ));
       } else if (contactInfo is DefaultSelectionContactInfo) {
-        children.add(AddContactChooseRingToneButton(
+        children.add(EditContactChooseRingToneButton(
           info: contactInfo,
         ));
       } else if (contactInfo is NormalSelectionContactInfo) {
-        children.add(AddContactNormalSelectionButton(
+        children.add(EditContactNormalSelectionButton(
           info: contactInfo,
         ));
       } else if (contactInfo is MultiEditableContactInfo) {
-        children.add(AddContactRemarksTextField(
+        children.add(EditContactRemarksTextField(
           info: contactInfo,
         ));
       }
     }
 
-    var persistentHeaderDelegate = AddContactPersistentHeaderDelegate(
+    var persistentHeaderDelegate = EditContactPersistentHeaderDelegate(
       avatar: presenter.avatar,
       maxAvatarSize: _kMaxAvatarSize,
       minAvatarSize: _kMinAvatarSize,
+      paddingTop: MediaQuery.of(context).padding.top,
+      isEditContact: widget.contact != null,
       onEditAvatarPressed: presenter.onEditAvatarPressed,
+      listenable: presenter,
+      onCancelPressed: presenter.onCancelPressed,
+      onDonePressed: presenter.isChanged ? presenter.onDonePressed : null,
     );
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemBackground,
-      navigationBar: CupertinoNavigationBar(
-        middle: widget.contact == null ? Text('新建联系人') : null,
-        backgroundColor: CupertinoColors.tertiarySystemBackground,
-        border: null,
-        leading: NavigationBarAction(
-          child: Text('取消'),
-          onPressed: presenter.onCancelPressed,
-        ),
-        trailing: ValueListenableBuilder<Contact>(
-          valueListenable: presenter,
-          builder: (context, value, child) {
-            return NavigationBarAction(
-              child: Text('完成'),
-              onPressed: presenter.isChanged ? presenter.onDonePressed : null,
-            );
-          },
-        ),
-      ),
       child: SupportNestedScrollView(
         physics: SnappingScrollPhysics(
           midScrollOffset: _kMaxAvatarSize,
@@ -157,18 +143,22 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                   _onDismissSlidable();
                   return false;
                 },
-                child: CupertinoScrollbar(
-                  child: ListView.separated(
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    itemCount: children.length,
-                    itemBuilder: (context, index) {
-                      return children[index];
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 40,
-                      );
-                    },
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: CupertinoScrollbar(
+                    child: ListView.separated(
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      itemCount: children.length,
+                      itemBuilder: (context, index) {
+                        return children[index];
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 40,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

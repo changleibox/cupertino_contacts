@@ -9,10 +9,10 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 新建联系人-默认输入框
-class AddContactNormalTextField extends StatelessWidget {
+class EditContactNormalTextField extends StatelessWidget {
   final EditableContactInfo info;
 
-  const AddContactNormalTextField({
+  const EditContactNormalTextField({
     Key key,
     @required this.info,
   })  : assert(info != null),
