@@ -179,12 +179,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
 
   @override
   void addListener(VoidCallback listener) {
-    _listeners.add(listener);
+    _listeners?.add(listener);
   }
 
   @override
   void removeListener(VoidCallback listener) {
-    _listeners.remove(listener);
+    _listeners?.remove(listener);
   }
 
   @override

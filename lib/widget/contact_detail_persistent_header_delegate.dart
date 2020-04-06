@@ -85,7 +85,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
               trailing: NavigationBarAction(
                 child: Text('编辑'),
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     RouteProvider.buildRoute(
                       EditContactPage(
