@@ -13,13 +13,16 @@ import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
 const double _kPaddingBottom = 16.0;
-const double _kSpacing = 10.0;
-const double _kTextHeight = 14.0;
+const double _kSpacing = 8.0;
+const double _kActionButtonHeight = 60;
+const double _kNavigationBarHeight = 44;
 
 class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Contact contact;
   final double maxAvatarSize;
   final double minAvatarSize;
+  final double maxNameSize;
+  final double minNameSize;
   final double paddingTop;
   final VoidCallback onEditAvatarPressed;
 
@@ -27,10 +30,14 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     @required this.contact,
     @required this.maxAvatarSize,
     @required this.minAvatarSize,
+    @required this.maxNameSize,
+    @required this.minNameSize,
     @required this.paddingTop,
     this.onEditAvatarPressed,
   })  : assert(maxAvatarSize != null),
         assert(minAvatarSize != null),
+        assert(maxNameSize != null),
+        assert(minNameSize != null),
         assert(paddingTop != null);
 
   @override
@@ -39,9 +46,8 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
 
-    final scrollExtent = maxAvatarSize - minAvatarSize;
-    final offset = ((scrollExtent - shrinkOffset) / scrollExtent).clamp(0.0, 1.0);
-    final offsetExtent = (_kSpacing + _kTextHeight) * (1.0 - offset);
+    final scrollExtent = maxExtent - minExtent;
+    final offset = 1.0 - shrinkOffset / scrollExtent;
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemBackground,
@@ -94,18 +100,18 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
               child: WidgetGroup.spacing(
                 alignment: MainAxisAlignment.center,
                 direction: Axis.vertical,
-                spacing: 8,
+                spacing: _kSpacing,
                 children: <Widget>[
                   CupertinoCircleAvatar.memory(
                     assetName: Images.ic_default_avatar,
                     bytes: contact.avatar,
                     borderSide: BorderSide.none,
-                    size: maxAvatarSize,
+                    size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
                   ),
                   Text(
                     contact.displayName,
                     style: textStyle.copyWith(
-                      fontSize: 26,
+                      fontSize: minNameSize + (maxNameSize - minNameSize) * offset,
                       height: 1.0,
                     ),
                   ),
@@ -144,13 +150,13 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     );
   }
 
-  double get _spacing => 60 + 16 + 26 + _kPaddingBottom + paddingTop;
+  double get _spacing => _kActionButtonHeight + _kSpacing * 2 + _kPaddingBottom + paddingTop;
 
   @override
-  double get maxExtent => maxAvatarSize + _spacing + 44;
+  double get maxExtent => maxAvatarSize + _spacing + _kNavigationBarHeight + maxNameSize;
 
   @override
-  double get minExtent => minAvatarSize + _spacing;
+  double get minExtent => minAvatarSize + _spacing + minNameSize;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

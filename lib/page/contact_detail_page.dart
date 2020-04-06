@@ -17,6 +17,11 @@ import 'package:flutter/rendering.dart';
 /// Created by box on 2020/3/30.
 ///
 /// 联系人详情
+const double _kMaxAvatarSize = 80;
+const double _kMinAvatarSize = 44;
+const double _kMaxNameSize = 26;
+const double _kMinNameSize = 17;
+
 class ContactDetailPage extends StatefulWidget {
   final Contact contact;
 
@@ -122,21 +127,25 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       text: '共享我的位置',
     ));
 
+    var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
+      contact: widget.contact,
+      maxAvatarSize: _kMaxAvatarSize,
+      minAvatarSize: _kMinAvatarSize,
+      maxNameSize: _kMaxNameSize,
+      minNameSize: _kMinNameSize,
+      paddingTop: MediaQuery.of(context).padding.top,
+    );
+
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
-          return 198;
+          return persistentHeaderDelegate.minExtent;
         },
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverPersistentHeader(
               pinned: true,
-              delegate: ContactDetailPersistentHeaderDelegate(
-                contact: widget.contact,
-                maxAvatarSize: 80,
-                minAvatarSize: 44,
-                paddingTop: MediaQuery.of(context).padding.top,
-              ),
+              delegate: persistentHeaderDelegate,
             ),
           ];
         },
