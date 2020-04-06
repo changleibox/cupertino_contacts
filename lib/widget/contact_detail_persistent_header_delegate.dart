@@ -50,6 +50,8 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
 
     final scrollExtent = maxExtent - minExtent;
     final offset = 1.0 - shrinkOffset / scrollExtent;
+    final opacity = (1 - (1.8 * (1 - offset))).clamp(0.0, 1.0);
+
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemBackground,
@@ -100,7 +102,8 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
               right: 0,
               bottom: 0,
               child: WidgetGroup.spacing(
-                alignment: MainAxisAlignment.center,
+                alignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
                 direction: Axis.vertical,
                 spacing: _kSpacing,
                 children: <Widget>[
@@ -111,7 +114,8 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
                   ),
                   WidgetGroup.spacing(
-                    alignment: MainAxisAlignment.start,
+                    alignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
                     direction: Axis.vertical,
                     spacing: _kTextSpacing * offset,
                     children: [
@@ -122,9 +126,9 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                           height: 1.0,
                         ),
                       ),
-                      if (_hasJob && offset > 0)
+                      if (_hasJob)
                         Opacity(
-                          opacity: offset,
+                          opacity: opacity,
                           child: Text(
                             contact.jobTitle,
                             style: textStyle.copyWith(
@@ -137,9 +141,9 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                             ),
                           ),
                         ),
-                      if (_hasCompany && offset > 0)
+                      if (_hasCompany)
                         Opacity(
-                          opacity: offset,
+                          opacity: opacity,
                           child: Text(
                             contact.company,
                             style: textStyle.copyWith(
