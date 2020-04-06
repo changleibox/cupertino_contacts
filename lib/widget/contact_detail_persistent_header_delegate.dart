@@ -11,6 +11,7 @@ import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const double _kPaddingBottom = 16.0;
 const double _kSpacing = 8.0;
@@ -165,22 +166,22 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '信息',
-                      onPressed: () {},
+                      onPressed: _hasPhone || _hasEmail ? () => launch('sms:') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '呼叫',
-                      onPressed: null,
+                      onPressed: _hasPhone ? () => launch('tel:') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '视频',
-                      onPressed: null,
+                      onPressed: _hasPhone ? () => launch('facetime:') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '邮件',
-                      onPressed: null,
+                      onPressed: _hasEmail ? () => launch('mailto:') : null,
                     ),
                   ],
                 ),
@@ -191,6 +192,10 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
       ),
     );
   }
+
+  bool get _hasPhone => contact.phones != null && contact.phones.isNotEmpty;
+
+  bool get _hasEmail => contact.emails != null && contact.emails.isNotEmpty;
 
   bool get _hasJob => contact.jobTitle != null && contact.jobTitle.isNotEmpty;
 
