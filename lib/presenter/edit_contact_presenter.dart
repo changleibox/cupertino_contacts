@@ -160,7 +160,6 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
   }
 
   onDonePressed() {
-    value.displayName = ContactUtils.buildDisplayName(value);
     Future future;
     if (value.identifier == null) {
       future = ContactsService.addContact(value);
@@ -209,7 +208,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
       'postalAddresses': _initialContact.postalAddresses,
       'birthday': _initialContact.birthday,
     };
-    return Contact.fromMap(contactMap);
+    var contact = Contact.fromMap(contactMap);
+    contact.displayName = ContactUtils.buildDisplayName(contact);
+    return contact;
   }
 
   List<Map> _convert(ContactInfoGroup<EditableItem> infoGroup) {

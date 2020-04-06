@@ -21,7 +21,8 @@ class ContactUtils {
       contact.suffix,
     ].where((element) => element != null && element.isNotEmpty).toList();
     final hasSpacing = names.where((element) => letterRegExp.hasMatch(element)).length > 0;
-    return names.join(hasSpacing ? ' ' : '');
+    var name = names.join(hasSpacing ? ' ' : '');
+    return name.isEmpty ? null : name;
   }
 
   static List<Widget> buildDisplayNameWidgets(Contact contact) {
