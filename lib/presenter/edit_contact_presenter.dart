@@ -13,6 +13,7 @@ import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/collections.dart';
+import 'package:cupertinocontacts/util/contact_utils.dart';
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -159,6 +160,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
   }
 
   onDonePressed() {
+    value.displayName = ContactUtils.buildDisplayName(value);
     Future future;
     if (value.identifier == null) {
       future = ContactsService.addContact(value);

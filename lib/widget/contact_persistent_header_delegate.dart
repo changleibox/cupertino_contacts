@@ -6,6 +6,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
+import 'package:cupertinocontacts/util/contact_utils.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,8 +14,6 @@ import 'package:flutter/cupertino.dart';
 const double _kHorizontalPadding = 16.0;
 
 class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  static final RegExp letterRegExp = RegExp(r'[A-Z|a-z]');
-
   final MapEntry<String, List<Contact>> contactEntry;
   final double indexHeight;
   final double dividerHeight;
@@ -77,29 +76,8 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
-          final names = [
-            Text(
-              contact.prefix ?? '',
-            ),
-            Text(
-              contact.givenName ?? '',
-            ),
-            Text(
-              contact.middleName ?? '',
-            ),
-            Text(
-              contact.familyName ?? '',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              contact.suffix,
-            ),
-          ].where((element) {
-            return element.data != null && element.data.isNotEmpty;
-          }).toList();
-          final hasSpacing = contact.displayName != null && letterRegExp.hasMatch(contact.displayName);
+          final names = ContactUtils.buildDisplayNameWidgets(contact);
+          final hasSpacing = ContactUtils.hasSpacing(contact);
           return CupertinoButton(
             padding: EdgeInsets.zero,
             minSize: 0,
