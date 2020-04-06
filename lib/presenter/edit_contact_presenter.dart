@@ -14,12 +14,13 @@ import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/util/contact_utils.dart';
+import 'package:cupertinocontacts/widget/edit_contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
-class EditContactPresenter extends Presenter<EditContactPage> implements ValueListenable<Contact> {
+class EditContactPresenter extends Presenter<EditContactPage> implements EditContactOperation {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
@@ -28,8 +29,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
 
   Contact _initialContact;
 
+  @override
   Uint8List get avatar => _avatar;
 
+  @override
   bool get isChanged => _initialContact != value;
 
   @override
@@ -125,6 +128,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
     super.dispose();
   }
 
+  @override
   onEditAvatarPressed() {
     Navigator.push(
       context,
@@ -147,6 +151,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
     });
   }
 
+  @override
   onCancelPressed() {
     if (!isChanged) {
       Navigator.maybePop(context);
@@ -159,6 +164,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
     }
   }
 
+  @override
   onDonePressed() {
     Future future;
     if (value.identifier == null) {
