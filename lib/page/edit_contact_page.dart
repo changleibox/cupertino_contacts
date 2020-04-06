@@ -98,15 +98,11 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     }
 
     var persistentHeaderDelegate = EditContactPersistentHeaderDelegate(
-      avatar: presenter.avatar,
       maxAvatarSize: _kMaxAvatarSize,
       minAvatarSize: _kMinAvatarSize,
       paddingTop: MediaQuery.of(context).padding.top,
       isEditContact: widget.contact != null,
-      onEditAvatarPressed: presenter.onEditAvatarPressed,
-      listenable: presenter,
-      onCancelPressed: presenter.onCancelPressed,
-      onDonePressed: presenter.isChanged ? presenter.onDonePressed : null,
+      presenter: presenter,
     );
 
     return CupertinoPageScaffold(

@@ -2,9 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:typed_data';
-
 import 'package:contacts_service/contacts_service.dart';
+import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
@@ -19,31 +18,23 @@ const double _kTextHeight = 14.0;
 const double _kNavigationBarHeight = 44;
 
 class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Uint8List avatar;
   final double maxAvatarSize;
   final double minAvatarSize;
   final double paddingTop;
   final bool isEditContact;
-  final ValueListenable<Contact> listenable;
-  final VoidCallback onCancelPressed;
-  final VoidCallback onDonePressed;
-  final VoidCallback onEditAvatarPressed;
+  final EditContactPresenter presenter;
 
   const EditContactPersistentHeaderDelegate({
-    @required this.avatar,
     @required this.maxAvatarSize,
     @required this.minAvatarSize,
     @required this.paddingTop,
     @required this.isEditContact,
-    @required this.listenable,
-    this.onCancelPressed,
-    this.onDonePressed,
-    this.onEditAvatarPressed,
+    @required this.presenter,
   })  : assert(maxAvatarSize != null),
         assert(minAvatarSize != null),
         assert(paddingTop != null),
         assert(isEditContact != null),
-        assert(listenable != null);
+        assert(presenter != null);
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -81,14 +72,14 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
               middle: isEditContact ? null : Text('新建联系人'),
               leading: NavigationBarAction(
                 child: Text('取消'),
-                onPressed: onCancelPressed,
+                onPressed: presenter.onCancelPressed,
               ),
               trailing: ValueListenableBuilder<Contact>(
-                valueListenable: listenable,
+                valueListenable: presenter,
                 builder: (context, value, child) {
                   return NavigationBarAction(
                     child: Text('完成'),
-                    onPressed: onDonePressed,
+                    onPressed: presenter.isChanged ? presenter.onDonePressed : null,
                   );
                 },
               ),
@@ -105,17 +96,17 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
               children: [
                 CupertinoCircleAvatar.memory(
                   assetName: Images.ic_default_avatar,
-                  bytes: avatar,
+                  bytes: presenter.avatar,
                   borderSide: BorderSide.none,
                   size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
-                  onPressed: onEditAvatarPressed,
+                  onPressed: presenter.onEditAvatarPressed,
                 ),
                 if (offset > 0)
                   CupertinoButton(
                     minSize: 0,
                     padding: EdgeInsets.zero,
                     borderRadius: BorderRadius.zero,
-                    onPressed: onEditAvatarPressed,
+                    onPressed: presenter.onEditAvatarPressed,
                     child: SizedBox(
                       height: _kTextHeight * offset,
                       child: Opacity(
