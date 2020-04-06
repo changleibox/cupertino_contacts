@@ -27,7 +27,12 @@ const double _kMaxAvatarSize = 144.0;
 const double _kMinAvatarSize = 48.0;
 
 class AddContactPage extends StatefulWidget {
-  const AddContactPage({Key key}) : super(key: key);
+  final Contact initialContact;
+
+  const AddContactPage({
+    Key key,
+    this.initialContact,
+  }) : super(key: key);
 
   @override
   _AddContactPageState createState() => _AddContactPageState();
@@ -113,10 +118,9 @@ class _AddContactPageState extends PresenterState<AddContactPage, AddContactPres
         trailing: ValueListenableBuilder<Contact>(
           valueListenable: presenter,
           builder: (context, value, child) {
-            final bool isInvalid = value == presenter.emptyContact;
             return NavigationBarAction(
               child: Text('完成'),
-              onPressed: isInvalid ? null : presenter.onDonePressed,
+              onPressed: presenter.isChanged ? presenter.onDonePressed : null,
             );
           },
         ),

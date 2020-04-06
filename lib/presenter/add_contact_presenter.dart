@@ -20,35 +20,50 @@ import 'package:flutter/foundation.dart';
 
 class AddContactPresenter extends Presenter<AddContactPage> implements ValueListenable<Contact> {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
-  final emptyContact = Contact(
-    phones: [],
-    emails: [],
-    postalAddresses: [],
-  );
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
 
   Uint8List avatar;
 
+  Contact _initialContact;
+
+  bool get isChanged => _initialContact != value;
+
   @override
   void initState() {
+    _initialContact = widget.initialContact ??
+        Contact(
+          phones: [],
+          emails: [],
+          postalAddresses: [],
+        );
+
+    avatar = _initialContact.avatar;
+
     baseInfos.add(EditableContactInfo(
       name: '姓氏',
+      value: _initialContact.familyName,
     ));
     baseInfos.add(EditableContactInfo(
       name: '名字',
+      value: _initialContact.givenName,
     ));
     baseInfos.add(EditableContactInfo(
       name: '公司',
+      value: _initialContact.company,
     ));
     groups.add(ContactInfoGroup<EditableItem>(
       name: '电话',
-      items: List<EditableItem>(),
+      items: _initialContact.phones?.map((e) {
+        return EditableItem(label: e.label, value: e.value);
+      })?.toList(),
       selections: selection.phoneSelections,
     ));
     groups.add(ContactInfoGroup<EditableItem>(
       name: '电子邮件',
-      items: List<EditableItem>(),
+      items: _initialContact.emails?.map((e) {
+        return EditableItem(label: e.label, value: e.value);
+      })?.toList(),
       selections: selection.emailSelections,
     ));
     groups.add(DefaultSelectionContactInfo(
@@ -135,7 +150,7 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
   }
 
   onCancelPressed() {
-    if (emptyContact == value) {
+    if (!isChanged) {
       Navigator.maybePop(context);
     } else {
       showGriveUpEditDialog(context).then((value) {
@@ -147,11 +162,17 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
   }
 
   onDonePressed() {
-    ContactsService.addContact(value).then((value) {
+    Future future;
+    if (_initialContact.identifier == null) {
+      future = ContactsService.addContact(value);
+    } else {
+      future = ContactsService.updateContact(value);
+    }
+    future.then((value) {
       Navigator.pushReplacement(
         context,
         RouteProvider.buildRoute(
-          ContactDetailPage(contact: value),
+          ContactDetailPage(contact: this.value),
         ),
       );
     }).catchError((error) {

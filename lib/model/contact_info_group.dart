@@ -50,8 +50,7 @@ class EditableContactInfo extends ContactInfo<String> {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller == other.controller;
+  bool operator ==(Object other) => identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller == other.controller;
 
   @override
   int get hashCode => controller.hashCode;
@@ -104,10 +103,9 @@ class ContactInfoGroup<T extends _Item> extends ContactInfo<List<T>> {
     @required this.selections,
     List<T> items,
   })  : assert(name != null),
-        assert(items != null),
         assert(selections != null && selections.length > 0),
-        this._items = List<T>()..addAll(items),
-        super(name: name, value: List.unmodifiable(items)) {
+        this._items = List<T>()..addAll(items ?? []),
+        super(name: name, value: items == null ? null : List.unmodifiable(items)) {
     _items.forEach((element) => element.addListener(_itemListener));
   }
 
@@ -195,8 +193,7 @@ class EditableItem extends _Item<String> {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller == other.controller;
+  bool operator ==(Object other) => identical(this, other) || other is EditableItem && runtimeType == other.runtimeType && controller == other.controller;
 
   @override
   int get hashCode => controller.hashCode;
