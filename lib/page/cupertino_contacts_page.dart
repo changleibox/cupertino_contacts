@@ -2,7 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/page/add_contact_page.dart';
+import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -253,7 +253,7 @@ class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
           Navigator.push(
             context,
             RouteProvider.buildRoute(
-              AddContactPage(),
+              EditContactPage(),
               fullscreenDialog: true,
             ),
           );

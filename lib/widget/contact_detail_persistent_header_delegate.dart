@@ -3,7 +3,7 @@
  */
 
 import 'package:contacts_service/contacts_service.dart';
-import 'package:cupertinocontacts/page/add_contact_page.dart';
+import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
@@ -88,7 +88,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                   Navigator.push(
                     context,
                     RouteProvider.buildRoute(
-                      AddContactPage(
+                      EditContactPage(
                         initialContact: contact,
                       ),
                     ),

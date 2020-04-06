@@ -7,7 +7,7 @@ import 'dart:typed_data';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
 import 'package:cupertinocontacts/model/contact_info_group.dart';
-import 'package:cupertinocontacts/page/add_contact_page.dart';
+import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
@@ -18,7 +18,7 @@ import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
-class AddContactPresenter extends Presenter<AddContactPage> implements ValueListenable<Contact> {
+class EditContactPresenter extends Presenter<EditContactPage> implements ValueListenable<Contact> {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
   final baseInfos = List<EditableContactInfo>();
   final groups = List<ContactInfo>();
