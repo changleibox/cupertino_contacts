@@ -72,123 +72,120 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
       padding: EdgeInsets.only(
         bottom: _kPaddingBottom,
       ),
-      child: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              left: 0,
-              top: 0,
-              right: 0,
-              child: CupertinoNavigationBar(
-                backgroundColor: CupertinoColors.secondarySystemBackground,
-                border: null,
-                previousPageTitle: '通讯录',
-                trailing: NavigationBarAction(
-                  child: Text('编辑'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      RouteProvider.buildRoute(
-                        EditContactPage(),
-                      ),
-                    );
-                  },
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            left: 0,
+            top: 0,
+            right: 0,
+            child: CupertinoNavigationBar(
+              backgroundColor: CupertinoColors.secondarySystemBackground,
+              border: null,
+              previousPageTitle: '通讯录',
+              trailing: NavigationBarAction(
+                child: Text('编辑'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    RouteProvider.buildRoute(
+                      EditContactPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: WidgetGroup.spacing(
+              alignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              direction: Axis.vertical,
+              spacing: _kSpacing,
+              children: <Widget>[
+                CupertinoCircleAvatar.memory(
+                  assetName: Images.ic_default_avatar,
+                  bytes: contact.avatar,
+                  borderSide: BorderSide.none,
+                  size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
                 ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: WidgetGroup.spacing(
-                alignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                direction: Axis.vertical,
-                spacing: _kSpacing,
-                children: <Widget>[
-                  CupertinoCircleAvatar.memory(
-                    assetName: Images.ic_default_avatar,
-                    bytes: contact.avatar,
-                    borderSide: BorderSide.none,
-                    size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
-                  ),
-                  WidgetGroup.spacing(
-                    alignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    direction: Axis.vertical,
-                    spacing: _kTextSpacing * offset,
-                    children: [
-                      Text(
-                        contact.displayName ?? '无姓名',
-                        style: textStyle.copyWith(
-                          fontSize: minNameSize + (maxNameSize - minNameSize) * offset,
-                          height: 1.0,
-                        ),
+                WidgetGroup.spacing(
+                  alignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  direction: Axis.vertical,
+                  spacing: _kTextSpacing * offset,
+                  children: [
+                    Text(
+                      contact.displayName ?? '无姓名',
+                      style: textStyle.copyWith(
+                        fontSize: minNameSize + (maxNameSize - minNameSize) * offset,
+                        height: 1.0,
                       ),
-                      if (_hasJob)
-                        Opacity(
-                          opacity: opacity,
-                          child: Text(
-                            contact.jobTitle,
-                            style: textStyle.copyWith(
-                              color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel,
-                                context,
-                              ),
-                              fontSize: _kNormalTextSize * offset,
-                              height: 1.0,
+                    ),
+                    if (_hasJob)
+                      Opacity(
+                        opacity: opacity,
+                        child: Text(
+                          contact.jobTitle,
+                          style: textStyle.copyWith(
+                            color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.secondaryLabel,
+                              context,
                             ),
+                            fontSize: _kNormalTextSize * offset,
+                            height: 1.0,
                           ),
                         ),
-                      if (_hasCompany)
-                        Opacity(
-                          opacity: opacity,
-                          child: Text(
-                            contact.company,
-                            style: textStyle.copyWith(
-                              color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel,
-                                context,
-                              ),
-                              fontSize: _kNormalTextSize * offset,
-                              height: 1.0,
+                      ),
+                    if (_hasCompany)
+                      Opacity(
+                        opacity: opacity,
+                        child: Text(
+                          contact.company,
+                          style: textStyle.copyWith(
+                            color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.secondaryLabel,
+                              context,
                             ),
+                            fontSize: _kNormalTextSize * offset,
+                            height: 1.0,
                           ),
                         ),
-                    ],
-                  ),
-                  WidgetGroup.spacing(
-                    alignment: MainAxisAlignment.center,
-                    spacing: 24,
-                    children: [
-                      _OperationButton(
-                        icon: CupertinoIcons.info,
-                        text: '信息',
-                        onPressed: () {},
                       ),
-                      _OperationButton(
-                        icon: CupertinoIcons.info,
-                        text: '呼叫',
-                        onPressed: null,
-                      ),
-                      _OperationButton(
-                        icon: CupertinoIcons.info,
-                        text: '视频',
-                        onPressed: null,
-                      ),
-                      _OperationButton(
-                        icon: CupertinoIcons.info,
-                        text: '邮件',
-                        onPressed: null,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                  ],
+                ),
+                WidgetGroup.spacing(
+                  alignment: MainAxisAlignment.center,
+                  spacing: 24,
+                  children: [
+                    _OperationButton(
+                      icon: CupertinoIcons.info,
+                      text: '信息',
+                      onPressed: () {},
+                    ),
+                    _OperationButton(
+                      icon: CupertinoIcons.info,
+                      text: '呼叫',
+                      onPressed: null,
+                    ),
+                    _OperationButton(
+                      icon: CupertinoIcons.info,
+                      text: '视频',
+                      onPressed: null,
+                    ),
+                    _OperationButton(
+                      icon: CupertinoIcons.info,
+                      text: '邮件',
+                      onPressed: null,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
