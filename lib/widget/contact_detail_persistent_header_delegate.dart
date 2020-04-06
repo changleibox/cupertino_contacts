@@ -89,7 +89,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     context,
                     RouteProvider.buildRoute(
                       EditContactPage(
-                        initialContact: contact,
+                        contact: contact,
                       ),
                     ),
                   );

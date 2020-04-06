@@ -31,7 +31,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
 
   @override
   void initState() {
-    _initialContact = widget.initialContact ??
+    _initialContact = widget.contact ??
         Contact(
           phones: [],
           emails: [],

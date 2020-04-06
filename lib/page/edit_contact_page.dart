@@ -27,11 +27,11 @@ const double _kMaxAvatarSize = 144.0;
 const double _kMinAvatarSize = 48.0;
 
 class EditContactPage extends StatefulWidget {
-  final Contact initialContact;
+  final Contact contact;
 
   const EditContactPage({
     Key key,
-    this.initialContact,
+    this.contact,
   }) : super(key: key);
 
   @override
@@ -108,7 +108,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text('新建联系人'),
+        middle: widget.contact == null ? null : Text('新建联系人'),
         backgroundColor: CupertinoColors.tertiarySystemBackground,
         border: null,
         leading: NavigationBarAction(
