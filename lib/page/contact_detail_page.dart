@@ -223,50 +223,63 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
         if (!value) {
           hideToolbar();
         }
+        setState(() {});
       },
       child: CompositedTransformTarget(
         link: _toolbarLayerLink,
         child: GestureDetector(
+          onTapDown: (details) {
+            _focusScopeNode.requestFocus();
+          },
           onLongPress: () {
             showToolbar();
           },
-          child: CupertinoButton(
-            color: CupertinoDynamicColor.resolve(
-              CupertinoColors.tertiarySystemBackground,
-              context,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 10,
-            ),
-            borderRadius: BorderRadius.zero,
-            minSize: 0,
-            onPressed: widget.onPressed,
-            child: WidgetGroup.spacing(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 80,
-              children: <Widget>[
-                Expanded(
-                  child: WidgetGroup.spacing(
-                    alignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    direction: Axis.vertical,
-                    children: [
-                      Text(
-                        widget.name,
-                        style: textStyle,
-                      ),
-                      Text(
-                        widget.value ?? '暂无',
-                        style: textStyle.copyWith(
-                          color: widget.valueColor ?? textStyle.color,
+          child: AnimatedOpacity(
+            opacity: _focusScopeNode.hasFocus ? 0.4 : 1.0,
+            duration: Duration(milliseconds: 150),
+            child: CupertinoButton(
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.tertiarySystemBackground,
+                context,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              borderRadius: BorderRadius.zero,
+              minSize: 0,
+              onPressed: () {
+                hideToolbar();
+                if (widget.onPressed != null) {
+                  widget.onPressed();
+                }
+              },
+              child: WidgetGroup.spacing(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 80,
+                children: <Widget>[
+                  Expanded(
+                    child: WidgetGroup.spacing(
+                      alignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      direction: Axis.vertical,
+                      children: [
+                        Text(
+                          widget.name,
+                          style: textStyle,
                         ),
-                      ),
-                    ],
+                        Text(
+                          widget.value ?? '暂无',
+                          style: textStyle.copyWith(
+                            color: widget.valueColor ?? textStyle.color,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                if (widget.trailing != null) widget.trailing,
-              ],
+                  if (widget.trailing != null) widget.trailing,
+                ],
+              ),
             ),
           ),
         ),
