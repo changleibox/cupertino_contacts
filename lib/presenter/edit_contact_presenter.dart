@@ -162,18 +162,17 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
   }
 
   onDonePressed() {
-    var contact = Contact.fromMap(value.toMap()..['identifier'] = _initialContact.identifier);
     Future future;
-    if (contact.identifier == null) {
-      future = ContactsService.addContact(contact);
+    if (value.identifier == null) {
+      future = ContactsService.addContact(value);
     } else {
-      future = ContactsService.updateContact(contact);
+      future = ContactsService.updateContact(value);
     }
     future.then((value) {
       Navigator.pushReplacement(
         context,
         RouteProvider.buildRoute(
-          ContactDetailPage(contact: contact),
+          ContactDetailPage(contact: this.value),
         ),
       );
     }).catchError((error) {
@@ -193,23 +192,25 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
 
   @override
   Contact get value {
-    return Contact(
-      avatar: avatar,
-      familyName: baseInfos[0].value,
-      givenName: baseInfos[1].value,
-      company: baseInfos[2].value,
-      phones: (groups[0] as ContactInfoGroup<EditableItem>).value.where((element) {
+    final contactMap = {
+      'identifier': _initialContact.identifier,
+      'avatar': avatar,
+      'familyName': baseInfos[0].value,
+      'givenName': baseInfos[1].value,
+      'company': baseInfos[2].value,
+      'phones': (groups[0] as ContactInfoGroup<EditableItem>).value.where((element) {
         return element.value != null && element.value.isNotEmpty;
       }).map((e) {
         return Item(label: e.label, value: e.value);
       }).toList(),
-      emails: (groups[1] as ContactInfoGroup<EditableItem>).value.where((element) {
+      'emails': (groups[1] as ContactInfoGroup<EditableItem>).value.where((element) {
         return element.value != null && element.value.isNotEmpty;
       }).map((e) {
         return Item(label: e.label, value: e.value);
       }).toList(),
-      postalAddresses: [],
-    );
+      'postalAddresses': _initialContact.postalAddresses,
+    };
+    return Contact.fromMap(contactMap);
   }
 
   @protected
