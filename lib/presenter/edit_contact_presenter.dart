@@ -194,21 +194,27 @@ class EditContactPresenter extends Presenter<EditContactPage> implements ValueLi
     final contactMap = {
       'identifier': _initialContact.identifier,
       'avatar': _avatar,
+      'prefix': _initialContact.prefix,
+      'suffix': _initialContact.suffix,
+      'middleName': _initialContact.middleName,
+      'displayName': _initialContact.displayName,
       'familyName': baseInfos[0].value,
       'givenName': baseInfos[1].value,
       'company': baseInfos[2].value,
+      'jobTitle': _initialContact.jobTitle,
       'phones': phones.isEmpty ? _initialContact.phones : phones,
       'emails': emails.isEmpty ? _initialContact.emails : emails,
       'postalAddresses': _initialContact.postalAddresses,
+      'birthday': _initialContact.birthday,
     };
     return Contact.fromMap(contactMap);
   }
 
-  List<Item> _convert(ContactInfoGroup<EditableItem> infoGroup) {
+  List<Map> _convert(ContactInfoGroup<EditableItem> infoGroup) {
     return infoGroup.value.where((element) {
       return element.value != null && element.value.isNotEmpty;
     }).map((e) {
-      return Item(label: e.label, value: e.value);
+      return {"label": e.label, "value": e.value};
     }).toList();
   }
 
