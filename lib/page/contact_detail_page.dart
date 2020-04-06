@@ -8,12 +8,15 @@ import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delega
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/multi_line_text_field.dart';
+import 'package:cupertinocontacts/widget/send_message_dialog.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -58,7 +61,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           name: phone.label,
           value: phone.value,
           valueColor: actionTextStyle.color,
-          onPressed: () {},
+          onPressed: () {
+            launch('tel:${phone.value}');
+          },
         );
       }));
     }
@@ -68,7 +73,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           name: email.label,
           value: email.value,
           valueColor: actionTextStyle.color,
-          onPressed: () {},
+          onPressed: () {
+            launch('tel:${email.value}');
+          },
         );
       }));
     }
@@ -118,21 +125,28 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     if (hasPhone) {
       children.add(_NormalButton(
         text: '发送信息',
+        onPressed: () {
+          showSendMessageDialog(context, phones, emails);
+        },
       ));
     }
     children.add(_NormalButton(
       text: '共享联系人',
+      onPressed: () {},
     ));
     if (hasPhone) {
       children.add(_NormalButton(
         text: '添加到个人收藏',
+        onPressed: () {},
       ));
       children.add(_NormalButton(
         text: '添加到紧急联系人',
         isDestructive: true,
+        onPressed: () {},
       ));
       children.add(_NormalButton(
         text: '共享我的位置',
+        onPressed: () {},
       ));
     }
 
@@ -381,11 +395,13 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
 class _NormalButton extends StatelessWidget {
   final String text;
   final bool isDestructive;
+  final VoidCallback onPressed;
 
   const _NormalButton({
     Key key,
     @required this.text,
     this.isDestructive = false,
+    this.onPressed,
   })  : assert(text != null),
         assert(isDestructive != null),
         super(key: key);
@@ -418,7 +434,7 @@ class _NormalButton extends StatelessWidget {
           style: actionTextStyle,
         ),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }
