@@ -198,6 +198,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   Contact get value {
     var phones = _convert(groups[0]);
     var emails = _convert(groups[1]);
+    var addresses = _convertAddress(_initialContact.postalAddresses);
     final contactMap = {
       'identifier': _initialContact.identifier,
       'avatar': _avatar,
@@ -211,8 +212,8 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       'jobTitle': _initialContact.jobTitle,
       'phones': phones.isEmpty ? _initialContact.phones : phones,
       'emails': emails.isEmpty ? _initialContact.emails : emails,
-      'postalAddresses': _initialContact.postalAddresses,
-      'birthday': _initialContact.birthday,
+      'postalAddresses': addresses,
+      'birthday': _initialContact.birthday.toString(),
     };
     var contact = Contact.fromMap(contactMap);
     contact.displayName = ContactUtils.buildDisplayName(contact);
@@ -225,6 +226,19 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     }).map((e) {
       return {"label": e.label, "value": e.value};
     }).toList();
+  }
+
+  List<Map> _convertAddress(Iterable<PostalAddress> addresses) {
+    return addresses?.map((address) {
+      return {
+        "label": address.label,
+        "street": address.street,
+        "city": address.city,
+        "postcode": address.postcode,
+        "region": address.region,
+        "country": address.country
+      };
+    })?.toList();
   }
 
   @protected
