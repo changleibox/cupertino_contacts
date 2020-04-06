@@ -162,9 +162,7 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
   }
 
   onDonePressed() {
-    var map = value.toMap();
-    map['identifier'] = _initialContact.identifier;
-    var contact = Contact.fromMap(map);
+    var contact = Contact.fromMap(value.toMap()..['identifier'] = _initialContact.identifier);
     Future future;
     if (contact.identifier == null) {
       future = ContactsService.addContact(contact);
