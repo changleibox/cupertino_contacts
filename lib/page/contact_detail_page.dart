@@ -13,6 +13,7 @@ import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -103,7 +104,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     if (widget.contact.birthday != null) {
       children.add(_NormalGroupInfoWidget(
         name: '生日',
-        value: widget.contact.birthday.toString(),
+        value: DateFormat('yyyy年MM月dd日').format(widget.contact.birthday),
         valueColor: actionTextStyle.color,
         onPressed: () {},
       ));
