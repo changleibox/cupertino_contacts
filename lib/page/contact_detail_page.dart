@@ -117,7 +117,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           var birthday = widget.contact.birthday;
           var currentYear = DateTime.now().toUtc().year;
           var currentYearBirthday = DateTime.utc(currentYear, birthday.month, birthday.day);
-          var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(currentYearBirthday).toUtc();
+          var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(currentYearBirthday);
           launch('calshow:${timeIntervalSince.millisecondsSinceEpoch / 1000}');
         },
       ));
