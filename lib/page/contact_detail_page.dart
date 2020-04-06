@@ -81,15 +81,16 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (postalAddresses != null && postalAddresses.isNotEmpty) {
       children.addAll(postalAddresses.map((address) {
+        final value = [
+          address.street,
+          address.region,
+          address.city,
+          address.postcode,
+          address.country,
+        ].join(' ');
         return _NormalGroupInfoWidget(
           name: address.label,
-          value: [
-            address.street,
-            address.region,
-            address.city,
-            address.postcode,
-            address.country,
-          ].join(' '),
+          value: value,
           trailing: Container(
             width: 80,
             height: 80,
@@ -101,7 +102,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             child: Text('地图'),
           ),
           onPressed: () {
-            launch('maps:');
+            launch('maps:${Uri.encodeComponent('$value')}');
           },
         );
       }));
@@ -112,7 +113,15 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         value: DateFormat('yyyy年MM月dd日').format(widget.contact.birthday),
         valueColor: actionTextStyle.color,
         onPressed: () {
-          launch('calshow:');
+          var birthday = widget.contact.birthday;
+          var currentYear = DateTime.now().toUtc().year;
+          var birthdayMonth = birthday.month;
+          var birthdayDay = birthday.day;
+          if (currentYear % 4 == 0 && currentYear % 100 != 0 && birthdayMonth <= 2) {
+            birthdayDay--;
+          }
+          var currentYearBirthday = DateTime.utc(currentYear - 31, birthdayMonth, birthdayDay);
+          launch('calshow:${currentYearBirthday.millisecondsSinceEpoch / 1000}');
         },
       ));
     }
@@ -132,7 +141,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     children.add(_NormalButton(
       text: '共享联系人',
-      onPressed: () {},
+      onPressed: () {
+        launch('prefs:root=General&path=DATE_AND_TIME');
+      },
     ));
     if (hasPhone) {
       children.add(_NormalButton(
