@@ -162,17 +162,20 @@ class AddContactPresenter extends Presenter<AddContactPage> implements ValueList
   }
 
   onDonePressed() {
+    var map = value.toMap();
+    map['identifier'] = _initialContact.identifier;
+    var contact = Contact.fromMap(map);
     Future future;
-    if (_initialContact.identifier == null) {
-      future = ContactsService.addContact(value);
+    if (contact.identifier == null) {
+      future = ContactsService.addContact(contact);
     } else {
-      future = ContactsService.updateContact(value);
+      future = ContactsService.updateContact(contact);
     }
     future.then((value) {
       Navigator.pushReplacement(
         context,
         RouteProvider.buildRoute(
-          ContactDetailPage(contact: this.value),
+          ContactDetailPage(contact: contact),
         ),
       );
     }).catchError((error) {

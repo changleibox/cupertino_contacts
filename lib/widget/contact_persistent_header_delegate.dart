@@ -79,16 +79,16 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           final contact = contacts[index];
           final names = [
             Text(
-              contact.prefix,
+              contact.prefix ?? '',
             ),
             Text(
-              contact.givenName,
+              contact.givenName ?? '',
             ),
             Text(
-              contact.middleName,
+              contact.middleName ?? '',
             ),
             Text(
-              contact.familyName,
+              contact.familyName ?? '',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
               ),
