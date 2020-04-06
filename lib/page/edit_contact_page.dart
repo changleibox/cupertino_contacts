@@ -108,7 +108,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: widget.contact == null ? null : Text('新建联系人'),
+        middle: widget.contact == null ? Text('新建联系人') : null,
         backgroundColor: CupertinoColors.tertiarySystemBackground,
         border: null,
         leading: NavigationBarAction(
