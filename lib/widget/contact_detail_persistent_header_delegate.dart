@@ -14,8 +14,10 @@ import 'package:flutter/cupertino.dart';
 
 const double _kPaddingBottom = 16.0;
 const double _kSpacing = 8.0;
+const double _kTextSpacing = 4.0;
 const double _kActionButtonHeight = 60;
 const double _kNavigationBarHeight = 44;
+const double _kNormalTextSize = 17.0;
 
 class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Contact contact;
@@ -108,12 +110,43 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     borderSide: BorderSide.none,
                     size: minAvatarSize + (maxAvatarSize - minAvatarSize) * offset,
                   ),
-                  Text(
-                    contact.displayName,
-                    style: textStyle.copyWith(
-                      fontSize: minNameSize + (maxNameSize - minNameSize) * offset,
-                      height: 1.0,
-                    ),
+                  WidgetGroup.spacing(
+                    alignment: MainAxisAlignment.center,
+                    direction: Axis.vertical,
+                    spacing: _kTextSpacing * offset,
+                    children: [
+                      Text(
+                        contact.displayName ?? '无姓名',
+                        style: textStyle.copyWith(
+                          fontSize: minNameSize + (maxNameSize - minNameSize) * offset,
+                          height: 1.0,
+                        ),
+                      ),
+                      if (_hasJob && offset > 0)
+                        Text(
+                          contact.jobTitle,
+                          style: textStyle.copyWith(
+                            color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.secondaryLabel,
+                              context,
+                            ),
+                            fontSize: _kNormalTextSize * offset,
+                            height: 1.0,
+                          ),
+                        ),
+                      if (_hasCompany && offset > 0)
+                        Text(
+                          contact.company,
+                          style: textStyle.copyWith(
+                            color: CupertinoDynamicColor.resolve(
+                              CupertinoColors.secondaryLabel,
+                              context,
+                            ),
+                            fontSize: _kNormalTextSize * offset,
+                            height: 1.0,
+                          ),
+                        ),
+                    ],
                   ),
                   WidgetGroup.spacing(
                     alignment: MainAxisAlignment.center,
@@ -150,10 +183,20 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     );
   }
 
+  bool get _hasJob => contact.jobTitle != null && contact.jobTitle.isNotEmpty;
+
+  bool get _hasCompany => contact.company != null && contact.company.isNotEmpty;
+
+  double get _jobTextSize => _hasJob ? _kNormalTextSize : 0;
+
+  double get _companyTextSize => _hasCompany ? _kNormalTextSize : 0;
+
+  double get _jobCompanySize => _jobTextSize + _companyTextSize + _kTextSpacing * 2;
+
   double get _spacing => _kActionButtonHeight + _kSpacing * 2 + _kPaddingBottom + paddingTop;
 
   @override
-  double get maxExtent => maxAvatarSize + _spacing + _kNavigationBarHeight + maxNameSize;
+  double get maxExtent => maxAvatarSize + _spacing + _kNavigationBarHeight + maxNameSize + _jobCompanySize;
 
   @override
   double get minExtent => minAvatarSize + _spacing + minNameSize;
