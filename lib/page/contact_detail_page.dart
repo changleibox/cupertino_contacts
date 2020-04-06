@@ -4,6 +4,7 @@
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
+import 'package:cupertinocontacts/util/time_interval.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
@@ -115,13 +116,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         onPressed: () {
           var birthday = widget.contact.birthday;
           var currentYear = DateTime.now().toUtc().year;
-          var birthdayMonth = birthday.month;
-          var birthdayDay = birthday.day;
-          if (currentYear % 4 == 0 && currentYear % 100 != 0 && birthdayMonth <= 2) {
-            birthdayDay--;
-          }
-          var currentYearBirthday = DateTime.utc(currentYear - 31, birthdayMonth, birthdayDay);
-          launch('calshow:${currentYearBirthday.millisecondsSinceEpoch / 1000}');
+          var currentYearBirthday = DateTime.utc(currentYear, birthday.month, birthday.day);
+          var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(currentYearBirthday).toUtc();
+          launch('calshow:${timeIntervalSince.millisecondsSinceEpoch / 1000}');
         },
       ));
     }
