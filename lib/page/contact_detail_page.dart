@@ -135,6 +135,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                 contact: widget.contact,
                 maxAvatarSize: 80,
                 minAvatarSize: 44,
+                paddingTop: MediaQuery.of(context).padding.top,
               ),
             ),
           ];

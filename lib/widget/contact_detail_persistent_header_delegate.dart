@@ -20,15 +20,18 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
   final Contact contact;
   final double maxAvatarSize;
   final double minAvatarSize;
+  final double paddingTop;
   final VoidCallback onEditAvatarPressed;
 
   const ContactDetailPersistentHeaderDelegate({
     @required this.contact,
     @required this.maxAvatarSize,
     @required this.minAvatarSize,
+    @required this.paddingTop,
     this.onEditAvatarPressed,
   })  : assert(maxAvatarSize != null),
-        assert(minAvatarSize != null);
+        assert(minAvatarSize != null),
+        assert(paddingTop != null);
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -59,89 +62,92 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
       padding: EdgeInsets.only(
         bottom: _kPaddingBottom,
       ),
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            child: CupertinoNavigationBar(
-              backgroundColor: CupertinoColors.secondarySystemBackground,
-              border: null,
-              previousPageTitle: '通讯录',
-              trailing: NavigationBarAction(
-                child: Text('编辑'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    RouteProvider.buildRoute(
-                      EditContactPage(),
-                    ),
-                  );
-                },
+      child: SafeArea(
+        bottom: false,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              left: 0,
+              top: 0,
+              right: 0,
+              child: CupertinoNavigationBar(
+                backgroundColor: CupertinoColors.secondarySystemBackground,
+                border: null,
+                previousPageTitle: '通讯录',
+                trailing: NavigationBarAction(
+                  child: Text('编辑'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      RouteProvider.buildRoute(
+                        EditContactPage(),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: WidgetGroup.spacing(
-              alignment: MainAxisAlignment.center,
-              direction: Axis.vertical,
-              spacing: 8,
-              children: <Widget>[
-                CupertinoCircleAvatar.memory(
-                  assetName: Images.ic_default_avatar,
-                  bytes: contact.avatar,
-                  borderSide: BorderSide.none,
-                  size: 44,
-                ),
-                Text(
-                  contact.displayName,
-                  style: textStyle.copyWith(
-                    fontSize: 26,
-                    height: 1.0,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: WidgetGroup.spacing(
+                alignment: MainAxisAlignment.center,
+                direction: Axis.vertical,
+                spacing: 8,
+                children: <Widget>[
+                  CupertinoCircleAvatar.memory(
+                    assetName: Images.ic_default_avatar,
+                    bytes: contact.avatar,
+                    borderSide: BorderSide.none,
+                    size: maxAvatarSize,
                   ),
-                ),
-                WidgetGroup.spacing(
-                  alignment: MainAxisAlignment.center,
-                  spacing: 24,
-                  children: [
-                    _OperationButton(
-                      icon: CupertinoIcons.info,
-                      text: '信息',
-                      onPressed: () {},
+                  Text(
+                    contact.displayName,
+                    style: textStyle.copyWith(
+                      fontSize: 26,
+                      height: 1.0,
                     ),
-                    _OperationButton(
-                      icon: CupertinoIcons.info,
-                      text: '呼叫',
-                      onPressed: null,
-                    ),
-                    _OperationButton(
-                      icon: CupertinoIcons.info,
-                      text: '视频',
-                      onPressed: null,
-                    ),
-                    _OperationButton(
-                      icon: CupertinoIcons.info,
-                      text: '邮件',
-                      onPressed: null,
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  WidgetGroup.spacing(
+                    alignment: MainAxisAlignment.center,
+                    spacing: 24,
+                    children: [
+                      _OperationButton(
+                        icon: CupertinoIcons.info,
+                        text: '信息',
+                        onPressed: () {},
+                      ),
+                      _OperationButton(
+                        icon: CupertinoIcons.info,
+                        text: '呼叫',
+                        onPressed: null,
+                      ),
+                      _OperationButton(
+                        icon: CupertinoIcons.info,
+                        text: '视频',
+                        onPressed: null,
+                      ),
+                      _OperationButton(
+                        icon: CupertinoIcons.info,
+                        text: '邮件',
+                        onPressed: null,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  double get _spacing => 154;
+  double get _spacing => 60 + 16 + 26 + _kPaddingBottom + paddingTop;
 
   @override
-  double get maxExtent => maxAvatarSize + _spacing;
+  double get maxExtent => maxAvatarSize + _spacing + 44;
 
   @override
   double get minExtent => minAvatarSize + _spacing;
