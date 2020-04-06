@@ -12,11 +12,13 @@ import 'package:flutter/cupertino.dart';
 class AddContactRemarksTextField extends StatelessWidget {
   final MultiEditableContactInfo info;
   final int minLines;
+  final Color backgroundColor;
 
   const AddContactRemarksTextField({
     Key key,
     @required this.info,
     this.minLines = 3,
+    this.backgroundColor,
   })  : assert(info != null),
         assert(minLines != null),
         super(key: key);
@@ -25,7 +27,7 @@ class AddContactRemarksTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemBackground,
+        backgroundColor ?? CupertinoColors.tertiarySystemBackground,
         context,
       ),
       padding: EdgeInsets.symmetric(

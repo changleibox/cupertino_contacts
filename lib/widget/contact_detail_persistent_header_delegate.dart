@@ -41,17 +41,17 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     final offsetExtent = (_kSpacing + _kTextHeight) * (1.0 - offset);
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemBackground,
+        CupertinoColors.secondarySystemBackground,
         context,
       ),
       foregroundDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             color: CupertinoDynamicColor.resolve(
-              separatorColor.withOpacity(0.1),
+              separatorColor,
               context,
             ),
-            width: 0.0, // One physical pixel.
+            width: 0.5, // One physical pixel.
             style: BorderStyle.solid,
           ),
         ),
@@ -66,7 +66,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
             right: 0,
             top: 0,
             child: CupertinoNavigationBar(
-              backgroundColor: CupertinoColors.tertiarySystemBackground,
+              backgroundColor: CupertinoColors.secondarySystemBackground,
               border: null,
               previousPageTitle: '通讯录',
               trailing: NavigationBarAction(

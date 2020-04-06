@@ -83,7 +83,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               height: 80,
               foregroundDecoration: FlutterLogoDecoration(),
               color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemBackground,
+                CupertinoColors.tertiarySystemBackground,
                 context,
               ),
             ),
@@ -104,6 +104,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     children.add(AddContactRemarksTextField(
       info: presenter.remarksInfo,
       minLines: 2,
+      backgroundColor: CupertinoColors.secondarySystemBackground,
     ));
     children.add(_NormalButton(
       text: '发送信息',
@@ -164,7 +165,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                   }
                   return Container(
                     color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.tertiarySystemBackground,
+                      CupertinoColors.secondarySystemBackground,
                       context,
                     ),
                     padding: EdgeInsets.only(
@@ -236,7 +237,10 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
         link: _toolbarLayerLink,
         child: GestureDetector(
           onTapDown: (details) {
-            _focusScopeNode.requestFocus();
+            var focusScopeNode = FocusScope.of(context);
+            if (focusScopeNode != _focusScopeNode) {
+              focusScopeNode.unfocus();
+            }
           },
           onLongPress: () {
             showToolbar();
@@ -246,7 +250,7 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
             duration: Duration(milliseconds: 150),
             child: CupertinoButton(
               color: CupertinoDynamicColor.resolve(
-                CupertinoColors.tertiarySystemBackground,
+                CupertinoColors.secondarySystemBackground,
                 context,
               ),
               padding: EdgeInsets.symmetric(
@@ -257,6 +261,7 @@ class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
               minSize: 0,
               onPressed: () {
                 hideToolbar();
+                FocusScope.of(context).unfocus();
                 if (widget.onPressed != null) {
                   widget.onPressed();
                 }
@@ -382,7 +387,7 @@ class _NormalButton extends StatelessWidget {
       ),
       borderRadius: BorderRadius.zero,
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemBackground,
+        CupertinoColors.secondarySystemBackground,
         context,
       ),
       child: Align(
