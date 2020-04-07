@@ -33,11 +33,18 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   Uint8List get avatar => _avatar;
 
   @override
-  bool get isChanged => _initialContact != value;
+  bool get isChanged => _initialContact != value || !Collections.equals(_avatar, _initialContact.avatar);
 
   @override
   void initState() {
     _initialContact = widget.contact ?? Contact();
+    _initialContact.familyName ??= '';
+    _initialContact.givenName ??= '';
+    _initialContact.company ??= '';
+    _initialContact.phones ??= [];
+    _initialContact.emails ??= [];
+    _initialContact.urls ??= [];
+    _initialContact.note ??= '';
 
     _avatar = _initialContact.avatar;
 
@@ -216,14 +223,14 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       'suffix': _initialContact.suffix,
       'middleName': _initialContact.middleName,
       'displayName': _initialContact.displayName,
-      'familyName': baseInfos[0].value,
-      'givenName': baseInfos[1].value,
-      'company': baseInfos[2].value,
+      'familyName': baseInfos[0].value ?? '',
+      'givenName': baseInfos[1].value ?? '',
+      'company': baseInfos[2].value ?? '',
       'jobTitle': _initialContact.jobTitle,
-      'phones': phones.isEmpty ? null : phones,
-      'emails': emails.isEmpty ? null : emails,
-      'urls': urls.isEmpty ? null : urls,
-      'note': groups[11].value,
+      'phones': phones,
+      'emails': emails,
+      'urls': urls,
+      'note': groups[11].value ?? '',
     };
     var contact = Contact.fromMap(contactMap);
     contact.displayName = _initialContact.displayName;
