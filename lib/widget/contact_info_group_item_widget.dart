@@ -4,30 +4,28 @@
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 /// Created by box on 2020/3/31.
 ///
-/// 添加联系人-自定义信息日期选择
-class DateTimeContactInfoText extends StatelessWidget {
-  static final _dateFormat = DateFormat('MM月dd日');
-
-  final String name;
-  final DateTimeItem item;
+/// 添加联系人-自定义信息
+class ContactInfoGroupItemWidget extends StatelessWidget {
+  final GroupItemBuilder builder;
+  final ContactInfoGroup infoGroup;
+  final GroupItem item;
   final VoidCallback onDeletePressed;
-  final TextInputType inputType;
 
-  const DateTimeContactInfoText({
+  const ContactInfoGroupItemWidget({
     Key key,
-    @required this.name,
+    @required this.infoGroup,
     @required this.item,
     this.onDeletePressed,
-    this.inputType = TextInputType.text,
-  })  : assert(name != null),
+    this.builder,
+  })  : assert(infoGroup != null),
         assert(item != null),
-        assert(inputType != null),
+        assert(builder != null),
         super(key: key);
 
   @override
@@ -82,18 +80,11 @@ class DateTimeContactInfoText extends StatelessWidget {
           onPressed: () {},
         ),
         Expanded(
-          child: Container(
-            height: 44,
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.symmetric(
-              horizontal: 6,
+          child: DefaultTextStyle(
+            style: textStyle.copyWith(
+              color: themeData.primaryColor,
             ),
-            child: Text(
-              _dateFormat.format(item.value),
-              style: textStyle.copyWith(
-                color: themeData.primaryColor,
-              ),
-            ),
+            child: builder(infoGroup, item),
           ),
         ),
       ],

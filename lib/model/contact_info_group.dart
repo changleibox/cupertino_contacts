@@ -94,7 +94,7 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
   }
 }
 
-class ContactInfoGroup<T extends _Item> extends ContactInfo<List<T>> {
+class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
   final List<T> _items;
   final List<String> selections;
 
@@ -154,10 +154,10 @@ class ContactInfoGroup<T extends _Item> extends ContactInfo<List<T>> {
   int get hashCode => _items.hashCode ^ selections.hashCode;
 }
 
-abstract class _Item<T> extends ValueNotifier<T> {
+abstract class GroupItem<T> extends ValueNotifier<T> {
   final String label;
 
-  _Item(this.label, {T value}) : super(value);
+  GroupItem(this.label, {T value}) : super(value);
 
   @override
   void dispose() {
@@ -165,7 +165,7 @@ abstract class _Item<T> extends ValueNotifier<T> {
   }
 }
 
-class EditableItem extends _Item<String> {
+class EditableItem extends GroupItem<String> {
   final TextEditingController controller;
 
   EditableItem({@required String label, String value})
@@ -199,7 +199,7 @@ class EditableItem extends _Item<String> {
   int get hashCode => controller.hashCode;
 }
 
-class DateTimeItem extends _Item<DateTime> {
+class DateTimeItem extends GroupItem<DateTime> {
   DateTimeItem({
     @required String label,
     DateTime value,
@@ -209,7 +209,7 @@ class DateTimeItem extends _Item<DateTime> {
         );
 }
 
-class SelectionItem extends _Item {
+class SelectionItem extends GroupItem {
   SelectionItem({@required String label, dynamic value})
       : assert(label != null),
         super(label, value: value);
