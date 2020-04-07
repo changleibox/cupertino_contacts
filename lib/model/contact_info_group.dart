@@ -23,14 +23,11 @@ abstract class ContactInfo<T> extends ValueNotifier<T> {
 
 class EditableContactInfo extends ContactInfo<String> {
   final TextEditingController controller;
-  final TextInputType inputType;
 
   EditableContactInfo({
     @required String name,
     String value,
-    this.inputType = TextInputType.text,
   })  : this.controller = TextEditingController(text: value),
-        assert(inputType != null),
         super(name: name, value: value) {
     controller.addListener(() {
       var text = controller.text;
@@ -170,12 +167,10 @@ abstract class _Item<T> extends ValueNotifier<T> {
 
 class EditableItem extends _Item<String> {
   final TextEditingController controller;
-  final TextInputType inputType;
 
-  EditableItem({@required String label, String value, this.inputType = TextInputType.text})
+  EditableItem({@required String label, String value})
       : this.controller = TextEditingController(text: value),
         assert(label != null),
-        assert(inputType != null),
         super(label, value: value) {
     controller.addListener(() {
       var text = controller.text;

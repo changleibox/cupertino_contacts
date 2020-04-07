@@ -11,11 +11,14 @@ import 'package:flutter/cupertino.dart';
 /// 新建联系人-默认输入框
 class EditContactNormalTextField extends StatelessWidget {
   final EditableContactInfo info;
+  final TextInputType inputType;
 
   const EditContactNormalTextField({
     Key key,
     @required this.info,
+    this.inputType = TextInputType.text,
   })  : assert(info != null),
+        assert(inputType != null),
         super(key: key);
 
   @override
@@ -27,7 +30,7 @@ class EditContactNormalTextField extends StatelessWidget {
       ),
       child: CupertinoTextField(
         controller: info.controller,
-        keyboardType: info.inputType,
+        keyboardType: inputType,
         placeholder: info.name,
         placeholderStyle: TextStyle(
           color: CupertinoDynamicColor.resolve(

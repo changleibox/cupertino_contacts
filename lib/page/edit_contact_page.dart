@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
@@ -73,10 +74,36 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         );
       },
     ));
-    for (var contactInfo in presenter.groups) {
+    var keys = presenter.itemMap.keys;
+    for (var key in keys) {
+      final contactInfo = presenter.itemMap[key];
+      TextInputType inputType = TextInputType.text;
+      switch (key) {
+        case ContactItemType.phone:
+          inputType = TextInputType.phone;
+          break;
+        case ContactItemType.email:
+          inputType = TextInputType.emailAddress;
+          break;
+        case ContactItemType.url:
+          inputType = TextInputType.url;
+          break;
+        case ContactItemType.baseInfo:
+        case ContactItemType.phoneRinging:
+        case ContactItemType.smsRinging:
+        case ContactItemType.address:
+        case ContactItemType.birthday:
+        case ContactItemType.date:
+        case ContactItemType.relatedParty:
+        case ContactItemType.socialData:
+        case ContactItemType.instantMessaging:
+        case ContactItemType.remarks:
+        case ContactItemType.addInfo:
+      }
       if (contactInfo is ContactInfoGroup) {
         children.add(EditContactInfoGroup(
           infoGroup: contactInfo,
+          inputType: inputType,
         ));
       } else if (contactInfo is DefaultSelectionContactInfo) {
         children.add(EditContactChooseRingToneButton(

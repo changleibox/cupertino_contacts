@@ -14,14 +14,17 @@ class EditContactInfoTextField extends StatelessWidget {
   final String name;
   final EditableItem item;
   final VoidCallback onDeletePressed;
+  final TextInputType inputType;
 
   const EditContactInfoTextField({
     Key key,
     @required this.name,
     @required this.item,
     this.onDeletePressed,
+    this.inputType = TextInputType.text,
   })  : assert(name != null),
         assert(item != null),
+        assert(inputType != null),
         super(key: key);
 
   @override
@@ -80,7 +83,7 @@ class EditContactInfoTextField extends StatelessWidget {
             height: 44,
             child: CupertinoTextField(
               controller: item.controller,
-              keyboardType: item.inputType,
+              keyboardType: inputType,
               style: textStyle.copyWith(
                 color: themeData.primaryColor,
               ),

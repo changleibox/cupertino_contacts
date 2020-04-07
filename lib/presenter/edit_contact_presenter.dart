@@ -2,9 +2,11 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
+import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
@@ -23,7 +25,7 @@ import 'package:flutter_contact/contacts.dart';
 class EditContactPresenter extends Presenter<EditContactPage> implements EditContactOperation {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
   final baseInfos = List<EditableContactInfo>();
-  final groups = List<ContactInfo>();
+  final itemMap = LinkedHashMap<ContactItemType, ContactInfo>();
 
   Uint8List _avatar;
 
@@ -60,85 +62,82 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       name: '公司',
       value: _initialContact.company,
     ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    itemMap[ContactItemType.phone] = ContactInfoGroup<EditableItem>(
       name: '电话',
       items: _initialContact.phones?.map((e) {
         return EditableItem(
           label: e.label,
           value: e.value,
-          inputType: TextInputType.phone,
         );
       })?.toList(),
       selections: selection.phoneSelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.email] = ContactInfoGroup<EditableItem>(
       name: '电子邮件',
       items: _initialContact.emails?.map((e) {
         return EditableItem(
           label: e.label,
           value: e.value,
-          inputType: TextInputType.emailAddress,
         );
       })?.toList(),
       selections: selection.emailSelections,
-    ));
-    groups.add(DefaultSelectionContactInfo(
+    );
+    itemMap[ContactItemType.phoneRinging] = DefaultSelectionContactInfo(
       name: '电话铃声',
-    ));
-    groups.add(DefaultSelectionContactInfo(
+    );
+    itemMap[ContactItemType.smsRinging] = DefaultSelectionContactInfo(
       name: '短信铃声',
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.url] = ContactInfoGroup<EditableItem>(
       name: 'URL',
       items: _initialContact.urls?.map((e) {
         return EditableItem(
           label: e.label,
           value: e.value,
-          inputType: TextInputType.url,
         );
       })?.toList(),
       selections: selection.urlSelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.address] = ContactInfoGroup<EditableItem>(
       name: '地址',
       items: List<EditableItem>(),
       selections: selection.addressSelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.birthday] = ContactInfoGroup<EditableItem>(
       name: '生日',
       items: List<EditableItem>(),
       selections: selection.birthdaySelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.date] = ContactInfoGroup<EditableItem>(
       name: '日期',
       items: List<EditableItem>(),
       selections: selection.dateSelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableItem>(
       name: '关联人',
       items: List<EditableItem>(),
       selections: selection.relatedPartySelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
       items: List<EditableItem>(),
       selections: selection.socialDataSelections,
-    ));
-    groups.add(ContactInfoGroup<EditableItem>(
+    );
+    itemMap[ContactItemType.instantMessaging] = ContactInfoGroup<EditableItem>(
       name: '即时信息',
       items: List<EditableItem>(),
       selections: selection.instantMessagingSelections,
-    ));
-    groups.add(MultiEditableContactInfo(
+    );
+    itemMap[ContactItemType.remarks] = MultiEditableContactInfo(
       name: '备注',
       value: _initialContact.note,
-    ));
-    groups.add(NormalSelectionContactInfo(
+    );
+    itemMap[ContactItemType.addInfo] = NormalSelectionContactInfo(
       name: '添加信息栏',
-    ));
+    );
 
     baseInfos.forEach((element) => element.addListener(notifyListeners));
-    groups.forEach((element) => element.addListener(notifyListeners));
+    itemMap.values.forEach((element) => element.addListener(notifyListeners));
     super.initState();
   }
 
@@ -146,7 +145,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   void dispose() {
     _listeners = null;
     baseInfos.forEach((element) => element.dispose());
-    groups.forEach((element) => element.dispose());
+    itemMap.values.forEach((element) => element.dispose());
     super.dispose();
   }
 
@@ -225,9 +224,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   Contact get value {
-    var phones = _convert(groups[0]);
-    var emails = _convert(groups[1]);
-    var urls = _convert(groups[4]);
+    var phones = _convert(itemMap[ContactItemType.phone]);
+    var emails = _convert(itemMap[ContactItemType.email]);
+    var urls = _convert(itemMap[ContactItemType.url]);
     final contactMap = {
       'identifier': _initialContact.identifier,
       'avatar': _avatar,
@@ -242,7 +241,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       'phones': phones,
       'emails': emails,
       'urls': urls,
-      'note': groups[11].value ?? '',
+      'note': itemMap[ContactItemType.remarks].value ?? '',
     };
     var contact = Contact.fromMap(contactMap);
     contact.displayName = _initialContact.displayName;

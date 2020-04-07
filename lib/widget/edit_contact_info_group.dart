@@ -104,6 +104,7 @@ class _EditContactInfoGroupState extends State<EditContactInfoGroup> {
           child: EditContactInfoTextField(
             name: widget.infoGroup.name,
             item: item,
+            inputType: widget.inputType,
             onDeletePressed: onDeletePressed,
           ),
         ),
@@ -128,7 +129,6 @@ class _EditContactInfoGroupState extends State<EditContactInfoGroup> {
     var selections = widget.infoGroup.selections;
     widget.infoGroup.add(EditableItem(
       label: selections[length % selections.length],
-      inputType: widget.inputType,
     ));
     _globalKeys.add(GlobalKey());
     _animatedListKey.currentState.insertItem(length);
