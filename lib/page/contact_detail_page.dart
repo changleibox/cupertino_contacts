@@ -7,6 +7,7 @@ import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/emergency_contact_dialog.dart';
+import 'package:cupertinocontacts/widget/error_tips.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/multi_line_text_field.dart';
 import 'package:cupertinocontacts/widget/send_message_dialog.dart';
@@ -28,12 +29,14 @@ const double _kMaxNameSize = 26;
 const double _kMinNameSize = 17;
 
 class ContactDetailPage extends StatefulWidget {
+  final String identifier;
   final Contact contact;
 
   const ContactDetailPage({
     Key key,
-    @required this.contact,
-  })  : assert(contact != null),
+    @required this.identifier,
+    this.contact,
+  })  : assert(identifier != null),
         super(key: key);
 
   @override
@@ -48,12 +51,17 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     var themeData = CupertinoTheme.of(context);
     var textTheme = themeData.textTheme;
     var actionTextStyle = textTheme.actionTextStyle;
+    var contact = presenter.object;
 
-    var phones = widget.contact.phones;
-    var emails = widget.contact.emails;
-    var urls = widget.contact.urls;
-    var postalAddresses = widget.contact.postalAddresses;
-    var dates = widget.contact.dates;
+    if (contact == null) {
+      return ErrorTips();
+    }
+
+    var phones = contact.phones;
+    var emails = contact.emails;
+    var urls = contact.urls;
+    var postalAddresses = contact.postalAddresses;
+    var dates = contact.dates;
 
     final hasPhone = phones != null && phones.isNotEmpty;
 
@@ -158,8 +166,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       text: '共享联系人',
       onPressed: () {
         Share.share(
-          widget.contact.displayName,
-          subject: widget.contact.displayName,
+          contact.displayName,
+          subject: contact.displayName,
         );
       },
     ));
@@ -184,7 +192,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
 
     var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
-      contact: widget.contact,
+      contact: contact,
       maxAvatarSize: _kMaxAvatarSize,
       minAvatarSize: _kMinAvatarSize,
       maxNameSize: _kMaxNameSize,

@@ -104,7 +104,10 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               Navigator.push(
                 context,
                 RouteProvider.buildRoute(
-                  ContactDetailPage(contact: contact),
+                  ContactDetailPage(
+                    identifier: contact.identifier,
+                    contact: contact,
+                  ),
                 ),
               );
             },

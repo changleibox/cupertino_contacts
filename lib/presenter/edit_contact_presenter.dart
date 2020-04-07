@@ -180,7 +180,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       Navigator.pushReplacement(
         context,
         RouteProvider.buildRoute(
-          ContactDetailPage(contact: value),
+          ContactDetailPage(
+            identifier: value.identifier,
+            contact: value,
+          ),
         ),
       );
     }).catchError((error) {
