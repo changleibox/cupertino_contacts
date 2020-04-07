@@ -6,7 +6,6 @@ import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
-import 'package:cupertinocontacts/widget/contact_item_widget.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_progress.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
@@ -83,19 +82,6 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     final slivers = List<Widget>();
     slivers.add(SupportSliverRefreshIndicator(
       onRefresh: presenter.onRefresh,
-    ));
-    slivers.add(SliverToBoxAdapter(
-      child: Container(
-        color: CupertinoDynamicColor.resolve(
-          itemColor,
-          context,
-        ),
-        child: CustomContactItemWidget(
-          avatar: null,
-          name: 'Box',
-          describe: '我的名片',
-        ),
-      ),
     ));
     if (presenter.isEmpty) {
       slivers.add(SliverFillRemaining(

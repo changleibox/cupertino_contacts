@@ -37,7 +37,8 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       bufferSize: total,
       sortBy: ContactSortOrder.firstName(),
     );
-    return await listContacts.jumpToPage(0);
+    var contacts = await listContacts.jumpToPage(0);
+    return _handleContactGroup(contacts);
   }
 
   @override
@@ -95,6 +96,18 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       ),
     ).then((value) {
       _selectedGroups = List.of(value);
+      setObjects(_handleContactGroup(objects));
     });
+  }
+
+  List<Contact> _handleContactGroup(List<Contact> contacts) {
+    var ids = _selectedGroups.expand((e) => e.contacts);
+    final newContacts = List<Contact>();
+    contacts.forEach((element) {
+      if (ids.contains(element.identifier)) {
+        newContacts.add(element);
+      }
+    });
+    return newContacts;
   }
 }
