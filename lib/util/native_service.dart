@@ -7,31 +7,58 @@ import 'package:url_launcher/url_launcher.dart';
 
 class NativeService {
   static Future<bool> message(String account) {
-    return _launch('sms:$account');
+    var uri = Uri(
+      scheme: 'sms',
+      path: account,
+    );
+    return _launch(uri);
   }
 
   static Future<bool> call(String phone) {
-    return _launch('tel:$phone');
+    var uri = Uri(
+      scheme: 'tel',
+      path: phone,
+    );
+    return _launch(uri);
   }
 
   static Future<bool> faceTime(String account) {
-    return _launch('facetime:$account');
+    var uri = Uri(
+      scheme: 'facetime',
+      path: account,
+    );
+    return _launch(uri);
   }
 
   static Future<bool> email(String account) {
-    return _launch('mailto:$account');
+    var uri = Uri(
+      scheme: 'mailto',
+      path: account,
+    );
+    return _launch(uri);
   }
 
   static Future<bool> maps(String address) {
-    return _launch('maps:${'q=${Uri.encodeComponent(address)}'}');
+    var uri = Uri(
+      scheme: 'maps',
+      queryParameters: {
+        'q': address,
+      },
+    );
+    return _launch(uri);
   }
 
   static Future<bool> calendar(DateTime dateTime) {
     var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(dateTime, isUtc: true);
-    return _launch('calshow:${timeIntervalSince.millisecondsSinceEpoch / 1000}');
+    var timeInterval = timeIntervalSince.millisecondsSinceEpoch / 1000;
+    var uri = Uri(
+      scheme: 'calshow',
+      path: timeInterval.toString(),
+    );
+    return _launch(uri);
   }
 
-  static Future<bool> _launch(String urlString) {
-    return launch(urlString);
+  static Future<bool> _launch(Uri uri) {
+    return launch(uri.toString());
   }
 }
