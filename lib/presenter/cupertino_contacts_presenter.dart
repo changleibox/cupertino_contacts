@@ -4,8 +4,10 @@
 
 import 'dart:collection';
 
+import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
 import 'package:cupertinocontacts/presenter/list_presenter.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
 import 'package:flutter_contact/contacts.dart';
@@ -16,6 +18,8 @@ const String _kOctothorpe = '#';
 class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Contact> {
   final _contactsMap = LinkedHashMap<String, List<Contact>>();
   final _contactKeys = List<GlobalKey>();
+
+  List<Group> _selectedGroups;
 
   int get keyCount => _contactKeys.length;
 
@@ -78,5 +82,19 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       return _kOctothorpe;
     }
     return upperCase;
+  }
+
+  onGroupPressed() {
+    Navigator.push(
+      context,
+      RouteProvider.buildRoute(
+        ContactGroupPage(
+          selectedGroups: _selectedGroups,
+        ),
+        fullscreenDialog: true,
+      ),
+    ).then((value) {
+      _selectedGroups = List.of(value);
+    });
   }
 }

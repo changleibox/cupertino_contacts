@@ -3,7 +3,6 @@
  */
 
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
-import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
@@ -66,6 +65,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     return [
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
+        onGroupPressed: presenter.onGroupPressed,
       ),
       _AnimatedSliverSearchBar(
         colorTween: _colorTween,
@@ -224,9 +224,12 @@ class __AnimatedColorWidgetState extends State<_AnimatedColorWidget> {
 }
 
 class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
+  final VoidCallback onGroupPressed;
+
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
+    this.onGroupPressed,
   }) : super(key: key, colorTween: colorTween);
 
   @override
@@ -241,15 +244,7 @@ class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
       backgroundColor: color,
       leading: NavigationBarAction(
         child: Text('群组'),
-        onPressed: () {
-          Navigator.push(
-            context,
-            RouteProvider.buildRoute(
-              ContactGroupPage(),
-              fullscreenDialog: true,
-            ),
-          );
-        },
+        onPressed: onGroupPressed,
       ),
       trailing: NavigationBarAction(
         child: Icon(

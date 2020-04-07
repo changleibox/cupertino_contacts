@@ -11,12 +11,18 @@ import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/support_refresh_indicator.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contacts.dart';
 
 /// Created by box on 2020/3/30.
 ///
 /// 群组
 class ContactGroupPage extends StatefulWidget {
-  const ContactGroupPage({Key key}) : super(key: key);
+  final List<Group> selectedGroups;
+
+  const ContactGroupPage({
+    Key key,
+    this.selectedGroups,
+  }) : super(key: key);
 
   @override
   _ContactGroupPageState createState() => _ContactGroupPageState();
@@ -134,9 +140,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
-          onPressed: () {
-            Navigator.maybePop(context);
-          },
+          onPressed: presenter.onDonePressed,
         ),
       ),
       child: CustomScrollView(
