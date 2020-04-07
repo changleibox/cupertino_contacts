@@ -34,13 +34,16 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = CupertinoButton(
-      padding: EdgeInsets.zero,
-      minSize: size,
-      borderRadius: BorderRadius.circular(size / 2),
-      onPressed: onPressed,
-      child: ClipOval(
-        child: this.child,
+    Widget child = SizedBox.fromSize(
+      size: Size.square(size),
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: size,
+        borderRadius: BorderRadius.circular(size / 2),
+        onPressed: onPressed,
+        child: ClipOval(
+          child: this.child,
+        ),
       ),
     );
     if (borderSide != null) {
