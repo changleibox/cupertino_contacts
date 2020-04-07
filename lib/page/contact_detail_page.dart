@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_contact/contact.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -50,6 +51,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
 
     var phones = widget.contact.phones;
     var emails = widget.contact.emails;
+    var urls = widget.contact.urls;
     var postalAddresses = widget.contact.postalAddresses;
     var dates = widget.contact.dates;
 
@@ -76,6 +78,20 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           valueColor: actionTextStyle.color,
           onPressed: () {
             NativeService.email(email.value);
+          },
+        );
+      }));
+    }
+    if (urls != null && urls.isNotEmpty) {
+      children.addAll(urls.map((e) {
+        var url = e.value;
+        url = url.startsWith('http') ? url : 'http://$url';
+        return _NormalGroupInfoWidget(
+          name: e.label,
+          value: url,
+          valueColor: actionTextStyle.color,
+          onPressed: () {
+            NativeService.url(url);
           },
         );
       }));
@@ -110,9 +126,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (dates != null && dates.isNotEmpty) {
       children.addAll(dates.map((e) {
+        var label = e.label == 'birthday' ? '生日' : e.label;
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
-          name: e.label,
+          name: label,
           value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -139,7 +156,12 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     children.add(_NormalButton(
       text: '共享联系人',
-      onPressed: () {},
+      onPressed: () {
+        Share.share(
+          'contact://${widget.contact.identifier}',
+          subject: widget.contact.displayName,
+        );
+      },
     ));
     if (hasPhone) {
       children.add(_NormalButton(

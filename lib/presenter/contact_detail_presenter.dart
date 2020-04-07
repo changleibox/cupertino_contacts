@@ -8,4 +8,10 @@ import 'package:flutter/cupertino.dart';
 
 class ContactDetailPresenter extends Presenter<ContactDetailPage> {
   final remarksController = TextEditingController();
+
+  @override
+  void initState() {
+    remarksController.text = widget.contact.note;
+    super.initState();
+  }
 }

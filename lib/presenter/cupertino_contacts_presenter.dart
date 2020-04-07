@@ -32,8 +32,6 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       query: queryText,
       bufferSize: total,
       sortBy: ContactSortOrder.firstName(),
-      withHiResPhoto: false,
-      withThumbnails: true,
     );
     return await listContacts.jumpToPage(0);
   }
