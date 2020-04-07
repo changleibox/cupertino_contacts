@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:cupertinocontacts/page/contact_group_page.dart';
@@ -20,6 +21,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
   final _contactKeys = List<GlobalKey>();
 
   List<Group> _selectedGroups;
+  StreamSubscription<dynamic> _subscription;
 
   int get keyCount => _contactKeys.length;
 
@@ -28,6 +30,18 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
   List<String> get indexs => _contactsMap.keys.toList();
 
   Iterable<MapEntry<String, List<Contact>>> get entries => _contactsMap.entries;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = Contacts.contactEvents.listen((event) => refresh());
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Future<List<Contact>> onLoad(bool showProgress) async {
