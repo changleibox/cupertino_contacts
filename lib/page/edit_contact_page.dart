@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
@@ -17,6 +16,7 @@ import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// Created by box on 2020/3/30.

@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
@@ -16,6 +15,7 @@ import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_contact/contact.dart';
 import 'package:intl/intl.dart';
 
 /// Created by box on 2020/3/30.
@@ -51,6 +51,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     var phones = widget.contact.phones;
     var emails = widget.contact.emails;
     var postalAddresses = widget.contact.postalAddresses;
+    var dates = widget.contact.dates;
 
     final hasPhone = phones != null && phones.isNotEmpty;
 
@@ -107,18 +108,20 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         );
       }));
     }
-    if (widget.contact.birthday != null) {
-      children.add(_NormalGroupInfoWidget(
-        name: '生日',
-        value: DateFormat('yyyy年MM月dd日').format(widget.contact.birthday),
-        valueColor: actionTextStyle.color,
-        onPressed: () {
-          var birthday = widget.contact.birthday;
-          var currentYear = DateTime.now().year;
-          var currentYearBirthday = DateTime(currentYear, birthday.month, birthday.day);
-          NativeService.calendar(currentYearBirthday);
-        },
-      ));
+    if (dates != null && dates.isNotEmpty) {
+      children.addAll(dates.map((e) {
+        var dateTime = e.date.toDateTime();
+        return _NormalGroupInfoWidget(
+          name: e.label,
+          value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
+          valueColor: actionTextStyle.color,
+          onPressed: () {
+            var currentYear = DateTime.now().year;
+            var currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
+            NativeService.calendar(currentYearBirthday);
+          },
+        );
+      }));
     }
     children.add(MultiLineTextField(
       controller: presenter.remarksController,

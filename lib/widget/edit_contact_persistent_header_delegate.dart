@@ -4,7 +4,6 @@
 
 import 'dart:typed_data';
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
@@ -12,6 +11,7 @@ import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_contact/contact.dart';
 
 const double _kPaddingBottom = 16.0;
 const double _kSpacing = 10.0;

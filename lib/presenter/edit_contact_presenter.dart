@@ -4,7 +4,6 @@
 
 import 'dart:typed_data';
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/constant/selection.dart' as selection;
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
@@ -19,6 +18,8 @@ import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_contact/contact.dart';
+import 'package:flutter_contact/contacts.dart';
 
 class EditContactPresenter extends Presenter<EditContactPage> implements EditContactOperation {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
@@ -166,17 +167,17 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   onDonePressed() {
-    Future future;
+    Future<Contact> future;
     if (value.identifier == null) {
-      future = ContactsService.addContact(value);
+      future = Contacts.addContact(value);
     } else {
-      future = ContactsService.updateContact(value);
+      future = Contacts.updateContact(value);
     }
     future.then((value) {
       Navigator.pushReplacement(
         context,
         RouteProvider.buildRoute(
-          ContactDetailPage(contact: this.value),
+          ContactDetailPage(contact: value),
         ),
       );
     }).catchError((error) {
@@ -198,7 +199,6 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   Contact get value {
     var phones = _convert(groups[0]);
     var emails = _convert(groups[1]);
-    var addresses = _convertAddress(_initialContact.postalAddresses);
     final contactMap = {
       'identifier': _initialContact.identifier,
       'avatar': _avatar,
@@ -212,12 +212,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       'jobTitle': _initialContact.jobTitle,
       'phones': phones.isEmpty ? _initialContact.phones : phones,
       'emails': emails.isEmpty ? _initialContact.emails : emails,
-      'postalAddresses': addresses,
-      'birthday': _initialContact.birthday.toString(),
     };
     var contact = Contact.fromMap(contactMap);
     contact.displayName = ContactUtils.buildDisplayName(contact);
-    return contact;
+    return contact + _initialContact;
   }
 
   List<Map> _convert(ContactInfoGroup<EditableItem> infoGroup) {
@@ -226,19 +224,6 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     }).map((e) {
       return {"label": e.label, "value": e.value};
     }).toList();
-  }
-
-  List<Map> _convertAddress(Iterable<PostalAddress> addresses) {
-    return addresses?.map((address) {
-      return {
-        "label": address.label,
-        "street": address.street,
-        "city": address.city,
-        "postcode": address.postcode,
-        "region": address.region,
-        "country": address.country
-      };
-    })?.toList();
   }
 
   @protected

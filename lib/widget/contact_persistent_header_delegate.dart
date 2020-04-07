@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
@@ -10,6 +9,7 @@ import 'package:cupertinocontacts/util/contact_utils.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 
 const double _kHorizontalPadding = 16.0;
 

@@ -2,8 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 
 class ContactUtils {
   static final RegExp letterRegExp = RegExp(r'[A-Z|a-z]');

@@ -2,10 +2,10 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 
 showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item> emails) {
   var textStyle = CupertinoTheme.of(context).textTheme.textStyle;

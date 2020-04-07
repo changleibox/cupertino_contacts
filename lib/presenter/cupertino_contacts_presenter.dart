@@ -4,10 +4,11 @@
 
 import 'dart:collection';
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
 import 'package:cupertinocontacts/presenter/list_presenter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
+import 'package:flutter_contact/contacts.dart';
 import 'package:lpinyin/lpinyin.dart';
 
 const String _kOctothorpe = '#';
@@ -26,7 +27,15 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
 
   @override
   Future<List<Contact>> onLoad(bool showProgress) async {
-    return (await ContactsService.getContacts(query: queryText)).toList();
+    var total = await Contacts.getTotalContacts(query: queryText);
+    var listContacts = Contacts.listContacts(
+      query: queryText,
+      bufferSize: total,
+      sortBy: ContactSortOrder.firstName(),
+      withHiResPhoto: false,
+      withThumbnails: true,
+    );
+    return await listContacts.jumpToPage(0);
   }
 
   @override

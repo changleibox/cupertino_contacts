@@ -4,11 +4,11 @@
 
 import 'dart:typed_data';
 
-import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 
 /// Created by box on 2020/3/26.
 ///
