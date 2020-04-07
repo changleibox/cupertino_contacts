@@ -15,7 +15,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
-typedef GroupItemBuilder = Widget Function(ContactInfoGroup<GroupItem> infoGroup, GroupItem item);
+typedef GroupItemBuilder = Widget Function(BuildContext context, GroupItem item);
 
 class ContactInfoGroupWidget extends StatefulWidget {
   final ContactInfoGroup infoGroup;

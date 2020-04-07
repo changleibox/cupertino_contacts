@@ -84,7 +84,9 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
             style: textStyle.copyWith(
               color: themeData.primaryColor,
             ),
-            child: builder(infoGroup, item),
+            child: Builder(
+              builder: (context) => builder(context, item),
+            ),
           ),
         ),
       ],
