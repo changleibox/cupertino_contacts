@@ -14,10 +14,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
 
 const double _kPaddingBottom = 16.0;
-const double _kSpacing = 8.0;
+const double _kSpacing = 16.0;
 const double _kTextSpacing = 4.0;
 const double _kActionButtonHeight = 60;
-const double _kNavigationBarHeight = 44;
+const double _kNavigationBarHeight = 24;
 const double _kNormalTextSize = 17.0;
 
 class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {

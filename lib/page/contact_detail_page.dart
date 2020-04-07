@@ -26,7 +26,7 @@ import 'package:share/share.dart';
 const double _kMaxAvatarSize = 80;
 const double _kMinAvatarSize = 44;
 const double _kMaxNameSize = 26;
-const double _kMinNameSize = 17;
+const double _kMinNameSize = 15;
 
 class ContactDetailPage extends StatefulWidget {
   final String identifier;
