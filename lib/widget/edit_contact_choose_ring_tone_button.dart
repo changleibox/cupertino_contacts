@@ -22,6 +22,8 @@ class EditContactChooseRingToneButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var textStyle = themeData.textTheme.textStyle;
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemBackground,
@@ -45,7 +47,9 @@ class EditContactChooseRingToneButton extends StatelessWidget {
               children: [
                 Text(
                   info.name,
-                  style: CupertinoTheme.of(context).textTheme.textStyle,
+                  style: textStyle.copyWith(
+                    fontSize: 15,
+                  ),
                 ),
                 Expanded(
                   child: Text(

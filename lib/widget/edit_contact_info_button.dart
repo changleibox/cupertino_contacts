@@ -21,6 +21,8 @@ class EditContactInfoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var textStyle = themeData.textTheme.textStyle;
     return CupertinoButton(
       minSize: 44,
       padding: EdgeInsets.only(
@@ -37,7 +39,9 @@ class EditContactInfoButton extends StatelessWidget {
           ),
           Text(
             text,
-            style: CupertinoTheme.of(context).textTheme.textStyle,
+            style: textStyle.copyWith(
+              fontSize: 15,
+            ),
           ),
         ],
       ),

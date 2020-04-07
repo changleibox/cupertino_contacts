@@ -25,6 +25,8 @@ class EditContactRemarksTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var textStyle = themeData.textTheme.textStyle;
     return Container(
       color: CupertinoDynamicColor.resolve(
         backgroundColor ?? CupertinoColors.secondarySystemBackground,
@@ -41,7 +43,9 @@ class EditContactRemarksTextField extends StatelessWidget {
         children: [
           Text(
             info.name,
-            style: CupertinoTheme.of(context).textTheme.textStyle,
+            style: textStyle.copyWith(
+              fontSize: 15,
+            ),
           ),
           CupertinoTextField(
             controller: info.controller,

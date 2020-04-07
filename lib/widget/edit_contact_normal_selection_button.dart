@@ -19,6 +19,8 @@ class EditContactNormalSelectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var actionTextStyle = themeData.textTheme.actionTextStyle;
     return CupertinoButton(
       minSize: 44,
       padding: EdgeInsets.only(
@@ -34,9 +36,7 @@ class EditContactNormalSelectionButton extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           info.name,
-          style: CupertinoTheme.of(context).textTheme.actionTextStyle.copyWith(
-                fontSize: 15,
-              ),
+          style: actionTextStyle,
         ),
       ),
       onPressed: () {},

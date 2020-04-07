@@ -26,6 +26,8 @@ class EditContactInfoTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var actionTextStyle = themeData.textTheme.actionTextStyle;
     return WidgetGroup.spacing(
       spacing: 10,
       children: [
@@ -48,6 +50,9 @@ class EditContactInfoTextField extends StatelessWidget {
             children: [
               Text(
                 item.label,
+                style: actionTextStyle.copyWith(
+                  fontSize: 15,
+                ),
               ),
               Icon(
                 CupertinoIcons.forward,
