@@ -96,7 +96,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       ),
     ).then((value) {
       _selectedGroups = value == null ? null : List.of(value);
-      setObjects(_handleContactGroup(objects));
+      refresh();
     });
   }
 
