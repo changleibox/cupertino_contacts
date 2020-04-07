@@ -113,6 +113,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     ));
     groups.add(MultiEditableContactInfo(
       name: '备注',
+      value: _initialContact.note,
     ));
     groups.add(NormalSelectionContactInfo(
       name: '添加信息栏',
@@ -213,13 +214,18 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       'givenName': baseInfos[1].value,
       'company': baseInfos[2].value,
       'jobTitle': _initialContact.jobTitle,
-      'phones': phones.isEmpty ? _initialContact.phones : phones,
-      'emails': emails.isEmpty ? _initialContact.emails : emails,
-      'urls': urls.isEmpty ? _initialContact.urls : urls,
+      'phones': phones.isEmpty ? null : phones,
+      'emails': emails.isEmpty ? null : emails,
+      'urls': urls.isEmpty ? null : urls,
+      'note': groups[11].value,
     };
     var contact = Contact.fromMap(contactMap);
     contact.displayName = ContactUtils.buildDisplayName(contact);
-    return contact + _initialContact;
+    contact.dates = _initialContact.dates;
+    contact.lastModified = _initialContact.lastModified;
+    contact.socialProfiles = _initialContact.socialProfiles;
+    contact.postalAddresses = _initialContact.postalAddresses;
+    return contact;
   }
 
   List<Map> _convert(ContactInfoGroup<EditableItem> infoGroup) {
