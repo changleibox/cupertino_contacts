@@ -28,7 +28,7 @@ class NativeService {
 
   static Future<bool> calendar(DateTime dateTime) {
     var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(dateTime, isUtc: true);
-    return _launch('mailto:${timeIntervalSince.millisecondsSinceEpoch / 1000}');
+    return _launch('calshow:${timeIntervalSince.millisecondsSinceEpoch / 1000}');
   }
 
   static Future<bool> _launch(String urlString) {
