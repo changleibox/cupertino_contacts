@@ -177,15 +177,19 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       future = Contacts.updateContact(value);
     }
     future.then((value) {
-      Navigator.pushReplacement(
-        context,
-        RouteProvider.buildRoute(
-          ContactDetailPage(
-            identifier: value.identifier,
-            contact: value,
+      if (widget.contact != null) {
+        Navigator.pop(context, value);
+      } else {
+        Navigator.pushReplacement(
+          context,
+          RouteProvider.buildRoute(
+            ContactDetailPage(
+              identifier: value.identifier,
+              contact: value,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }).catchError((error) {
       showText(error.toString(), context);
     });
