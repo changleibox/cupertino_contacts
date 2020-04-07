@@ -91,7 +91,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
                 valueListenable: operation,
                 builder: (context, value, child) {
                   return NavigationBarAction(
-                    child: Text('完成'),
+                    child: Text(isEditContact ? '更新' : '完成'),
                     onPressed: operation.isChanged ? operation.onDonePressed : null,
                   );
                 },
