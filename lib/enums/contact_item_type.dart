@@ -4,8 +4,17 @@
 
 import 'package:flutter/cupertino.dart';
 
+enum ContactInfoType {
+  prefix,
+  suffix,
+  middleName,
+  familyName,
+  givenName,
+  company,
+  jobTitle,
+}
+
 enum ContactItemType {
-  baseInfo,
   phone,
   email,
   phoneRinging,
@@ -33,7 +42,6 @@ TextInputType convertInputType(ContactItemType itemType) {
     case ContactItemType.url:
       inputType = TextInputType.url;
       break;
-    case ContactItemType.baseInfo:
     case ContactItemType.phoneRinging:
     case ContactItemType.smsRinging:
     case ContactItemType.address:

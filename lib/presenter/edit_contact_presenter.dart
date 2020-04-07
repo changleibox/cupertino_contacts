@@ -24,7 +24,7 @@ import 'package:flutter_contact/contacts.dart';
 
 class EditContactPresenter extends Presenter<EditContactPage> implements EditContactOperation {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
-  final baseInfos = List<EditableContactInfo>();
+  final baseInfoMap = LinkedHashMap<ContactInfoType, EditableContactInfo>();
   final itemMap = LinkedHashMap<ContactItemType, ContactInfo>();
 
   Uint8List _avatar;
@@ -50,18 +50,18 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
     _avatar = _initialContact.avatar;
 
-    baseInfos.add(EditableContactInfo(
+    baseInfoMap[ContactInfoType.familyName] = EditableContactInfo(
       name: '姓氏',
       value: _initialContact.familyName,
-    ));
-    baseInfos.add(EditableContactInfo(
+    );
+    baseInfoMap[ContactInfoType.givenName] = EditableContactInfo(
       name: '名字',
       value: _initialContact.givenName,
-    ));
-    baseInfos.add(EditableContactInfo(
+    );
+    baseInfoMap[ContactInfoType.company] = EditableContactInfo(
       name: '公司',
       value: _initialContact.company,
-    ));
+    );
     itemMap[ContactItemType.phone] = ContactInfoGroup<EditableItem>(
       name: '电话',
       items: _initialContact.phones?.map((e) {
@@ -136,7 +136,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       name: '添加信息栏',
     );
 
-    baseInfos.forEach((element) => element.addListener(notifyListeners));
+    baseInfoMap.values.forEach((element) => element.addListener(notifyListeners));
     itemMap.values.forEach((element) => element.addListener(notifyListeners));
     super.initState();
   }
@@ -144,7 +144,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   @override
   void dispose() {
     _listeners = null;
-    baseInfos.forEach((element) => element.dispose());
+    baseInfoMap.values.forEach((element) => element.dispose());
     itemMap.values.forEach((element) => element.dispose());
     super.dispose();
   }
@@ -231,9 +231,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.suffix = _initialContact.suffix;
     contact.middleName = _initialContact.middleName;
     contact.displayName = _initialContact.displayName;
-    contact.familyName = baseInfos[0].value ?? '';
-    contact.givenName = baseInfos[1].value ?? '';
-    contact.company = baseInfos[2].value ?? '';
+    contact.familyName = baseInfoMap[ContactInfoType.familyName].value ?? '';
+    contact.givenName = baseInfoMap[ContactInfoType.givenName].value ?? '';
+    contact.company = baseInfoMap[ContactInfoType.company].value ?? '';
     contact.jobTitle = _initialContact.jobTitle;
     contact.phones = _convert(itemMap[ContactItemType.phone]);
     contact.emails = _convert(itemMap[ContactItemType.email]);

@@ -66,9 +66,9 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
   Widget builds(BuildContext context) {
     final children = List<Widget>();
     children.add(EditContactGroupContainer(
-      itemCount: presenter.baseInfos.length,
+      itemCount: presenter.baseInfoMap.length,
       itemBuilder: (context, index) {
-        var baseInfo = presenter.baseInfos[index];
+        var baseInfo = presenter.baseInfoMap.values.elementAt(index);
         return EditContactNormalTextField(
           info: baseInfo,
         );
