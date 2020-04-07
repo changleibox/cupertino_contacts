@@ -105,6 +105,10 @@ class EditContactInfoTextField extends StatelessWidget {
               scrollPadding: EdgeInsets.only(
                 bottom: 54,
               ),
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () {
+                FocusScope.of(context).nextFocus();
+              },
             ),
           ),
         ),

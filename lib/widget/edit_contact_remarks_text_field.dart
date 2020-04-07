@@ -53,6 +53,10 @@ class EditContactRemarksTextField extends StatelessWidget {
             decoration: null,
             minLines: minLines,
             maxLines: null,
+            textInputAction: TextInputAction.next,
+            onEditingComplete: () {
+              FocusScope.of(context).nextFocus();
+            },
           ),
         ],
       ),
