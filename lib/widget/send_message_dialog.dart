@@ -3,9 +3,9 @@
  */
 
 import 'package:contacts_service/contacts_service.dart';
+import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item> emails) {
   var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
@@ -41,7 +41,7 @@ showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item
           label: e.label,
           value: e.value,
           onPressed: () {
-            launch('sms:${e.value}');
+            NativeService.message(e.value);
           },
         );
       }));

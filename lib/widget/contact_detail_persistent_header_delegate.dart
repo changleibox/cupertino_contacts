@@ -7,11 +7,11 @@ import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
+import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const double _kPaddingBottom = 16.0;
 const double _kSpacing = 8.0;
@@ -166,22 +166,22 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '信息',
-                      onPressed: _hasPhone || _hasEmail ? () => launch('sms:') : null,
+                      onPressed: _hasPhone || _hasEmail ? () => NativeService.message('account') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '呼叫',
-                      onPressed: _hasPhone ? () => launch('tel:') : null,
+                      onPressed: _hasPhone ? () => NativeService.call('phone') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '视频',
-                      onPressed: _hasPhone || _hasEmail ? () => launch('facetime:') : null,
+                      onPressed: _hasPhone || _hasEmail ? () => NativeService.faceTime('account') : null,
                     ),
                     _OperationButton(
                       icon: CupertinoIcons.info,
                       text: '邮件',
-                      onPressed: _hasEmail ? () => launch('mailto:') : null,
+                      onPressed: _hasEmail ? () => NativeService.email('account') : null,
                     ),
                   ],
                 ),

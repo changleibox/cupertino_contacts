@@ -4,7 +4,7 @@
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
-import 'package:cupertinocontacts/util/time_interval.dart';
+import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
@@ -17,7 +17,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Created by box on 2020/3/30.
 ///
@@ -63,7 +62,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           value: phone.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
-            launch('tel:${phone.value}');
+            NativeService.call(phone.value);
           },
         );
       }));
@@ -75,7 +74,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           value: email.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
-            launch('tel:${email.value}');
+            NativeService.email(email.value);
           },
         );
       }));
@@ -103,7 +102,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             child: Text('地图'),
           ),
           onPressed: () {
-            launch('maps:${Uri.encodeComponent('$value')}');
+            NativeService.maps(value);
           },
         );
       }));
@@ -117,8 +116,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           var birthday = widget.contact.birthday;
           var currentYear = DateTime.now().year;
           var currentYearBirthday = DateTime(currentYear, birthday.month, birthday.day);
-          var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(currentYearBirthday, isUtc: true);
-          launch('calshow:${timeIntervalSince.toUtc().millisecondsSinceEpoch / 1000}');
+          NativeService.calendar(currentYearBirthday);
         },
       ));
     }
@@ -138,9 +136,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     children.add(_NormalButton(
       text: '共享联系人',
-      onPressed: () {
-        launch('prefs:root=General&path=DATE_AND_TIME');
-      },
+      onPressed: () {},
     ));
     if (hasPhone) {
       children.add(_NormalButton(
