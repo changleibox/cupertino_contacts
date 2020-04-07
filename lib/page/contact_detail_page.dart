@@ -6,15 +6,15 @@ import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
+import 'package:cupertinocontacts/widget/emergency_contact_dialog.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/multi_line_text_field.dart';
 import 'package:cupertinocontacts/widget/send_message_dialog.dart';
+import 'package:cupertinocontacts/widget/share_location_dialog.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_contact/contact.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
@@ -158,7 +158,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       text: '共享联系人',
       onPressed: () {
         Share.share(
-          'contact://${widget.contact.identifier}',
+          widget.contact.displayName,
           subject: widget.contact.displayName,
         );
       },
@@ -171,11 +171,15 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       children.add(_NormalButton(
         text: '添加到紧急联系人',
         isDestructive: true,
-        onPressed: () {},
+        onPressed: () {
+          showAddEmergencyContactDialog(context, phones);
+        },
       ));
       children.add(_NormalButton(
         text: '共享我的位置',
-        onPressed: () {},
+        onPressed: () {
+          showShareLocationDialog(context);
+        },
       ));
     }
 
