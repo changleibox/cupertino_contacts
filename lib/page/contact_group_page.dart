@@ -74,19 +74,21 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
               direction: Axis.vertical,
               itemCount: presenter.itemCount,
               itemBuilder: (context, index) {
+                var group = presenter[index];
                 return CupertinoButton(
                   child: WidgetGroup.spacing(
                     alignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        presenter[index].name,
+                        group.name,
                         style: CupertinoTheme.of(context).textTheme.textStyle,
                       ),
-                      Icon(
-                        CupertinoIcons.check_mark,
-                        size: 40,
-                        color: CupertinoTheme.of(context).primaryColor,
-                      ),
+                      if (presenter.isSelected(group))
+                        Icon(
+                          CupertinoIcons.check_mark,
+                          size: 40,
+                          color: CupertinoTheme.of(context).primaryColor,
+                        ),
                     ],
                   ),
                   padding: EdgeInsets.only(
@@ -96,7 +98,9 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                   color: CupertinoColors.tertiarySystemBackground,
                   minSize: 44,
                   borderRadius: BorderRadius.zero,
-                  onPressed: () {},
+                  onPressed: () {
+                    presenter.switchSelect(group);
+                  },
                 );
               },
               separatorBuilder: (context, index) {
