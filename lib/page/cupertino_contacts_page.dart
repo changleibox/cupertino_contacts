@@ -100,7 +100,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     if (presenter.isEmpty) {
       slivers.add(SliverFillRemaining(
         child: ErrorTips(
-          exception: '暂无联系人',
+          exception: '无联系人',
         ),
       ));
     } else {
