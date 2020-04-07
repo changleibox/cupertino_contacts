@@ -63,14 +63,22 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     groups.add(ContactInfoGroup<EditableItem>(
       name: '电话',
       items: _initialContact.phones?.map((e) {
-        return EditableItem(label: e.label, value: e.value);
+        return EditableItem(
+          label: e.label,
+          value: e.value,
+          inputType: TextInputType.phone,
+        );
       })?.toList(),
       selections: selection.phoneSelections,
     ));
     groups.add(ContactInfoGroup<EditableItem>(
       name: '电子邮件',
       items: _initialContact.emails?.map((e) {
-        return EditableItem(label: e.label, value: e.value);
+        return EditableItem(
+          label: e.label,
+          value: e.value,
+          inputType: TextInputType.emailAddress,
+        );
       })?.toList(),
       selections: selection.emailSelections,
     ));
@@ -83,7 +91,11 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     groups.add(ContactInfoGroup<EditableItem>(
       name: 'URL',
       items: _initialContact.urls?.map((e) {
-        return EditableItem(label: e.label, value: e.value);
+        return EditableItem(
+          label: e.label,
+          value: e.value,
+          inputType: TextInputType.url,
+        );
       })?.toList(),
       selections: selection.urlSelections,
     ));

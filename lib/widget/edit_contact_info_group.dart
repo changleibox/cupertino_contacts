@@ -17,11 +17,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// 添加联系人-信息组
 class EditContactInfoGroup extends StatefulWidget {
   final ContactInfoGroup infoGroup;
+  final TextInputType inputType;
 
   const EditContactInfoGroup({
     Key key,
     @required this.infoGroup,
+    this.inputType = TextInputType.text,
   })  : assert(infoGroup != null),
+        assert(inputType != null),
         super(key: key);
 
   @override
@@ -125,6 +128,7 @@ class _EditContactInfoGroupState extends State<EditContactInfoGroup> {
     var selections = widget.infoGroup.selections;
     widget.infoGroup.add(EditableItem(
       label: selections[length % selections.length],
+      inputType: widget.inputType,
     ));
     _globalKeys.add(GlobalKey());
     _animatedListKey.currentState.insertItem(length);

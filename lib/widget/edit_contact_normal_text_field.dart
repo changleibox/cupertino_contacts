@@ -27,6 +27,7 @@ class EditContactNormalTextField extends StatelessWidget {
       ),
       child: CupertinoTextField(
         controller: info.controller,
+        keyboardType: info.inputType,
         placeholder: info.name,
         placeholderStyle: TextStyle(
           color: CupertinoDynamicColor.resolve(
