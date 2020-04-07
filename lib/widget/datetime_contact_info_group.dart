@@ -25,6 +25,9 @@ class DateTimeContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
+      itemFactory: (index, label) {
+        return DateTimeItem(label: label);
+      },
       itemBuilder: (context, item) {
         return Container(
           height: 44,

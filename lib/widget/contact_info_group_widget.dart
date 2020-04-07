@@ -17,16 +17,21 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// 添加联系人-信息组
 typedef GroupItemBuilder = Widget Function(BuildContext context, GroupItem item);
 
+typedef ItemFactory = GroupItem Function(int index, String label);
+
 class ContactInfoGroupWidget extends StatefulWidget {
   final ContactInfoGroup infoGroup;
   final GroupItemBuilder itemBuilder;
+  final ItemFactory itemFactory;
 
   const ContactInfoGroupWidget({
     Key key,
     @required this.infoGroup,
     @required this.itemBuilder,
+    @required this.itemFactory,
   })  : assert(infoGroup != null),
         assert(itemBuilder != null),
+        assert(itemFactory != null),
         super(key: key);
 
   @override
@@ -129,9 +134,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
   _onAddPressed() {
     var length = widget.infoGroup.value.length;
     var selections = widget.infoGroup.selections;
-    widget.infoGroup.add(DateTimeItem(
-      label: selections[length % selections.length],
-    ));
+    widget.infoGroup.add(widget.itemFactory(length, selections[length % selections.length]));
     _globalKeys.add(GlobalKey());
     _animatedListKey.currentState.insertItem(length);
   }

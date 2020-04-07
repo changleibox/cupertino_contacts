@@ -26,6 +26,9 @@ class EditContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
+      itemFactory: (index, label) {
+        return EditableItem(label: label);
+      },
       itemBuilder: (context, item) {
         return SizedBox(
           height: 44,
