@@ -101,6 +101,13 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       slivers.add(SliverFillRemaining(
         child: ErrorTips(
           exception: '无联系人',
+          style: TextStyle(
+            fontSize: 26,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondaryLabel,
+              context,
+            ),
+          ),
         ),
       ));
     } else {

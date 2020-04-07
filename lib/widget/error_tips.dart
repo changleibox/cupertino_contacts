@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 /// 错误提示
 class ErrorTips extends StatelessWidget {
   final dynamic exception;
+  final TextStyle style;
 
   const ErrorTips({
     Key key,
     this.exception = '暂无数据',
+    this.style,
   })  : assert(exception != null),
         super(key: key);
 
@@ -23,12 +25,13 @@ class ErrorTips extends StatelessWidget {
     return Center(
       child: Text(
         exception.toString(),
-        style: textTheme.textStyle.copyWith(
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondaryLabel,
-            context,
-          ),
-        ),
+        style: style ??
+            textTheme.textStyle.copyWith(
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel,
+                context,
+              ),
+            ),
       ),
     );
   }
