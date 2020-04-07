@@ -5,7 +5,6 @@
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
-import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
@@ -19,6 +18,7 @@ const double _kTextSpacing = 4.0;
 const double _kActionButtonHeight = 60;
 const double _kNavigationBarHeight = 24;
 const double _kNormalTextSize = 17.0;
+const Duration _kDuration = Duration(milliseconds: 300);
 
 class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Contact contact;
@@ -88,11 +88,22 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                 onPressed: () {
                   Navigator.push(
                     context,
-                    RouteProvider.buildRoute(
-                      EditContactPage(
-                        contact: contact,
-                      ),
+                    PageRouteBuilder(
                       fullscreenDialog: true,
+                      transitionDuration: _kDuration,
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return FadeTransition(
+                          opacity: Tween(begin: 0.0, end: 1.0).animate(
+                            CurvedAnimation(
+                              parent: animation, //动画样式
+                              curve: Curves.fastOutSlowIn, //动画曲线
+                            ),
+                          ),
+                          child: EditContactPage(
+                            contact: contact,
+                          ),
+                        );
+                      },
                     ),
                   );
                 },
