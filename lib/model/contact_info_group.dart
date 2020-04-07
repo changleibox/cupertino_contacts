@@ -199,6 +199,16 @@ class EditableItem extends _Item<String> {
   int get hashCode => controller.hashCode;
 }
 
+class DateTimeItem extends _Item<DateTime> {
+  DateTimeItem({
+    @required String label,
+    DateTime value,
+  }) : super(
+          label,
+          value: value ?? DateTime.now(),
+        );
+}
+
 class SelectionItem extends _Item {
   SelectionItem({@required String label, dynamic value})
       : assert(label != null),

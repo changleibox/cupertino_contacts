@@ -103,14 +103,24 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       items: List<EditableItem>(),
       selections: selection.addressSelections,
     );
-    itemMap[ContactItemType.birthday] = ContactInfoGroup<EditableItem>(
+    itemMap[ContactItemType.birthday] = ContactInfoGroup<DateTimeItem>(
       name: '生日',
-      items: List<EditableItem>(),
+      items: _initialContact.dates?.where((element) => element.label == 'birthday')?.map((e) {
+        return DateTimeItem(
+          label: '生日',
+          value: e.date.toDateTime(),
+        );
+      })?.toList(),
       selections: selection.birthdaySelections,
     );
-    itemMap[ContactItemType.date] = ContactInfoGroup<EditableItem>(
+    itemMap[ContactItemType.date] = ContactInfoGroup<DateTimeItem>(
       name: '日期',
-      items: List<EditableItem>(),
+      items: _initialContact.dates?.where((element) => element.label != 'birthday')?.map((e) {
+        return DateTimeItem(
+          label: e.label,
+          value: e.date.toDateTime(),
+        );
+      })?.toList(),
       selections: selection.dateSelections,
     );
     itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableItem>(
@@ -120,7 +130,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
-      items: List<EditableItem>(),
+      items: _initialContact.socialProfiles?.map((e) {
+        return EditableItem(
+          label: e.label,
+          value: e.value,
+        );
+      })?.toList(),
       selections: selection.socialDataSelections,
     );
     itemMap[ContactItemType.instantMessaging] = ContactInfoGroup<EditableItem>(
