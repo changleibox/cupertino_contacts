@@ -68,14 +68,15 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     children.add(EditContactGroupContainer(
       itemCount: presenter.baseInfoMap.length,
       itemBuilder: (context, index) {
-        var baseInfo = presenter.baseInfoMap.values.elementAt(index);
+        var values = presenter.baseInfoMap.values;
+        var baseInfo = values.elementAt(index);
         return EditContactNormalTextField(
           info: baseInfo,
         );
       },
     ));
-    var keys = presenter.itemMap.keys;
-    for (var key in keys) {
+    var itemKeys = presenter.itemMap.keys;
+    for (var key in itemKeys) {
       final contactInfo = presenter.itemMap[key];
       if (contactInfo is ContactInfoGroup) {
         children.add(EditContactInfoGroup(
