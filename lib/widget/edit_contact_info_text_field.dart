@@ -81,7 +81,7 @@ class EditContactInfoTextField extends StatelessWidget {
                 ),
               ),
               decoration: BoxDecoration(
-                color: CupertinoColors.tertiarySystemBackground,
+                color: CupertinoColors.secondarySystemBackground,
               ),
               padding: EdgeInsets.only(
                 left: 10,

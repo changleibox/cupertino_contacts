@@ -142,7 +142,7 @@ class _EditContactInfoGroupState extends State<EditContactInfoGroup> {
   Widget build(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemBackground,
+        CupertinoColors.secondarySystemBackground,
         context,
       ),
       child: WidgetGroup(

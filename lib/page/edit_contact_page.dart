@@ -63,10 +63,6 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
 
   @override
   Widget builds(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
-    var textStyle = textTheme.textStyle;
-
     final children = List<Widget>();
     children.add(EditContactGroupContainer(
       itemCount: presenter.baseInfos.length,
@@ -106,7 +102,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     );
 
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemBackground,
+      backgroundColor: CupertinoColors.systemBackground,
       child: SupportNestedScrollView(
         physics: SnappingScrollPhysics(
           midScrollOffset: _kMaxAvatarSize,
@@ -122,39 +118,30 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
             ),
           ];
         },
-        body: CupertinoTheme(
-          data: themeData.copyWith(
-            textTheme: textTheme.copyWith(
-              textStyle: textStyle.copyWith(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          child: PrimarySlidableController(
-            controller: _slidableController,
-            child: Listener(
-              onPointerDown: (event) => _onDismissSlidable(),
-              child: NotificationListener<ScrollStartNotification>(
-                onNotification: (notification) {
-                  _onDismissSlidable();
-                  return false;
-                },
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: CupertinoScrollbar(
-                    child: ListView.separated(
-                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                      itemCount: children.length,
-                      itemBuilder: (context, index) {
-                        return children[index];
-                      },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 40,
-                        );
-                      },
-                    ),
+        body: PrimarySlidableController(
+          controller: _slidableController,
+          child: Listener(
+            onPointerDown: (event) => _onDismissSlidable(),
+            child: NotificationListener<ScrollStartNotification>(
+              onNotification: (notification) {
+                _onDismissSlidable();
+                return false;
+              },
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: CupertinoScrollbar(
+                  child: ListView.separated(
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    itemCount: children.length,
+                    itemBuilder: (context, index) {
+                      return children[index];
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 40,
+                      );
+                    },
                   ),
                 ),
               ),

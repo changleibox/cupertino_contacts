@@ -27,7 +27,7 @@ class EditContactRemarksTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
-        backgroundColor ?? CupertinoColors.tertiarySystemBackground,
+        backgroundColor ?? CupertinoColors.secondarySystemBackground,
         context,
       ),
       padding: EdgeInsets.symmetric(
