@@ -95,12 +95,15 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
         fullscreenDialog: true,
       ),
     ).then((value) {
-      _selectedGroups = List.of(value);
+      _selectedGroups = value == null ? null : List.of(value);
       setObjects(_handleContactGroup(objects));
     });
   }
 
   List<Contact> _handleContactGroup(List<Contact> contacts) {
+    if (_selectedGroups == null) {
+      return contacts;
+    }
     var ids = _selectedGroups.expand((e) => e.contacts);
     final newContacts = List<Contact>();
     contacts.forEach((element) {

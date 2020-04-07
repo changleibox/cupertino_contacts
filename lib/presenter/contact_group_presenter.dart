@@ -65,6 +65,6 @@ class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
   }
 
   onDonePressed() {
-    Navigator.pop(context, _selectedGroups);
+    Navigator.pop(context, _selectedGroups.contains(_allIPhoneGroup) ? null : _selectedGroups);
   }
 }
