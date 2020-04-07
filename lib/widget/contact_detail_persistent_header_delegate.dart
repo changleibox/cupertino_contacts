@@ -16,7 +16,7 @@ const double _kPaddingBottom = 16.0;
 const double _kSpacing = 16.0;
 const double _kTextSpacing = 4.0;
 const double _kActionButtonHeight = 60;
-const double _kNavigationBarHeight = 24;
+const double _kNavigationBarHeight = 32;
 const double _kNormalTextSize = 17.0;
 const Duration _kDuration = Duration(milliseconds: 300);
 
