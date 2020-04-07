@@ -224,39 +224,33 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   Contact get value {
-    var phones = _convert(itemMap[ContactItemType.phone]);
-    var emails = _convert(itemMap[ContactItemType.email]);
-    var urls = _convert(itemMap[ContactItemType.url]);
-    final contactMap = {
-      'identifier': _initialContact.identifier,
-      'avatar': _avatar,
-      'prefix': _initialContact.prefix,
-      'suffix': _initialContact.suffix,
-      'middleName': _initialContact.middleName,
-      'displayName': _initialContact.displayName,
-      'familyName': baseInfos[0].value ?? '',
-      'givenName': baseInfos[1].value ?? '',
-      'company': baseInfos[2].value ?? '',
-      'jobTitle': _initialContact.jobTitle,
-      'phones': phones,
-      'emails': emails,
-      'urls': urls,
-      'note': itemMap[ContactItemType.remarks].value ?? '',
-    };
-    var contact = Contact.fromMap(contactMap);
+    var contact = Contact();
+    contact.identifier = _initialContact.identifier;
+    contact.avatar = _avatar;
+    contact.prefix = _initialContact.prefix;
+    contact.suffix = _initialContact.suffix;
+    contact.middleName = _initialContact.middleName;
     contact.displayName = _initialContact.displayName;
+    contact.familyName = baseInfos[0].value ?? '';
+    contact.givenName = baseInfos[1].value ?? '';
+    contact.company = baseInfos[2].value ?? '';
+    contact.jobTitle = _initialContact.jobTitle;
+    contact.phones = _convert(itemMap[ContactItemType.phone]);
+    contact.emails = _convert(itemMap[ContactItemType.email]);
+    contact.urls = _convert(itemMap[ContactItemType.url]);
     contact.dates = _initialContact.dates;
     contact.lastModified = _initialContact.lastModified;
     contact.socialProfiles = _initialContact.socialProfiles;
     contact.postalAddresses = _initialContact.postalAddresses;
+    contact.note = itemMap[ContactItemType.remarks].value ?? '';
     return contact;
   }
 
-  List<Map> _convert(ContactInfoGroup<EditableItem> infoGroup) {
+  List<Item> _convert(ContactInfoGroup<EditableItem> infoGroup) {
     return infoGroup.value.where((element) {
       return element.value != null && element.value.isNotEmpty;
     }).map((e) {
-      return {"label": e.label, "value": e.value};
+      return Item(label: e.label, value: e.value);
     }).toList();
   }
 
