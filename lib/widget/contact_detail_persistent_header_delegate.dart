@@ -92,6 +92,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                       EditContactPage(
                         contact: contact,
                       ),
+                      fullscreenDialog: true,
                     ),
                   );
                 },
