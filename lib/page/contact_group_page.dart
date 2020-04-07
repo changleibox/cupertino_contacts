@@ -79,7 +79,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                     alignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        presenter[index],
+                        presenter[index].name,
                         style: CupertinoTheme.of(context).textTheme.textStyle,
                       ),
                       Icon(
