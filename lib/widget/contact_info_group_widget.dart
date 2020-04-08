@@ -2,6 +2,9 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:collection';
+import 'dart:math';
+
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_item_widget.dart';
@@ -40,8 +43,10 @@ class ContactInfoGroupWidget extends StatefulWidget {
 class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
   final _animatedListKey = GlobalKey<AnimatedListState>();
   final _globalKeys = List<GlobalKey<SlidableState>>();
+  final _labelWidthMap = HashMap<int, double>();
 
   SlidableController _slidableController;
+  double _maxLabelWidth;
 
   @override
   void initState() {
@@ -85,6 +90,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
             onTap: () {
               widget.infoGroup.removeAt(index);
               _globalKeys.removeAt(index);
+              _labelWidthMap.remove(index);
               _animatedListKey.currentState.removeItem(index, (context, animation) {
                 return _buildItemAsItem(item, animation);
               });
@@ -119,6 +125,19 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
             item: item,
             builder: widget.itemBuilder,
             onDeletePressed: onDeletePressed,
+            labelWidth: index == -1 ? null : _maxLabelWidth,
+            onLabelWidthChanged: (value) {
+              if (index != -1) {
+                _labelWidthMap[index] = value;
+              }
+              var maxWidth = 0.0;
+              _labelWidthMap.values.forEach((element) {
+                maxWidth = max(maxWidth, element);
+              });
+
+              _maxLabelWidth = maxWidth;
+              setState(() {});
+            },
           ),
         ),
       ),

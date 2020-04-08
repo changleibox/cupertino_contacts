@@ -7,15 +7,20 @@ import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-自定义信息
-class ContactInfoGroupItemWidget extends StatelessWidget {
+const Duration _duration = Duration(milliseconds: 150);
+
+class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
   final ContactInfoGroup infoGroup;
   final GroupItem item;
   final VoidCallback onDeletePressed;
+  final ValueChanged<double> onLabelWidthChanged;
+  final double labelWidth;
 
   const ContactInfoGroupItemWidget({
     Key key,
@@ -23,10 +28,39 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
     @required this.item,
     this.onDeletePressed,
     this.builder,
+    this.onLabelWidthChanged,
+    this.labelWidth,
   })  : assert(infoGroup != null),
         assert(item != null),
         assert(builder != null),
         super(key: key);
+
+  @override
+  _ContactInfoGroupItemWidgetState createState() => _ContactInfoGroupItemWidgetState();
+}
+
+class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget> {
+  final _globalKey = GlobalKey();
+
+  bool _isMeasure = false;
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      var currentContext = _globalKey.currentContext;
+      var renderBox = currentContext?.findRenderObject() as RenderBox;
+      if (widget.onLabelWidthChanged == null || renderBox == null || !renderBox.hasSize) {
+        return;
+      }
+      var width = renderBox.size.width;
+      widget.onLabelWidthChanged(width);
+      _isMeasure = true;
+      if (widget.labelWidth == null || widget.labelWidth > width) {
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +68,45 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
     var actionTextStyle = textTheme.actionTextStyle;
+
+    Widget labelButton = CupertinoButton(
+      key: _globalKey,
+      minSize: 44,
+      borderRadius: BorderRadius.zero,
+      padding: EdgeInsets.only(
+        left: 8,
+        right: 4,
+      ),
+      child: WidgetGroup.spacing(
+        alignment: MainAxisAlignment.spaceBetween,
+        spacing: 2,
+        children: [
+          Text(
+            widget.item.label,
+            style: actionTextStyle.copyWith(
+              fontSize: 15,
+            ),
+          ),
+          Icon(
+            CupertinoIcons.forward,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondaryLabel,
+              context,
+            ),
+          ),
+        ],
+      ),
+      onPressed: () {},
+    );
+    if (_isMeasure) {
+      labelButton = AnimatedContainer(
+        duration: _duration,
+        width: widget.labelWidth,
+        height: 44,
+        child: labelButton,
+      );
+    }
+
     return WidgetGroup.spacing(
       children: [
         CupertinoButton(
@@ -44,36 +117,9 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
-          onPressed: onDeletePressed,
+          onPressed: widget.onDeletePressed,
         ),
-        CupertinoButton(
-          minSize: 44,
-          borderRadius: BorderRadius.zero,
-          padding: EdgeInsets.only(
-            left: 8,
-            right: 4,
-          ),
-          child: WidgetGroup.spacing(
-            alignment: MainAxisAlignment.spaceBetween,
-            spacing: 2,
-            children: [
-              Text(
-                item.label,
-                style: actionTextStyle.copyWith(
-                  fontSize: 15,
-                ),
-              ),
-              Icon(
-                CupertinoIcons.forward,
-                color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.secondaryLabel,
-                  context,
-                ),
-              ),
-            ],
-          ),
-          onPressed: () {},
-        ),
+        labelButton,
         Expanded(
           child: Container(
             foregroundDecoration: BoxDecoration(
@@ -92,7 +138,7 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
                 color: themeData.primaryColor,
               ),
               child: Builder(
-                builder: (context) => builder(context, item),
+                builder: (context) => widget.builder(context, widget.item),
               ),
             ),
           ),
