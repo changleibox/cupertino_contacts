@@ -4,17 +4,7 @@
 
 import 'package:flutter/cupertino.dart';
 
-const Color separatorColor = CupertinoDynamicColor(
-  debugLabel: 'separator',
-  color: Color.fromARGB(153, 198, 198, 200),
-  darkColor: Color.fromARGB(200, 50, 50, 53),
-  highContrastColor: Color.fromARGB(94, 60, 60, 67),
-  darkHighContrastColor: Color.fromARGB(173, 84, 84, 88),
-  elevatedColor: Color.fromARGB(73, 60, 60, 67),
-  darkElevatedColor: Color.fromARGB(153, 84, 84, 88),
-  highContrastElevatedColor: Color.fromARGB(94, 60, 60, 67),
-  darkHighContrastElevatedColor: Color.fromARGB(173, 84, 84, 88),
-);
+const Color separatorColor = CupertinoColors.separator;
 const Color headerColor = CupertinoDynamicColor.withBrightness(
   color: Color(0xF0ffffff),
   darkColor: Color(0xF0000000),

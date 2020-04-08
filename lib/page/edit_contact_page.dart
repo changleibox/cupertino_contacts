@@ -117,6 +117,14 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       operation: presenter,
     );
 
+    var borderSide = BorderSide(
+      color: CupertinoDynamicColor.resolve(
+        separatorColor,
+        context,
+      ),
+      width: 0.0,
+    );
+
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         physics: SnappingScrollPhysics(
@@ -152,14 +160,9 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                     itemBuilder: (context, index) {
                       return Container(
                         foregroundDecoration: BoxDecoration(
-                          border: Border.symmetric(
-                            vertical: BorderSide(
-                              color: CupertinoDynamicColor.resolve(
-                                separatorColor,
-                                context,
-                              ),
-                              width: 0.0,
-                            ),
+                          border: Border(
+                            top: index == 0 ? BorderSide.none : borderSide,
+                            bottom: borderSide,
                           ),
                         ),
                         child: children[index],

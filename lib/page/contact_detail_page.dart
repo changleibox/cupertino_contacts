@@ -273,7 +273,6 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
-                      top: index == 0 ? borderSide : BorderSide.none,
                       bottom: index == children.length - 1 ? borderSide : BorderSide.none,
                     ),
                   ),
