@@ -266,7 +266,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.urls = _convert(itemMap[ContactItemType.url]);
     contact.dates = _initialContact.dates;
     contact.lastModified = _initialContact.lastModified;
-    contact.socialProfiles = _initialContact.socialProfiles;
+    contact.socialProfiles = _convert(itemMap[ContactItemType.socialData]);
     contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address]);
     contact.note = itemMap[ContactItemType.remarks].value ?? '';
     return contact;

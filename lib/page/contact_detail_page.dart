@@ -62,6 +62,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     var urls = contact.urls;
     var postalAddresses = contact.postalAddresses;
     var dates = contact.dates;
+    var socialProfiles = contact.socialProfiles;
 
     final hasPhone = phones != null && phones.isNotEmpty;
 
@@ -144,6 +145,37 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             var currentYear = DateTime.now().year;
             var currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
             NativeService.calendar(currentYearBirthday);
+          },
+        );
+      }));
+    }
+    if (socialProfiles != null && socialProfiles.isNotEmpty) {
+      children.addAll(socialProfiles.map((e) {
+        return _NormalGroupInfoWidget(
+          name: e.label,
+          value: e.value,
+          valueColor: actionTextStyle.color,
+          onPressed: () {
+            switch (e.label.toLowerCase()) {
+              case 'twitter':
+                NativeService.url('https://www.twitter.com');
+                break;
+              case 'facebook':
+                NativeService.url('https://www.facebook.com');
+                break;
+              case 'flickr':
+                NativeService.url('https://www.flickr.com');
+                break;
+              case '领英':
+                NativeService.url('https://www.linkedin.com');
+                break;
+              case 'myspace':
+                NativeService.url('https://www.myspace.com');
+                break;
+              case '新浪微博':
+                NativeService.url('https://www.sina.com');
+                break;
+            }
           },
         );
       }));
