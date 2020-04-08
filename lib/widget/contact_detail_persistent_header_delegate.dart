@@ -95,8 +95,8 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                         return FadeTransition(
                           opacity: Tween(begin: 0.0, end: 1.0).animate(
                             CurvedAnimation(
-                              parent: animation, //动画样式
-                              curve: Curves.fastOutSlowIn, //动画曲线
+                              parent: animation,
+                              curve: Curves.fastOutSlowIn,
                             ),
                           ),
                           child: EditContactPage(
