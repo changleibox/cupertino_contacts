@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
@@ -240,6 +241,14 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       paddingTop: MediaQuery.of(context).padding.top,
     );
 
+    var borderSide = BorderSide(
+      color: CupertinoDynamicColor.resolve(
+        separatorColor,
+        context,
+      ),
+      width: 0.0,
+    );
+
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -261,12 +270,25 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: children.length,
               itemBuilder: (context, index) {
-                return children[index];
+                return Container(
+                  foregroundDecoration: BoxDecoration(
+                    border: Border(
+                      top: index == 0 ? borderSide : BorderSide.none,
+                      bottom: index == children.length - 1 ? borderSide : BorderSide.none,
+                    ),
+                  ),
+                  child: children[index],
+                );
               },
               separatorBuilder: (context, index) {
                 if (index == children.length - 2 && hasPhone) {
-                  return SizedBox(
+                  return Container(
                     height: 40,
+                    decoration: BoxDecoration(
+                      border: Border.symmetric(
+                        vertical: borderSide,
+                      ),
+                    ),
                   );
                 }
                 return Container(

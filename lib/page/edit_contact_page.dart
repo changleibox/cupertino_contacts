@@ -152,11 +152,13 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                     itemBuilder: (context, index) {
                       return Container(
                         foregroundDecoration: BoxDecoration(
-                          border: Border.all(
-                            width: 0.0,
-                            color: CupertinoDynamicColor.resolve(
-                              separatorColor,
-                              context,
+                          border: Border.symmetric(
+                            vertical: BorderSide(
+                              color: CupertinoDynamicColor.resolve(
+                                separatorColor,
+                                context,
+                              ),
+                              width: 0.0,
                             ),
                           ),
                         ),

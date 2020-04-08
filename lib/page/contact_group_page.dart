@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/presenter/contact_group_presenter.dart';
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/cupertino_progress.dart';
 import 'package:cupertinocontacts/widget/error_tips.dart';
@@ -31,6 +32,14 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
   _ContactGroupPageState() : super(ContactGroupPresenter());
 
   List<Widget> _buildChildren() {
+    var borderSide = BorderSide(
+      color: CupertinoDynamicColor.resolve(
+        separatorColor,
+        context,
+      ),
+      width: 0.0,
+    );
+
     final slivers = List<Widget>();
     if (presenter.showProgress) {
       slivers.add(SliverFillRemaining(
@@ -80,32 +89,40 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
               itemCount: presenter.itemCount,
               itemBuilder: (context, index) {
                 var group = presenter[index];
-                return CupertinoButton(
-                  child: WidgetGroup.spacing(
-                    alignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        group.name,
-                        style: CupertinoTheme.of(context).textTheme.textStyle,
-                      ),
-                      if (presenter.isSelected(group))
-                        Icon(
-                          CupertinoIcons.check_mark,
-                          size: 40,
-                          color: CupertinoTheme.of(context).primaryColor,
+                return Container(
+                  foregroundDecoration: BoxDecoration(
+                    border: Border(
+                      top: index == 0 ? borderSide : BorderSide.none,
+                      bottom: index == presenter.itemCount - 1 ? borderSide : BorderSide.none,
+                    ),
+                  ),
+                  child: CupertinoButton(
+                    child: WidgetGroup.spacing(
+                      alignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          group.name,
+                          style: CupertinoTheme.of(context).textTheme.textStyle,
                         ),
-                    ],
+                        if (presenter.isSelected(group))
+                          Icon(
+                            CupertinoIcons.check_mark,
+                            size: 40,
+                            color: CupertinoTheme.of(context).primaryColor,
+                          ),
+                      ],
+                    ),
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 8,
+                    ),
+                    color: CupertinoColors.secondarySystemGroupedBackground,
+                    minSize: 44,
+                    borderRadius: BorderRadius.zero,
+                    onPressed: () {
+                      presenter.switchSelect(group);
+                    },
                   ),
-                  padding: EdgeInsets.only(
-                    left: 16,
-                    right: 8,
-                  ),
-                  color: CupertinoColors.secondarySystemGroupedBackground,
-                  minSize: 44,
-                  borderRadius: BorderRadius.zero,
-                  onPressed: () {
-                    presenter.switchSelect(group);
-                  },
                 );
               },
               separatorBuilder: (context, index) {

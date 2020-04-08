@@ -26,7 +26,6 @@ const double _kSearchBarHeight = 56.0;
 const double _kNavBarPersistentHeight = 44.0;
 const double _kNavBarLargeTitleHeightExtension = 52.0;
 const double _kIndexHeight = 26.0;
-const double _kDividerSize = 0.5;
 const double _kItemHeight = 44.0;
 
 class CupertinoContactsPage extends StatefulWidget {
@@ -102,7 +101,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
           key: presenter.contactKeys[index],
           delegate: ContactPersistentHeaderDelegate(
             contactEntry: presenter.entries.elementAt(index),
-            dividerHeight: _kDividerSize,
+            dividerHeight: 1.0 / MediaQuery.of(context).devicePixelRatio,
             indexHeight: _kIndexHeight,
             itemHeight: _kItemHeight,
           ),
