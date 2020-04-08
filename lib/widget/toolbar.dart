@@ -86,7 +86,7 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _focusScopeNode.hasFocus;
 
   @override
   TextEditingValue get textEditingValue => widget.value;
