@@ -35,7 +35,6 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
     var textStyle = textTheme.textStyle;
     var actionTextStyle = textTheme.actionTextStyle;
     return WidgetGroup.spacing(
-      spacing: 10,
       children: [
         CupertinoButton(
           child: Icon(
@@ -50,9 +49,13 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
         CupertinoButton(
           minSize: 44,
           borderRadius: BorderRadius.zero,
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(
+            left: 8,
+            right: 4,
+          ),
           child: WidgetGroup.spacing(
-            spacing: 10,
+            alignment: MainAxisAlignment.spaceBetween,
+            spacing: 2,
             children: [
               Text(
                 item.label,
