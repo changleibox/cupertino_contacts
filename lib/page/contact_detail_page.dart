@@ -13,7 +13,7 @@ import 'package:cupertinocontacts/widget/multi_line_text_field.dart';
 import 'package:cupertinocontacts/widget/send_message_dialog.dart';
 import 'package:cupertinocontacts/widget/share_location_dialog.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
-import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
+import 'package:cupertinocontacts/widget/toolbar.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
@@ -281,7 +281,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
   }
 }
 
-class _NormalGroupInfoWidget extends StatefulWidget {
+class _NormalGroupInfoWidget extends StatelessWidget {
   final String name;
   final String value;
   final Color valueColor;
@@ -299,170 +299,64 @@ class _NormalGroupInfoWidget extends StatefulWidget {
         super(key: key);
 
   @override
-  _NormalGroupInfoWidgetState createState() => _NormalGroupInfoWidgetState();
-}
-
-class _NormalGroupInfoWidgetState extends State<_NormalGroupInfoWidget>
-    with AutomaticKeepAliveClientMixin<_NormalGroupInfoWidget>
-    implements TextSelectionDelegate {
-  final LayerLink _toolbarLayerLink = LayerLink();
-  final FocusScopeNode _focusScopeNode = FocusScopeNode();
-
-  SimpleTextSelectionOverlay _selectionOverlay;
-
-  @override
-  void dispose() {
-    _selectionOverlay?.dispose();
-    _selectionOverlay = null;
-    _focusScopeNode.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
     var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-    return FocusScope(
-      node: _focusScopeNode,
-      onFocusChange: (value) {
-        if (!value) {
-          hideToolbar();
-        }
-        setState(() {});
-      },
-      child: CompositedTransformTarget(
-        link: _toolbarLayerLink,
-        child: GestureDetector(
-          onTapDown: (details) {
-            var focusScopeNode = FocusScope.of(context);
-            if (focusScopeNode != _focusScopeNode) {
-              focusScopeNode.unfocus();
-            }
-          },
-          onLongPress: () {
-            showToolbar();
-          },
-          child: AnimatedOpacity(
-            opacity: _focusScopeNode.hasFocus ? 0.4 : 1.0,
-            duration: Duration(milliseconds: 150),
-            child: CupertinoButton(
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.secondarySystemBackground,
-                context,
-              ),
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              borderRadius: BorderRadius.zero,
-              minSize: 0,
-              onPressed: () {
-                hideToolbar();
-                FocusScope.of(context).unfocus();
-                if (widget.onPressed != null) {
-                  widget.onPressed();
-                }
-              },
-              child: WidgetGroup.spacing(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 80,
-                children: <Widget>[
-                  Expanded(
-                    child: WidgetGroup.spacing(
-                      alignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      direction: Axis.vertical,
-                      children: [
-                        Text(
-                          widget.name,
-                          style: textStyle.copyWith(
-                            fontSize: 15,
-                          ),
-                        ),
-                        Text(
-                          widget.value ?? '暂无',
-                          style: textStyle.copyWith(
-                            color: widget.valueColor ?? textStyle.color,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (widget.trailing != null) widget.trailing,
-                ],
-              ),
-            ),
-          ),
+    return Toolbar(
+      value: TextEditingValue(
+        text: value,
+        selection: TextSelection(
+          baseOffset: 0,
+          extentOffset: value.length,
         ),
       ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  TextEditingValue get textEditingValue {
-    return TextEditingValue(
-      text: widget.value,
-      selection: TextSelection(
-        baseOffset: 0,
-        extentOffset: widget.value.length,
+      options: ToolbarOptions(
+        copy: true,
       ),
+      builder: (context) {
+        return CupertinoButton(
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.secondarySystemBackground,
+            context,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 10,
+          ),
+          borderRadius: BorderRadius.zero,
+          minSize: 0,
+          onPressed: onPressed,
+          child: WidgetGroup.spacing(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 80,
+            children: <Widget>[
+              Expanded(
+                child: WidgetGroup.spacing(
+                  alignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  direction: Axis.vertical,
+                  children: [
+                    Text(
+                      name,
+                      style: textStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      value ?? '暂无',
+                      style: textStyle.copyWith(
+                        color: valueColor ?? textStyle.color,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (trailing != null) trailing,
+            ],
+          ),
+        );
+      },
     );
   }
-
-  @override
-  void bringIntoView(TextPosition position) {}
-
-  /// Toggles the visibility of the toolbar.
-  void toggleToolbar() {
-    assert(_selectionOverlay != null);
-    if (_selectionOverlay.toolbarIsVisible) {
-      hideToolbar();
-    } else {
-      showToolbar();
-    }
-  }
-
-  void showToolbar() {
-    _selectionOverlay?.hideToolbar();
-    _selectionOverlay = null;
-
-    _selectionOverlay = SimpleTextSelectionOverlay(
-      context: context,
-      toolbarLayerLink: _toolbarLayerLink,
-      renderObject: context.findRenderObject(),
-      delegate: this,
-    );
-    _selectionOverlay.showToolbar();
-
-    _focusScopeNode.requestFocus();
-  }
-
-  @override
-  void hideToolbar() {
-    _selectionOverlay?.hideToolbar();
-    _selectionOverlay = null;
-    if (_focusScopeNode.hasFocus) {
-      _focusScopeNode.unfocus();
-    }
-  }
-
-  @override
-  bool get copyEnabled => true;
-
-  @override
-  bool get cutEnabled => false;
-
-  @override
-  bool get pasteEnabled => false;
-
-  @override
-  bool get selectAllEnabled => false;
-
-  @override
-  set textEditingValue(TextEditingValue value) {}
 }
 
 class _NormalButton extends StatelessWidget {
