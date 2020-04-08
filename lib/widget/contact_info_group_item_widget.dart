@@ -71,7 +71,7 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
                 width: 0.5,
                 height: 32,
                 color: CupertinoDynamicColor.resolve(
-                  separatorColor.withOpacity(0.1),
+                  separatorColor,
                   context,
                 ),
               ),

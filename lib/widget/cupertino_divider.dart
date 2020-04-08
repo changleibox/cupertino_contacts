@@ -25,7 +25,7 @@ class CupertinoDivider extends StatelessWidget {
         color ?? separatorColor,
         context,
       ),
-      height: height ?? 0.5,
+      height: height ?? 1.0 / MediaQuery.of(context).devicePixelRatio, // One physical pixel.
     );
   }
 }

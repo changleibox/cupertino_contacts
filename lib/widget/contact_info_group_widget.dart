@@ -5,7 +5,6 @@
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_item_widget.dart';
-import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/edit_contact_info_button.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -77,7 +76,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
           SlideAction(
             child: Text(
               '删除',
-              style: CupertinoTheme.of(context).textTheme.textStyle,
+              style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                    color: CupertinoColors.white,
+                  ),
             ),
             closeOnTap: true,
             color: CupertinoColors.destructiveRed,
@@ -95,9 +96,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         foregroundDecoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: separatorColor.withOpacity(0.1),
+              color: separatorColor,
               width: 0.5,
-              style: items.indexOf(item) == items.length - 1 ? BorderStyle.none : BorderStyle.solid,
+              style: BorderStyle.solid,
             ),
           ),
         ),
@@ -158,24 +159,16 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         alignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         direction: Axis.vertical,
-        divider: Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-          ),
-          child: CupertinoDivider(
-            color: separatorColor.withOpacity(0.1),
-          ),
-        ),
         children: <Widget>[
-          AnimatedList(
-            key: _animatedListKey,
-            initialItemCount: widget.infoGroup.value.length,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index, animation) {
-              return _buildItem(index, animation);
-            },
-          ),
+            AnimatedList(
+              key: _animatedListKey,
+              initialItemCount: widget.infoGroup.value.length,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index, animation) {
+                return _buildItem(index, animation);
+              },
+            ),
           EditContactInfoButton(
             text: '添加${widget.infoGroup.name}',
             onPressed: _onAddPressed,

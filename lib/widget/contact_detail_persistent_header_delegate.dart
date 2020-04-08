@@ -65,7 +65,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
               separatorColor,
               context,
             ),
-            width: 0.5, // One physical pixel.
+            width: 0.0, // One physical pixel.
             style: BorderStyle.solid,
           ),
         ),

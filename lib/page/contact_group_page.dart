@@ -3,7 +3,6 @@
  */
 
 import 'package:cupertinocontacts/presenter/contact_group_presenter.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/cupertino_progress.dart';
 import 'package:cupertinocontacts/widget/error_tips.dart';
@@ -101,7 +100,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                     left: 16,
                     right: 8,
                   ),
-                  color: CupertinoColors.tertiarySystemGroupedBackground,
+                  color: CupertinoColors.secondarySystemGroupedBackground,
                   minSize: 44,
                   borderRadius: BorderRadius.zero,
                   onPressed: () {
@@ -114,9 +113,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                   padding: EdgeInsets.only(
                     left: 16,
                   ),
-                  child: CupertinoDivider(
-                    color: separatorColor.withOpacity(0.2),
-                  ),
+                  child: CupertinoDivider(),
                 );
               },
             ),
@@ -130,11 +127,10 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
   @override
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('群组'),
         automaticallyImplyLeading: false,
-        backgroundColor: CupertinoColors.tertiarySystemGroupedBackground,
+        backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         trailing: CupertinoButton(
           child: Text('完成'),
           padding: EdgeInsets.zero,

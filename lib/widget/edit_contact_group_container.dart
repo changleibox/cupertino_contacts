@@ -41,7 +41,7 @@ class EditContactGroupContainer extends StatelessWidget {
               left: 16,
             ),
             child: CupertinoDivider(
-              color: separatorColor.withOpacity(0.1),
+              color: separatorColor,
             ),
           );
         },

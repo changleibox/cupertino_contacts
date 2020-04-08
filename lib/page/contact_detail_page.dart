@@ -125,7 +125,15 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               context,
             ),
             alignment: Alignment.center,
-            child: Text('地图'),
+            child: Text(
+              '地图',
+              style: textTheme.textStyle.copyWith(
+                color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel,
+                  context,
+                ),
+              ),
+            ),
           ),
           onPressed: () {
             NativeService.maps(value);
@@ -262,6 +270,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                   );
                 }
                 return Container(
+                  width: double.infinity,
                   color: CupertinoDynamicColor.resolve(
                     CupertinoColors.secondarySystemGroupedBackground,
                     context,
@@ -269,7 +278,6 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                   padding: EdgeInsets.only(
                     left: 16,
                   ),
-                  height: 1.0,
                   child: CupertinoDivider(),
                 );
               },
