@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
@@ -43,7 +42,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
 class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
   final _animatedListKey = GlobalKey<AnimatedListState>();
   final _globalKeys = List<GlobalKey<SlidableState>>();
-  final _labelWidthMap = HashMap<int, double>();
+  final _labelWidts = List<double>();
 
   SlidableController _slidableController;
   double _maxLabelWidth;
@@ -90,7 +89,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
             onTap: () {
               widget.infoGroup.removeAt(index);
               _globalKeys.removeAt(index);
-              _labelWidthMap.remove(index);
+              _labelWidts.removeAt(index);
               _animatedListKey.currentState.removeItem(index, (context, animation) {
                 return _buildItemAsItem(item, animation);
               });
@@ -127,18 +126,21 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
             onDeletePressed: onDeletePressed,
             labelWidth: index == -1 ? null : _maxLabelWidth,
             onLabelWidthChanged: (value) {
-              if (index != -1) {
-                _labelWidthMap[index] = value;
-                if (_maxLabelWidth != null && value <= _maxLabelWidth) {
-                  return;
+              var isAdd = index != -1;
+              if (isAdd) {
+                if (_labelWidts.length < _globalKeys.length) {
+                  _labelWidts.add(value);
                 }
               }
+              if (_maxLabelWidth != null && (value < _maxLabelWidth || (isAdd && value == _maxLabelWidth))) {
+                return;
+              }
               var maxWidth = 0.0;
-              _labelWidthMap.values.forEach((element) {
+              _labelWidts.forEach((element) {
                 maxWidth = max(maxWidth, element);
               });
 
-              _maxLabelWidth = maxWidth;
+              _maxLabelWidth = maxWidth == 0 ? null : maxWidth;
               setState(() {});
             },
           ),
