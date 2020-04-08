@@ -67,25 +67,30 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
                   context,
                 ),
               ),
-              Container(
-                width: 1.0 / MediaQuery.of(context).devicePixelRatio,
-                height: 32,
-                color: CupertinoDynamicColor.resolve(
-                  separatorColor,
-                  context,
-                ),
-              ),
             ],
           ),
           onPressed: () {},
         ),
         Expanded(
-          child: DefaultTextStyle(
-            style: textStyle.copyWith(
-              color: themeData.primaryColor,
+          child: Container(
+            foregroundDecoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: CupertinoDynamicColor.resolve(
+                    separatorColor,
+                    context,
+                  ),
+                  width: 0.0,
+                ),
+              ),
             ),
-            child: Builder(
-              builder: (context) => builder(context, item),
+            child: DefaultTextStyle(
+              style: textStyle.copyWith(
+                color: themeData.primaryColor,
+              ),
+              child: Builder(
+                builder: (context) => builder(context, item),
+              ),
             ),
           ),
         ),
