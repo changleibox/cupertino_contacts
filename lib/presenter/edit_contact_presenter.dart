@@ -98,9 +98,20 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       })?.toList(),
       selections: selection.urlSelections,
     );
-    itemMap[ContactItemType.address] = ContactInfoGroup<EditableItem>(
+    itemMap[ContactItemType.address] = ContactInfoGroup<AddressItem>(
       name: '地址',
-      items: List<EditableItem>(),
+      items: _initialContact.postalAddresses?.map((e) {
+        return AddressItem(
+          label: e.label,
+          value: Address(
+            street1: e.street,
+            city: e.city,
+            region: e.region,
+            postcode: e.postcode,
+            country: e.country,
+          ),
+        );
+      })?.toList(),
       selections: selection.addressSelections,
     );
     itemMap[ContactItemType.birthday] = ContactInfoGroup<DateTimeItem>(
@@ -256,16 +267,28 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.dates = _initialContact.dates;
     contact.lastModified = _initialContact.lastModified;
     contact.socialProfiles = _initialContact.socialProfiles;
-    contact.postalAddresses = _initialContact.postalAddresses;
+    contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address]);
     contact.note = itemMap[ContactItemType.remarks].value ?? '';
     return contact;
   }
 
   List<Item> _convert(ContactInfoGroup<EditableItem> infoGroup) {
-    return infoGroup.value.where((element) {
-      return element.value != null && element.value.isNotEmpty;
-    }).map((e) {
+    return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
       return Item(label: e.label, value: e.value);
+    }).toList();
+  }
+
+  List<PostalAddress> _convertAddress(ContactInfoGroup<AddressItem> infoGroup) {
+    return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
+      var value = e.value;
+      return PostalAddress(
+        label: e.label,
+        street: value.street1.value,
+        city: value.city.value,
+        region: value.region.value,
+        postcode: value.postcode.value,
+        country: value.country.value,
+      );
     }).toList();
   }
 

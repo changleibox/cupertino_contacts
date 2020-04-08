@@ -5,6 +5,7 @@
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
+import 'package:cupertinocontacts/widget/address_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/datetime_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_group_container.dart';
@@ -88,6 +89,10 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         children.add(DateTimeContactInfoGroup(
           infoGroup: contactInfo,
         ));
+      } else if (contactInfo is ContactInfoGroup<AddressItem>) {
+        children.add(
+          AddressContactInfoGroup(infoGroup: contactInfo),
+        );
       } else if (contactInfo is DefaultSelectionContactInfo) {
         children.add(EditContactChooseRingToneButton(
           info: contactInfo,

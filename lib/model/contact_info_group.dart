@@ -159,6 +159,10 @@ abstract class GroupItem<T> extends ValueNotifier<T> {
 
   GroupItem(this.label, {T value}) : super(value);
 
+  bool get isEmpty => value == null;
+
+  bool get isNotEmpty => value != null;
+
   @override
   void dispose() {
     super.dispose();
@@ -187,6 +191,12 @@ class EditableItem extends GroupItem<String> {
   }
 
   @override
+  bool get isEmpty => value == null || value.isEmpty;
+
+  @override
+  bool get isNotEmpty => value != null && value.isNotEmpty;
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -209,7 +219,7 @@ class DateTimeItem extends GroupItem<DateTime> {
         );
 }
 
-class SelectionItem extends GroupItem {
+class SelectionItem extends GroupItem<String> {
   SelectionItem({@required String label, dynamic value})
       : assert(label != null),
         super(label, value: value);
@@ -218,4 +228,89 @@ class SelectionItem extends GroupItem {
   void dispose() {
     super.dispose();
   }
+}
+
+class AddressItem extends GroupItem<Address> {
+  AddressItem({
+    @required String label,
+    @required Address value,
+  })  : assert(value != null),
+        super(label, value: value) {
+    value._street1.addListener(_itemListener);
+    value._street2.addListener(_itemListener);
+    value._city.addListener(_itemListener);
+    value._region.addListener(_itemListener);
+    value._postcode.addListener(_itemListener);
+    value._country.addListener(_itemListener);
+  }
+
+  void _itemListener() {
+    notifyListeners();
+  }
+
+  @override
+  set value(Address newValue) {
+    value._street1.value = newValue?._street1?.value;
+    value._street2.value = newValue?._street2?.value;
+    value._city.value = newValue?._city?.value;
+    value._region.value = newValue?._region?.value;
+    value._postcode.value = newValue?._postcode?.value;
+    value._country.value = newValue?._country?.value;
+  }
+
+  @override
+  bool get isEmpty => value.isEmpty;
+
+  @override
+  bool get isNotEmpty => value.isNotEmpty;
+
+  @override
+  void dispose() {
+    value._street1.dispose();
+    value._street2.dispose();
+    value._city.dispose();
+    value._region.dispose();
+    value._postcode.dispose();
+    value._country.dispose();
+    super.dispose();
+  }
+}
+
+class Address {
+  final EditableItem _street1;
+  final EditableItem _street2;
+  final EditableItem _city;
+  final EditableItem _postcode;
+  final EditableItem _region;
+  final SelectionItem _country;
+
+  Address({
+    String street1,
+    String street2,
+    String city,
+    String postcode,
+    String region,
+    String country,
+  })  : _street1 = EditableItem(label: '街道', value: street1),
+        _street2 = EditableItem(label: '街道', value: street2),
+        _city = EditableItem(label: '城市', value: city),
+        _postcode = EditableItem(label: '邮编', value: postcode),
+        _region = EditableItem(label: '州/省', value: region),
+        _country = SelectionItem(label: '国家', value: country);
+
+  EditableItem get street1 => _street1;
+
+  EditableItem get street2 => _street2;
+
+  EditableItem get city => _city;
+
+  EditableItem get postcode => _postcode;
+
+  EditableItem get region => _region;
+
+  SelectionItem get country => _country;
+
+  bool get isEmpty => _street1.isEmpty && _street2.isEmpty && _city.isEmpty && _postcode.isEmpty && _region.isEmpty && _country.isEmpty;
+
+  bool get isNotEmpty => _street1.isNotEmpty || _street2.isNotEmpty || _city.isNotEmpty || _postcode.isNotEmpty || _region.isNotEmpty || _country.isNotEmpty;
 }
