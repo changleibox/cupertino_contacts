@@ -5,6 +5,7 @@
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/address_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/datetime_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
@@ -149,7 +150,18 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: children.length,
                     itemBuilder: (context, index) {
-                      return children[index];
+                      return Container(
+                        foregroundDecoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.0,
+                            color: CupertinoDynamicColor.resolve(
+                              separatorColor,
+                              context,
+                            ),
+                          ),
+                        ),
+                        child: children[index],
+                      );
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(
