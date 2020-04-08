@@ -270,10 +270,13 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: children.length,
               itemBuilder: (context, index) {
+                var length = children.length;
+                var isLast = index == length - 1;
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
-                      bottom: index == children.length - 1 ? borderSide : BorderSide.none,
+                      top: isLast && hasPhone ? borderSide : BorderSide.none,
+                      bottom: isLast || (index == length - 2 && hasPhone) ? borderSide : BorderSide.none,
                     ),
                   ),
                   child: children[index],
@@ -281,13 +284,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               },
               separatorBuilder: (context, index) {
                 if (index == children.length - 2 && hasPhone) {
-                  return Container(
+                  return SizedBox(
                     height: 40,
-                    decoration: BoxDecoration(
-                      border: Border.symmetric(
-                        vertical: borderSide,
-                      ),
-                    ),
                   );
                 }
                 return Container(
