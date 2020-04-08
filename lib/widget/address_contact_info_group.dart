@@ -85,9 +85,16 @@ class AddressContactInfoGroup extends StatelessWidget {
                 ),
               ],
             ),
-            SelectionContactInfoGroup(
-              item: country,
-              onPressed: () {},
+            StatefulBuilder(
+              builder: (context, setState) {
+                return SelectionContactInfoGroup(
+                  item: country,
+                  onPressed: () {
+                    country.value = 'USA';
+                    setState(() {});
+                  },
+                );
+              },
             ),
           ],
         );
