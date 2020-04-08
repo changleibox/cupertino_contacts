@@ -107,6 +107,8 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         ),
         margin: EdgeInsets.only(
           left: 16,
+        ),
+        padding: EdgeInsets.only(
           right: 10,
         ),
         child: SizeTransition(
