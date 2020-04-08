@@ -75,7 +75,7 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
               showToolbar();
             },
             child: AnimatedOpacity(
-              opacity: _focusScopeNode.hasFocus ? 0.4 : 1.0,
+              opacity: isShowing ? 0.4 : 1.0,
               duration: Duration(milliseconds: 150),
               child: widget.builder(context),
             ),
@@ -83,6 +83,12 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
         ),
       ),
     );
+  }
+
+  bool get isShowing {
+    return _focusScopeNode.hasFocus &&
+        (_selectionOverlay?.toolbarIsVisible ?? false) &&
+        (widget.options.cut || widget.options.paste || widget.options.copy || widget.options.selectAll);
   }
 
   @override
