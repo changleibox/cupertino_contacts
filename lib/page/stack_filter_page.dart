@@ -88,9 +88,9 @@ class _StackFilterPageState extends State<StackFilterPage> {
   Widget build(BuildContext context) {
     final imageSize = (MediaQuery.of(context).size.width - _spacing) / 2 - _padding;
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemBackground,
+      backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.tertiarySystemBackground,
+        backgroundColor: CupertinoColors.tertiarySystemGroupedBackground,
         middle: Text('选取滤镜'),
         leading: NavigationBarAction(
           child: Text('取消'),

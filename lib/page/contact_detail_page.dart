@@ -121,7 +121,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             width: 80,
             height: 80,
             color: CupertinoDynamicColor.resolve(
-              CupertinoColors.tertiarySystemBackground,
+              CupertinoColors.tertiarySystemGroupedBackground,
               context,
             ),
             alignment: Alignment.center,
@@ -184,7 +184,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       controller: presenter.remarksController,
       name: '备注',
       minLines: 2,
-      backgroundColor: CupertinoColors.secondarySystemBackground,
+      backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
     ));
     if (hasPhone) {
       children.add(_NormalButton(
@@ -263,7 +263,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                 }
                 return Container(
                   color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondarySystemBackground,
+                    CupertinoColors.secondarySystemGroupedBackground,
                     context,
                   ),
                   padding: EdgeInsets.only(
@@ -315,7 +315,7 @@ class _NormalGroupInfoWidget extends StatelessWidget {
       builder: (context) {
         return CupertinoButton(
           color: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondarySystemBackground,
+            CupertinoColors.secondarySystemGroupedBackground,
             context,
           ),
           padding: EdgeInsets.symmetric(
@@ -391,7 +391,7 @@ class _NormalButton extends StatelessWidget {
       ),
       borderRadius: BorderRadius.zero,
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       child: Align(

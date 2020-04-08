@@ -26,7 +26,7 @@ class EditContactChooseRingToneButton extends StatelessWidget {
     var textStyle = themeData.textTheme.textStyle;
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       child: WidgetGroup.separated(

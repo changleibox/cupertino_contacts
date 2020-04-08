@@ -29,7 +29,7 @@ class EditContactNormalSelectionButton extends StatelessWidget {
       ),
       borderRadius: BorderRadius.zero,
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       child: Align(

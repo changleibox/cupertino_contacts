@@ -44,7 +44,7 @@ class EditContactInfoGroup extends StatelessWidget {
               ),
             ),
             decoration: BoxDecoration(
-              color: CupertinoColors.secondarySystemBackground,
+              color: CupertinoColors.secondarySystemGroupedBackground,
             ),
             padding: EdgeInsets.only(
               left: 10,

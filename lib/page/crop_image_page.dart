@@ -58,65 +58,70 @@ class _CropImagePageState extends State<CropImagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemBackground,
-      child: SizedBox.expand(
-        child: Stack(
-          fit: StackFit.expand,
-          alignment: Alignment.center,
-          children: <Widget>[
-            ImageCrop(
-              key: _cropKey,
-              image: MemoryImage(widget.bytes),
-              chipRadius: MediaQuery.of(context).size.width / 2 - _padding,
-              chipShape: BoxShape.circle,
-            ),
-            Positioned(
-              top: 20,
-              child: SafeArea(
-                child: Text(
-                  '移动和缩放',
-                  style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
+    return CupertinoTheme(
+      data: CupertinoTheme.of(context).copyWith(
+        brightness: Brightness.dark,
+      ),
+      child: CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
+        child: SizedBox.expand(
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: <Widget>[
+              ImageCrop(
+                key: _cropKey,
+                image: MemoryImage(widget.bytes),
+                chipRadius: MediaQuery.of(context).size.width / 2 - _padding,
+                chipShape: BoxShape.circle,
+              ),
+              Positioned(
+                top: 20,
+                child: SafeArea(
+                  child: Text(
+                    '移动和缩放',
+                    style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 10,
-              child: SafeArea(
-                child: WidgetGroup.spacing(
-                  alignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CupertinoButton(
-                      child: Text(
-                        '取消',
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: CupertinoColors.white,
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 10,
+                child: SafeArea(
+                  child: WidgetGroup.spacing(
+                    alignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CupertinoButton(
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: CupertinoColors.white,
+                          ),
                         ),
+                        padding: EdgeInsets.all(_padding),
+                        onPressed: () {
+                          Navigator.maybePop(context);
+                        },
                       ),
-                      padding: EdgeInsets.all(_padding),
-                      onPressed: () {
-                        Navigator.maybePop(context);
-                      },
-                    ),
-                    CupertinoButton(
-                      child: Text(
-                        '选取',
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: CupertinoColors.white,
+                      CupertinoButton(
+                        child: Text(
+                          '选取',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: CupertinoColors.white,
+                          ),
                         ),
+                        padding: EdgeInsets.all(_padding),
+                        onPressed: _onCropPressed,
                       ),
-                      padding: EdgeInsets.all(_padding),
-                      onPressed: _onCropPressed,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -55,7 +55,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
     final offset = 1.0 - shrinkOffset / scrollExtent;
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       foregroundDecoration: BoxDecoration(
@@ -80,7 +80,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
             top: 0,
             right: 0,
             child: CupertinoNavigationBar(
-              backgroundColor: CupertinoColors.secondarySystemBackground,
+              backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
               middle: isEditContact ? null : Text('新建联系人'),
               leading: NavigationBarAction(

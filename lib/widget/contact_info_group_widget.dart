@@ -151,7 +151,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       child: WidgetGroup(

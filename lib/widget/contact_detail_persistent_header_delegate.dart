@@ -55,7 +55,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
 
     return Container(
       color: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       foregroundDecoration: BoxDecoration(
@@ -80,7 +80,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
             top: 0,
             right: 0,
             child: CupertinoNavigationBar(
-              backgroundColor: CupertinoColors.secondarySystemBackground,
+              backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
               previousPageTitle: '通讯录',
               trailing: NavigationBarAction(

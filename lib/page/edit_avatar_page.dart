@@ -42,10 +42,10 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
   @override
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemBackground,
+      backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
-        backgroundColor: CupertinoColors.secondarySystemBackground,
+        backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         trailing: CupertinoButton(
           child: Text('完成'),
           padding: EdgeInsets.zero,
@@ -143,7 +143,7 @@ class _CupertinoSheetAction extends StatelessWidget {
       ),
       minSize: _buttonHeight,
       padding: EdgeInsets.zero,
-      color: CupertinoColors.tertiarySystemBackground,
+      color: CupertinoColors.tertiarySystemGroupedBackground,
       borderRadius: BorderRadius.circular(_buttonRadius),
       onPressed: onPressed,
     );

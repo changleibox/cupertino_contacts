@@ -36,9 +36,9 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
   Widget builds(BuildContext context) {
     var textTheme = CupertinoTheme.of(context).textTheme;
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemBackground,
+      backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.secondarySystemBackground,
+        backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         border: null,
         leading: NavigationBarAction(
           child: Text('取消'),

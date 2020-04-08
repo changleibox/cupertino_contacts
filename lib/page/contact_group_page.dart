@@ -71,7 +71,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
         slivers.add(SliverToBoxAdapter(
           child: Container(
             color: CupertinoDynamicColor.resolve(
-              CupertinoColors.tertiarySystemBackground,
+              CupertinoColors.tertiarySystemGroupedBackground,
               context,
             ),
             child: WidgetGroup.separated(
@@ -101,7 +101,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                     left: 16,
                     right: 8,
                   ),
-                  color: CupertinoColors.tertiarySystemBackground,
+                  color: CupertinoColors.tertiarySystemGroupedBackground,
                   minSize: 44,
                   borderRadius: BorderRadius.zero,
                   onPressed: () {
@@ -130,11 +130,11 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
   @override
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.secondarySystemBackground,
+      backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('群组'),
         automaticallyImplyLeading: false,
-        backgroundColor: CupertinoColors.tertiarySystemBackground,
+        backgroundColor: CupertinoColors.tertiarySystemGroupedBackground,
         trailing: CupertinoButton(
           child: Text('完成'),
           padding: EdgeInsets.zero,

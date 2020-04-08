@@ -29,7 +29,7 @@ class MultiLineTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
-        backgroundColor ?? CupertinoColors.tertiarySystemBackground,
+        backgroundColor ?? CupertinoColors.tertiarySystemGroupedBackground,
         context,
       ),
       padding: EdgeInsets.symmetric(

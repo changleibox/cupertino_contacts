@@ -29,7 +29,7 @@ class EditContactRemarksTextField extends StatelessWidget {
     var textStyle = themeData.textTheme.textStyle;
     return Container(
       color: CupertinoDynamicColor.resolve(
-        backgroundColor ?? CupertinoColors.secondarySystemBackground,
+        backgroundColor ?? CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
       padding: EdgeInsets.symmetric(
