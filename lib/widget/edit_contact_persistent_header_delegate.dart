@@ -62,7 +62,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
         border: Border(
           bottom: BorderSide(
             color: CupertinoDynamicColor.resolve(
-              separatorColor.withOpacity(0.1),
+              separatorColor,
               context,
             ),
             width: 0.0, // One physical pixel.
