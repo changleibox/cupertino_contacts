@@ -63,18 +63,22 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
       },
       child: CompositedTransformTarget(
         link: _toolbarLayerLink,
-        child: GestureDetector(
-          onTapDown: (details) {
-            FocusScope.of(context).unfocus();
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (event) {
             _focusScopeNode.unfocus();
+            FocusScope.of(context).unfocus();
           },
-          onLongPress: () {
-            showToolbar();
-          },
-          child: AnimatedOpacity(
-            opacity: _focusScopeNode.hasFocus ? 0.4 : 1.0,
-            duration: Duration(milliseconds: 150),
-            child: widget.builder(context),
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onLongPress: () {
+              showToolbar();
+            },
+            child: AnimatedOpacity(
+              opacity: _focusScopeNode.hasFocus ? 0.4 : 1.0,
+              duration: Duration(milliseconds: 150),
+              child: widget.builder(context),
+            ),
           ),
         ),
       ),
