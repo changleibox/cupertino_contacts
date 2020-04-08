@@ -78,9 +78,13 @@ class _CropImagePageState extends State<CropImagePage> {
               Positioned(
                 top: 20,
                 child: SafeArea(
-                  child: Text(
-                    '移动和缩放',
-                    style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
+                  child: Builder(
+                    builder: (context) {
+                      return Text(
+                        '移动和缩放',
+                        style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
+                      );
+                    },
                   ),
                 ),
               ),

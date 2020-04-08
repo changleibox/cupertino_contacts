@@ -117,7 +117,6 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     );
 
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemBackground,
       child: SupportNestedScrollView(
         physics: SnappingScrollPhysics(
           midScrollOffset: _kMaxAvatarSize,
