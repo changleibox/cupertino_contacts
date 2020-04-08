@@ -225,6 +225,12 @@ class SelectionItem extends GroupItem<String> {
         super(label, value: value);
 
   @override
+  bool get isEmpty => value == null || value.isEmpty;
+
+  @override
+  bool get isNotEmpty => value != null && value.isNotEmpty;
+
+  @override
   void dispose() {
     super.dispose();
   }

@@ -42,6 +42,16 @@ class AddressContactInfoGroup extends StatelessWidget {
         var region = value.region;
         var postcode = value.postcode;
         var country = value.country;
+
+        var countryStyle = DefaultTextStyle.of(context).style;
+        if (country.isEmpty) {
+          countryStyle = TextStyle(
+            color: CupertinoDynamicColor.resolve(
+              placeholderColor,
+              context,
+            ),
+          );
+        }
         return WidgetGroup(
           alignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,13 +94,22 @@ class AddressContactInfoGroup extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              height: 44,
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.symmetric(
-                horizontal: 10,
+            CupertinoButton(
+              onPressed: () {},
+              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.zero,
+              minSize: 0,
+              child: Container(
+                height: 44,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                child: Text(
+                  country.isEmpty ? country.label : country.value,
+                  style: countryStyle,
+                ),
               ),
-              child: Text(country.value),
             ),
           ],
         );
