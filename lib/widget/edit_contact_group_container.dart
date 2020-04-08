@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,9 +39,7 @@ class EditContactGroupContainer extends StatelessWidget {
             padding: const EdgeInsets.only(
               left: 16,
             ),
-            child: CupertinoDivider(
-              color: separatorColor,
-            ),
+            child: CupertinoDivider(),
           );
         },
       ),

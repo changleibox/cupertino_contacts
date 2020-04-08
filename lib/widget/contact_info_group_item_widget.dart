@@ -68,7 +68,7 @@ class ContactInfoGroupItemWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 0.5,
+                width: 1.0 / MediaQuery.of(context).devicePixelRatio,
                 height: 32,
                 color: CupertinoDynamicColor.resolve(
                   separatorColor,

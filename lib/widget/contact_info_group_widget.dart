@@ -96,8 +96,11 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         foregroundDecoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: separatorColor,
-              width: 0.5,
+              color: CupertinoDynamicColor.resolve(
+                separatorColor,
+                context,
+              ),
+              width: 0.0,
               style: BorderStyle.solid,
             ),
           ),
@@ -160,15 +163,15 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         direction: Axis.vertical,
         children: <Widget>[
-            AnimatedList(
-              key: _animatedListKey,
-              initialItemCount: widget.infoGroup.value.length,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index, animation) {
-                return _buildItem(index, animation);
-              },
-            ),
+          AnimatedList(
+            key: _animatedListKey,
+            initialItemCount: widget.infoGroup.value.length,
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index, animation) {
+              return _buildItem(index, animation);
+            },
+          ),
           EditContactInfoButton(
             text: '添加${widget.infoGroup.name}',
             onPressed: _onAddPressed,
