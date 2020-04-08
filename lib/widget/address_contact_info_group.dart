@@ -6,6 +6,7 @@ import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
+import 'package:cupertinocontacts/widget/selection_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -42,16 +43,6 @@ class AddressContactInfoGroup extends StatelessWidget {
         var region = value.region;
         var postcode = value.postcode;
         var country = value.country;
-
-        var countryStyle = DefaultTextStyle.of(context).style;
-        if (country.isEmpty) {
-          countryStyle = TextStyle(
-            color: CupertinoDynamicColor.resolve(
-              placeholderColor,
-              context,
-            ),
-          );
-        }
         return WidgetGroup(
           alignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,22 +85,9 @@ class AddressContactInfoGroup extends StatelessWidget {
                 ),
               ],
             ),
-            CupertinoButton(
+            SelectionContactInfoGroup(
+              item: country,
               onPressed: () {},
-              padding: EdgeInsets.zero,
-              borderRadius: BorderRadius.zero,
-              minSize: 0,
-              child: Container(
-                height: 44,
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                child: Text(
-                  country.isEmpty ? country.label : country.value,
-                  style: countryStyle,
-                ),
-              ),
             ),
           ],
         );
