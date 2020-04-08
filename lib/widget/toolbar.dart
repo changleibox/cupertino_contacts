@@ -85,11 +85,9 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
     );
   }
 
-  bool get isShowing {
-    return _focusScopeNode.hasFocus &&
-        (_selectionOverlay?.toolbarIsVisible ?? false) &&
-        (widget.options.cut || widget.options.paste || widget.options.copy || widget.options.selectAll);
-  }
+  bool get isShowing => _focusScopeNode.hasFocus && (_selectionOverlay?.toolbarIsVisible ?? false) && isEnabled;
+
+  bool get isEnabled => widget.options.cut || widget.options.paste || widget.options.copy || widget.options.selectAll;
 
   @override
   bool get wantKeepAlive => _focusScopeNode.hasFocus;
@@ -115,6 +113,10 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
   }
 
   void showToolbar() {
+    if (!isEnabled) {
+      return;
+    }
+
     _selectionOverlay?.hideToolbar();
     _selectionOverlay = null;
 
