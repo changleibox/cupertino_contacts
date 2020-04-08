@@ -129,6 +129,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
             onLabelWidthChanged: (value) {
               if (index != -1) {
                 _labelWidthMap[index] = value;
+                if (_maxLabelWidth != null && value <= _maxLabelWidth) {
+                  return;
+                }
               }
               var maxWidth = 0.0;
               _labelWidthMap.values.forEach((element) {
