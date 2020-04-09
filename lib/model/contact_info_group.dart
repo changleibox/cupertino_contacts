@@ -206,6 +206,46 @@ class EditableItem extends GroupItem<String> {
   int get hashCode => controller.hashCode;
 }
 
+class EditableSelectionItem extends GroupItem<String> {
+  final TextEditingController controller;
+
+  EditableSelectionItem({@required String label, String value})
+      : this.controller = TextEditingController(text: value),
+        assert(label != null),
+        super(label, value: value) {
+    controller.addListener(() {
+      var text = controller.text;
+      this.value = text == null || text.isEmpty ? null : text;
+    });
+  }
+
+  @override
+  set value(String newValue) {
+    controller.value = controller.value.copyWith(
+      text: newValue,
+    );
+    super.value = newValue;
+  }
+
+  @override
+  bool get isEmpty => value == null || value.isEmpty;
+
+  @override
+  bool get isNotEmpty => value != null && value.isNotEmpty;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is EditableSelectionItem && runtimeType == other.runtimeType && controller == other.controller;
+
+  @override
+  int get hashCode => controller.hashCode;
+}
+
 class DateTimeItem extends GroupItem<DateTime> {
   DateTimeItem({
     @required String label,

@@ -11,12 +11,12 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/4/8.
 ///
 /// 编辑联系人
-class SelectionContactInfoGroup extends StatelessWidget {
+class SelectionInfoGroupItem extends StatelessWidget {
   final GroupItem item;
   final VoidCallback onPressed;
   final ValueGetter valueGetter;
 
-  const SelectionContactInfoGroup({
+  const SelectionInfoGroupItem({
     Key key,
     @required this.item,
     this.valueGetter,

@@ -9,12 +9,12 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/4/9.
 ///
 /// 可编辑的item
-class EditableContactInfoGroup extends StatelessWidget {
+class EditableInfoGroupItem extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType inputType;
   final String name;
 
-  const EditableContactInfoGroup({
+  const EditableInfoGroupItem({
     Key key,
     @required this.controller,
     this.inputType = TextInputType.text,

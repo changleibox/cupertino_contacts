@@ -134,9 +134,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       })?.toList(),
       selections: selection.dateSelections,
     );
-    itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableItem>(
+    itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableSelectionItem>(
       name: '关联人',
-      items: List<EditableItem>(),
+      items: List<EditableSelectionItem>(),
       selections: selection.relatedPartySelections,
     );
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(

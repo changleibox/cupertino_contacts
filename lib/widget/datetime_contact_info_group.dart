@@ -4,7 +4,7 @@
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
-import 'package:cupertinocontacts/widget/selection_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/selection_info_group_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +30,7 @@ class DateTimeContactInfoGroup extends StatelessWidget {
         return DateTimeItem(label: label);
       },
       itemBuilder: (context, item) {
-        return SelectionContactInfoGroup(
+        return SelectionInfoGroupItem(
           item: item,
           valueGetter: () => _dateFormat.format(item.value),
           onPressed: () {},

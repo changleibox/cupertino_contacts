@@ -5,8 +5,8 @@
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
-import 'package:cupertinocontacts/widget/editable_contact_info_group.dart';
-import 'package:cupertinocontacts/widget/selection_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/editable_info_group_item.dart';
+import 'package:cupertinocontacts/widget/selection_info_group_item.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -49,28 +49,28 @@ class AddressContactInfoGroup extends StatelessWidget {
           direction: Axis.vertical,
           divider: CupertinoDivider(),
           children: [
-            EditableContactInfoGroup(
+            EditableInfoGroupItem(
               controller: street1.controller,
               name: street1.label,
             ),
-            EditableContactInfoGroup(
+            EditableInfoGroupItem(
               controller: street2.controller,
               name: street2.label,
             ),
-            EditableContactInfoGroup(
+            EditableInfoGroupItem(
               controller: city.controller,
               name: city.label,
             ),
             WidgetGroup(
               children: [
                 Expanded(
-                  child: EditableContactInfoGroup(
+                  child: EditableInfoGroupItem(
                     controller: region.controller,
                     name: region.label,
                   ),
                 ),
                 Expanded(
-                  child: EditableContactInfoGroup(
+                  child: EditableInfoGroupItem(
                     controller: postcode.controller,
                     name: postcode.label,
                   ),
@@ -79,7 +79,7 @@ class AddressContactInfoGroup extends StatelessWidget {
             ),
             StatefulBuilder(
               builder: (context, setState) {
-                return SelectionContactInfoGroup(
+                return SelectionInfoGroupItem(
                   item: country,
                   onPressed: () {
                     country.value = 'USA';
