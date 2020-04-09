@@ -132,6 +132,10 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   Widget _buildItemAsItem(GroupItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
     var items = widget.infoGroup.value;
     var index = items.indexOf(item);
+    var borderStyle = BorderStyle.solid;
+    if (index == items.length - 1 && _animation.value == 0.0) {
+      borderStyle = BorderStyle.none;
+    }
     Widget child = Container(
       foregroundDecoration: BoxDecoration(
         border: Border(
@@ -141,7 +145,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
               context,
             ),
             width: 0.0,
-            style: index == items.length - 1 && _animation.value == 0.0 ? BorderStyle.none : BorderStyle.solid,
+            style: borderStyle,
           ),
         ),
       ),
