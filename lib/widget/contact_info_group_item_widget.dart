@@ -55,7 +55,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       var width = renderBox.size.width;
       widget.onLabelWidthChanged(width);
       _isMeasure = true;
-      if (widget.labelWidth == null || widget.labelWidth > width) {
+      if (widget.labelWidth != null && widget.labelWidth > width) {
         setState(() {});
       }
     });
@@ -98,7 +98,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       ),
       onPressed: () {},
     );
-    if (_isMeasure) {
+    if (_isMeasure && widget.labelWidth != null) {
       labelButton = AnimatedContainer(
         duration: _duration,
         width: widget.labelWidth,
