@@ -21,16 +21,24 @@ typedef GroupItemBuilder = Widget Function(BuildContext context, GroupItem item)
 
 typedef ItemFactory = GroupItem Function(int index, Selection label);
 
+typedef AddInterceptor = bool Function(BuildContext context);
+
+typedef ChangeLabelInterceptor = bool Function(BuildContext context, GroupItem item);
+
 class ContactInfoGroupWidget extends StatefulWidget {
   final ContactInfoGroup infoGroup;
   final GroupItemBuilder itemBuilder;
   final ItemFactory itemFactory;
+  final AddInterceptor addInterceptor;
+  final ChangeLabelInterceptor changedLabelInterceptor;
 
   const ContactInfoGroupWidget({
     Key key,
     @required this.infoGroup,
     @required this.itemBuilder,
     @required this.itemFactory,
+    this.addInterceptor,
+    this.changedLabelInterceptor,
   })  : assert(infoGroup != null),
         assert(itemBuilder != null),
         assert(itemFactory != null),
@@ -71,7 +79,57 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
   Widget _buildItemAsItem(GroupItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
     var items = widget.infoGroup.value;
     var index = items.indexOf(item);
-    return Slidable.builder(
+    Widget child = Container(
+      foregroundDecoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: CupertinoDynamicColor.resolve(
+              separatorColor,
+              context,
+            ),
+            width: 0.0,
+            style: BorderStyle.solid,
+          ),
+        ),
+      ),
+      margin: EdgeInsets.only(
+        left: 16,
+      ),
+      padding: EdgeInsets.only(
+        right: 10,
+      ),
+      child: SizeTransition(
+        sizeFactor: animation,
+        axisAlignment: 1.0,
+        child: ContactInfoGroupItemWidget(
+          infoGroup: widget.infoGroup,
+          item: item,
+          builder: widget.itemBuilder,
+          onDeletePressed: onDeletePressed,
+          canChangeLabel: widget.changedLabelInterceptor == null || widget.changedLabelInterceptor(context, item),
+          labelWidth: index == -1 ? null : _maxLabelWidth,
+          onLabelWidthChanged: (value) {
+            var isAdd = index != -1;
+            if (isAdd) {
+              if (_labelWidts.length < _globalKeys.length) {
+                _labelWidts.add(value);
+              }
+            }
+            if (_maxLabelWidth != null && (value < _maxLabelWidth || (isAdd && value == _maxLabelWidth))) {
+              return;
+            }
+            var maxWidth = 0.0;
+            _labelWidts.forEach((element) {
+              maxWidth = max(maxWidth, element);
+            });
+
+            _maxLabelWidth = maxWidth == 0 ? null : maxWidth;
+            setState(() {});
+          },
+        ),
+      ),
+    );
+    child = Slidable.builder(
       controller: _slidableController,
       key: index < 0 ? null : _globalKeys[index],
       closeOnScroll: false,
@@ -91,6 +149,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
               widget.infoGroup.removeAt(index);
               _globalKeys.removeAt(index);
               _labelWidts.removeAt(index);
+              if (widget.addInterceptor != null || widget.changedLabelInterceptor != null) {
+                setState(() {});
+              }
               _animatedListKey.currentState.removeItem(index, (context, animation) {
                 return _buildItemAsItem(item, animation);
               });
@@ -98,56 +159,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
           ),
         ],
       ),
-      child: Container(
-        foregroundDecoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: CupertinoDynamicColor.resolve(
-                separatorColor,
-                context,
-              ),
-              width: 0.0,
-              style: BorderStyle.solid,
-            ),
-          ),
-        ),
-        margin: EdgeInsets.only(
-          left: 16,
-        ),
-        padding: EdgeInsets.only(
-          right: 10,
-        ),
-        child: SizeTransition(
-          sizeFactor: animation,
-          axisAlignment: 1.0,
-          child: ContactInfoGroupItemWidget(
-            infoGroup: widget.infoGroup,
-            item: item,
-            builder: widget.itemBuilder,
-            onDeletePressed: onDeletePressed,
-            labelWidth: index == -1 ? null : _maxLabelWidth,
-            onLabelWidthChanged: (value) {
-              var isAdd = index != -1;
-              if (isAdd) {
-                if (_labelWidts.length < _globalKeys.length) {
-                  _labelWidts.add(value);
-                }
-              }
-              if (_maxLabelWidth != null && (value < _maxLabelWidth || (isAdd && value == _maxLabelWidth))) {
-                return;
-              }
-              var maxWidth = 0.0;
-              _labelWidts.forEach((element) {
-                maxWidth = max(maxWidth, element);
-              });
-
-              _maxLabelWidth = maxWidth == 0 ? null : maxWidth;
-              setState(() {});
-            },
-          ),
-        ),
-      ),
+      child: child,
     );
+    return child;
   }
 
   Widget _buildItem(int index, Animation<double> animation) {
@@ -168,6 +182,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
     widget.infoGroup.add(widget.itemFactory(length, selections[length % selections.length]));
     _globalKeys.add(GlobalKey());
     _animatedListKey.currentState.insertItem(length);
+    if (widget.addInterceptor != null || widget.changedLabelInterceptor != null) {
+      setState(() {});
+    }
   }
 
   _onRemovePressed(int index) {
@@ -199,10 +216,11 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
               return _buildItem(index, animation);
             },
           ),
-          EditContactInfoButton(
-            text: '添加${widget.infoGroup.name}',
-            onPressed: _onAddPressed,
-          ),
+          if (widget.addInterceptor == null || widget.addInterceptor(context))
+            EditContactInfoButton(
+              text: '添加${widget.infoGroup.name}',
+              onPressed: _onAddPressed,
+            ),
         ],
       ),
     );

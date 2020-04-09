@@ -7,6 +7,7 @@ import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/address_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/birthday_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/datetime_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_group_container.dart';
@@ -82,7 +83,11 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     var itemKeys = presenter.itemMap.keys;
     for (var key in itemKeys) {
       final contactInfo = presenter.itemMap[key];
-      if (contactInfo is ContactInfoGroup<EditableItem>) {
+      if (key == ContactItemType.birthday) {
+        children.add(
+          BirthdayContactInfoGroup(infoGroup: contactInfo),
+        );
+      } else if (contactInfo is ContactInfoGroup<EditableItem>) {
         children.add(EditContactInfoGroup(
           infoGroup: contactInfo,
           inputType: convertInputType(key),

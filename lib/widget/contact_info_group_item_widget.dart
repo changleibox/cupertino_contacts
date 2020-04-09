@@ -20,6 +20,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
   final VoidCallback onDeletePressed;
   final ValueChanged<double> onLabelWidthChanged;
   final double labelWidth;
+  final bool canChangeLabel;
 
   const ContactInfoGroupItemWidget({
     Key key,
@@ -29,9 +30,11 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
     this.builder,
     this.onLabelWidthChanged,
     this.labelWidth,
+    this.canChangeLabel = true,
   })  : assert(infoGroup != null),
         assert(item != null),
         assert(builder != null),
+        assert(canChangeLabel != null),
         super(key: key);
 
   @override
@@ -86,16 +89,25 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
               fontSize: 15,
             ),
           ),
-          Icon(
-            CupertinoIcons.forward,
-            color: CupertinoDynamicColor.resolve(
-              CupertinoColors.secondaryLabel,
-              context,
+          Visibility(
+            visible: widget.canChangeLabel,
+            maintainState: true,
+            child: Icon(
+              CupertinoIcons.forward,
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel,
+                context,
+              ),
             ),
           ),
         ],
       ),
-      onPressed: () {},
+      onPressed: () {
+        if (!widget.canChangeLabel) {
+          return;
+        }
+        // TODO 改变标签
+      },
     );
     if (_isMeasure && widget.labelWidth != null) {
       labelButton = AnimatedContainer(
