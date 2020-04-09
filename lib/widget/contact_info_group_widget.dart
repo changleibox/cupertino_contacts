@@ -77,6 +77,41 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
     super.dispose();
   }
 
+  Widget _wrapSlidable(int index, GroupItem item, Widget child) {
+    return Slidable.builder(
+      controller: _slidableController,
+      key: index < 0 ? null : _globalKeys[index],
+      closeOnScroll: false,
+      actionPane: SlidableScrollActionPane(),
+      secondaryActionDelegate: SlideActionListDelegate(
+        actions: [
+          SlideAction(
+            child: Text(
+              '删除',
+              style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                    color: CupertinoColors.white,
+                  ),
+            ),
+            closeOnTap: true,
+            color: CupertinoColors.destructiveRed,
+            onTap: () {
+              widget.infoGroup.removeAt(index);
+              _globalKeys.removeAt(index);
+              _labelWidts.removeAt(index);
+              if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
+                setState(() {});
+              }
+              _animatedListKey.currentState.removeItem(index, (context, animation) {
+                return _buildItemAsItem(item, animation);
+              });
+            },
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
   Widget _buildItemAsItem(GroupItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
     var items = widget.infoGroup.value;
     var index = items.indexOf(item);
@@ -130,39 +165,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         ),
       ),
     );
-    child = Slidable.builder(
-      controller: _slidableController,
-      key: index < 0 ? null : _globalKeys[index],
-      closeOnScroll: false,
-      actionPane: SlidableScrollActionPane(),
-      secondaryActionDelegate: SlideActionListDelegate(
-        actions: [
-          SlideAction(
-            child: Text(
-              '删除',
-              style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                    color: CupertinoColors.white,
-                  ),
-            ),
-            closeOnTap: true,
-            color: CupertinoColors.destructiveRed,
-            onTap: () {
-              widget.infoGroup.removeAt(index);
-              _globalKeys.removeAt(index);
-              _labelWidts.removeAt(index);
-              if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
-                setState(() {});
-              }
-              _animatedListKey.currentState.removeItem(index, (context, animation) {
-                return _buildItemAsItem(item, animation);
-              });
-            },
-          ),
-        ],
-      ),
-      child: child,
-    );
-    return child;
+    return _wrapSlidable(index, item, child);
   }
 
   Widget _buildItem(int index, Animation<double> animation) {
