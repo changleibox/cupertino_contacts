@@ -5,7 +5,7 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:cupertinocontacts/constant/selection.dart';
+import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';

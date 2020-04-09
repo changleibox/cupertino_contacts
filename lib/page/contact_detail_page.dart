@@ -2,7 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/constant/selection.dart';
+import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/util/native_service.dart';

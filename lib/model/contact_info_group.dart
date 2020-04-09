@@ -3,7 +3,7 @@
  */
 
 import 'package:collection/collection.dart';
-import 'package:cupertinocontacts/constant/selection.dart';
+import 'package:cupertinocontacts/model/selection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
