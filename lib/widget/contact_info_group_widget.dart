@@ -78,6 +78,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
   }
 
   Widget _wrapSlidable(int index, GroupItem item, Widget child) {
+    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
     return Slidable.builder(
       controller: _slidableController,
       key: index < 0 ? null : _globalKeys[index],
@@ -88,9 +89,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
           SlideAction(
             child: Text(
               '删除',
-              style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(
-                    color: CupertinoColors.white,
-                  ),
+              style: textStyle.copyWith(
+                color: CupertinoColors.white,
+              ),
             ),
             closeOnTap: true,
             color: CupertinoColors.destructiveRed,
