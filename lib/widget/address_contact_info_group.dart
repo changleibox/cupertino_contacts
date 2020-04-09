@@ -6,6 +6,7 @@ import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
+import 'package:cupertinocontacts/widget/editable_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/selection_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,15 +50,15 @@ class AddressContactInfoGroup extends StatelessWidget {
           direction: Axis.vertical,
           divider: CupertinoDivider(),
           children: [
-            _ItemTextField(
+            EditableContactInfoGroup(
               controller: street1.controller,
               name: street1.label,
             ),
-            _ItemTextField(
+            EditableContactInfoGroup(
               controller: street2.controller,
               name: street2.label,
             ),
-            _ItemTextField(
+            EditableContactInfoGroup(
               controller: city.controller,
               name: city.label,
             ),
@@ -72,13 +73,13 @@ class AddressContactInfoGroup extends StatelessWidget {
               ),
               children: [
                 Expanded(
-                  child: _ItemTextField(
+                  child: EditableContactInfoGroup(
                     controller: region.controller,
                     name: region.label,
                   ),
                 ),
                 Expanded(
-                  child: _ItemTextField(
+                  child: EditableContactInfoGroup(
                     controller: postcode.controller,
                     name: postcode.label,
                   ),
@@ -99,54 +100,6 @@ class AddressContactInfoGroup extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class _ItemTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final TextInputType inputType;
-  final String name;
-
-  const _ItemTextField({
-    Key key,
-    @required this.controller,
-    this.inputType = TextInputType.text,
-    @required this.name,
-  })  : assert(controller != null),
-        assert(inputType != null),
-        assert(name != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      child: CupertinoTextField(
-        controller: controller,
-        keyboardType: inputType,
-        style: DefaultTextStyle.of(context).style,
-        placeholder: name,
-        placeholderStyle: TextStyle(
-          color: CupertinoDynamicColor.resolve(
-            placeholderColor,
-            context,
-          ),
-        ),
-        decoration: null,
-        padding: EdgeInsets.only(
-          left: 10,
-          right: 10,
-        ),
-        clearButtonMode: OverlayVisibilityMode.editing,
-        scrollPadding: EdgeInsets.only(
-          bottom: 54,
-        ),
-        textInputAction: TextInputAction.next,
-        onEditingComplete: () {
-          FocusScope.of(context).nextFocus();
-        },
-      ),
     );
   }
 }

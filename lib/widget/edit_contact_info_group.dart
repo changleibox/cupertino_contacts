@@ -3,8 +3,8 @@
  */
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
+import 'package:cupertinocontacts/widget/editable_contact_info_group.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/3/31.
@@ -30,33 +30,10 @@ class EditContactInfoGroup extends StatelessWidget {
         return EditableItem(label: label);
       },
       itemBuilder: (context, item) {
-        return SizedBox(
-          height: 44,
-          child: CupertinoTextField(
-            controller: (item as EditableItem).controller,
-            keyboardType: inputType,
-            style: DefaultTextStyle.of(context).style,
-            placeholder: infoGroup.name,
-            placeholderStyle: TextStyle(
-              color: CupertinoDynamicColor.resolve(
-                placeholderColor,
-                context,
-              ),
-            ),
-            decoration: null,
-            padding: EdgeInsets.only(
-              left: 10,
-              right: 10,
-            ),
-            clearButtonMode: OverlayVisibilityMode.editing,
-            scrollPadding: EdgeInsets.only(
-              bottom: 54,
-            ),
-            textInputAction: TextInputAction.next,
-            onEditingComplete: () {
-              FocusScope.of(context).nextFocus();
-            },
-          ),
+        return EditableContactInfoGroup(
+          controller: (item as EditableItem).controller,
+          name: item.label,
+          inputType: inputType,
         );
       },
     );
