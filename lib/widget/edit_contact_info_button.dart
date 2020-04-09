@@ -31,7 +31,6 @@ class EditContactInfoButton extends StatelessWidget {
       ),
       borderRadius: BorderRadius.zero,
       child: WidgetGroup.spacing(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 10,
         children: [
           Icon(
