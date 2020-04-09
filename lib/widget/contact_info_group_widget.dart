@@ -57,7 +57,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
 
   SlidableController _slidableController;
   double _maxLabelWidth;
-  AnimationController _buttonController;
+  AnimationController _animationController;
   Animation<double> _animation;
 
   @override
@@ -65,18 +65,18 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     widget.infoGroup.value.forEach((element) {
       _globalKeys.add(GlobalKey());
     });
-    _buttonController = AnimationController(
+    _animationController = AnimationController(
       duration: _kDuration,
       vsync: this,
       value: 1.0,
     );
-    _buttonController.addListener(() {
-      if (_buttonController.isCompleted && mounted) {
+    _animationController.addListener(() {
+      if (_animationController.isCompleted && mounted) {
         setState(() {});
       }
     });
     _animation = CurvedAnimation(
-      parent: _buttonController,
+      parent: _animationController,
       curve: Curves.linear,
     );
     super.initState();
@@ -91,7 +91,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   @override
   void dispose() {
     _slidableController?.activeState = null;
-    _buttonController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -221,8 +221,8 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   _notifyButtonState() {
     var showButton = widget.addInterceptor == null || widget.addInterceptor(context);
     var animateToValue = showButton ? 1.0 : 0.0;
-    if (animateToValue != _buttonController.value) {
-      _buttonController.animateTo(animateToValue);
+    if (animateToValue != _animationController.value) {
+      _animationController.animateTo(animateToValue);
     }
     if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
       setState(() {});
