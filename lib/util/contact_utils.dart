@@ -12,36 +12,34 @@ class ContactUtils {
     return contact.displayName != null && letterRegExp.hasMatch(contact.displayName);
   }
 
-  static String buildDisplayName(Contact contact) {
-    final names = [
-      contact.prefix,
-      contact.givenName,
-      contact.middleName,
-      contact.familyName,
-      contact.suffix,
-    ].where((element) => element != null && element.isNotEmpty).toList();
-    final hasSpacing = names.where((element) => letterRegExp.hasMatch(element)).length > 0;
-    var name = names.join(hasSpacing ? ' ' : '');
-    return name.isEmpty ? null : name;
-  }
-
   static List<Widget> buildDisplayNameWidgets(Contact contact) {
+    var hasSpacing = ContactUtils.hasSpacing(contact);
     final names = [
       Text(
         contact.prefix ?? '',
       ),
-      Text(
-        contact.givenName ?? '',
-      ),
+      if (hasSpacing)
+        Text(
+          contact.givenName ?? '',
+        )
+      else
+        Text(
+          contact.familyName ?? '',
+        ),
       Text(
         contact.middleName ?? '',
       ),
-      Text(
-        contact.familyName ?? '',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
+      if (hasSpacing)
+        Text(
+          contact.familyName ?? '',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        )
+      else
+        Text(
+          contact.givenName ?? '',
         ),
-      ),
       Text(
         contact.suffix,
       ),
