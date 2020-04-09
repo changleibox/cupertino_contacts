@@ -60,10 +60,7 @@ class MultiEditableContactInfo extends EditableContactInfo {
   MultiEditableContactInfo({
     @required String name,
     String value,
-  }) : super(
-          name: name,
-          value: value,
-        );
+  }) : super(name: name, value: value);
 }
 
 abstract class _SelectionContactInfo extends ContactInfo {
@@ -104,8 +101,8 @@ class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
     List<T> items,
   })  : assert(name != null),
         assert(selections != null && selections.length > 0),
-        this._items = List<T>()..addAll(items ?? []),
-        super(name: name, value: List.unmodifiable(items ?? [])) {
+        this._items = [...?items],
+        super(name: name, value: List.unmodifiable([...?items])) {
     _items.forEach((element) => element.addListener(_itemListener));
   }
 
@@ -213,10 +210,7 @@ class DateTimeItem extends GroupItem<DateTime> {
   DateTimeItem({
     @required String label,
     DateTime value,
-  }) : super(
-          label,
-          value: value ?? DateTime.now(),
-        );
+  }) : super(label, value: value ?? DateTime.now());
 }
 
 class SelectionItem extends GroupItem<String> {
