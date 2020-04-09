@@ -27,9 +27,13 @@ class BirthdayContactInfoGroup extends StatelessWidget {
         return infoGroup.value.length < 2;
       },
       changeLabelInterceptor: (context, item) {
-        return infoGroup.value.length < 2 || item.label == selections.birthdaySelection;
+        return infoGroup.value.length < 2 || item.label != selections.birthdaySelection;
       },
       itemFactory: (index, label) {
+        var value = infoGroup.value;
+        if (value.length > 0 && value.first.label != selections.birthdaySelection) {
+          return DateTimeItem(label: selections.birthdaySelection);
+        }
         return DateTimeItem(label: label);
       },
     );

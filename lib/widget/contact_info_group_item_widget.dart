@@ -89,9 +89,9 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
               fontSize: 15,
             ),
           ),
-          Visibility(
-            visible: widget.canChangeLabel,
-            maintainState: true,
+          AnimatedOpacity(
+            opacity: widget.canChangeLabel ? 1.0 : 0.0,
+            duration: _duration,
             child: Icon(
               CupertinoIcons.forward,
               color: CupertinoDynamicColor.resolve(
