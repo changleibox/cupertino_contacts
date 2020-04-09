@@ -333,12 +333,12 @@ class Address {
     String postcode,
     String region,
     String country,
-  })  : _street1 = EditableItem(label: Selection('街道'), value: street1),
-        _street2 = EditableItem(label: Selection('街道'), value: street2),
-        _city = EditableItem(label: Selection('城市'), value: city),
-        _postcode = EditableItem(label: Selection('邮编'), value: postcode),
-        _region = EditableItem(label: Selection('州/省'), value: region),
-        _country = SelectionItem(label: Selection('国家'), value: country);
+  })  : _street1 = EditableItem(label: selections.streetSelection, value: street1),
+        _street2 = EditableItem(label: selections.streetSelection, value: street2),
+        _city = EditableItem(label: selections.citySelection, value: city),
+        _postcode = EditableItem(label: selections.postcodeSelection, value: postcode),
+        _region = EditableItem(label: selections.regionSelection, value: region),
+        _country = SelectionItem(label: selections.countrySelection, value: country);
 
   EditableItem get street1 => _street1;
 

@@ -9,7 +9,7 @@ class Selection {
   final String labelName;
   final String selectionName;
 
-  const Selection(
+  const Selection._(
     this.propertyName, {
     String labelName,
     String selectionName,
@@ -34,89 +34,89 @@ final _Selections selections = _Selections.instance;
 
 class _Selections {
   static const _phoneSelections = [
-    Selection('住宅'),
-    Selection('工作'),
-    Selection('学校'),
-    Selection('iPhone'),
-    Selection('手机'),
-    Selection('主要'),
-    Selection('家庭传真'),
-    Selection('工作传真'),
-    Selection('传呼机'),
-    Selection('其他'),
+    Selection._('住宅'),
+    Selection._('工作'),
+    Selection._('学校'),
+    Selection._('iPhone'),
+    Selection._('手机'),
+    Selection._('主要'),
+    Selection._('家庭传真'),
+    Selection._('工作传真'),
+    Selection._('传呼机'),
+    Selection._('其他'),
   ];
   static const _emailSelections = [
-    Selection('住宅'),
-    Selection('工作'),
-    Selection('学校'),
-    Selection('iCloud'),
-    Selection('其他'),
+    Selection._('住宅'),
+    Selection._('工作'),
+    Selection._('学校'),
+    Selection._('iCloud'),
+    Selection._('其他'),
   ];
   static const _urlSelections = [
-    Selection('主页'),
-    Selection('住宅'),
-    Selection('工作'),
-    Selection('学校'),
-    Selection('其他'),
+    Selection._('主页'),
+    Selection._('住宅'),
+    Selection._('工作'),
+    Selection._('学校'),
+    Selection._('其他'),
   ];
   static const _addressSelections = [
-    Selection('住宅'),
-    Selection('工作'),
-    Selection('学校'),
-    Selection('其他'),
+    Selection._('住宅'),
+    Selection._('工作'),
+    Selection._('学校'),
+    Selection._('其他'),
   ];
   static const _birthdaySelections = [
-    Selection('birthday', labelName: '生日', selectionName: '默认生日'),
-    Selection('农历生日'),
-    Selection('希伯来历'),
-    Selection('伊斯兰厉'),
+    Selection._('birthday', labelName: '生日', selectionName: '默认生日'),
+    Selection._('农历生日'),
+    Selection._('希伯来历'),
+    Selection._('伊斯兰厉'),
   ];
   static const _dateSelections = [
-    Selection('纪念日'),
-    Selection('其他'),
+    Selection._('纪念日'),
+    Selection._('其他'),
   ];
   static const _relatedPartySelections = [
-    Selection('父母'),
-    Selection('兄弟'),
-    Selection('姐妹'),
-    Selection('子女'),
-    Selection('配偶'),
-    Selection('助理'),
-    Selection('父亲'),
-    Selection('母亲'),
-    Selection('哥哥'),
-    Selection('姐姐'),
-    Selection('弟弟'),
-    Selection('妹妹'),
-    Selection('丈夫'),
-    Selection('妻子'),
-    Selection('伴侣'),
-    Selection('儿子'),
-    Selection('女儿'),
-    Selection('朋友'),
-    Selection('上司'),
-    Selection('同事'),
-    Selection('其他'),
-    Selection('所有标签'),
+    Selection._('父母'),
+    Selection._('兄弟'),
+    Selection._('姐妹'),
+    Selection._('子女'),
+    Selection._('配偶'),
+    Selection._('助理'),
+    Selection._('父亲'),
+    Selection._('母亲'),
+    Selection._('哥哥'),
+    Selection._('姐姐'),
+    Selection._('弟弟'),
+    Selection._('妹妹'),
+    Selection._('丈夫'),
+    Selection._('妻子'),
+    Selection._('伴侣'),
+    Selection._('儿子'),
+    Selection._('女儿'),
+    Selection._('朋友'),
+    Selection._('上司'),
+    Selection._('同事'),
+    Selection._('其他'),
+    Selection._('所有标签'),
   ];
   static const _socialDataSelections = [
-    Selection('Twitter'),
-    Selection('Facebook'),
-    Selection('Flickr'),
-    Selection('领英'),
-    Selection('Myspace'),
-    Selection('新浪微博'),
+    Selection._('Twitter'),
+    Selection._('Facebook'),
+    Selection._('Flickr'),
+    Selection._('领英'),
+    Selection._('Myspace'),
+    Selection._('新浪微博'),
   ];
   static const _instantMessagingSelections = [
-    Selection('Skype'),
-    Selection('MSN'),
-    Selection('Google Talk'),
-    Selection('AIM'),
-    Selection('雅虎'),
-    Selection('ICQ'),
-    Selection('Jabber'),
-    Selection('QQ'),
-    Selection('Gadu-Gadu'),
+    Selection._('Skype'),
+    Selection._('MSN'),
+    Selection._('Google Talk'),
+    Selection._('AIM'),
+    Selection._('雅虎'),
+    Selection._('ICQ'),
+    Selection._('Jabber'),
+    Selection._('QQ'),
+    Selection._('Gadu-Gadu'),
   ];
 
   static final Map<String, Selection> _selectionsMap = HashMap();
@@ -131,8 +131,6 @@ class _Selections {
     }
     return _instance;
   }
-
-  factory _Selections() => _getInstance();
 
   _Selections._() {
     _phoneSelections.forEach((element) {
@@ -182,7 +180,18 @@ class _Selections {
 
   List<Selection> get instantMessagingSelections => _instantMessagingSelections;
 
+  Selection get streetSelection => Selection._('街道');
+
+  Selection get citySelection => Selection._('城市');
+
+  Selection get postcodeSelection => Selection._('邮编');
+
+  Selection get regionSelection => Selection._('州/省');
+
+  Selection get countrySelection => Selection._('国家');
+
   Selection operator [](String propertyName) {
+    assert(propertyName != null);
     return _selectionsMap[propertyName];
   }
 }
