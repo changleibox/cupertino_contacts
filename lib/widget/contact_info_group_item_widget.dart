@@ -11,7 +11,7 @@ import 'package:flutter/scheduler.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-自定义信息
-const Duration _duration = Duration(milliseconds: 150);
+const Duration _kDuration = Duration(milliseconds: 300);
 
 class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
@@ -91,7 +91,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           ),
           AnimatedOpacity(
             opacity: widget.canChangeLabel ? 1.0 : 0.0,
-            duration: _duration,
+            duration: _kDuration,
             child: Icon(
               CupertinoIcons.forward,
               color: CupertinoDynamicColor.resolve(
@@ -111,7 +111,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     );
     if (_isMeasure && widget.labelWidth != null) {
       labelButton = AnimatedContainer(
-        duration: _duration,
+        duration: _kDuration,
         width: widget.labelWidth,
         height: 44,
         child: labelButton,

@@ -4,11 +4,10 @@
 
 import 'dart:math';
 
-import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
+import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_item_widget.dart';
-import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/edit_contact_info_button.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -58,12 +57,28 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
 
   SlidableController _slidableController;
   double _maxLabelWidth;
+  AnimationController _buttonController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     widget.infoGroup.value.forEach((element) {
       _globalKeys.add(GlobalKey());
     });
+    _buttonController = AnimationController(
+      duration: _kDuration,
+      vsync: this,
+      value: 1.0,
+    );
+    _buttonController.addListener(() {
+      if (_buttonController.isCompleted && mounted) {
+        setState(() {});
+      }
+    });
+    _animation = CurvedAnimation(
+      parent: _buttonController,
+      curve: Curves.linear,
+    );
     super.initState();
   }
 
@@ -76,6 +91,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   @override
   void dispose() {
     _slidableController?.activeState = null;
+    _buttonController.dispose();
     super.dispose();
   }
 
@@ -101,9 +117,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
               widget.infoGroup.removeAt(index);
               _globalKeys.removeAt(index);
               _labelWidts.removeAt(index);
-              if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
-                setState(() {});
-              }
+              _notifyButtonState();
               _animatedListKey.currentState.removeItem(index, (context, animation) {
                 return _buildItemAsItem(item, animation);
               });
@@ -127,7 +141,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
               context,
             ),
             width: 0.0,
-            style: index == items.length - 1 ? BorderStyle.none : BorderStyle.solid,
+            style: index == items.length - 1 && _animation.value == 0.0 ? BorderStyle.none : BorderStyle.solid,
           ),
         ),
       ),
@@ -189,9 +203,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     widget.infoGroup.add(widget.itemFactory(length, selections[length % selections.length]));
     _globalKeys.add(GlobalKey());
     _animatedListKey.currentState.insertItem(length);
-    if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
-      setState(() {});
-    }
+    _notifyButtonState();
   }
 
   _onRemovePressed(int index) {
@@ -202,9 +214,19 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     currentState.open(actionType: SlideActionType.secondary);
   }
 
+  _notifyButtonState() {
+    var showButton = widget.addInterceptor == null || widget.addInterceptor(context);
+    var animateToValue = showButton ? 1.0 : 0.0;
+    if (animateToValue != _buttonController.value) {
+      _buttonController.animateTo(animateToValue);
+    }
+    if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var showButton = widget.addInterceptor == null || widget.addInterceptor(context);
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemGroupedBackground,
@@ -214,14 +236,6 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
         alignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         direction: Axis.vertical,
-        divider: showButton
-            ? Container(
-                padding: EdgeInsets.only(
-                  left: 16,
-                ),
-                child: CupertinoDivider(),
-              )
-            : null,
         children: <Widget>[
           AnimatedList(
             key: _animatedListKey,
@@ -232,18 +246,12 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
               return _buildItem(index, animation);
             },
           ),
-          ClipRect(
-            child: AnimatedSize(
-              vsync: this,
-              duration: _kDuration,
-              alignment: Alignment(0, -1),
-              child: SizedBox(
-                height: showButton ? 44 : 0,
-                child: EditContactInfoButton(
-                  text: '添加${widget.infoGroup.name}',
-                  onPressed: _onAddPressed,
-                ),
-              ),
+          SizeTransition(
+            sizeFactor: _animation,
+            axisAlignment: 1.0,
+            child: EditContactInfoButton(
+              text: '添加${widget.infoGroup.name}',
+              onPressed: _onAddPressed,
             ),
           ),
         ],
