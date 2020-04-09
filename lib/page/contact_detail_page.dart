@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/constant/selection.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
@@ -69,25 +70,25 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
 
     final children = List<Widget>();
     if (hasPhone) {
-      children.addAll(phones.map((phone) {
+      children.addAll(phones.map((e) {
         return _NormalGroupInfoWidget(
-          name: phone.label,
-          value: phone.value,
+          name: selections[e.label].labelName,
+          value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
-            NativeService.call(phone.value);
+            NativeService.call(e.value);
           },
         );
       }));
     }
     if (emails != null && emails.isNotEmpty) {
-      children.addAll(emails.map((email) {
+      children.addAll(emails.map((e) {
         return _NormalGroupInfoWidget(
-          name: email.label,
-          value: email.value,
+          name: selections[e.label].labelName,
+          value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
-            NativeService.email(email.value);
+            NativeService.email(e.value);
           },
         );
       }));
@@ -97,7 +98,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         var url = e.value;
         url = url.startsWith('http') ? url : 'http://$url';
         return _NormalGroupInfoWidget(
-          name: e.label,
+          name: selections[e.label].labelName,
           value: url,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -144,10 +145,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (dates != null && dates.isNotEmpty) {
       children.addAll(dates.map((e) {
-        var label = e.label == 'birthday' ? '生日' : e.label;
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
-          name: label,
+          name: selections[e.label].labelName,
           value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -161,7 +161,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     if (socialProfiles != null && socialProfiles.isNotEmpty) {
       children.addAll(socialProfiles.map((e) {
         return _NormalGroupInfoWidget(
-          name: e.label,
+          name: selections[e.label].labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {

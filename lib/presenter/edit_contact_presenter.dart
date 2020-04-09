@@ -116,7 +116,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.birthday] = ContactInfoGroup<DateTimeItem>(
       name: '生日',
-      items: _initialContact.dates?.where((element) => element.label == 'birthday')?.map((e) {
+      items: _initialContact.dates?.where((element) {
+        return selections.birthdaySelections.contains(selections[element.label]);
+      })?.map((e) {
         return DateTimeItem(
           label: selections[e.label],
           value: e.date.toDateTime(),
@@ -126,7 +128,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.date] = ContactInfoGroup<DateTimeItem>(
       name: '日期',
-      items: _initialContact.dates?.where((element) => element.label != 'birthday')?.map((e) {
+      items: _initialContact.dates?.where((element) {
+        return selections.dateSelections.contains(selections[element.label]);
+      })?.map((e) {
         return DateTimeItem(
           label: selections[e.label],
           value: e.date.toDateTime(),
