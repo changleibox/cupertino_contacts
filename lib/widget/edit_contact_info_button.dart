@@ -31,16 +31,19 @@ class EditContactInfoButton extends StatelessWidget {
       ),
       borderRadius: BorderRadius.zero,
       child: WidgetGroup.spacing(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 10,
         children: [
           Icon(
             CupertinoIcons.add_circled_solid,
             color: CupertinoColors.systemGreen,
           ),
-          Text(
-            text,
-            style: textStyle.copyWith(
-              fontSize: 15,
+          Expanded(
+            child: Text(
+              text,
+              style: textStyle.copyWith(
+                fontSize: 15,
+              ),
             ),
           ),
         ],

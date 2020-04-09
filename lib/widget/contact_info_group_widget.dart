@@ -18,6 +18,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
+const Duration _kDuration = Duration(milliseconds: 300);
+
 typedef GroupItemBuilder = Widget Function(BuildContext context, GroupItem item);
 
 typedef ItemFactory = GroupItem Function(int index, Selection label);
@@ -49,7 +51,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
   _ContactInfoGroupWidgetState createState() => _ContactInfoGroupWidgetState();
 }
 
-class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
+class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with SingleTickerProviderStateMixin {
   final _animatedListKey = GlobalKey<AnimatedListState>();
   final _globalKeys = List<GlobalKey<SlidableState>>();
   final _labelWidts = List<double>();
@@ -202,6 +204,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var showButton = widget.addInterceptor == null || widget.addInterceptor(context);
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemGroupedBackground,
@@ -211,12 +214,14 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         alignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         direction: Axis.vertical,
-        divider: Container(
-          padding: EdgeInsets.only(
-            left: 16,
-          ),
-          child: CupertinoDivider(),
-        ),
+        divider: showButton
+            ? Container(
+                padding: EdgeInsets.only(
+                  left: 16,
+                ),
+                child: CupertinoDivider(),
+              )
+            : null,
         children: <Widget>[
           AnimatedList(
             key: _animatedListKey,
@@ -227,11 +232,20 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
               return _buildItem(index, animation);
             },
           ),
-          if (widget.addInterceptor == null || widget.addInterceptor(context))
-            EditContactInfoButton(
-              text: '添加${widget.infoGroup.name}',
-              onPressed: _onAddPressed,
+          ClipRect(
+            child: AnimatedSize(
+              vsync: this,
+              duration: _kDuration,
+              alignment: Alignment(0, -1),
+              child: SizedBox(
+                height: showButton ? 44 : 0,
+                child: EditContactInfoButton(
+                  text: '添加${widget.infoGroup.name}',
+                  onPressed: _onAddPressed,
+                ),
+              ),
             ),
+          ),
         ],
       ),
     );
