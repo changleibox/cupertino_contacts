@@ -30,7 +30,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
   final GroupItemBuilder itemBuilder;
   final ItemFactory itemFactory;
   final AddInterceptor addInterceptor;
-  final ChangeLabelInterceptor changedLabelInterceptor;
+  final ChangeLabelInterceptor changeLabelInterceptor;
 
   const ContactInfoGroupWidget({
     Key key,
@@ -38,7 +38,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
     @required this.itemBuilder,
     @required this.itemFactory,
     this.addInterceptor,
-    this.changedLabelInterceptor,
+    this.changeLabelInterceptor,
   })  : assert(infoGroup != null),
         assert(itemBuilder != null),
         assert(itemFactory != null),
@@ -106,7 +106,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
           item: item,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
-          canChangeLabel: widget.changedLabelInterceptor == null || widget.changedLabelInterceptor(context, item),
+          canChangeLabel: widget.changeLabelInterceptor == null || widget.changeLabelInterceptor(context, item),
           labelWidth: index == -1 ? null : _maxLabelWidth,
           onLabelWidthChanged: (value) {
             var isAdd = index != -1;
@@ -149,7 +149,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
               widget.infoGroup.removeAt(index);
               _globalKeys.removeAt(index);
               _labelWidts.removeAt(index);
-              if (widget.addInterceptor != null || widget.changedLabelInterceptor != null) {
+              if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
                 setState(() {});
               }
               _animatedListKey.currentState.removeItem(index, (context, animation) {
@@ -182,7 +182,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
     widget.infoGroup.add(widget.itemFactory(length, selections[length % selections.length]));
     _globalKeys.add(GlobalKey());
     _animatedListKey.currentState.insertItem(length);
-    if (widget.addInterceptor != null || widget.changedLabelInterceptor != null) {
+    if (widget.addInterceptor != null || widget.changeLabelInterceptor != null) {
       setState(() {});
     }
   }

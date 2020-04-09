@@ -15,10 +15,16 @@ class DateTimeContactInfoGroup extends StatelessWidget {
   static final _dateFormat = DateFormat('MM月dd日');
 
   final ContactInfoGroup infoGroup;
+  final AddInterceptor addInterceptor;
+  final ChangeLabelInterceptor changeLabelInterceptor;
+  final ItemFactory itemFactory;
 
   const DateTimeContactInfoGroup({
     Key key,
     @required this.infoGroup,
+    this.addInterceptor,
+    this.changeLabelInterceptor,
+    this.itemFactory,
   })  : assert(infoGroup != null),
         super(key: key);
 
@@ -26,9 +32,12 @@ class DateTimeContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
-      itemFactory: (index, label) {
-        return DateTimeItem(label: label);
-      },
+      addInterceptor: addInterceptor,
+      changeLabelInterceptor: changeLabelInterceptor,
+      itemFactory: itemFactory ??
+          (index, label) {
+            return DateTimeItem(label: label);
+          },
       itemBuilder: (context, item) {
         return SelectionInfoGroupItem(
           item: item,
