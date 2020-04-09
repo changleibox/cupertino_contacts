@@ -33,6 +33,8 @@ class Selection {
 final _Selections selections = _Selections.instance;
 
 class _Selections {
+  static const _birthdaySelection = Selection._('birthday', labelName: '生日', selectionName: '默认生日');
+
   static const _phoneSelections = [
     Selection._('住宅'),
     Selection._('工作'),
@@ -66,7 +68,7 @@ class _Selections {
     Selection._('其他'),
   ];
   static const _birthdaySelections = [
-    Selection._('birthday', labelName: '生日', selectionName: '默认生日'),
+    _birthdaySelection,
     Selection._('农历生日'),
     Selection._('希伯来历'),
     Selection._('伊斯兰厉'),
@@ -189,6 +191,8 @@ class _Selections {
   Selection get regionSelection => Selection._('州/省');
 
   Selection get countrySelection => Selection._('国家');
+
+  Selection get birthdaySelection => _birthdaySelection;
 
   Selection operator [](String propertyName) {
     assert(propertyName != null);

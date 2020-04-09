@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
+import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/widget/datetime_contact_info_group.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -26,7 +27,7 @@ class BirthdayContactInfoGroup extends StatelessWidget {
         return infoGroup.value.length < 2;
       },
       changeLabelInterceptor: (context, item) {
-        return infoGroup.value.length < 2 || item.label.propertyName != 'birthday';
+        return infoGroup.value.length < 2 || item.label == selections.birthdaySelection;
       },
       itemFactory: (index, label) {
         return DateTimeItem(label: label);
