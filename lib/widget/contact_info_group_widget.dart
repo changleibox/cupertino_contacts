@@ -202,7 +202,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   }
 
   _onAddPressed() {
-    if (!_animationController.isCompleted) {
+    if (!_animationController.isCompleted || _animationController.value != 1.0) {
       return;
     }
     var length = widget.infoGroup.value.length;
