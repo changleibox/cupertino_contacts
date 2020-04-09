@@ -120,7 +120,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
               _notifyButtonState();
               _animatedListKey.currentState.removeItem(index, (context, animation) {
                 return _buildItemAsItem(item, animation);
-              });
+              }, duration: _kDuration);
             },
           ),
         ],
@@ -202,11 +202,14 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   }
 
   _onAddPressed() {
+    if (!_animationController.isCompleted) {
+      return;
+    }
     var length = widget.infoGroup.value.length;
     var selections = widget.infoGroup.selections;
     widget.infoGroup.add(widget.itemFactory(length, selections[length % selections.length]));
     _globalKeys.add(GlobalKey());
-    _animatedListKey.currentState.insertItem(length);
+    _animatedListKey.currentState.insertItem(length, duration: _kDuration);
     _notifyButtonState();
   }
 
