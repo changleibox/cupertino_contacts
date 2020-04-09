@@ -3,7 +3,7 @@
  */
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/widget/normal_property_text_field.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/3/31.
@@ -28,26 +28,10 @@ class EditContactNormalTextField extends StatelessWidget {
       padding: EdgeInsets.only(
         right: 10,
       ),
-      child: CupertinoTextField(
+      child: NormalPropertyTextField(
         controller: info.controller,
-        keyboardType: inputType,
-        placeholder: info.name,
-        placeholderStyle: TextStyle(
-          color: CupertinoDynamicColor.resolve(
-            placeholderColor,
-            context,
-          ),
-        ),
-        decoration: null,
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 10,
-        ),
-        clearButtonMode: OverlayVisibilityMode.editing,
-        textInputAction: TextInputAction.next,
-        onEditingComplete: () {
-          FocusScope.of(context).nextFocus();
-        },
+        name: info.name,
+        inputType: inputType,
       ),
     );
   }

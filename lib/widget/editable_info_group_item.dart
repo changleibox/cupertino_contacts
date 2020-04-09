@@ -2,8 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_item_container.dart';
+import 'package:cupertinocontacts/widget/normal_property_text_field.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/4/9.
@@ -27,30 +27,10 @@ class EditableInfoGroupItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContactItemContainer(
-      child: CupertinoTextField(
+      child: NormalPropertyTextField(
         controller: controller,
-        keyboardType: inputType,
-        style: DefaultTextStyle.of(context).style,
-        placeholder: name,
-        placeholderStyle: TextStyle(
-          color: CupertinoDynamicColor.resolve(
-            placeholderColor,
-            context,
-          ),
-        ),
-        decoration: null,
-        padding: EdgeInsets.only(
-          left: 10,
-          right: 10,
-        ),
-        clearButtonMode: OverlayVisibilityMode.editing,
-        scrollPadding: EdgeInsets.only(
-          bottom: 54,
-        ),
-        textInputAction: TextInputAction.next,
-        onEditingComplete: () {
-          FocusScope.of(context).nextFocus();
-        },
+        name: name,
+        inputType: inputType,
       ),
     );
   }
