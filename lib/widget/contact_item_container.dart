@@ -31,8 +31,14 @@ class ContactItemContainer extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  CupertinoColors.separator.withOpacity(0.0),
-                  CupertinoColors.separator,
+                  CupertinoDynamicColor.resolve(
+                    CupertinoColors.separator.withOpacity(0.0),
+                    context,
+                  ),
+                  CupertinoDynamicColor.resolve(
+                    CupertinoColors.separator,
+                    context,
+                  ),
                 ],
               ),
             ),
