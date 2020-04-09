@@ -5,7 +5,7 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:cupertinocontacts/constant/selection.dart' as selection;
+import 'package:cupertinocontacts/constant/selection.dart';
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
@@ -66,21 +66,21 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       name: '电话',
       items: _initialContact.phones?.map((e) {
         return EditableItem(
-          label: e.label,
+          label: selections[e.label],
           value: e.value,
         );
       })?.toList(),
-      selections: selection.phoneSelections,
+      selections: selections.phoneSelections,
     );
     itemMap[ContactItemType.email] = ContactInfoGroup<EditableItem>(
       name: '电子邮件',
       items: _initialContact.emails?.map((e) {
         return EditableItem(
-          label: e.label,
+          label: selections[e.label],
           value: e.value,
         );
       })?.toList(),
-      selections: selection.emailSelections,
+      selections: selections.emailSelections,
     );
     itemMap[ContactItemType.phoneRinging] = DefaultSelectionContactInfo(
       name: '电话铃声',
@@ -92,17 +92,17 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       name: 'URL',
       items: _initialContact.urls?.map((e) {
         return EditableItem(
-          label: e.label,
+          label: selections[e.label],
           value: e.value,
         );
       })?.toList(),
-      selections: selection.urlSelections,
+      selections: selections.urlSelections,
     );
     itemMap[ContactItemType.address] = ContactInfoGroup<AddressItem>(
       name: '地址',
       items: _initialContact.postalAddresses?.map((e) {
         return AddressItem(
-          label: e.label,
+          label: selections[e.label],
           value: Address(
             street1: e.street,
             city: e.city,
@@ -112,47 +112,47 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           ),
         );
       })?.toList(),
-      selections: selection.addressSelections,
+      selections: selections.addressSelections,
     );
     itemMap[ContactItemType.birthday] = ContactInfoGroup<DateTimeItem>(
       name: '生日',
       items: _initialContact.dates?.where((element) => element.label == 'birthday')?.map((e) {
         return DateTimeItem(
-          label: '生日',
+          label: selections[e.label],
           value: e.date.toDateTime(),
         );
       })?.toList(),
-      selections: selection.birthdaySelections,
+      selections: selections.birthdaySelections,
     );
     itemMap[ContactItemType.date] = ContactInfoGroup<DateTimeItem>(
       name: '日期',
       items: _initialContact.dates?.where((element) => element.label != 'birthday')?.map((e) {
         return DateTimeItem(
-          label: e.label,
+          label: selections[e.label],
           value: e.date.toDateTime(),
         );
       })?.toList(),
-      selections: selection.dateSelections,
+      selections: selections.dateSelections,
     );
     itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableSelectionItem>(
       name: '关联人',
       items: List<EditableSelectionItem>(),
-      selections: selection.relatedPartySelections,
+      selections: selections.relatedPartySelections,
     );
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
       items: _initialContact.socialProfiles?.map((e) {
         return EditableItem(
-          label: e.label,
+          label: selections[e.label],
           value: e.value,
         );
       })?.toList(),
-      selections: selection.socialDataSelections,
+      selections: selections.socialDataSelections,
     );
     itemMap[ContactItemType.instantMessaging] = ContactInfoGroup<EditableItem>(
       name: '即时信息',
       items: List<EditableItem>(),
-      selections: selection.instantMessagingSelections,
+      selections: selections.instantMessagingSelections,
     );
     itemMap[ContactItemType.remarks] = MultiEditableContactInfo(
       name: '备注',
@@ -274,7 +274,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   List<Item> _convert(ContactInfoGroup<EditableItem> infoGroup) {
     return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
-      return Item(label: e.label, value: e.value);
+      return Item(label: e.label.propertyName, value: e.value);
     }).toList();
   }
 
@@ -282,7 +282,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
       var value = e.value;
       return PostalAddress(
-        label: e.label,
+        label: e.label.propertyName,
         street: value.street1.value,
         city: value.city.value,
         region: value.region.value,

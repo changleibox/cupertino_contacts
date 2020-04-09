@@ -52,7 +52,7 @@ class SelectionInfoGroupItem extends StatelessWidget {
                 horizontal: 10,
               ),
               child: Text(
-                item.isEmpty ? item.label : valueGetter == null ? item.value : valueGetter(),
+                item.isEmpty ? item.label.labelName : valueGetter == null ? item.value : valueGetter(),
                 style: style,
               ),
             ),

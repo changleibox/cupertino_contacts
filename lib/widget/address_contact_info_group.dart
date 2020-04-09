@@ -51,28 +51,28 @@ class AddressContactInfoGroup extends StatelessWidget {
           children: [
             EditableInfoGroupItem(
               controller: street1.controller,
-              name: street1.label,
+              name: street1.label.labelName,
             ),
             EditableInfoGroupItem(
               controller: street2.controller,
-              name: street2.label,
+              name: street2.label.labelName,
             ),
             EditableInfoGroupItem(
               controller: city.controller,
-              name: city.label,
+              name: city.label.labelName,
             ),
             WidgetGroup(
               children: [
                 Expanded(
                   child: EditableInfoGroupItem(
                     controller: region.controller,
-                    name: region.label,
+                    name: region.label.labelName,
                   ),
                 ),
                 Expanded(
                   child: EditableInfoGroupItem(
                     controller: postcode.controller,
-                    name: postcode.label,
+                    name: postcode.label.labelName,
                   ),
                 ),
               ],

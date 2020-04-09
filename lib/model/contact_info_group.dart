@@ -3,6 +3,7 @@
  */
 
 import 'package:collection/collection.dart';
+import 'package:cupertinocontacts/constant/selection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
@@ -93,7 +94,7 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
 
 class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
   final List<T> _items;
-  final List<String> selections;
+  final List<Selection> selections;
 
   ContactInfoGroup({
     @required String name,
@@ -152,7 +153,7 @@ class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
 }
 
 abstract class GroupItem<T> extends ValueNotifier<T> {
-  final String label;
+  final Selection label;
 
   GroupItem(this.label, {T value}) : super(value);
 
@@ -169,7 +170,7 @@ abstract class GroupItem<T> extends ValueNotifier<T> {
 class EditableItem extends GroupItem<String> {
   final TextEditingController controller;
 
-  EditableItem({@required String label, String value})
+  EditableItem({@required Selection label, String value})
       : this.controller = TextEditingController(text: value),
         assert(label != null),
         super(label, value: value) {
@@ -209,7 +210,7 @@ class EditableItem extends GroupItem<String> {
 class EditableSelectionItem extends GroupItem<String> {
   final TextEditingController controller;
 
-  EditableSelectionItem({@required String label, String value})
+  EditableSelectionItem({@required Selection label, String value})
       : this.controller = TextEditingController(text: value),
         assert(label != null),
         super(label, value: value) {
@@ -240,7 +241,8 @@ class EditableSelectionItem extends GroupItem<String> {
   }
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is EditableSelectionItem && runtimeType == other.runtimeType && controller == other.controller;
+  bool operator ==(Object other) =>
+      identical(this, other) || other is EditableSelectionItem && runtimeType == other.runtimeType && controller == other.controller;
 
   @override
   int get hashCode => controller.hashCode;
@@ -248,13 +250,13 @@ class EditableSelectionItem extends GroupItem<String> {
 
 class DateTimeItem extends GroupItem<DateTime> {
   DateTimeItem({
-    @required String label,
+    @required Selection label,
     DateTime value,
   }) : super(label, value: value ?? DateTime.now());
 }
 
 class SelectionItem extends GroupItem<String> {
-  SelectionItem({@required String label, dynamic value})
+  SelectionItem({@required Selection label, dynamic value})
       : assert(label != null),
         super(label, value: value);
 
@@ -272,7 +274,7 @@ class SelectionItem extends GroupItem<String> {
 
 class AddressItem extends GroupItem<Address> {
   AddressItem({
-    @required String label,
+    @required Selection label,
     @required Address value,
   })  : assert(value != null),
         super(label, value: value) {
@@ -331,12 +333,12 @@ class Address {
     String postcode,
     String region,
     String country,
-  })  : _street1 = EditableItem(label: '街道', value: street1),
-        _street2 = EditableItem(label: '街道', value: street2),
-        _city = EditableItem(label: '城市', value: city),
-        _postcode = EditableItem(label: '邮编', value: postcode),
-        _region = EditableItem(label: '州/省', value: region),
-        _country = SelectionItem(label: '国家', value: country);
+  })  : _street1 = EditableItem(label: Selection('街道'), value: street1),
+        _street2 = EditableItem(label: Selection('街道'), value: street2),
+        _city = EditableItem(label: Selection('城市'), value: city),
+        _postcode = EditableItem(label: Selection('邮编'), value: postcode),
+        _region = EditableItem(label: Selection('州/省'), value: region),
+        _country = SelectionItem(label: Selection('国家'), value: country);
 
   EditableItem get street1 => _street1;
 

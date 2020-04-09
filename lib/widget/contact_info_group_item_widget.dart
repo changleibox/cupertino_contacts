@@ -81,7 +81,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         spacing: 2,
         children: [
           Text(
-            widget.item.label,
+            widget.item.label.labelName,
             style: actionTextStyle.copyWith(
               fontSize: 15,
             ),

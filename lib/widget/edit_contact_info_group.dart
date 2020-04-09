@@ -32,7 +32,7 @@ class EditContactInfoGroup extends StatelessWidget {
       itemBuilder: (context, item) {
         return EditableInfoGroupItem(
           controller: (item as EditableItem).controller,
-          name: item.label,
+          name: item.label.labelName,
           inputType: inputType,
         );
       },

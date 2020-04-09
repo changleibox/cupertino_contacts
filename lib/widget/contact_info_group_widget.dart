@@ -4,6 +4,7 @@
 
 import 'dart:math';
 
+import 'package:cupertinocontacts/constant/selection.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_item_widget.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// 添加联系人-信息组
 typedef GroupItemBuilder = Widget Function(BuildContext context, GroupItem item);
 
-typedef ItemFactory = GroupItem Function(int index, String label);
+typedef ItemFactory = GroupItem Function(int index, Selection label);
 
 class ContactInfoGroupWidget extends StatefulWidget {
   final ContactInfoGroup infoGroup;
