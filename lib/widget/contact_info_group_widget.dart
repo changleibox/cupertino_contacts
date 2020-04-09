@@ -8,6 +8,7 @@ import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_item_widget.dart';
+import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/edit_contact_info_button.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -88,7 +89,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
               context,
             ),
             width: 0.0,
-            style: BorderStyle.solid,
+            style: index == items.length - 1 ? BorderStyle.none : BorderStyle.solid,
           ),
         ),
       ),
@@ -206,6 +207,12 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> {
         alignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         direction: Axis.vertical,
+        divider: Container(
+          padding: EdgeInsets.only(
+            left: 16,
+          ),
+          child: CupertinoDivider(),
+        ),
         children: <Widget>[
           AnimatedList(
             key: _animatedListKey,
