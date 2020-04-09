@@ -3,7 +3,6 @@
  */
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -121,25 +120,12 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         ),
         labelButton,
         Expanded(
-          child: Container(
-            foregroundDecoration: BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: CupertinoDynamicColor.resolve(
-                    separatorColor,
-                    context,
-                  ),
-                  width: 0.0,
-                ),
-              ),
+          child: DefaultTextStyle(
+            style: textStyle.copyWith(
+              color: themeData.primaryColor,
             ),
-            child: DefaultTextStyle(
-              style: textStyle.copyWith(
-                color: themeData.primaryColor,
-              ),
-              child: Builder(
-                builder: (context) => widget.builder(context, widget.item),
-              ),
+            child: Builder(
+              builder: (context) => widget.builder(context, widget.item),
             ),
           ),
         ),

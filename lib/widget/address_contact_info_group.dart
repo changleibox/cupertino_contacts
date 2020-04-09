@@ -3,7 +3,6 @@
  */
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
-import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/editable_contact_info_group.dart';
@@ -63,14 +62,6 @@ class AddressContactInfoGroup extends StatelessWidget {
               name: city.label,
             ),
             WidgetGroup(
-              divider: Container(
-                color: CupertinoDynamicColor.resolve(
-                  separatorColor,
-                  context,
-                ),
-                width: 0.5,
-                height: 44,
-              ),
               children: [
                 Expanded(
                   child: EditableContactInfoGroup(

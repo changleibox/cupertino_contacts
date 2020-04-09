@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/widget/contact_item_container.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/4/9.
@@ -25,8 +26,7 @@ class EditableContactInfoGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
+    return ContactItemContainer(
       child: CupertinoTextField(
         controller: controller,
         keyboardType: inputType,

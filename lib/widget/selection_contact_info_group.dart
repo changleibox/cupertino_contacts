@@ -4,6 +4,7 @@
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/widget/contact_item_container.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -34,34 +35,36 @@ class SelectionContactInfoGroup extends StatelessWidget {
         ),
       );
     }
-    return CupertinoButton(
-      onPressed: onPressed,
-      padding: EdgeInsets.zero,
-      borderRadius: BorderRadius.zero,
-      minSize: 0,
-      child: WidgetGroup.spacing(
-        alignment: MainAxisAlignment.spaceBetween,
-        spacing: 16,
-        children: <Widget>[
-          Container(
-            height: 44,
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
+    return ContactItemContainer(
+      child: CupertinoButton(
+        onPressed: onPressed,
+        padding: EdgeInsets.zero,
+        borderRadius: BorderRadius.zero,
+        minSize: 0,
+        child: WidgetGroup.spacing(
+          alignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 16,
+          children: <Widget>[
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: Text(
+                item.isEmpty ? item.label : valueGetter == null ? item.value : valueGetter(),
+                style: style,
+              ),
             ),
-            child: Text(
-              item.isEmpty ? item.label : valueGetter == null ? item.value : valueGetter(),
-              style: style,
+            Icon(
+              CupertinoIcons.forward,
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel,
+                context,
+              ),
             ),
-          ),
-          Icon(
-            CupertinoIcons.forward,
-            color: CupertinoDynamicColor.resolve(
-              CupertinoColors.secondaryLabel,
-              context,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
