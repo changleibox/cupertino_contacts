@@ -28,5 +28,15 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>通讯录需要访问您的媒体资料库，为您提供客户相关服务</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>通讯录需要访问您的日历，为您提供客户相关服务</string>
+	<key>NSCameraUsageDescription</key>
+	<string>通讯录需要访问您的相机，为您提供资料照片及头像等服务</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>通讯录需要访问您的相册，为您提供资料照片及头像等服务</string>
+	<key>NSContactsUsageDescription</key>
+	<string>通讯录需要访问您的通讯录，为您提供客户资料显示等服务</string>
 </dict>
 </plist>
