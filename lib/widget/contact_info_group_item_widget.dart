@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:math';
+
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -12,6 +14,8 @@ import 'package:flutter/scheduler.dart';
 ///
 /// 添加联系人-自定义信息
 const Duration _kDuration = Duration(milliseconds: 300);
+const double _labelSpacing = 2;
+const double _iconSize = 24;
 
 class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
@@ -39,26 +43,37 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
 }
 
 class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget> {
-  final _globalKey = GlobalKey();
+  final _labelGlobalKey = GlobalKey();
 
-  bool _isMeasure = false;
+  double _labelWidth;
 
   @override
   void initState() {
+    _measureWidth();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(ContactInfoGroupItemWidget oldWidget) {
+    if (widget.canChangeLabel != oldWidget.canChangeLabel || widget.item.label != oldWidget.item.label) {
+      _measureWidth();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  _measureWidth() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      var currentContext = _globalKey.currentContext;
+      var currentContext = _labelGlobalKey.currentContext;
       var renderBox = currentContext?.findRenderObject() as RenderBox;
       if (widget.onLabelWidthChanged == null || renderBox == null || !renderBox.hasSize) {
         return;
       }
-      var width = renderBox.size.width;
-      widget.onLabelWidthChanged(width);
-      _isMeasure = true;
-      if (widget.labelWidth != null && widget.labelWidth > width) {
+      _labelWidth = renderBox.size.width;
+      widget.onLabelWidthChanged(_labelWidth);
+      if (widget.labelWidth != null && widget.labelWidth > _labelWidth) {
         setState(() {});
       }
     });
-    super.initState();
   }
 
   @override
@@ -68,37 +83,50 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     var textStyle = textTheme.textStyle;
     var actionTextStyle = textTheme.actionTextStyle;
 
+    Widget labelWidget = WidgetGroup.spacing(
+      alignment: MainAxisAlignment.spaceBetween,
+      spacing: _labelSpacing,
+      children: [
+        Text(
+          widget.item.label.labelName,
+          key: _labelGlobalKey,
+          style: actionTextStyle.copyWith(
+            fontSize: 15,
+          ),
+        ),
+        AnimatedOpacity(
+          duration: _kDuration,
+          opacity: widget.canChangeLabel ? 1.0 : 0.0,
+          child: Icon(
+            CupertinoIcons.forward,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondaryLabel,
+              context,
+            ),
+            size: _iconSize,
+          ),
+        ),
+      ],
+    );
+
+    if (widget.labelWidth != null && _labelWidth != null) {
+      labelWidget = AnimatedContainer(
+        duration: _kDuration,
+        width: max(_labelWidth, widget.labelWidth) + _iconSize + _labelSpacing,
+        child: ClipRect(
+          child: labelWidget,
+        ),
+      );
+    }
+
     Widget labelButton = CupertinoButton(
-      key: _globalKey,
       minSize: 44,
       borderRadius: BorderRadius.zero,
       padding: EdgeInsets.only(
         left: 8,
         right: 4,
       ),
-      child: WidgetGroup.spacing(
-        alignment: MainAxisAlignment.spaceBetween,
-        spacing: 2,
-        children: [
-          Text(
-            widget.item.label.labelName,
-            style: actionTextStyle.copyWith(
-              fontSize: 15,
-            ),
-          ),
-          AnimatedOpacity(
-            opacity: widget.canChangeLabel ? 1.0 : 0.0,
-            duration: _kDuration,
-            child: Icon(
-              CupertinoIcons.forward,
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.secondaryLabel,
-                context,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: labelWidget,
       onPressed: () {
         if (!widget.canChangeLabel) {
           return;
@@ -106,14 +134,6 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         // TODO 改变标签
       },
     );
-    if (_isMeasure && widget.labelWidth != null) {
-      labelButton = AnimatedContainer(
-        duration: _kDuration,
-        width: widget.labelWidth,
-        height: 44,
-        child: labelButton,
-      );
-    }
 
     return WidgetGroup.spacing(
       children: [
@@ -121,6 +141,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           child: Icon(
             CupertinoIcons.minus_circled,
             color: CupertinoColors.systemRed,
+            size: _iconSize,
           ),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
