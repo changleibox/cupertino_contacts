@@ -35,37 +35,55 @@ final _Selections selections = _Selections.instance;
 class _Selections {
   static const _birthdaySelection = Selection._('birthday', labelName: '生日', selectionName: '默认生日');
 
+  static const _homeSelection = Selection._('住宅');
+
+  static const _workSelection = Selection._('工作');
+
+  static const _schoolSelection = Selection._('学校');
+
+  static const _otherSelection = Selection._('其他');
+
+  static const _streetSelection = Selection._('街道');
+
+  static const _citySelection = Selection._('城市');
+
+  static const _postcodeSelection = Selection._('邮编');
+
+  static const _regionSelection = Selection._('州/省');
+
+  static const _countrySelection = Selection._('国家');
+
   static const _phoneSelections = [
-    Selection._('住宅'),
-    Selection._('工作'),
-    Selection._('学校'),
+    _homeSelection,
+    _workSelection,
+    _schoolSelection,
     Selection._('iPhone'),
     Selection._('手机'),
     Selection._('主要'),
     Selection._('家庭传真'),
     Selection._('工作传真'),
     Selection._('传呼机'),
-    Selection._('其他'),
+    _otherSelection,
   ];
   static const _emailSelections = [
-    Selection._('住宅'),
-    Selection._('工作'),
-    Selection._('学校'),
+    _homeSelection,
+    _workSelection,
+    _schoolSelection,
     Selection._('iCloud'),
-    Selection._('其他'),
+    _otherSelection,
   ];
   static const _urlSelections = [
     Selection._('主页'),
-    Selection._('住宅'),
-    Selection._('工作'),
-    Selection._('学校'),
-    Selection._('其他'),
+    _homeSelection,
+    _workSelection,
+    _schoolSelection,
+    _otherSelection,
   ];
   static const _addressSelections = [
-    Selection._('住宅'),
-    Selection._('工作'),
-    Selection._('学校'),
-    Selection._('其他'),
+    _homeSelection,
+    _workSelection,
+    _schoolSelection,
+    _otherSelection,
   ];
   static const _birthdaySelections = [
     _birthdaySelection,
@@ -75,7 +93,7 @@ class _Selections {
   ];
   static const _dateSelections = [
     Selection._('纪念日'),
-    Selection._('其他'),
+    _otherSelection,
   ];
   static const _relatedPartySelections = [
     Selection._('父母'),
@@ -98,7 +116,7 @@ class _Selections {
     Selection._('朋友'),
     Selection._('上司'),
     Selection._('同事'),
-    Selection._('其他'),
+    _otherSelection,
     Selection._('所有标签'),
   ];
   static const _socialDataSelections = [
@@ -182,15 +200,15 @@ class _Selections {
 
   List<Selection> get instantMessagingSelections => _instantMessagingSelections;
 
-  Selection get streetSelection => Selection._('街道');
+  Selection get streetSelection => _streetSelection;
 
-  Selection get citySelection => Selection._('城市');
+  Selection get citySelection => _citySelection;
 
-  Selection get postcodeSelection => Selection._('邮编');
+  Selection get postcodeSelection => _postcodeSelection;
 
-  Selection get regionSelection => Selection._('州/省');
+  Selection get regionSelection => _regionSelection;
 
-  Selection get countrySelection => Selection._('国家');
+  Selection get countrySelection => _countrySelection;
 
   Selection get birthdaySelection => _birthdaySelection;
 
