@@ -71,7 +71,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     final children = List<Widget>();
     if (hasPhone) {
       children.addAll(phones.where((element) {
-        return selections[element.label] != null;
+        return selections.contains(element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,
@@ -85,7 +85,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (emails != null && emails.isNotEmpty) {
       children.addAll(emails.where((element) {
-        return selections[element.label] != null;
+        return selections.contains(element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,
@@ -99,7 +99,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (urls != null && urls.isNotEmpty) {
       children.addAll(urls.where((element) {
-        return selections[element.label] != null;
+        return selections.contains(element.label);
       }).map((e) {
         var url = e.value;
         url = url.startsWith('http') ? url : 'http://$url';
@@ -115,7 +115,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (postalAddresses != null && postalAddresses.isNotEmpty) {
       children.addAll(postalAddresses.where((element) {
-        return selections[element.label] != null;
+        return selections.contains(element.label);
       }).map((address) {
         final value = [
           address.street,
@@ -153,7 +153,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (dates != null && dates.isNotEmpty) {
       children.addAll(dates.where((element) {
-        return selections[element.label] != null;
+        return selections.contains(element.label);
       }).map((e) {
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
@@ -170,7 +170,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (socialProfiles != null && socialProfiles.isNotEmpty) {
       children.addAll(socialProfiles.where((element) {
-        return selections[element.label] != null;
+        return selections.contains(element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,

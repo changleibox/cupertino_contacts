@@ -194,6 +194,10 @@ class _Selections {
 
   Selection get birthdaySelection => _birthdaySelection;
 
+  bool contains(String propertyName) {
+    return _selectionsMap.containsKey(propertyName);
+  }
+
   Selection operator [](String propertyName) {
     assert(propertyName != null);
     return _selectionsMap[propertyName];

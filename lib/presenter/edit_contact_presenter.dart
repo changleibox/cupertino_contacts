@@ -64,7 +64,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.phone] = ContactInfoGroup<EditableItem>(
       name: '电话',
-      items: _initialContact.phones?.map((e) {
+      items: _initialContact.phones?.where((element) {
+        return selections.contains(element.label);
+      })?.map((e) {
         return EditableItem(
           label: selections[e.label],
           value: e.value,
@@ -74,7 +76,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.email] = ContactInfoGroup<EditableItem>(
       name: '电子邮件',
-      items: _initialContact.emails?.map((e) {
+      items: _initialContact.emails?.where((element) {
+        return selections.contains(element.label);
+      })?.map((e) {
         return EditableItem(
           label: selections[e.label],
           value: e.value,
@@ -90,7 +94,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.url] = ContactInfoGroup<EditableItem>(
       name: 'URL',
-      items: _initialContact.urls?.map((e) {
+      items: _initialContact.urls?.where((element) {
+        return selections.contains(element.label);
+      })?.map((e) {
         return EditableItem(
           label: selections[e.label],
           value: e.value,
@@ -100,7 +106,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.address] = ContactInfoGroup<AddressItem>(
       name: '地址',
-      items: _initialContact.postalAddresses?.map((e) {
+      items: _initialContact.postalAddresses?.where((element) {
+        return selections.contains(element.label);
+      })?.map((e) {
         return AddressItem(
           label: selections[e.label],
           value: Address(
@@ -145,7 +153,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
-      items: _initialContact.socialProfiles?.map((e) {
+      items: _initialContact.socialProfiles?.where((element) {
+        return selections.contains(element.label);
+      })?.map((e) {
         return EditableItem(
           label: selections[e.label],
           value: e.value,
