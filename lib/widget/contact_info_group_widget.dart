@@ -68,7 +68,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     _animationController = AnimationController(
       duration: _kDuration,
       vsync: this,
-      value: 1.0,
+      value: _animateToValue,
     );
     _animationController.addListener(() {
       if (_animationController.isCompleted && mounted) {
@@ -221,9 +221,13 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     currentState.open(actionType: SlideActionType.secondary);
   }
 
-  _notifyButtonState() {
+  double get _animateToValue {
     var showButton = widget.addInterceptor == null || widget.addInterceptor(context);
-    var animateToValue = showButton ? 1.0 : 0.0;
+    return showButton ? 1.0 : 0.0;
+  }
+
+  _notifyButtonState() {
+    var animateToValue = _animateToValue;
     if (animateToValue != _animationController.value) {
       _animationController.animateTo(animateToValue);
     }
