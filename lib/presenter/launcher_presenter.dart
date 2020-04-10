@@ -17,7 +17,7 @@ class LauncherPresenter extends Presenter<LauncherPage> {
   void postFrameCallback() {
     _timer = Timer(Duration(seconds: 2), () {
       _requestPermission().then((value) {
-        Navigator.pushNamedAndRemoveUntil(context, RouteProvider.home, (route) => false);
+        Navigator.pushReplacementNamed(context, RouteProvider.home);
       }).catchError((_) async {
         _showNotPermissionDialog();
       });
