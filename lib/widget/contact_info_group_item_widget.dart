@@ -122,24 +122,11 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       ],
     );
 
-    Widget labelButton = CupertinoButton(
-      minSize: 0,
-      borderRadius: BorderRadius.zero,
-      padding: _buttonPadding,
-      child: labelWidget,
-      onPressed: () {
-        if (!widget.canChangeLabel) {
-          return;
-        }
-        // TODO 改变标签
-      },
-    );
-
     if (hasSize) {
-      labelButton = AnimatedContainer(
+      labelWidget = AnimatedContainer(
         duration: _kDuration,
-        width: max(_labelWidth, widget.labelWidth) + _buttonPadding.horizontal,
-        child: labelButton,
+        width: max(_labelWidth, widget.labelWidth),
+        child: labelWidget,
       );
     }
 
@@ -156,7 +143,18 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           minSize: 0,
           onPressed: widget.onDeletePressed,
         ),
-        labelButton,
+        CupertinoButton(
+          minSize: 0,
+          borderRadius: BorderRadius.zero,
+          padding: _buttonPadding,
+          child: labelWidget,
+          onPressed: () {
+            if (!widget.canChangeLabel) {
+              return;
+            }
+            // TODO 改变标签
+          },
+        ),
         Expanded(
           child: DefaultTextStyle(
             style: textStyle.copyWith(
