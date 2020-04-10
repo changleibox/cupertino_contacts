@@ -12,6 +12,7 @@ import 'package:cupertinocontacts/widget/datetime_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_group_container.dart';
 import 'package:cupertinocontacts/widget/edit_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/edit_contact_normal_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_selection_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_text_field.dart';
 import 'package:cupertinocontacts/widget/edit_contact_remarks_text_field.dart';
@@ -108,15 +109,24 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         children.add(EditContactChooseRingToneButton(
           info: contactInfo,
         ));
-      } else if (contactInfo is NormalSelectionContactInfo) {
-        children.add(EditContactNormalSelectionButton(
-          info: contactInfo,
-        ));
       } else if (contactInfo is MultiEditableContactInfo) {
         children.add(EditContactRemarksTextField(
           info: contactInfo,
         ));
+      } else if (contactInfo is NormalSelectionContactInfo) {
+        children.add(EditContactNormalSelectionButton(
+          info: contactInfo,
+          onPressed: () {},
+        ));
       }
+    }
+
+    if (widget.contact != null) {
+      children.add(EditContactNormalButton(
+        text: '删除联系人',
+        isDestructiveAction: true,
+        onPressed: presenter.onDeleteContactPressed,
+      ));
     }
 
     var persistentHeaderDelegate = EditContactPersistentHeaderDelegate(

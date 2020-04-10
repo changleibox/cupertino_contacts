@@ -14,8 +14,10 @@ import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/collections.dart';
+import 'package:cupertinocontacts/widget/delete_contact_dialog.dart';
 import 'package:cupertinocontacts/widget/edit_contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
+import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -249,6 +251,24 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       }
     }).catchError((error) {
       showText(error.toString(), context);
+    });
+  }
+
+  onDeleteContactPressed() {
+    if (widget.contact == null) {
+      return;
+    }
+    showDeleteContactDialog(context, widget.contact).then((value) {
+      if (value == null || !value) {
+        return;
+      }
+      var loadPrompt = LoadPrompt(context)..show();
+      Contacts.deleteContact(widget.contact).then((value) {
+        loadPrompt.dismiss();
+        Navigator.popUntil(context, ModalRoute.withName(RouteProvider.home));
+      }).catchError((_) {
+        loadPrompt.dismiss();
+      });
     });
   }
 
