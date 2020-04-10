@@ -87,6 +87,26 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     var textStyle = textTheme.textStyle;
     var actionTextStyle = textTheme.actionTextStyle;
 
+    final hasSize = widget.labelWidth != null && _labelWidth != null;
+
+    Widget arrow = AnimatedOpacity(
+      duration: _kDuration,
+      opacity: widget.canChangeLabel ? 1.0 : 0.0,
+      child: Icon(
+        CupertinoIcons.forward,
+        color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel,
+          context,
+        ),
+        size: _iconSize,
+      ),
+    );
+    if (hasSize) {
+      arrow = Flexible(
+        child: arrow,
+      );
+    }
+
     Widget labelWidget = WidgetGroup.spacing(
       alignment: MainAxisAlignment.spaceBetween,
       spacing: _labelSpacing,
@@ -98,27 +118,12 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
             fontSize: 15,
           ),
         ),
-        AnimatedCrossFade(
-          firstChild: Icon(
-            CupertinoIcons.forward,
-            color: CupertinoDynamicColor.resolve(
-              CupertinoColors.secondaryLabel,
-              context,
-            ),
-            size: _iconSize,
-          ),
-          secondChild: SizedBox(
-            width: _iconMinSize,
-            height: _iconSize,
-          ),
-          crossFadeState: widget.canChangeLabel ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: _kDuration,
-        ),
+        arrow,
       ],
     );
 
     Widget labelButton = CupertinoButton(
-      minSize: 44,
+      minSize: 0,
       borderRadius: BorderRadius.zero,
       padding: _buttonPadding,
       child: labelWidget,
@@ -130,7 +135,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       },
     );
 
-    if (widget.labelWidth != null && _labelWidth != null) {
+    if (hasSize) {
       labelButton = AnimatedContainer(
         duration: _kDuration,
         width: max(_labelWidth, widget.labelWidth) + _buttonPadding.horizontal,
