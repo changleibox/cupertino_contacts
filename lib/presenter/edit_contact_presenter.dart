@@ -254,6 +254,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   Contact get value {
+    var birthdayDates = _convertDatetime(itemMap[ContactItemType.birthday]);
+    var dates = _convertDatetime(itemMap[ContactItemType.date]);
+    dates.addAll(birthdayDates);
+
     var contact = Contact();
     contact.identifier = _initialContact.identifier;
     contact.avatar = _avatar;
@@ -268,7 +272,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.phones = _convert(itemMap[ContactItemType.phone]);
     contact.emails = _convert(itemMap[ContactItemType.email]);
     contact.urls = _convert(itemMap[ContactItemType.url]);
-    contact.dates = _initialContact.dates;
+    contact.dates = dates;
     contact.lastModified = _initialContact.lastModified;
     contact.socialProfiles = _convert(itemMap[ContactItemType.socialData]);
     contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address]);
@@ -292,6 +296,16 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         region: value.region.value,
         postcode: value.postcode.value,
         country: value.country.value,
+      );
+    }).toList();
+  }
+
+  List<ContactDate> _convertDatetime(ContactInfoGroup<DateTimeItem> infoGroup) {
+    return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
+      var dateTime = e.value;
+      return ContactDate(
+        label: e.label.propertyName,
+        date: DateComponents.fromDateTime(dateTime),
       );
     }).toList();
   }
