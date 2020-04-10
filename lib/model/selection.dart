@@ -213,11 +213,11 @@ class _Selections {
   Selection get birthdaySelection => _birthdaySelection;
 
   bool contains(String propertyName) {
-    return _selectionsMap.containsKey(propertyName);
+    return [propertyName] != null;
   }
 
   Selection operator [](String propertyName) {
     assert(propertyName != null);
-    return _selectionsMap[propertyName];
+    return _selectionsMap[propertyName] ?? _otherSelection;
   }
 }
