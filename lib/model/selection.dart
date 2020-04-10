@@ -292,13 +292,13 @@ class _IOSSelections extends _Selections {
 class _AndroidSelections extends _Selections {
   static const _birthdaySelection = Selection._('birthday', labelName: '生日', selectionName: '默认生日');
 
-  static const _homeSelection = Selection._('住宅');
+  static const _homeSelection = Selection._('home', labelName: '住宅');
 
-  static const _workSelection = Selection._('工作');
+  static const _workSelection = Selection._('work', labelName: '工作');
 
-  static const _schoolSelection = Selection._('学校');
+  static const _schoolSelection = Selection._('school', labelName: '学校');
 
-  static const _otherSelection = Selection._('其他');
+  static const _otherSelection = Selection._('other', labelName: '其他');
 
   static const _streetSelection = Selection._('街道');
 
@@ -314,8 +314,7 @@ class _AndroidSelections extends _Selections {
     _homeSelection,
     _workSelection,
     _schoolSelection,
-    Selection._('iPhone'),
-    Selection._('手机'),
+    Selection._('mobile', labelName: '手机'),
     Selection._('主要'),
     Selection._('家庭传真'),
     Selection._('工作传真'),
