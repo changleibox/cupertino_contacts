@@ -43,7 +43,7 @@ abstract class _Selections {
       case 'ios':
         return _IOSSelections.instance;
     }
-    return null;
+    return _UnsupportedSelections.instance;
   }
 
   _Selections() {
@@ -116,6 +116,71 @@ abstract class _Selections {
     assert(propertyName != null);
     return _selectionsMap[propertyName] ?? otherSelection;
   }
+}
+
+class _UnsupportedSelections extends _Selections {
+  static _UnsupportedSelections get instance => _getInstance();
+
+  static _UnsupportedSelections _instance;
+
+  static _UnsupportedSelections _getInstance() {
+    if (_instance == null) {
+      _instance = _UnsupportedSelections._();
+    }
+    return _instance;
+  }
+
+  factory _UnsupportedSelections() => _getInstance();
+
+  _UnsupportedSelections._() : super();
+
+  @override
+  List<Selection> get phoneSelections => [otherSelection];
+
+  @override
+  List<Selection> get emailSelections => [otherSelection];
+
+  @override
+  List<Selection> get urlSelections => [otherSelection];
+
+  @override
+  List<Selection> get addressSelections => [otherSelection];
+
+  @override
+  List<Selection> get birthdaySelections => [otherSelection];
+
+  @override
+  List<Selection> get dateSelections => [otherSelection];
+
+  @override
+  List<Selection> get relatedPartySelections => [otherSelection];
+
+  @override
+  List<Selection> get socialDataSelections => [otherSelection];
+
+  @override
+  List<Selection> get instantMessagingSelections => [otherSelection];
+
+  @override
+  Selection get streetSelection => otherSelection;
+
+  @override
+  Selection get citySelection => otherSelection;
+
+  @override
+  Selection get postcodeSelection => otherSelection;
+
+  @override
+  Selection get regionSelection => otherSelection;
+
+  @override
+  Selection get countrySelection => otherSelection;
+
+  @override
+  Selection get birthdaySelection => otherSelection;
+
+  @override
+  Selection get otherSelection => Selection._('不支持');
 }
 
 class _IOSSelections extends _Selections {
