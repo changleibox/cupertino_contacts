@@ -167,10 +167,8 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           labelWidth: index == -1 ? null : _maxLabelWidth,
           onLabelWidthChanged: (value) {
             var isAdd = index != -1;
-            if (isAdd) {
-              if (_labelWidts.length < _globalKeys.length) {
-                _labelWidts.add(value);
-              }
+            if (isAdd && _labelWidts.length < _globalKeys.length) {
+              _labelWidts.add(value);
             }
             if (_maxLabelWidth != null && (value < _maxLabelWidth || (isAdd && value == _maxLabelWidth))) {
               return;
