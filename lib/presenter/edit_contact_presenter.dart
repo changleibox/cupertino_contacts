@@ -177,6 +177,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.addInfo] = NormalSelectionContactInfo(
       name: '添加信息栏',
     );
+    if (widget.contact != null) {
+      itemMap[ContactItemType.linkContact] = ContactInfoGroup<ContactSelectionItem>(
+        name: '链接联系人…',
+        selections: [selections.buildSelection('iPhone')],
+      );
+    }
 
     baseInfoMap.values.forEach((element) => element.addListener(notifyListeners));
     itemMap.values.forEach((element) => element.addListener(notifyListeners));

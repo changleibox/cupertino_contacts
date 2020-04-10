@@ -28,6 +28,7 @@ enum ContactItemType {
   instantMessaging,
   remarks,
   addInfo,
+  linkContact,
 }
 
 TextInputType convertInputType(ContactItemType itemType) {
@@ -52,6 +53,7 @@ TextInputType convertInputType(ContactItemType itemType) {
     case ContactItemType.instantMessaging:
     case ContactItemType.remarks:
     case ContactItemType.addInfo:
+    case ContactItemType.linkContact:
   }
   return inputType;
 }

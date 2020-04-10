@@ -26,7 +26,7 @@ class EditableSelectionContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
-      itemFactory: (index, label) {
+      itemFactory: (index, label) async {
         return EditableSelectionItem(label: label);
       },
       itemBuilder: (context, item) {

@@ -29,7 +29,7 @@ class BirthdayContactInfoGroup extends StatelessWidget {
       changeLabelInterceptor: (context, item) {
         return infoGroup.value.length < 2 || item.label != selections.birthdaySelection;
       },
-      itemFactory: (index, label) {
+      itemFactory: (index, label) async {
         var value = infoGroup.value;
         if (value.length > 0 && value.first.label != selections.birthdaySelection) {
           return DateTimeItem(label: selections.birthdaySelection);

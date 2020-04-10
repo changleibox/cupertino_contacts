@@ -108,6 +108,8 @@ abstract class _Selections {
 
   Selection get otherSelection;
 
+  Selection buildSelection(String name) => Selection._(name);
+
   bool contains(String propertyName) {
     return [propertyName] != null;
   }

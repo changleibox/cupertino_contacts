@@ -26,7 +26,7 @@ class EditContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
-      itemFactory: (index, label) {
+      itemFactory: (index, label) async {
         return EditableItem(label: label);
       },
       itemBuilder: (context, item) {

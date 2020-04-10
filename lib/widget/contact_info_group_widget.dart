@@ -21,7 +21,7 @@ const Duration _kDuration = Duration(milliseconds: 300);
 
 typedef GroupItemBuilder = Widget Function(BuildContext context, GroupItem item);
 
-typedef ItemFactory = GroupItem Function(int index, Selection label);
+typedef ItemFactory = Future<GroupItem> Function(int index, Selection label);
 
 typedef AddInterceptor = bool Function(BuildContext context);
 
@@ -207,10 +207,15 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     }
     var length = widget.infoGroup.value.length;
     var selections = widget.infoGroup.selections;
-    widget.infoGroup.add(widget.itemFactory(length, selections[length % selections.length]));
-    _globalKeys.add(GlobalKey());
-    _animatedListKey.currentState.insertItem(length, duration: _kDuration);
-    _notifyButtonState();
+    widget.itemFactory(length, selections[length % selections.length]).then((value) {
+      if (value == null) {
+        return;
+      }
+      widget.infoGroup.add(value);
+      _globalKeys.add(GlobalKey());
+      _animatedListKey.currentState.insertItem(length, duration: _kDuration);
+      _notifyButtonState();
+    });
   }
 
   _onRemovePressed(int index) {

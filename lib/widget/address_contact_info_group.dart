@@ -29,7 +29,7 @@ class AddressContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
-      itemFactory: (index, label) {
+      itemFactory: (index, label) async {
         return AddressItem(
           label: label,
           value: Address(),

@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_contact/contact.dart';
 
 abstract class ContactInfo<T> extends ValueNotifier<T> {
   final String name;
@@ -265,6 +266,17 @@ class SelectionItem extends GroupItem<String> {
 
   @override
   bool get isNotEmpty => value != null && value.isNotEmpty;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
+
+class ContactSelectionItem extends GroupItem<Contact> {
+  ContactSelectionItem({@required Selection label, dynamic value})
+      : assert(label != null),
+        super(label, value: value);
 
   @override
   void dispose() {

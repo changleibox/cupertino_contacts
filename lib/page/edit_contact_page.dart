@@ -12,6 +12,7 @@ import 'package:cupertinocontacts/widget/datetime_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/edit_contact_choose_ring_tone_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_group_container.dart';
 import 'package:cupertinocontacts/widget/edit_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/edit_contact_link_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_selection_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_text_field.dart';
@@ -117,6 +118,10 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         children.add(EditContactNormalSelectionButton(
           info: contactInfo,
           onPressed: () {},
+        ));
+      } else if (contactInfo is ContactInfoGroup<ContactSelectionItem>) {
+        children.add(EditContactLinkContactInfoGroup(
+          infoGroup: contactInfo,
         ));
       }
     }
