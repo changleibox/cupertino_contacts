@@ -116,16 +116,16 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     if (postalAddresses != null && postalAddresses.isNotEmpty) {
       children.addAll(postalAddresses.where((element) {
         return selections.contains(element.label);
-      }).map((address) {
+      }).map((e) {
         final value = [
-          address.street,
-          address.region,
-          address.city,
-          address.postcode,
-          address.country,
-        ].join(' ');
+          e.street,
+          e.region,
+          e.city,
+          e.postcode,
+          e.country,
+        ].where((element) => element != null && element.isNotEmpty).join(' ');
         return _NormalGroupInfoWidget(
-          name: address.label,
+          name: selections[e.label].labelName,
           value: value,
           trailing: Container(
             width: 80,
