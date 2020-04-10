@@ -38,7 +38,7 @@ class CupertinoContactsApp extends StatelessWidget {
         Locale('zh', 'CN'),
       ],
       routes: RouteProvider.routes,
-      initialRoute: RouteProvider.home,
+      initialRoute: RouteProvider.launcher,
       onGenerateRoute: RouteProvider.buildGenerateRoute(context),
       onUnknownRoute: RouteProvider.unknownRoute,
     );

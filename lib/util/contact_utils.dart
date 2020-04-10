@@ -41,7 +41,7 @@ class ContactUtils {
           contact.givenName ?? '',
         ),
       Text(
-        contact.suffix,
+        contact.suffix ?? '',
       ),
     ].where((element) {
       return element.data != null && element.data.isNotEmpty;

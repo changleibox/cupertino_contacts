@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/page/launcher_page.dart';
 import 'package:cupertinocontacts/route/dialog_route.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -12,9 +13,11 @@ import 'package:flutter/cupertino.dart';
 class RouteProvider {
   RouteProvider._();
 
-  static const String home = Navigator.defaultRouteName;
+  static const String launcher = Navigator.defaultRouteName;
+  static const String home = '/home';
 
   static Map<String, WidgetBuilder> routes = {
+    launcher: (context) => LauncherPage(),
     home: (context) => CupertinoContactsPage(),
   };
 

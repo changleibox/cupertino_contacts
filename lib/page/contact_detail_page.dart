@@ -70,7 +70,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
 
     final children = List<Widget>();
     if (hasPhone) {
-      children.addAll(phones.map((e) {
+      children.addAll(phones.where((element) {
+        return selections[element.label] != null;
+      }).map((e) {
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,
           value: e.value,
@@ -82,7 +84,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }));
     }
     if (emails != null && emails.isNotEmpty) {
-      children.addAll(emails.map((e) {
+      children.addAll(emails.where((element) {
+        return selections[element.label] != null;
+      }).map((e) {
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,
           value: e.value,
@@ -94,7 +98,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }));
     }
     if (urls != null && urls.isNotEmpty) {
-      children.addAll(urls.map((e) {
+      children.addAll(urls.where((element) {
+        return selections[element.label] != null;
+      }).map((e) {
         var url = e.value;
         url = url.startsWith('http') ? url : 'http://$url';
         return _NormalGroupInfoWidget(
@@ -108,7 +114,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }));
     }
     if (postalAddresses != null && postalAddresses.isNotEmpty) {
-      children.addAll(postalAddresses.map((address) {
+      children.addAll(postalAddresses.where((element) {
+        return selections[element.label] != null;
+      }).map((address) {
         final value = [
           address.street,
           address.region,
@@ -144,7 +152,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }));
     }
     if (dates != null && dates.isNotEmpty) {
-      children.addAll(dates.map((e) {
+      children.addAll(dates.where((element) {
+        return selections[element.label] != null;
+      }).map((e) {
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,
@@ -159,7 +169,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }));
     }
     if (socialProfiles != null && socialProfiles.isNotEmpty) {
-      children.addAll(socialProfiles.map((e) {
+      children.addAll(socialProfiles.where((element) {
+        return selections[element.label] != null;
+      }).map((e) {
         return _NormalGroupInfoWidget(
           name: selections[e.label].labelName,
           value: e.value,
