@@ -315,10 +315,11 @@ class _AndroidSelections extends _Selections {
     _workSelection,
     _schoolSelection,
     Selection._('mobile', labelName: '手机'),
-    Selection._('主要'),
-    Selection._('家庭传真'),
-    Selection._('工作传真'),
-    Selection._('传呼机'),
+    Selection._('main', labelName: '主要'),
+    Selection._('home work', labelName: '家庭传真'),
+    Selection._('fax work', labelName: '工作传真'),
+    Selection._('pager', labelName: '传呼机'),
+    Selection._('company', labelName: '公司总机'),
     _otherSelection,
   ];
   static const _emailSelections = [
