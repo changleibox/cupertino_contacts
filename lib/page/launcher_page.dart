@@ -22,13 +22,14 @@ class _LauncherPageState extends PresenterState<LauncherPage, LauncherPresenter>
   @override
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemBackground,
       child: Center(
         child: Text(
           '通讯录',
           style: TextStyle(
             fontSize: 26,
             color: CupertinoDynamicColor.resolve(
-              CupertinoColors.secondaryLabel,
+              CupertinoColors.label,
               context,
             ),
           ),
