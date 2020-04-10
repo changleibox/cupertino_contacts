@@ -159,7 +159,6 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
         sizeFactor: animation,
         axisAlignment: 1.0,
         child: ContactInfoGroupItemWidget(
-          infoGroup: widget.infoGroup,
           item: item,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,

@@ -15,7 +15,6 @@ const Duration _kDuration = Duration(milliseconds: 300);
 
 class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
-  final ContactInfoGroup infoGroup;
   final GroupItem item;
   final VoidCallback onDeletePressed;
   final ValueChanged<double> onLabelWidthChanged;
@@ -24,15 +23,13 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
 
   const ContactInfoGroupItemWidget({
     Key key,
-    @required this.infoGroup,
     @required this.item,
     this.onDeletePressed,
     this.builder,
     this.onLabelWidthChanged,
     this.labelWidth,
     this.canChangeLabel = true,
-  })  : assert(infoGroup != null),
-        assert(item != null),
+  })  : assert(item != null),
         assert(builder != null),
         assert(canChangeLabel != null),
         super(key: key);
