@@ -16,6 +16,11 @@ import 'package:flutter/scheduler.dart';
 const Duration _kDuration = Duration(milliseconds: 300);
 const double _labelSpacing = 2;
 const double _iconSize = 24;
+const double _iconMinSize = 4;
+const EdgeInsets _buttonPadding = EdgeInsets.only(
+  left: 8,
+  right: 4,
+);
 
 class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
@@ -68,11 +73,10 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       if (widget.onLabelWidthChanged == null || renderBox == null || !renderBox.hasSize) {
         return;
       }
-      _labelWidth = renderBox.size.width;
+      final iconSize = widget.canChangeLabel ? _iconSize : _iconMinSize;
+      _labelWidth = renderBox.size.width + iconSize + _labelSpacing;
+      setState(() {});
       widget.onLabelWidthChanged(_labelWidth);
-      if (widget.labelWidth != null && widget.labelWidth > _labelWidth) {
-        setState(() {});
-      }
     });
   }
 
@@ -94,10 +98,8 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
             fontSize: 15,
           ),
         ),
-        AnimatedOpacity(
-          duration: _kDuration,
-          opacity: widget.canChangeLabel ? 1.0 : 0.0,
-          child: Icon(
+        AnimatedCrossFade(
+          firstChild: Icon(
             CupertinoIcons.forward,
             color: CupertinoDynamicColor.resolve(
               CupertinoColors.secondaryLabel,
@@ -105,27 +107,20 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
             ),
             size: _iconSize,
           ),
+          secondChild: SizedBox(
+            width: _iconMinSize,
+            height: _iconSize,
+          ),
+          crossFadeState: widget.canChangeLabel ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: _kDuration,
         ),
       ],
     );
 
-    if (widget.labelWidth != null && _labelWidth != null) {
-      labelWidget = AnimatedContainer(
-        duration: _kDuration,
-        width: max(_labelWidth, widget.labelWidth) + _iconSize + _labelSpacing,
-        child: ClipRect(
-          child: labelWidget,
-        ),
-      );
-    }
-
     Widget labelButton = CupertinoButton(
       minSize: 44,
       borderRadius: BorderRadius.zero,
-      padding: EdgeInsets.only(
-        left: 8,
-        right: 4,
-      ),
+      padding: _buttonPadding,
       child: labelWidget,
       onPressed: () {
         if (!widget.canChangeLabel) {
@@ -134,6 +129,14 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         // TODO 改变标签
       },
     );
+
+    if (widget.labelWidth != null && _labelWidth != null) {
+      labelButton = AnimatedContainer(
+        duration: _kDuration,
+        width: max(_labelWidth, widget.labelWidth) + _buttonPadding.horizontal,
+        child: labelButton,
+      );
+    }
 
     return WidgetGroup.spacing(
       children: [
