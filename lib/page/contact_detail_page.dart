@@ -220,6 +220,11 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       minLines: 2,
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
     ));
+
+    final largeSpacingIndexs = List<int>();
+    final topExpandedDividerIndexs = List<int>();
+    final bottomExpandedDividerIndexs = List<int>();
+
     final isSelectionMode = widget.launchMode == DetailLaunchMode.selection;
     if (!isSelectionMode) {
       if (hasPhone) {
@@ -251,6 +256,12 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             showAddEmergencyContactDialog(context, phones);
           },
         ));
+
+        bottomExpandedDividerIndexs.add(children.length - 1);
+        bottomExpandedDividerIndexs.add(children.length);
+        topExpandedDividerIndexs.add(children.length);
+        largeSpacingIndexs.add(children.length);
+
         children.add(_NormalButton(
           text: '共享我的位置',
           onPressed: () {
@@ -259,6 +270,34 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         ));
       }
     }
+
+    largeSpacingIndexs.add(children.length);
+    topExpandedDividerIndexs.add(children.length + 1);
+
+    children.add(Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 6,
+      ),
+      child: Text(
+        '已链接的联系人',
+        style: TextStyle(
+          fontSize: 13,
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.secondaryLabel,
+            context,
+          ),
+        ),
+      ),
+    ));
+    List.generate(10, (index) {
+      children.add(_NormalGroupInfoWidget(
+        name: selections.iPhoneSelection.labelName,
+        value: '联系人',
+        valueColor: actionTextStyle.color,
+        onPressed: () {},
+      ));
+    });
 
     var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
       contact: contact,
@@ -305,18 +344,21 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
-                      top: isLast && hasPhone && !isSelectionMode ? borderSide : BorderSide.none,
-                      bottom: isLast || (index == length - 2 && hasPhone && !isSelectionMode) ? borderSide : BorderSide.none,
+                      top: topExpandedDividerIndexs.contains(index) ? borderSide : BorderSide.none,
+                      bottom: isLast || bottomExpandedDividerIndexs.contains(index) ? borderSide : BorderSide.none,
                     ),
                   ),
                   child: children[index],
                 );
               },
               separatorBuilder: (context, index) {
-                if (index == children.length - 2 && hasPhone && !isSelectionMode) {
+                if (largeSpacingIndexs.contains(index + 1)) {
                   return SizedBox(
                     height: 40,
                   );
+                }
+                if (topExpandedDividerIndexs.contains(index + 1) || bottomExpandedDividerIndexs.contains(index)) {
+                  return SizedBox.shrink();
                 }
                 return Container(
                   width: double.infinity,

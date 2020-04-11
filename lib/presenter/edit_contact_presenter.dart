@@ -181,7 +181,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     if (widget.contact != null && widget.launchMode == EditLaunchMode.normal) {
       itemMap[ContactItemType.linkContact] = ContactInfoGroup<ContactSelectionItem>(
         name: '链接联系人…',
-        selections: [selections.buildSelection('iPhone')],
+        selections: [selections.iPhoneSelection],
       );
     }
 

@@ -36,6 +36,8 @@ final _Selections selections = _Selections.instance;
 abstract class _Selections {
   static final Map<String, Selection> _selectionsMap = HashMap();
 
+  final iPhoneSelection = Selection._('iPhone');
+
   static _Selections get instance {
     switch (Platform.operatingSystem) {
       case 'android':
