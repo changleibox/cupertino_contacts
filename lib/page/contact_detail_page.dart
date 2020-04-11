@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -33,12 +34,15 @@ const double _kMinNameSize = 15;
 class ContactDetailPage extends StatefulWidget {
   final String identifier;
   final Contact contact;
+  final ContactLaunchMode launchMode;
 
   const ContactDetailPage({
     Key key,
     @required this.identifier,
     this.contact,
+    this.launchMode = ContactLaunchMode.normal,
   })  : assert(identifier != null),
+        assert(launchMode != null),
         super(key: key);
 
   @override
@@ -251,6 +255,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       maxNameSize: _kMaxNameSize,
       minNameSize: _kMinNameSize,
       paddingTop: MediaQuery.of(context).padding.top,
+      launchMode: widget.launchMode,
     );
 
     var borderSide = BorderSide(

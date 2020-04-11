@@ -63,7 +63,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 
   double _buildPinnedHeaderSliverHeight(BuildContext context) {
-    if (widget.launchMode == ContactLaunchMode.selection) {
+    if (presenter.isSelectionMode) {
       return _kSearchBarHeight;
     }
     return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
@@ -71,7 +71,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     return [
-      if (widget.launchMode == ContactLaunchMode.normal)
+      if (!presenter.isSelectionMode)
         _AnimatedCupertinoSliverNavigationBar(
           colorTween: _colorTween,
           onGroupPressed: presenter.onGroupPressed,
@@ -84,7 +84,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 
   ObstructingPreferredSizeWidget _buildNavigationBar() {
-    if (widget.launchMode == ContactLaunchMode.normal) {
+    if (!presenter.isSelectionMode) {
       return null;
     }
     return CupertinoNavigationBar(
@@ -189,7 +189,8 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       child: CupertinoPageScaffold(
         navigationBar: _buildNavigationBar(),
         child: SafeArea(
-          top: widget.launchMode == ContactLaunchMode.selection,
+          top: presenter.isSelectionMode,
+          bottom: false,
           child: DragDismissKeyboardContainer(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: SupportNestedScrollView(

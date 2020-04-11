@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -27,7 +28,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
   final double maxNameSize;
   final double minNameSize;
   final double paddingTop;
-  final VoidCallback onEditAvatarPressed;
+  final ContactLaunchMode launchMode;
 
   const ContactDetailPersistentHeaderDelegate({
     @required this.contact,
@@ -36,18 +37,21 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     @required this.maxNameSize,
     @required this.minNameSize,
     @required this.paddingTop,
-    this.onEditAvatarPressed,
+    @required this.launchMode,
   })  : assert(maxAvatarSize != null),
         assert(minAvatarSize != null),
         assert(maxNameSize != null),
         assert(minNameSize != null),
-        assert(paddingTop != null);
+        assert(paddingTop != null),
+        assert(launchMode != null);
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     var themeData = CupertinoTheme.of(context);
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
+
+    final isSelection = launchMode == ContactLaunchMode.selection;
 
     final scrollExtent = maxExtent - minExtent;
     final offset = 1.0 - shrinkOffset / scrollExtent;
@@ -84,28 +88,32 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
               border: null,
               previousPageTitle: '通讯录',
               trailing: NavigationBarAction(
-                child: Text('编辑'),
+                child: Text(isSelection ? '链接' : '编辑'),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      fullscreenDialog: true,
-                      transitionDuration: _kDuration,
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return FadeTransition(
-                          opacity: Tween(begin: 0.0, end: 1.0).animate(
-                            CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.fastOutSlowIn,
+                  if (isSelection) {
+                    Navigator.pop(context, contact);
+                  } else {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        fullscreenDialog: true,
+                        transitionDuration: _kDuration,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return FadeTransition(
+                            opacity: Tween(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.fastOutSlowIn,
+                              ),
                             ),
-                          ),
-                          child: EditContactPage(
-                            contact: contact,
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                            child: EditContactPage(
+                              contact: contact,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
                 },
               ),
             ),

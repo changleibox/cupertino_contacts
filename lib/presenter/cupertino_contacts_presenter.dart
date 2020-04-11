@@ -33,6 +33,8 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
 
   Iterable<MapEntry<String, List<Contact>>> get entries => _contactsMap.entries;
 
+  bool get isSelectionMode => widget.launchMode == ContactLaunchMode.selection;
+
   @override
   void initState() {
     super.initState();
@@ -102,19 +104,20 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
   }
 
   onItemPressed(Contact contact) {
-    if (widget.launchMode == ContactLaunchMode.selection) {
-      Navigator.pop(context, contact);
-    } else {
-      Navigator.push(
-        context,
-        RouteProvider.buildRoute(
-          ContactDetailPage(
-            identifier: contact.identifier,
-            contact: contact,
-          ),
+    Navigator.push(
+      context,
+      RouteProvider.buildRoute(
+        ContactDetailPage(
+          identifier: contact.identifier,
+          contact: contact,
+          launchMode: widget.launchMode,
         ),
-      );
-    }
+      ),
+    ).then((value) {
+      if (value != null && isSelectionMode) {
+        Navigator.pop(context, value);
+      }
+    });
   }
 
   onGroupPressed() {
