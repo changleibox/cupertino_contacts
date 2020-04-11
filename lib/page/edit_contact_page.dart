@@ -23,6 +23,7 @@ import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
+import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -183,7 +184,11 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: children.length,
                     itemBuilder: (context, index) {
-                      return Container(
+                      ContactItemType itemKey;
+                      if (index > 0 && index <= itemKeys.length) {
+                        itemKey = itemKeys.elementAt(index - 1);
+                      }
+                      Widget child = Container(
                         foregroundDecoration: BoxDecoration(
                           border: Border(
                             top: index == 0 ? BorderSide.none : borderSide,
@@ -192,6 +197,33 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                         ),
                         child: children[index],
                       );
+                      if (itemKey == ContactItemType.linkContact) {
+                        child = WidgetGroup.spacing(
+                          alignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          direction: Axis.vertical,
+                          spacing: 6,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                '已链接的联系人',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondaryLabel,
+                                    context,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            child,
+                          ],
+                        );
+                      }
+                      return child;
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(
