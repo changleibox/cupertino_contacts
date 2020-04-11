@@ -7,6 +7,12 @@ enum HomeLaunchMode {
   selection,
 }
 
+enum DetailLaunchMode {
+  normal,
+  selection,
+  editView,
+}
+
 enum EditLaunchMode {
   normal,
   other,

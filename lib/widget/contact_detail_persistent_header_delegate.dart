@@ -27,7 +27,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
   final double maxNameSize;
   final double minNameSize;
   final double paddingTop;
-  final HomeLaunchMode launchMode;
+  final DetailLaunchMode launchMode;
   final String routeTitle;
 
   const ContactDetailPersistentHeaderDelegate({
@@ -52,17 +52,11 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
 
-    final isSelection = launchMode == HomeLaunchMode.selection;
+    final isSelection = launchMode == DetailLaunchMode.selection;
 
     final scrollExtent = maxExtent - minExtent;
     final offset = 1.0 - shrinkOffset / scrollExtent;
     final opacity = (1 - (1.8 * (1 - offset))).clamp(0.0, 1.0);
-
-    var route = ModalRoute.of(context);
-    var title;
-    if (route is CupertinoPageRoute) {
-      title = route.title;
-    }
 
     return Container(
       color: CupertinoDynamicColor.resolve(
@@ -93,7 +87,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
             child: CupertinoNavigationBar(
               backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
-              previousPageTitle: title == null ? '通讯录' : '返回',
+              previousPageTitle: launchMode == DetailLaunchMode.normal ? '通讯录' : '返回',
               trailing: NavigationBarAction(
                 child: Text(isSelection ? '链接' : '编辑'),
                 onPressed: () {
@@ -104,11 +98,11 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                       context,
                       _PageRoute(
                         fullscreenDialog: true,
-                        title: title,
+                        title: routeTitle,
                         builder: (context) {
                           return EditContactPage(
                             contact: contact,
-                            launchMode: title == null ? EditLaunchMode.normal : EditLaunchMode.other,
+                            launchMode: launchMode == DetailLaunchMode.normal ? EditLaunchMode.normal : EditLaunchMode.other,
                           );
                         },
                       ),

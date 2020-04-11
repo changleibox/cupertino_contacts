@@ -58,6 +58,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
                 ContactDetailPage(
                   identifier: contact.identifier,
                   contact: contact,
+                  launchMode: DetailLaunchMode.editView,
                 ),
                 title: item.label.labelName,
               ),

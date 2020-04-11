@@ -110,7 +110,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
         ContactDetailPage(
           identifier: contact.identifier,
           contact: contact,
-          launchMode: widget.launchMode,
+          launchMode: widget.launchMode == HomeLaunchMode.normal ? DetailLaunchMode.normal : DetailLaunchMode.selection,
         ),
       ),
     ).then((value) {

@@ -34,13 +34,13 @@ const double _kMinNameSize = 15;
 class ContactDetailPage extends StatefulWidget {
   final String identifier;
   final Contact contact;
-  final HomeLaunchMode launchMode;
+  final DetailLaunchMode launchMode;
 
   const ContactDetailPage({
     Key key,
     @required this.identifier,
     this.contact,
-    this.launchMode = HomeLaunchMode.normal,
+    this.launchMode = DetailLaunchMode.normal,
   })  : assert(identifier != null),
         assert(launchMode != null),
         super(key: key);
@@ -220,8 +220,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       minLines: 2,
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
     ));
-    final isNormalMode = widget.launchMode == HomeLaunchMode.normal;
-    if (isNormalMode) {
+    final isSelectionMode = widget.launchMode == DetailLaunchMode.selection;
+    if (!isSelectionMode) {
       if (hasPhone) {
         children.add(_NormalButton(
           text: '发送信息',
@@ -305,15 +305,15 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
-                      top: isLast && hasPhone && isNormalMode ? borderSide : BorderSide.none,
-                      bottom: isLast || (index == length - 2 && hasPhone && isNormalMode) ? borderSide : BorderSide.none,
+                      top: isLast && hasPhone && !isSelectionMode ? borderSide : BorderSide.none,
+                      bottom: isLast || (index == length - 2 && hasPhone && !isSelectionMode) ? borderSide : BorderSide.none,
                     ),
                   ),
                   child: children[index],
                 );
               },
               separatorBuilder: (context, index) {
-                if (index == children.length - 2 && hasPhone && isNormalMode) {
+                if (index == children.length - 2 && hasPhone && !isSelectionMode) {
                   return SizedBox(
                     height: 40,
                   );
