@@ -4,6 +4,7 @@
 
 import 'dart:ui';
 
+import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -87,10 +88,23 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
         backgroundColor,
         context,
       ),
-      child: SearchBar(
-        height: height,
-        queryController: queryController,
-        onChanged: onChanged,
+      child: Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: CupertinoDynamicColor.resolve(
+                separatorColor,
+                context,
+              ),
+              width: 0.0,
+            ),
+          ),
+        ),
+        child: SearchBar(
+          height: height,
+          queryController: queryController,
+          onChanged: onChanged,
+        ),
       ),
     );
   }

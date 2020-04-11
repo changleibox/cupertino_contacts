@@ -176,6 +176,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
         axisAlignment: 1.0,
         child: ContactInfoGroupItemWidget(
           item: item,
+          selections: widget.infoGroup.selections,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
           changeLabelType: changeLabelType,

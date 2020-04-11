@@ -7,6 +7,7 @@ import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
+import 'package:cupertinocontacts/widget/animated_color_widget.dart';
 import 'package:cupertinocontacts/widget/contact_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_progress.dart';
 import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
@@ -214,49 +215,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 }
 
-abstract class _AnimatedColorWidget extends StatefulWidget {
-  final ColorTween colorTween;
-
-  const _AnimatedColorWidget({
-    Key key,
-    @required this.colorTween,
-  })  : assert(colorTween != null),
-        super(key: key);
-
-  Widget evaluateBuild(BuildContext context, Color color);
-
-  @override
-  __AnimatedColorWidgetState createState() => __AnimatedColorWidgetState();
-}
-
-class __AnimatedColorWidgetState extends State<_AnimatedColorWidget> {
-  double _value = 1.0;
-  ScrollController _scrollController;
-
-  _onScrollListener() {
-    if (_scrollController == null || !_scrollController.hasClients) {
-      return;
-    }
-    var position = _scrollController.position;
-    _value = 1.0 - position.pixels / position.maxScrollExtent;
-    setState(() {});
-  }
-
-  @override
-  void didChangeDependencies() {
-    _scrollController?.removeListener(_onScrollListener);
-    _scrollController = PrimaryScrollController.of(context);
-    _scrollController?.addListener(_onScrollListener);
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.evaluateBuild(context, widget.colorTween.transform(_value));
-  }
-}
-
-class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
+class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
   final VoidCallback onGroupPressed;
 
   const _AnimatedCupertinoSliverNavigationBar({
@@ -298,7 +257,7 @@ class _AnimatedCupertinoSliverNavigationBar extends _AnimatedColorWidget {
   }
 }
 
-class _AnimatedSliverSearchBar extends _AnimatedColorWidget {
+class _AnimatedSliverSearchBar extends AnimatedColorWidget {
   final ValueChanged<String> onQuery;
 
   const _AnimatedSliverSearchBar({

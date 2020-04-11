@@ -38,6 +38,8 @@ abstract class _Selections {
 
   final iPhoneSelection = Selection._('iPhone');
 
+  final addCustomSelection = Selection._('添加自定义标签');
+
   static _Selections get instance {
     switch (Platform.operatingSystem) {
       case 'android':

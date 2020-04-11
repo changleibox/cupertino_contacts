@@ -5,6 +5,9 @@
 import 'dart:math';
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
+import 'package:cupertinocontacts/model/selection.dart';
+import 'package:cupertinocontacts/page/label_picker_page.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +28,7 @@ const EdgeInsets _buttonPadding = EdgeInsets.only(
 class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
   final GroupItem item;
+  final List<Selection> selections;
   final VoidCallback onDeletePressed;
   final ValueChanged<double> onLabelWidthChanged;
   final double labelMaxWidth;
@@ -34,6 +38,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
   const ContactInfoGroupItemWidget({
     Key key,
     @required this.item,
+    @required this.selections,
     this.onDeletePressed,
     this.builder,
     this.onLabelWidthChanged,
@@ -41,6 +46,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
     this.labelCacheWidth,
     this.changeLabelType = ChangeLabelType.normal,
   })  : assert(item != null),
+        assert(selections != null),
         assert(builder != null),
         assert(changeLabelType != null),
         super(key: key);
@@ -87,7 +93,15 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     if (widget.changeLabelType != ChangeLabelType.normal) {
       return;
     }
-    // TODO 改变标签
+    Navigator.push(
+      context,
+      RouteProvider.buildRoute(
+        LabelPickerPage(
+          selections: widget.selections,
+        ),
+        fullscreenDialog: true,
+      ),
+    );
   }
 
   @override
