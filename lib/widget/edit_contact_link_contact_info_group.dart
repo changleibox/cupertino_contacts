@@ -32,7 +32,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
           item: item,
           hasStartDivier: false,
           valueGetter: () {
-            return (item as ContactSelectionItem).value.displayName;
+            return (item as ContactSelectionItem).value?.displayName;
           },
           onPressed: () {},
         );

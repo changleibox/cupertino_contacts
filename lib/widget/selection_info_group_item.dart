@@ -29,8 +29,13 @@ class SelectionInfoGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var value = item.value?.toString();
+    if (valueGetter != null) {
+      value = valueGetter();
+    }
+    final isInvalidValue = value == null || value.isEmpty;
     var style = DefaultTextStyle.of(context).style;
-    if (item.isEmpty) {
+    if (isInvalidValue) {
       style = TextStyle(
         color: CupertinoDynamicColor.resolve(
           placeholderColor,
@@ -55,7 +60,7 @@ class SelectionInfoGroupItem extends StatelessWidget {
                 horizontal: 10,
               ),
               child: Text(
-                item.isEmpty ? item.label.labelName : valueGetter == null ? item.value : valueGetter(),
+                isInvalidValue ? item.label.labelName : value,
                 style: style,
               ),
             ),
