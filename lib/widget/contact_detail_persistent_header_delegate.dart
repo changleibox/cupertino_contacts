@@ -28,6 +28,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
   final double minNameSize;
   final double paddingTop;
   final HomeLaunchMode launchMode;
+  final String routeTitle;
 
   const ContactDetailPersistentHeaderDelegate({
     @required this.contact,
@@ -37,6 +38,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     @required this.minNameSize,
     @required this.paddingTop,
     @required this.launchMode,
+    @required this.routeTitle,
   })  : assert(maxAvatarSize != null),
         assert(minAvatarSize != null),
         assert(maxNameSize != null),
@@ -231,7 +233,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
   double get maxExtent => maxAvatarSize + _spacing + _kNavigationBarHeight + maxNameSize + _jobCompanySize;
 
   @override
-  double get minExtent => minAvatarSize + _spacing + minNameSize;
+  double get minExtent => minAvatarSize + _spacing + minNameSize + (routeTitle == null ? 0 : _kNavigationBarHeight);
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

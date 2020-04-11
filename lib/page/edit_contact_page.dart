@@ -153,7 +153,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       minAvatarSize: _kMinAvatarSize,
       paddingTop: MediaQuery.of(context).padding.top,
       isEditContact: widget.contact != null,
-      title: _routeTitle,
+      routeTitle: _routeTitle,
       operation: presenter,
     );
 

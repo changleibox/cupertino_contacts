@@ -52,6 +52,15 @@ class ContactDetailPage extends StatefulWidget {
 class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactDetailPresenter> {
   _ContactDetailPageState() : super(ContactDetailPresenter());
 
+  String get _routeTitle {
+    var route = ModalRoute.of(context);
+    String title;
+    if (route is CupertinoPageRoute) {
+      title = route.title;
+    }
+    return title;
+  }
+
   @override
   Widget builds(BuildContext context) {
     var themeData = CupertinoTheme.of(context);
@@ -259,6 +268,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       minNameSize: _kMinNameSize,
       paddingTop: MediaQuery.of(context).padding.top,
       launchMode: widget.launchMode,
+      routeTitle: _routeTitle,
     );
 
     var borderSide = BorderSide(
