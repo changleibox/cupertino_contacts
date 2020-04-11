@@ -87,7 +87,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
             child: CupertinoNavigationBar(
               backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
-              previousPageTitle: launchMode == DetailLaunchMode.normal ? '通讯录' : '返回',
+              previousPageTitle: launchMode != DetailLaunchMode.editView ? '通讯录' : '返回',
               trailing: NavigationBarAction(
                 child: Text(isSelection ? '链接' : '编辑'),
                 onPressed: () {
