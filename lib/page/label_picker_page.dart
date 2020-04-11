@@ -55,7 +55,7 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
     return [
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
-        onGroupPressed: () {},
+        onEditPressed: () {},
       ),
       _AnimatedSliverSearchBar(
         colorTween: _colorTween,
@@ -198,12 +198,12 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
 }
 
 class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
-  final VoidCallback onGroupPressed;
+  final VoidCallback onEditPressed;
 
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
-    this.onGroupPressed,
+    this.onEditPressed,
   }) : super(key: key, colorTween: colorTween);
 
   @override
@@ -228,7 +228,7 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
             ),
             trailing: NavigationBarAction(
               child: Text('编辑'),
-              onPressed: null,
+              onPressed: onEditPressed,
             ),
           );
         },
@@ -249,10 +249,9 @@ class _AnimatedSliverSearchBar extends AnimatedColorWidget {
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
     return SliverPersistentHeader(
-      pinned: true,
+      pinned: false,
       delegate: SearchBarHeaderDelegate(
         height: _kSearchBarHeight,
-        minHeight: 0,
         onChanged: onQuery,
         backgroundColor: color,
         color: CupertinoColors.secondarySystemFill,
