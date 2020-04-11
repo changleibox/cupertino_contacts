@@ -2,9 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
-import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/contact_utils.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -18,12 +16,14 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double indexHeight;
   final double dividerHeight;
   final double itemHeight;
+  final ValueChanged<Contact> onItemPressed;
 
   const ContactPersistentHeaderDelegate({
     @required this.contactEntry,
     @required this.indexHeight,
     @required this.dividerHeight,
     @required this.itemHeight,
+    this.onItemPressed,
   })  : assert(contactEntry != null),
         assert(indexHeight != null),
         assert(dividerHeight != null),
@@ -101,15 +101,9 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                RouteProvider.buildRoute(
-                  ContactDetailPage(
-                    identifier: contact.identifier,
-                    contact: contact,
-                  ),
-                ),
-              );
+              if (onItemPressed != null) {
+                onItemPressed(contact);
+              }
             },
           );
         },

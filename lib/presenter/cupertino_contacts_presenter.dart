@@ -5,6 +5,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
+import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
 import 'package:cupertinocontacts/presenter/list_presenter.dart';
@@ -97,6 +99,22 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       return _kOctothorpe;
     }
     return upperCase;
+  }
+
+  onItemPressed(Contact contact) {
+    if (widget.launchMode == ContactLaunchMode.selection) {
+      Navigator.pop(context, contact);
+    } else {
+      Navigator.push(
+        context,
+        RouteProvider.buildRoute(
+          ContactDetailPage(
+            identifier: contact.identifier,
+            contact: contact,
+          ),
+        ),
+      );
+    }
   }
 
   onGroupPressed() {

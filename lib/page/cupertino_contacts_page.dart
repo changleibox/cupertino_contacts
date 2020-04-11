@@ -2,6 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
 import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -29,7 +30,13 @@ const double _kIndexHeight = 26.0;
 const double _kItemHeight = 44.0;
 
 class CupertinoContactsPage extends StatefulWidget {
-  const CupertinoContactsPage({Key key}) : super(key: key);
+  final ContactLaunchMode launchMode;
+
+  const CupertinoContactsPage({
+    Key key,
+    this.launchMode = ContactLaunchMode.normal,
+  })  : assert(launchMode != null),
+        super(key: key);
 
   @override
   _CupertinoContactsPageState createState() => _CupertinoContactsPageState();
@@ -56,20 +63,49 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
   }
 
   double _buildPinnedHeaderSliverHeight(BuildContext context) {
+    if (widget.launchMode == ContactLaunchMode.selection) {
+      return _kSearchBarHeight;
+    }
     return MediaQuery.of(context).padding.top + _kNavBarPersistentHeight + _kSearchBarHeight;
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     return [
-      _AnimatedCupertinoSliverNavigationBar(
-        colorTween: _colorTween,
-        onGroupPressed: presenter.onGroupPressed,
-      ),
+      if (widget.launchMode == ContactLaunchMode.normal)
+        _AnimatedCupertinoSliverNavigationBar(
+          colorTween: _colorTween,
+          onGroupPressed: presenter.onGroupPressed,
+        ),
       _AnimatedSliverSearchBar(
         colorTween: _colorTween,
         onQuery: presenter.onQuery,
       ),
     ];
+  }
+
+  ObstructingPreferredSizeWidget _buildNavigationBar() {
+    if (widget.launchMode == ContactLaunchMode.normal) {
+      return null;
+    }
+    return CupertinoNavigationBar(
+      middle: Text('通讯录'),
+      padding: EdgeInsetsDirectional.only(
+        start: 16,
+        end: 10,
+      ),
+      border: null,
+      backgroundColor: _colorTween.end,
+      leading: NavigationBarAction(
+        child: Text('群组'),
+        onPressed: presenter.onGroupPressed,
+      ),
+      trailing: NavigationBarAction(
+        child: Text('取消'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 
   Widget _buildBody() {
@@ -104,6 +140,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
             dividerHeight: 1.0 / MediaQuery.of(context).devicePixelRatio,
             indexHeight: _kIndexHeight,
             itemHeight: _kItemHeight,
+            onItemPressed: presenter.onItemPressed,
           ),
         );
       }));
@@ -150,15 +187,19 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
         ),
       ),
       child: CupertinoPageScaffold(
-        child: DragDismissKeyboardContainer(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: SupportNestedScrollView(
-            pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
-            headerSliverBuilder: _buildHeaderSliver,
-            physics: SnappingScrollPhysics(
-              midScrollOffset: _kNavBarLargeTitleHeightExtension,
+        navigationBar: _buildNavigationBar(),
+        child: SafeArea(
+          top: widget.launchMode == ContactLaunchMode.selection,
+          child: DragDismissKeyboardContainer(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: SupportNestedScrollView(
+              pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
+              headerSliverBuilder: _buildHeaderSliver,
+              physics: SnappingScrollPhysics(
+                midScrollOffset: _kNavBarLargeTitleHeightExtension,
+              ),
+              body: _buildBody(),
             ),
-            body: _buildBody(),
           ),
         ),
       ),
