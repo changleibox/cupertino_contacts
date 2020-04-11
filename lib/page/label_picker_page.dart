@@ -12,6 +12,7 @@ import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 
 /// Created by box on 2020/4/11.
 ///
@@ -36,6 +37,15 @@ class LabelPickerPage extends StatefulWidget {
 
 class _LabelPickerPageState extends State<LabelPickerPage> {
   ColorTween _colorTween;
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController?.jumpTo(_kSearchBarHeight);
+    });
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -53,6 +63,7 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
+    _scrollController = PrimaryScrollController.of(context);
     return [
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
