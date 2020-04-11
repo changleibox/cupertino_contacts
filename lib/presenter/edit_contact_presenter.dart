@@ -42,14 +42,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   void initState() {
-    _initialContact = widget.contact ?? Contact();
-    _initialContact.familyName ??= '';
-    _initialContact.givenName ??= '';
-    _initialContact.company ??= '';
-    _initialContact.phones ??= [];
-    _initialContact.emails ??= [];
-    _initialContact.urls ??= [];
-    _initialContact.note ??= '';
+    _initialContact = _alignmentContact(widget.contact ?? Contact());
 
     _avatar = _initialContact.avatar;
 
@@ -314,7 +307,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.socialProfiles = _convert(itemMap[ContactItemType.socialData]);
     contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address]);
     contact.note = itemMap[ContactItemType.remarks].value ?? '';
-    return contact;
+    return _alignmentContact(contact);
   }
 
   List<Item> _convert(ContactInfoGroup<EditableItem> infoGroup) {
@@ -359,4 +352,30 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       }
     }
   }
+
+  Contact _alignmentContact(Contact contact) {
+    contact.familyName ??= '';
+    contact.givenName ??= '';
+    contact.company ??= '';
+    contact.phones ??= [];
+    contact.emails ??= [];
+    contact.urls ??= [];
+    contact.note ??= '';
+    contact.phones = contact.phones?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
+    contact.emails = contact.emails?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
+    contact.urls = contact.urls?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
+    contact.socialProfiles = contact.socialProfiles?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
+    return contact;
+  }
+}
+
+// ignore: must_be_immutable
+class _LabelItem extends Item {
+  _LabelItem({
+    String label,
+    String value,
+  }) : super(label: label, value: value);
+
+  @override
+  List get props => [label, equalsValue];
 }
