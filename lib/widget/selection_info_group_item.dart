@@ -14,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 class SelectionInfoGroupItem extends StatelessWidget {
   final GroupItem item;
   final VoidCallback onPressed;
-  final ValueGetter valueGetter;
+  final ValueGetter<String> valueGetter;
   final bool hasStartDivier;
 
   const SelectionInfoGroupItem({
