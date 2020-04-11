@@ -29,7 +29,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
   final ValueChanged<double> onLabelWidthChanged;
   final double labelMaxWidth;
   final double labelCacheWidth;
-  final bool canChangeLabel;
+  final ChangeLabelType changeLabelType;
 
   const ContactInfoGroupItemWidget({
     Key key,
@@ -39,10 +39,10 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
     this.onLabelWidthChanged,
     this.labelMaxWidth,
     this.labelCacheWidth,
-    this.canChangeLabel = true,
+    this.changeLabelType = ChangeLabelType.normal,
   })  : assert(item != null),
         assert(builder != null),
-        assert(canChangeLabel != null),
+        assert(changeLabelType != null),
         super(key: key);
 
   @override
@@ -62,7 +62,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
 
   @override
   void didUpdateWidget(ContactInfoGroupItemWidget oldWidget) {
-    if (widget.canChangeLabel != oldWidget.canChangeLabel || widget.item.label != oldWidget.item.label) {
+    if (widget.changeLabelType != oldWidget.changeLabelType || widget.item.label != oldWidget.item.label) {
       _measureWidth();
     }
     super.didUpdateWidget(oldWidget);
@@ -75,11 +75,19 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       if (widget.onLabelWidthChanged == null || renderBox == null || !renderBox.hasSize) {
         return;
       }
-      final iconSize = widget.canChangeLabel ? _iconSize : _iconMinSize;
+      final showArrow = widget.changeLabelType == ChangeLabelType.normal;
+      final iconSize = showArrow ? _iconSize : _iconMinSize;
       _labelWidth = renderBox.size.width + iconSize + _labelSpacing;
       setState(() {});
       widget.onLabelWidthChanged(_labelWidth);
     });
+  }
+
+  _onLabelPressed() {
+    if (widget.changeLabelType != ChangeLabelType.normal) {
+      return;
+    }
+    // TODO 改变标签
   }
 
   @override
@@ -94,9 +102,12 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       labelWidth = max(_labelWidth, widget.labelMaxWidth);
     }
 
+    final showArrow = widget.changeLabelType == ChangeLabelType.normal;
+    final labelDisbale = widget.changeLabelType == ChangeLabelType.disable;
+
     Widget arrow = AnimatedOpacity(
       duration: _kDuration,
-      opacity: widget.canChangeLabel ? 1.0 : 0.0,
+      opacity: showArrow ? 1.0 : 0.0,
       child: Icon(
         CupertinoIcons.forward,
         color: CupertinoDynamicColor.resolve(
@@ -121,6 +132,10 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           key: _labelGlobalKey,
           style: actionTextStyle.copyWith(
             fontSize: 15,
+            color: CupertinoDynamicColor.resolve(
+              labelDisbale ? textStyle.color : themeData.primaryColor,
+              context,
+            ),
           ),
         ),
         arrow,
@@ -153,17 +168,15 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           borderRadius: BorderRadius.zero,
           padding: _buttonPadding,
           child: labelWidget,
-          onPressed: () {
-            if (!widget.canChangeLabel) {
-              return;
-            }
-            // TODO 改变标签
-          },
+          onPressed: labelDisbale ? null : _onLabelPressed,
         ),
         Expanded(
           child: DefaultTextStyle(
             style: textStyle.copyWith(
-              color: themeData.primaryColor,
+              color: CupertinoDynamicColor.resolve(
+                themeData.primaryColor,
+                context,
+              ),
             ),
             child: Builder(
               builder: (context) => widget.builder(context, widget.item),

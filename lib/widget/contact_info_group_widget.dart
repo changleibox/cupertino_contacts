@@ -25,7 +25,13 @@ typedef ItemFactory = Future<GroupItem> Function(int index, Selection label);
 
 typedef AddInterceptor = bool Function(BuildContext context);
 
-typedef ChangeLabelInterceptor = bool Function(BuildContext context, GroupItem item);
+typedef ChangeLabelInterceptor = ChangeLabelType Function(BuildContext context, GroupItem item);
+
+enum ChangeLabelType {
+  normal,
+  cannotChange,
+  disable,
+}
 
 class ContactInfoGroupWidget extends StatefulWidget {
   final ContactInfoGroup infoGroup;
@@ -140,7 +146,10 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     if (index >= 0 && index < _labelWidts.length && _maxLabelWidth != null) {
       labelCacheWidth = max(_labelWidts[index], _maxLabelWidth);
     }
-    final canChangeLabel = widget.changeLabelInterceptor == null || widget.changeLabelInterceptor(context, item);
+    ChangeLabelType changeLabelType = ChangeLabelType.normal;
+    if (widget.changeLabelInterceptor != null) {
+      changeLabelType = widget.changeLabelInterceptor(context, item);
+    }
     Widget child = Container(
       foregroundDecoration: BoxDecoration(
         border: Border(
@@ -167,7 +176,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           item: item,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
-          canChangeLabel: canChangeLabel,
+          changeLabelType: changeLabelType,
           labelMaxWidth: _maxLabelWidth,
           labelCacheWidth: labelCacheWidth,
           onLabelWidthChanged: (value) {
