@@ -249,9 +249,10 @@ class _AnimatedSliverSearchBar extends AnimatedColorWidget {
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
     return SliverPersistentHeader(
-      pinned: false,
+      pinned: true,
       delegate: SearchBarHeaderDelegate(
         height: _kSearchBarHeight,
+        minHeight: 0,
         onChanged: onQuery,
         backgroundColor: color,
         color: CupertinoColors.secondarySystemFill,

@@ -71,6 +71,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
   final double height;
+  final double minHeight;
   final Color backgroundColor;
   final Color color;
 
@@ -78,6 +79,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
     this.queryController,
     this.onChanged,
     @required this.height,
+    this.minHeight,
     this.backgroundColor,
     this.color,
   }) : assert(height != null);
@@ -116,7 +118,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => height;
 
   @override
-  double get minExtent => height;
+  double get minExtent => minHeight ?? height;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
