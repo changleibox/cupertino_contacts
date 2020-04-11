@@ -118,7 +118,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         );
       } else if (contactInfo is ContactInfoGroup<EditableSelectionItem>) {
         children.add(
-          EditableSelectionContactInfoGroup(infoGroup: contactInfo),
+          RelatedPartyContactInfoGroup(infoGroup: contactInfo),
         );
       } else if (contactInfo is DefaultSelectionContactInfo) {
         children.add(EditContactChooseRingToneButton(

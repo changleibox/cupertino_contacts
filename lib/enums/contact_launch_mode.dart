@@ -5,6 +5,7 @@
 enum HomeLaunchMode {
   normal,
   selection,
+  onlySelection,
 }
 
 enum DetailLaunchMode {

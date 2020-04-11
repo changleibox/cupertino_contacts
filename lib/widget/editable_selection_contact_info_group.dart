@@ -2,7 +2,10 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
+import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/editable_selection_info_group_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,11 +13,11 @@ import 'package:flutter/cupertino.dart';
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
-class EditableSelectionContactInfoGroup extends StatelessWidget {
+class RelatedPartyContactInfoGroup extends StatelessWidget {
   final ContactInfoGroup infoGroup;
   final TextInputType inputType;
 
-  const EditableSelectionContactInfoGroup({
+  const RelatedPartyContactInfoGroup({
     Key key,
     @required this.infoGroup,
     this.inputType = TextInputType.text,
@@ -34,6 +37,20 @@ class EditableSelectionContactInfoGroup extends StatelessWidget {
           controller: (item as EditableSelectionItem).controller,
           name: item.label.labelName,
           inputType: inputType,
+          onPressed: () async {
+            var contact = await Navigator.push(
+              context,
+              RouteProvider.buildRoute(
+                CupertinoContactsPage(
+                  launchMode: HomeLaunchMode.onlySelection,
+                ),
+                fullscreenDialog: true,
+              ),
+            );
+            if (contact != null) {
+              item.value = contact.displayName;
+            }
+          },
         );
       },
     );

@@ -14,12 +14,14 @@ class EditableSelectionInfoGroupItem extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType inputType;
   final String name;
+  final VoidCallback onPressed;
 
   const EditableSelectionInfoGroupItem({
     Key key,
     @required this.controller,
     this.inputType = TextInputType.text,
     @required this.name,
+    this.onPressed,
   })  : assert(controller != null),
         assert(inputType != null),
         assert(name != null),
@@ -39,7 +41,7 @@ class EditableSelectionInfoGroupItem extends StatelessWidget {
           ),
           CupertinoButton(
             minSize: 24,
-            onPressed: () {},
+            onPressed: onPressed,
             borderRadius: BorderRadius.zero,
             padding: EdgeInsets.zero,
             child: Icon(
