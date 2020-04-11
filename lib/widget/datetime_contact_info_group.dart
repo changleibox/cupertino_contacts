@@ -18,6 +18,7 @@ class DateTimeContactInfoGroup extends StatelessWidget {
   final ContactInfoGroup<DateTimeItem> infoGroup;
   final AddInterceptor addInterceptor;
   final ChangeLabelInterceptor changeLabelInterceptor;
+  final SelectionsInterceptor selectionsInterceptor;
   final ItemFactory itemFactory;
 
   const DateTimeContactInfoGroup({
@@ -25,6 +26,7 @@ class DateTimeContactInfoGroup extends StatelessWidget {
     @required this.infoGroup,
     this.addInterceptor,
     this.changeLabelInterceptor,
+    this.selectionsInterceptor,
     this.itemFactory,
   })  : assert(infoGroup != null),
         super(key: key);
@@ -35,6 +37,7 @@ class DateTimeContactInfoGroup extends StatelessWidget {
       infoGroup: infoGroup,
       addInterceptor: addInterceptor,
       changeLabelInterceptor: changeLabelInterceptor,
+      selectionsInterceptor: selectionsInterceptor,
       itemFactory: itemFactory ??
           (index, label) async {
             return DateTimeItem(label: label);

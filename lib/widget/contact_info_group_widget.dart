@@ -27,6 +27,8 @@ typedef AddInterceptor = bool Function(BuildContext context);
 
 typedef ChangeLabelInterceptor = ChangeLabelType Function(BuildContext context, GroupItem item);
 
+typedef SelectionsInterceptor = List<Selection> Function(BuildContext context);
+
 enum ChangeLabelType {
   normal,
   cannotChange,
@@ -39,6 +41,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
   final ItemFactory itemFactory;
   final AddInterceptor addInterceptor;
   final ChangeLabelInterceptor changeLabelInterceptor;
+  final SelectionsInterceptor selectionsInterceptor;
   final String addButtonText;
 
   const ContactInfoGroupWidget({
@@ -48,6 +51,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
     @required this.itemFactory,
     this.addInterceptor,
     this.changeLabelInterceptor,
+    this.selectionsInterceptor,
     this.addButtonText,
   })  : assert(infoGroup != null),
         assert(itemBuilder != null),
@@ -152,6 +156,12 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     if (widget.changeLabelInterceptor != null) {
       changeLabelType = widget.changeLabelInterceptor(context, item);
     }
+
+    var selections = widget.infoGroup.selections;
+    if (widget.selectionsInterceptor != null) {
+      selections = widget.selectionsInterceptor(context);
+    }
+
     Widget child = Container(
       foregroundDecoration: BoxDecoration(
         border: Border(
@@ -176,7 +186,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
         axisAlignment: 1.0,
         child: ContactInfoGroupItemWidget(
           item: item,
-          selections: widget.infoGroup.selections,
+          selections: selections,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
           changeLabelType: changeLabelType,

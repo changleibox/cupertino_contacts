@@ -28,7 +28,20 @@ class BirthdayContactInfoGroup extends StatelessWidget {
         return infoGroup.value.length < 2;
       },
       changeLabelInterceptor: (context, item) {
-        return infoGroup.value.length < 2 || item.label != selections.birthdaySelection ? ChangeLabelType.normal : ChangeLabelType.cannotChange;
+        var changeLabelType;
+        if (infoGroup.value.length < 2 || item.label != selections.birthdaySelection) {
+          changeLabelType = ChangeLabelType.normal;
+        } else {
+          changeLabelType = ChangeLabelType.cannotChange;
+        }
+        return changeLabelType;
+      },
+      selectionsInterceptor: (context) {
+        var originalSelections = List.of(infoGroup.selections);
+        if (infoGroup.value.length >= 2) {
+          originalSelections.remove(selections.birthdaySelection);
+        }
+        return originalSelections;
       },
       itemFactory: (index, label) async {
         var value = infoGroup.value;
