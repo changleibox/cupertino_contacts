@@ -31,10 +31,12 @@ const double _kItemHeight = 44.0;
 
 class CupertinoContactsPage extends StatefulWidget {
   final HomeLaunchMode launchMode;
+  final List<String> selectedIds;
 
   const CupertinoContactsPage({
     Key key,
     this.launchMode = HomeLaunchMode.normal,
+    this.selectedIds,
   })  : assert(launchMode != null),
         super(key: key);
 
@@ -140,6 +142,10 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
             dividerHeight: 1.0 / MediaQuery.of(context).devicePixelRatio,
             indexHeight: _kIndexHeight,
             itemHeight: _kItemHeight,
+            disableBuilder: (contact) {
+              var ids = widget.selectedIds;
+              return ids == null || !ids.contains(contact.identifier);
+            },
             onItemPressed: presenter.onItemPressed,
           ),
         );

@@ -10,16 +10,19 @@ import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/selection_info_group_item.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 
 /// Created by box on 2020/4/10.
 ///
 /// 链接联系人
 class EditContactLinkContactInfoGroup extends StatelessWidget {
-  final ContactInfoGroup infoGroup;
+  final ContactInfoGroup<ContactSelectionItem> infoGroup;
+  final Contact currentContact;
 
   const EditContactLinkContactInfoGroup({
     Key key,
     @required this.infoGroup,
+    @required this.currentContact,
   })  : assert(infoGroup != null),
         super(key: key);
 
@@ -29,11 +32,18 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
       infoGroup: infoGroup,
       changeLabelInterceptor: (context, item) => ChangeLabelType.disable,
       itemFactory: (index, label) async {
+        final selectedContactIds = List<String>();
+        var currentIdentifier = currentContact?.identifier;
+        if (currentIdentifier != null) {
+          selectedContactIds.add(currentIdentifier);
+        }
+        selectedContactIds.addAll(infoGroup.value.map((e) => e.value.identifier));
         var contact = await Navigator.push(
           context,
           RouteProvider.buildRoute(
             CupertinoContactsPage(
               launchMode: HomeLaunchMode.selection,
+              selectedIds: selectedContactIds,
             ),
             fullscreenDialog: true,
           ),

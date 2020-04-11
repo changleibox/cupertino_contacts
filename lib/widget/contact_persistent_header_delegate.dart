@@ -11,12 +11,15 @@ import 'package:flutter_contact/contact.dart';
 
 const double _kHorizontalPadding = 16.0;
 
+typedef ItemDisableBuilder = bool Function(Contact contact);
+
 class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final MapEntry<String, List<Contact>> contactEntry;
   final double indexHeight;
   final double dividerHeight;
   final double itemHeight;
   final ValueChanged<Contact> onItemPressed;
+  final ItemDisableBuilder disableBuilder;
 
   const ContactPersistentHeaderDelegate({
     @required this.contactEntry,
@@ -24,6 +27,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     @required this.dividerHeight,
     @required this.itemHeight,
     this.onItemPressed,
+    this.disableBuilder,
   })  : assert(contactEntry != null),
         assert(indexHeight != null),
         assert(dividerHeight != null),
@@ -76,6 +80,26 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
+
+          var onPressed;
+          if (disableBuilder == null || disableBuilder(contact)) {
+            onPressed = () {
+              if (onItemPressed != null) {
+                onItemPressed(contact);
+              }
+            };
+          }
+
+          var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+          if (onPressed == null) {
+            textStyle = textStyle.copyWith(
+              color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel,
+                context,
+              ),
+            );
+          }
+
           final names = ContactUtils.buildDisplayNameWidgets(contact);
           final hasSpacing = ContactUtils.hasSpacing(contact);
           return CupertinoButton(
@@ -89,7 +113,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
               alignment: Alignment.centerLeft,
               child: DefaultTextStyle(
-                style: CupertinoTheme.of(context).textTheme.textStyle,
+                style: textStyle,
                 child: names.isEmpty
                     ? Text('无姓名')
                     : WidgetGroup.spacing(
@@ -100,11 +124,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                       ),
               ),
             ),
-            onPressed: () {
-              if (onItemPressed != null) {
-                onItemPressed(contact);
-              }
-            },
+            onPressed: onPressed,
           );
         },
         separatorBuilder: (context, index) {

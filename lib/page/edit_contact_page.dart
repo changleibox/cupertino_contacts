@@ -136,6 +136,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       } else if (contactInfo is ContactInfoGroup<ContactSelectionItem>) {
         children.add(EditContactLinkContactInfoGroup(
           infoGroup: contactInfo,
+          currentContact: widget.contact,
         ));
       }
     }
