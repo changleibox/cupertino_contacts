@@ -154,9 +154,19 @@ class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
 }
 
 abstract class GroupItem<T> extends ValueNotifier<T> {
-  final Selection label;
+  Selection _label;
 
-  GroupItem(this.label, {T value}) : super(value);
+  GroupItem(this._label, {T value}) : super(value);
+
+  Selection get label => _label;
+
+  set label(Selection label) {
+    if (label == _label) {
+      return;
+    }
+    _label = label;
+    notifyListeners();
+  }
 
   bool get isEmpty => value == null;
 

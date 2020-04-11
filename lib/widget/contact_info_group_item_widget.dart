@@ -102,7 +102,12 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         ),
         fullscreenDialog: true,
       ),
-    );
+    ).then((value) {
+      if (value != null) {
+        widget.item.label = value;
+        _measureWidth();
+      }
+    });
   }
 
   @override
