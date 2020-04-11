@@ -27,7 +27,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItem item;
   final VoidCallback onDeletePressed;
   final ValueChanged<double> onLabelWidthChanged;
-  final double labelWidth;
+  final double labelMaxWidth;
   final bool canChangeLabel;
 
   const ContactInfoGroupItemWidget({
@@ -36,7 +36,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
     this.onDeletePressed,
     this.builder,
     this.onLabelWidthChanged,
-    this.labelWidth,
+    this.labelMaxWidth,
     this.canChangeLabel = true,
   })  : assert(item != null),
         assert(builder != null),
@@ -87,7 +87,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     var textStyle = textTheme.textStyle;
     var actionTextStyle = textTheme.actionTextStyle;
 
-    final hasSize = widget.labelWidth != null && _labelWidth != null;
+    final hasSize = widget.labelMaxWidth != null && _labelWidth != null;
 
     Widget arrow = AnimatedOpacity(
       duration: _kDuration,
@@ -125,7 +125,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     if (hasSize) {
       labelWidget = AnimatedContainer(
         duration: _kDuration,
-        width: max(_labelWidth, widget.labelWidth),
+        width: max(_labelWidth, widget.labelMaxWidth),
         child: labelWidget,
       );
     }

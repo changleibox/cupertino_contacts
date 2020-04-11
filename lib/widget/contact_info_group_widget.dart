@@ -163,7 +163,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
           canChangeLabel: widget.changeLabelInterceptor == null || widget.changeLabelInterceptor(context, item),
-          labelWidth: _maxLabelWidth,
+          labelMaxWidth: _maxLabelWidth,
           onLabelWidthChanged: (value) {
             var isAdd = index != -1;
             if (isAdd) {
