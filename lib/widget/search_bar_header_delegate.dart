@@ -9,16 +9,6 @@ import 'package:cupertinocontacts/widget/search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
-
-const Border _kDefaultNavBarBorder = Border(
-  bottom: BorderSide(
-    color: _kDefaultNavBarBorderColor,
-    width: 0.0, // One physical pixel.
-    style: BorderStyle.solid,
-  ),
-);
-
 Widget _wrapWithBackground({
   Border border,
   Color backgroundColor,
@@ -87,29 +77,25 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return _wrapWithBackground(
-      border: _kDefaultNavBarBorder,
+      border: Border(
+        bottom: BorderSide(
+          color: CupertinoDynamicColor.resolve(
+            separatorColor,
+            context,
+          ),
+          width: 0.0, // One physical pixel.
+          style: BorderStyle.solid,
+        ),
+      ),
       backgroundColor: CupertinoDynamicColor.resolve(
         backgroundColor,
         context,
       ),
-      child: Container(
-        foregroundDecoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: CupertinoDynamicColor.resolve(
-                separatorColor,
-                context,
-              ),
-              width: 0.0,
-            ),
-          ),
-        ),
-        child: SearchBar(
-          height: height,
-          queryController: queryController,
-          color: color,
-          onChanged: onChanged,
-        ),
+      child: SearchBar(
+        height: height,
+        queryController: queryController,
+        color: color,
+        onChanged: onChanged,
       ),
     );
   }
