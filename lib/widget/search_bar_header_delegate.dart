@@ -76,6 +76,42 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SearchBarHeader(
+      height: height,
+      color: color,
+      backgroundColor: backgroundColor,
+      queryController: queryController,
+      onChanged: onChanged,
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => minHeight ?? height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
+}
+
+class SearchBarHeader extends StatelessWidget {
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final double height;
+  final Color backgroundColor;
+  final Color color;
+
+  const SearchBarHeader({
+    this.queryController,
+    this.onChanged,
+    @required this.height,
+    this.backgroundColor,
+    this.color,
+  }) : assert(height != null);
+
+  @override
+  Widget build(BuildContext context) {
     return _wrapWithBackground(
       border: Border(
         bottom: BorderSide(
@@ -99,13 +135,4 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
       ),
     );
   }
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  double get minExtent => minHeight ?? height;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }

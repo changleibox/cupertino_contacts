@@ -6,10 +6,8 @@ import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/animated_color_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
-import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
-import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
+import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/sliver_list_view.dart';
-import 'package:cupertinocontacts/widget/sliver_persistent_header_widget.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,10 +54,6 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
         onEditPressed: () {},
-      ),
-      _AnimatedSliverSearchBar(
-        colorTween: _colorTween,
-        onQuery: (text) {},
       ),
     ];
   }
@@ -199,62 +193,27 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
 
 class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
   final VoidCallback onEditPressed;
+  final ValueChanged<String> onQuery;
 
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
     this.onEditPressed,
+    this.onQuery,
   }) : super(key: key, colorTween: colorTween);
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
-    final height = _kNavigationBarHeight + MediaQuery.of(context).padding.top;
+    final paddingTop = MediaQuery.of(context).padding.top;
     return SliverPersistentHeader(
       pinned: true,
-      delegate: SliverPersistentHeaderWidget(
-        maxExtent: height,
-        minExtent: height,
-        builder: (context, shrinkOffset, overlapsContent) {
-          return CupertinoNavigationBar(
-            backgroundColor: color,
-            middle: Text('标签'),
-            automaticallyImplyLeading: false,
-            border: null,
-            leading: NavigationBarAction(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            trailing: NavigationBarAction(
-              child: Text('编辑'),
-              onPressed: onEditPressed,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _AnimatedSliverSearchBar extends AnimatedColorWidget {
-  final ValueChanged<String> onQuery;
-
-  const _AnimatedSliverSearchBar({
-    Key key,
-    @required ColorTween colorTween,
-    @required this.onQuery,
-  }) : super(key: key, colorTween: colorTween);
-
-  @override
-  Widget evaluateBuild(BuildContext context, Color color) {
-    return SliverPersistentHeader(
-      pinned: false,
-      delegate: SearchBarHeaderDelegate(
-        height: _kSearchBarHeight,
-        onChanged: onQuery,
+      delegate: LabelPickePersistentHeaderDelegate(
+        paddingTop: paddingTop,
+        navigationBarHeight: _kNavigationBarHeight,
+        searchBarHeight: _kSearchBarHeight,
         backgroundColor: color,
-        color: CupertinoColors.secondarySystemFill,
+        onEditPressed: onEditPressed,
+        onQuery: onQuery,
       ),
     );
   }

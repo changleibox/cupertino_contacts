@@ -48,3 +48,22 @@ class _AnimatedColorWidgetState extends State<AnimatedColorWidget> {
     return widget.evaluateBuild(context, widget.colorTween.transform(_value));
   }
 }
+
+typedef AnimatedColorBuilder = Widget Function(BuildContext context, Color color);
+
+class AnimatedColorWidgetBuilder extends AnimatedColorWidget {
+  final ColorTween colorTween;
+  final AnimatedColorBuilder builder;
+
+  AnimatedColorWidgetBuilder({
+    Key key,
+    @required this.builder,
+    this.colorTween,
+  })  : assert(builder != null),
+        super(key: key, colorTween: colorTween);
+
+  @override
+  Widget evaluateBuild(BuildContext context, Color color) {
+    return builder(context, color);
+  }
+}
