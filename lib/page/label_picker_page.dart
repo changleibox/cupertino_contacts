@@ -10,6 +10,7 @@ import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate
 import 'package:cupertinocontacts/widget/sliver_list_view.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
+import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Created by box on 2020/4/11.
@@ -106,13 +107,26 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
                     child: CupertinoButton(
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          selection.selectionName,
-                          style: textStyle,
+                        child: WidgetGroup.spacing(
+                          alignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selection.labelName,
+                                style: CupertinoTheme.of(context).textTheme.textStyle,
+                              ),
+                            ),
+                            Icon(
+                              CupertinoIcons.check_mark,
+                              size: 40,
+                              color: CupertinoTheme.of(context).primaryColor,
+                            ),
+                          ],
                         ),
                       ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
+                      padding: EdgeInsets.only(
+                        left: 16,
+                        right: 8,
                       ),
                       borderRadius: BorderRadius.zero,
                       color: CupertinoColors.secondarySystemGroupedBackground,

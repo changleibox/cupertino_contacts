@@ -100,9 +100,11 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                     child: WidgetGroup.spacing(
                       alignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          group.name,
-                          style: CupertinoTheme.of(context).textTheme.textStyle,
+                        Expanded(
+                          child: Text(
+                            group.name,
+                            style: CupertinoTheme.of(context).textTheme.textStyle,
+                          ),
                         ),
                         if (presenter.isSelected(group))
                           Icon(
