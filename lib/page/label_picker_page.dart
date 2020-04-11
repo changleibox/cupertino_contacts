@@ -40,11 +40,11 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
   void didChangeDependencies() {
     _colorTween = ColorTween(
       begin: CupertinoDynamicColor.resolve(
-        CupertinoColors.secondarySystemGroupedBackground,
+        CupertinoColors.tertiarySystemGroupedBackground,
         context,
       ),
       end: CupertinoDynamicColor.resolve(
-        CupertinoColors.tertiarySystemGroupedBackground,
+        CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
     );
@@ -254,6 +254,7 @@ class _AnimatedSliverSearchBar extends AnimatedColorWidget {
         height: _kSearchBarHeight,
         onChanged: onQuery,
         backgroundColor: color,
+        color: CupertinoColors.secondarySystemFill,
       ),
     );
   }

@@ -72,12 +72,14 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   final ValueChanged<String> onChanged;
   final double height;
   final Color backgroundColor;
+  final Color color;
 
   const SearchBarHeaderDelegate({
     this.queryController,
     this.onChanged,
     @required this.height,
     this.backgroundColor,
+    this.color,
   }) : assert(height != null);
 
   @override
@@ -103,6 +105,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
         child: SearchBar(
           height: height,
           queryController: queryController,
+          color: color,
           onChanged: onChanged,
         ),
       ),

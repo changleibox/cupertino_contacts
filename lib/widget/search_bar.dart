@@ -12,12 +12,14 @@ class SearchBar extends StatelessWidget {
   final double height;
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
+  final Color color;
 
   const SearchBar({
     Key key,
     @required this.height,
     this.queryController,
     this.onChanged,
+    this.color,
   })  : assert(height != null),
         super(key: key);
 
@@ -37,7 +39,7 @@ class SearchBar extends StatelessWidget {
         onChanged: onChanged,
         decoration: BoxDecoration(
           color: CupertinoDynamicColor.resolve(
-            systemFill,
+            color ?? systemFill,
             context,
           ),
           borderRadius: BorderRadius.circular(8),
