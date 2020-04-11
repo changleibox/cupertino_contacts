@@ -39,6 +39,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
   final ItemFactory itemFactory;
   final AddInterceptor addInterceptor;
   final ChangeLabelInterceptor changeLabelInterceptor;
+  final String addButtonText;
 
   const ContactInfoGroupWidget({
     Key key,
@@ -47,6 +48,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
     @required this.itemFactory,
     this.addInterceptor,
     this.changeLabelInterceptor,
+    this.addButtonText,
   })  : assert(infoGroup != null),
         assert(itemBuilder != null),
         assert(itemFactory != null),
@@ -279,7 +281,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
             sizeFactor: _animation,
             axisAlignment: 1.0,
             child: EditContactInfoButton(
-              text: '添加${widget.infoGroup.name}',
+              text: widget.addButtonText ?? '添加${widget.infoGroup.name}',
               onPressed: _onAddPressed,
             ),
           ),

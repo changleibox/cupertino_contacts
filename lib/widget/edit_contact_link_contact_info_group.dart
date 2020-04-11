@@ -30,6 +30,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContactInfoGroupWidget(
       infoGroup: infoGroup,
+      addButtonText: infoGroup.name,
       changeLabelInterceptor: (context, item) => ChangeLabelType.disable,
       itemFactory: (index, label) async {
         final selectedContactIds = List<String>();
