@@ -136,6 +136,11 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     if (index == items.length - 1 && _animation.value == 0.0) {
       borderStyle = BorderStyle.none;
     }
+    var labelCacheWidth;
+    if (index >= 0 && index < _labelWidts.length && _maxLabelWidth != null) {
+      labelCacheWidth = max(_labelWidts[index], _maxLabelWidth);
+    }
+    final canChangeLabel = widget.changeLabelInterceptor == null || widget.changeLabelInterceptor(context, item);
     Widget child = Container(
       foregroundDecoration: BoxDecoration(
         border: Border(
@@ -162,8 +167,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           item: item,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
-          canChangeLabel: widget.changeLabelInterceptor == null || widget.changeLabelInterceptor(context, item),
+          canChangeLabel: canChangeLabel,
           labelMaxWidth: _maxLabelWidth,
+          labelCacheWidth: labelCacheWidth,
           onLabelWidthChanged: (value) {
             var isAdd = index != -1;
             if (isAdd) {
