@@ -19,7 +19,6 @@ const double _kTextSpacing = 4.0;
 const double _kActionButtonHeight = 60;
 const double _kNavigationBarHeight = 32;
 const double _kNormalTextSize = 17.0;
-const Duration _kDuration = Duration(milliseconds: 300);
 
 class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Contact contact;
@@ -28,7 +27,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
   final double maxNameSize;
   final double minNameSize;
   final double paddingTop;
-  final ContactLaunchMode launchMode;
+  final HomeLaunchMode launchMode;
 
   const ContactDetailPersistentHeaderDelegate({
     @required this.contact,
@@ -51,11 +50,17 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
 
-    final isSelection = launchMode == ContactLaunchMode.selection;
+    final isSelection = launchMode == HomeLaunchMode.selection;
 
     final scrollExtent = maxExtent - minExtent;
     final offset = 1.0 - shrinkOffset / scrollExtent;
     final opacity = (1 - (1.8 * (1 - offset))).clamp(0.0, 1.0);
+
+    var route = ModalRoute.of(context);
+    var title;
+    if (route is CupertinoPageRoute) {
+      title = route.title;
+    }
 
     return Container(
       color: CupertinoDynamicColor.resolve(
@@ -86,7 +91,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
             child: CupertinoNavigationBar(
               backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
-              previousPageTitle: '通讯录',
+              previousPageTitle: title == null ? '通讯录' : '返回',
               trailing: NavigationBarAction(
                 child: Text(isSelection ? '链接' : '编辑'),
                 onPressed: () {
@@ -95,20 +100,13 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                   } else {
                     Navigator.push(
                       context,
-                      PageRouteBuilder(
+                      _PageRoute(
                         fullscreenDialog: true,
-                        transitionDuration: _kDuration,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return FadeTransition(
-                            opacity: Tween(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                parent: animation,
-                                curve: Curves.fastOutSlowIn,
-                              ),
-                            ),
-                            child: EditContactPage(
-                              contact: contact,
-                            ),
+                        title: title,
+                        builder: (context) {
+                          return EditContactPage(
+                            contact: contact,
+                            launchMode: title == null ? EditLaunchMode.normal : EditLaunchMode.other,
                           );
                         },
                       ),
@@ -278,6 +276,39 @@ class _OperationButton extends StatelessWidget {
         ],
       ),
       onPressed: onPressed,
+    );
+  }
+}
+
+class _PageRoute<T> extends CupertinoPageRoute<T> {
+  _PageRoute({
+    @required WidgetBuilder builder,
+    String title,
+    RouteSettings settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  })  : assert(builder != null),
+        assert(maintainState != null),
+        assert(fullscreenDialog != null),
+        assert(opaque),
+        super(
+          settings: settings,
+          fullscreenDialog: fullscreenDialog,
+          title: title,
+          builder: builder,
+          maintainState: maintainState,
+        );
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+    return FadeTransition(
+      opacity: Tween(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+          parent: animation,
+          curve: Curves.fastOutSlowIn,
+        ),
+      ),
+      child: child,
     );
   }
 }

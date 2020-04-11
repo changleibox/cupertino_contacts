@@ -2,7 +2,12 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-enum ContactLaunchMode {
+enum HomeLaunchMode {
   normal,
   selection,
+}
+
+enum EditLaunchMode {
+  normal,
+  other,
 }

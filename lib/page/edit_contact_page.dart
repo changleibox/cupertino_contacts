@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/presenter/edit_contact_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -36,11 +37,14 @@ const double _kMinAvatarSize = 48.0;
 
 class EditContactPage extends StatefulWidget {
   final Contact contact;
+  final EditLaunchMode launchMode;
 
   const EditContactPage({
     Key key,
     this.contact,
-  }) : super(key: key);
+    this.launchMode = EditLaunchMode.normal,
+  })  : assert(launchMode != null),
+        super(key: key);
 
   @override
   _EditContactPageState createState() => _EditContactPageState();
@@ -68,6 +72,15 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
 
   _onDismissSlidable() {
     _slidableController.activeState?.close();
+  }
+
+  String get _routeTitle {
+    var route = ModalRoute.of(context);
+    String title;
+    if (route is CupertinoPageRoute) {
+      title = route.title;
+    }
+    return title;
   }
 
   @override
@@ -140,6 +153,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       minAvatarSize: _kMinAvatarSize,
       paddingTop: MediaQuery.of(context).padding.top,
       isEditContact: widget.contact != null,
+      title: _routeTitle,
       operation: presenter,
     );
 

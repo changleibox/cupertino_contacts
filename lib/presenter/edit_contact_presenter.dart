@@ -5,6 +5,7 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
@@ -177,7 +178,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.addInfo] = NormalSelectionContactInfo(
       name: '添加信息栏',
     );
-    if (widget.contact != null) {
+    if (widget.contact != null && widget.launchMode == EditLaunchMode.normal) {
       itemMap[ContactItemType.linkContact] = ContactInfoGroup<ContactSelectionItem>(
         name: '链接联系人…',
         selections: [selections.buildSelection('iPhone')],

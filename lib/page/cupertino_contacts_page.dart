@@ -30,11 +30,11 @@ const double _kIndexHeight = 26.0;
 const double _kItemHeight = 44.0;
 
 class CupertinoContactsPage extends StatefulWidget {
-  final ContactLaunchMode launchMode;
+  final HomeLaunchMode launchMode;
 
   const CupertinoContactsPage({
     Key key,
-    this.launchMode = ContactLaunchMode.normal,
+    this.launchMode = HomeLaunchMode.normal,
   })  : assert(launchMode != null),
         super(key: key);
 

@@ -4,6 +4,7 @@
 
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
+import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
@@ -32,7 +33,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
           context,
           RouteProvider.buildRoute(
             CupertinoContactsPage(
-              launchMode: ContactLaunchMode.selection,
+              launchMode: HomeLaunchMode.selection,
             ),
             fullscreenDialog: true,
           ),
@@ -40,13 +41,28 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
         return contact == null ? null : ContactSelectionItem(label: label, value: contact);
       },
       itemBuilder: (context, item) {
+        var contact = (item as ContactSelectionItem).value;
         return SelectionInfoGroupItem(
           item: item,
           hasStartDivier: false,
           valueGetter: () {
-            return (item as ContactSelectionItem).value?.displayName;
+            return contact?.displayName;
           },
-          onPressed: () {},
+          onPressed: () {
+            if (contact == null) {
+              return;
+            }
+            Navigator.push(
+              context,
+              RouteProvider.buildRoute(
+                ContactDetailPage(
+                  identifier: contact.identifier,
+                  contact: contact,
+                ),
+                title: item.label.labelName,
+              ),
+            );
+          },
         );
       },
     );

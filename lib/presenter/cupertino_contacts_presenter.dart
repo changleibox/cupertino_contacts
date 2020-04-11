@@ -33,7 +33,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
 
   Iterable<MapEntry<String, List<Contact>>> get entries => _contactsMap.entries;
 
-  bool get isSelectionMode => widget.launchMode == ContactLaunchMode.selection;
+  bool get isSelectionMode => widget.launchMode == HomeLaunchMode.selection;
 
   @override
   void initState() {

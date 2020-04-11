@@ -35,12 +35,14 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
   final double minAvatarSize;
   final double paddingTop;
   final bool isEditContact;
+  final String title;
   final EditContactOperation operation;
 
   const EditContactPersistentHeaderDelegate({
     @required this.maxAvatarSize,
     @required this.minAvatarSize,
     @required this.paddingTop,
+    @required this.title,
     @required this.isEditContact,
     @required this.operation,
   })  : assert(maxAvatarSize != null),
@@ -53,6 +55,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     final scrollExtent = maxExtent - minExtent;
     final offset = 1.0 - shrinkOffset / scrollExtent;
+
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemGroupedBackground,
@@ -82,7 +85,8 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
             child: CupertinoNavigationBar(
               backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
-              middle: isEditContact ? null : Text('新建联系人'),
+              middle: isEditContact ? (title == null ? null : Text(title)) : Text('新建联系人'),
+              automaticallyImplyMiddle: false,
               leading: NavigationBarAction(
                 child: Text('取消'),
                 onPressed: operation.onCancelPressed,
@@ -149,7 +153,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
   double get maxExtent => maxAvatarSize + _spacing + _kNavigationBarHeight + paddingTop;
 
   @override
-  double get minExtent => minAvatarSize + _kPaddingBottom + paddingTop + (isEditContact ? 0 : _kNavigationBarHeight);
+  double get minExtent => minAvatarSize + _kPaddingBottom + paddingTop + (isEditContact && title == null ? 0 : _kNavigationBarHeight);
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

@@ -34,13 +34,13 @@ const double _kMinNameSize = 15;
 class ContactDetailPage extends StatefulWidget {
   final String identifier;
   final Contact contact;
-  final ContactLaunchMode launchMode;
+  final HomeLaunchMode launchMode;
 
   const ContactDetailPage({
     Key key,
     @required this.identifier,
     this.contact,
-    this.launchMode = ContactLaunchMode.normal,
+    this.launchMode = HomeLaunchMode.normal,
   })  : assert(identifier != null),
         assert(launchMode != null),
         super(key: key);
@@ -211,7 +211,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       minLines: 2,
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
     ));
-    final isNormalMode = widget.launchMode == ContactLaunchMode.normal;
+    final isNormalMode = widget.launchMode == HomeLaunchMode.normal;
     if (isNormalMode) {
       if (hasPhone) {
         children.add(_NormalButton(
