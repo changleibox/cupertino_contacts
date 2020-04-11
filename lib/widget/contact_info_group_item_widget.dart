@@ -59,9 +59,11 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
   final _labelGlobalKey = GlobalKey();
 
   double _labelWidth;
+  double _labelCacheWidth;
 
   @override
   void initState() {
+    _labelCacheWidth = widget.labelCacheWidth;
     _measureWidth();
     super.initState();
   }
@@ -84,6 +86,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       final showArrow = widget.changeLabelType == ChangeLabelType.normal;
       final iconSize = showArrow ? _iconSize : _iconMinSize;
       _labelWidth = renderBox.size.width + iconSize + _labelSpacing;
+      _labelCacheWidth = null;
       setState(() {});
       widget.onLabelWidthChanged(_labelWidth);
     });
@@ -105,6 +108,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     ).then((value) {
       if (value != null) {
         widget.item.label = value;
+        _labelWidth = null;
         _measureWidth();
       }
     });
@@ -117,7 +121,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     var textStyle = textTheme.textStyle;
     var actionTextStyle = textTheme.actionTextStyle;
 
-    var labelWidth = widget.labelCacheWidth;
+    var labelWidth = _labelCacheWidth;
     if (widget.labelMaxWidth != null && _labelWidth != null) {
       labelWidth = max(_labelWidth, widget.labelMaxWidth);
     }
