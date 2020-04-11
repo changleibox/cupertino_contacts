@@ -27,7 +27,7 @@ typedef AddInterceptor = bool Function(BuildContext context);
 
 typedef ChangeLabelInterceptor = ChangeLabelType Function(BuildContext context, GroupItem item);
 
-typedef SelectionsInterceptor = List<Selection> Function(BuildContext context);
+typedef SelectionsInterceptor = List<Selection> Function(BuildContext context, GroupItem item);
 
 enum ChangeLabelType {
   normal,
@@ -159,7 +159,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
 
     var selections = widget.infoGroup.selections;
     if (widget.selectionsInterceptor != null) {
-      selections = widget.selectionsInterceptor(context);
+      selections = widget.selectionsInterceptor(context, item);
     }
 
     Widget child = Container(

@@ -36,7 +36,7 @@ class BirthdayContactInfoGroup extends StatelessWidget {
         }
         return changeLabelType;
       },
-      selectionsInterceptor: (context) {
+      selectionsInterceptor: (context, item) {
         var originalSelections = List.of(infoGroup.selections);
         if (infoGroup.value.length >= 2) {
           originalSelections.remove(selections.birthdaySelection);
