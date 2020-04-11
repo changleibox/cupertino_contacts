@@ -15,13 +15,16 @@ class SelectionInfoGroupItem extends StatelessWidget {
   final GroupItem item;
   final VoidCallback onPressed;
   final ValueGetter valueGetter;
+  final bool hasStartDivier;
 
   const SelectionInfoGroupItem({
     Key key,
     @required this.item,
     this.valueGetter,
     this.onPressed,
+    this.hasStartDivier = true,
   })  : assert(item != null),
+        assert(hasStartDivier != null),
         super(key: key);
 
   @override
@@ -35,18 +38,18 @@ class SelectionInfoGroupItem extends StatelessWidget {
         ),
       );
     }
-    return ContactItemContainer(
-      child: CupertinoButton(
-        onPressed: onPressed,
-        padding: EdgeInsets.zero,
-        borderRadius: BorderRadius.zero,
-        minSize: 0,
-        child: WidgetGroup.spacing(
-          alignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 16,
-          children: <Widget>[
-            Container(
+    Widget child = CupertinoButton(
+      onPressed: onPressed,
+      padding: EdgeInsets.zero,
+      borderRadius: BorderRadius.zero,
+      minSize: 0,
+      child: WidgetGroup.spacing(
+        alignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 16,
+        children: <Widget>[
+          Expanded(
+            child: Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(
                 horizontal: 10,
@@ -56,16 +59,25 @@ class SelectionInfoGroupItem extends StatelessWidget {
                 style: style,
               ),
             ),
-            Icon(
-              CupertinoIcons.forward,
-              color: CupertinoDynamicColor.resolve(
-                CupertinoColors.secondaryLabel,
-                context,
-              ),
+          ),
+          Icon(
+            CupertinoIcons.forward,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondaryLabel,
+              context,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+    if (hasStartDivier) {
+      child = ContactItemContainer(
+        child: child,
+      );
+    }
+    return SizedBox(
+      height: 44,
+      child: child,
     );
   }
 }
