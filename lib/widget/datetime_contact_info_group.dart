@@ -4,6 +4,7 @@
 
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
+import 'package:cupertinocontacts/widget/select_date_dialog.dart';
 import 'package:cupertinocontacts/widget/selection_info_group_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +15,7 @@ import 'package:intl/intl.dart';
 class DateTimeContactInfoGroup extends StatelessWidget {
   static final _dateFormat = DateFormat('MM月dd日');
 
-  final ContactInfoGroup infoGroup;
+  final ContactInfoGroup<DateTimeItem> infoGroup;
   final AddInterceptor addInterceptor;
   final ChangeLabelInterceptor changeLabelInterceptor;
   final ItemFactory itemFactory;
@@ -39,10 +40,23 @@ class DateTimeContactInfoGroup extends StatelessWidget {
             return DateTimeItem(label: label);
           },
       itemBuilder: (context, item) {
-        return SelectionInfoGroupItem(
-          item: item,
-          valueGetter: () => _dateFormat.format(item.value),
-          onPressed: () {},
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return SelectionInfoGroupItem(
+              item: item,
+              valueGetter: () => _dateFormat.format(item.value),
+              onPressed: () {
+                showSelectDateDialog(
+                  context,
+                  initialDate: item.value,
+                  onDateChanged: (value) {
+                    item.value = value;
+                    setState(() {});
+                  },
+                );
+              },
+            );
+          },
         );
       },
     );
