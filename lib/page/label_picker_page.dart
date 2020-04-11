@@ -21,10 +21,12 @@ const double _kNavigationBarHeight = 44.0;
 
 class LabelPickerPage extends StatefulWidget {
   final List<Selection> selections;
+  final Selection selectedSelection;
 
   const LabelPickerPage({
     Key key,
     @required this.selections,
+    @required this.selectedSelection,
   })  : assert(selections != null && selections.length > 0),
         super(key: key);
 
@@ -61,22 +63,8 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
 
   @override
   Widget build(BuildContext context) {
-    var textTheme = CupertinoTheme.of(context).textTheme;
-    var textStyle = textTheme.textStyle;
-    var borderSide = BorderSide(
-      color: CupertinoDynamicColor.resolve(
-        separatorColor,
-        context,
-      ),
-      width: 0.0,
-    );
-    var originalSelections = widget.selections;
-    var originalLength = originalSelections.length;
-
     final customSelections = List<Selection>();
     customSelections.add(selections.addCustomSelection);
-
-    var customLength = customSelections.length;
 
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
@@ -93,58 +81,11 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
               context: context,
               removeTop: true,
               removeBottom: true,
-              child: SliverListView.separated(
-                itemCount: originalLength,
-                itemBuilder: (context, index) {
-                  var selection = originalSelections[index];
-                  return Container(
-                    foregroundDecoration: BoxDecoration(
-                      border: Border(
-                        top: index == 0 ? borderSide : BorderSide.none,
-                        bottom: index == originalLength - 1 ? borderSide : BorderSide.none,
-                      ),
-                    ),
-                    child: CupertinoButton(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: WidgetGroup.spacing(
-                          alignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                selection.labelName,
-                                style: CupertinoTheme.of(context).textTheme.textStyle,
-                              ),
-                            ),
-                            Icon(
-                              CupertinoIcons.check_mark,
-                              size: 40,
-                              color: CupertinoTheme.of(context).primaryColor,
-                            ),
-                          ],
-                        ),
-                      ),
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        right: 8,
-                      ),
-                      borderRadius: BorderRadius.zero,
-                      color: CupertinoColors.secondarySystemGroupedBackground,
-                      onPressed: () {},
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Container(
-                    color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemGroupedBackground,
-                      context,
-                    ),
-                    padding: EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(),
-                  );
+              child: _SelectionGroupWidget(
+                selections: widget.selections,
+                selectedSelection: widget.selectedSelection,
+                onItemPressed: (value) {
+                  Navigator.pop(context, value);
                 },
               ),
             ),
@@ -156,45 +97,15 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
             MediaQuery.removePadding(
               context: context,
               removeTop: true,
-              child: SliverListView.separated(
-                itemCount: customLength,
-                itemBuilder: (context, index) {
-                  var selection = customSelections[index];
-                  return Container(
-                    foregroundDecoration: BoxDecoration(
-                      border: Border(
-                        top: index == 0 ? borderSide : BorderSide.none,
-                        bottom: index == customLength - 1 ? borderSide : BorderSide.none,
-                      ),
-                    ),
-                    child: CupertinoButton(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          selection.selectionName,
-                          style: textStyle,
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
-                      borderRadius: BorderRadius.zero,
-                      color: CupertinoColors.secondarySystemGroupedBackground,
-                      onPressed: () {},
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Container(
-                    color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemGroupedBackground,
-                      context,
-                    ),
-                    padding: EdgeInsets.only(
-                      left: 16,
-                    ),
-                    child: CupertinoDivider(),
-                  );
+              child: _SelectionGroupWidget(
+                selections: customSelections,
+                selectedSelection: widget.selectedSelection,
+                onItemPressed: (value) {
+                  if (value == selections.addCustomSelection) {
+                    // TODO 添加自定义标签
+                  } else {
+                    Navigator.pop(context, value);
+                  }
                 },
               ),
             ),
@@ -228,6 +139,128 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
         backgroundColor: color,
         onEditPressed: onEditPressed,
         onQuery: onQuery,
+      ),
+    );
+  }
+}
+
+class _SelectionGroupWidget extends StatelessWidget {
+  final List<Selection> selections;
+  final Selection selectedSelection;
+  final ValueChanged<Selection> onItemPressed;
+
+  const _SelectionGroupWidget({
+    Key key,
+    @required this.selections,
+    @required this.selectedSelection,
+    this.onItemPressed,
+  })  : assert(selections != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var length = selections.length;
+    return SliverListView.separated(
+      itemCount: length,
+      itemBuilder: (context, index) {
+        var selection = selections[index];
+        return _SelectionItemWidget(
+          selection: selection,
+          isFirst: index == 0,
+          isLast: index == length - 1,
+          selected: selection == selectedSelection,
+          onPressed: () {
+            if (onItemPressed != null) {
+              onItemPressed(selection);
+            }
+          },
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Container(
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.secondarySystemGroupedBackground,
+            context,
+          ),
+          padding: EdgeInsets.only(
+            left: 16,
+          ),
+          child: CupertinoDivider(),
+        );
+      },
+    );
+  }
+}
+
+class _SelectionItemWidget extends StatelessWidget {
+  final Selection selection;
+  final bool isFirst;
+  final bool isLast;
+  final bool selected;
+  final VoidCallback onPressed;
+
+  const _SelectionItemWidget({
+    Key key,
+    @required this.selection,
+    @required this.isFirst,
+    @required this.isLast,
+    this.selected = false,
+    this.onPressed,
+  })  : assert(selection != null),
+        assert(isFirst != null),
+        assert(isLast != null),
+        assert(selected != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    var textTheme = themeData.textTheme;
+    var textStyle = textTheme.textStyle;
+
+    var borderSide = BorderSide(
+      color: CupertinoDynamicColor.resolve(
+        separatorColor,
+        context,
+      ),
+      width: 0.0,
+    );
+
+    return Container(
+      foregroundDecoration: BoxDecoration(
+        border: Border(
+          top: isFirst ? borderSide : BorderSide.none,
+          bottom: isLast ? borderSide : BorderSide.none,
+        ),
+      ),
+      child: CupertinoButton(
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: WidgetGroup.spacing(
+            alignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  selection.labelName,
+                  style: textStyle,
+                ),
+              ),
+              if (selection != selections.addCustomSelection && selected)
+                Icon(
+                  CupertinoIcons.check_mark,
+                  size: 40,
+                  color: themeData.primaryColor,
+                ),
+            ],
+          ),
+        ),
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 8,
+        ),
+        borderRadius: BorderRadius.zero,
+        color: CupertinoColors.secondarySystemGroupedBackground,
+        onPressed: onPressed,
       ),
     );
   }

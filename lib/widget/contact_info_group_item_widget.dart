@@ -98,6 +98,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       RouteProvider.buildRoute(
         LabelPickerPage(
           selections: widget.selections,
+          selectedSelection: widget.item.label,
         ),
         fullscreenDialog: true,
       ),
