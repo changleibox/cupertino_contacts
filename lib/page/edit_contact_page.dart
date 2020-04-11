@@ -19,7 +19,7 @@ import 'package:cupertinocontacts/widget/edit_contact_normal_selection_button.da
 import 'package:cupertinocontacts/widget/edit_contact_normal_text_field.dart';
 import 'package:cupertinocontacts/widget/edit_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/edit_contact_persistent_header_delegate.dart';
-import 'package:cupertinocontacts/widget/editable_selection_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/related_party_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
@@ -103,6 +103,10 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         children.add(
           BirthdayContactInfoGroup(infoGroup: contactInfo),
         );
+      } else if (key == ContactItemType.relatedParty) {
+        children.add(
+          RelatedPartyContactInfoGroup(infoGroup: contactInfo),
+        );
       } else if (contactInfo is ContactInfoGroup<EditableItem>) {
         children.add(EditContactInfoGroup(
           infoGroup: contactInfo,
@@ -115,10 +119,6 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       } else if (contactInfo is ContactInfoGroup<AddressItem>) {
         children.add(
           AddressContactInfoGroup(infoGroup: contactInfo),
-        );
-      } else if (contactInfo is ContactInfoGroup<EditableSelectionItem>) {
-        children.add(
-          RelatedPartyContactInfoGroup(infoGroup: contactInfo),
         );
       } else if (contactInfo is DefaultSelectionContactInfo) {
         children.add(EditContactChooseRingToneButton(
