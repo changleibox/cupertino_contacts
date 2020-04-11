@@ -60,6 +60,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             onChanged: onQuery,
             color: CupertinoColors.secondarySystemFill,
             backgroundColor: backgroundColor,
+            opacity: 1.0 - shrinkOffset / searchBarHeight,
           ),
         ),
       ],

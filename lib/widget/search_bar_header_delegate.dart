@@ -101,6 +101,7 @@ class SearchBarHeader extends StatelessWidget {
   final double height;
   final Color backgroundColor;
   final Color color;
+  final double opacity;
 
   const SearchBarHeader({
     this.queryController,
@@ -108,6 +109,7 @@ class SearchBarHeader extends StatelessWidget {
     @required this.height,
     this.backgroundColor,
     this.color,
+    this.opacity,
   }) : assert(height != null);
 
   @override
@@ -131,6 +133,7 @@ class SearchBarHeader extends StatelessWidget {
         height: height,
         queryController: queryController,
         color: color,
+        opacity: opacity ?? 1.0,
         onChanged: onChanged,
       ),
     );

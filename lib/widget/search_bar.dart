@@ -13,6 +13,7 @@ class SearchBar extends StatelessWidget {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
   final Color color;
+  final double opacity;
 
   const SearchBar({
     Key key,
@@ -20,7 +21,9 @@ class SearchBar extends StatelessWidget {
     this.queryController,
     this.onChanged,
     this.color,
+    this.opacity = 1.0,
   })  : assert(height != null),
+        assert(opacity >= 0 && opacity <= 1.0),
         super(key: key);
 
   @override
@@ -33,44 +36,52 @@ class SearchBar extends StatelessWidget {
         right: 16,
         bottom: 14,
       ),
-      child: CupertinoTextField(
-        controller: queryController,
-        placeholder: '搜索',
-        onChanged: onChanged,
-        decoration: BoxDecoration(
-          color: CupertinoDynamicColor.resolve(
-            color ?? systemFill,
-            context,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        style: TextStyle(
-          fontSize: 17,
-        ),
-        placeholderStyle: TextStyle(
-          fontSize: 17,
-          color: CupertinoDynamicColor.resolve(
-            placeholderColor,
-            context,
-          ),
-        ),
-        prefix: Padding(
-          padding: const EdgeInsetsDirectional.only(
-            start: 6,
-          ),
-          child: Icon(
-            CupertinoIcons.search,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
             color: CupertinoDynamicColor.resolve(
-              placeholderColor,
+              color ?? systemFill,
               context,
             ),
-            size: 22,
           ),
-        ),
-        textInputAction: TextInputAction.search,
-        clearButtonMode: OverlayVisibilityMode.editing,
-        padding: EdgeInsets.symmetric(
-          horizontal: 4,
+          child: Opacity(
+            opacity: opacity,
+            child: CupertinoTextField(
+              controller: queryController,
+              placeholder: '搜索',
+              onChanged: onChanged,
+              decoration: null,
+              style: TextStyle(
+                fontSize: 17,
+              ),
+              placeholderStyle: TextStyle(
+                fontSize: 17,
+                color: CupertinoDynamicColor.resolve(
+                  placeholderColor,
+                  context,
+                ),
+              ),
+              prefix: Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  start: 6,
+                ),
+                child: Icon(
+                  CupertinoIcons.search,
+                  color: CupertinoDynamicColor.resolve(
+                    placeholderColor,
+                    context,
+                  ),
+                  size: 22,
+                ),
+              ),
+              textInputAction: TextInputAction.search,
+              clearButtonMode: OverlayVisibilityMode.editing,
+              padding: EdgeInsets.symmetric(
+                horizontal: 4,
+              ),
+            ),
+          ),
         ),
       ),
     );
