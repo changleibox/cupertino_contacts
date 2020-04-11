@@ -6,6 +6,7 @@ import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/contact_detail_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
@@ -271,33 +272,33 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }
     }
 
-    largeSpacingIndexs.add(children.length);
-    topExpandedDividerIndexs.add(children.length + 1);
+    if (widget.launchMode == DetailLaunchMode.normal) {
+      largeSpacingIndexs.add(children.length);
+      topExpandedDividerIndexs.add(children.length + 1);
 
-    children.add(Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 6,
-      ),
-      child: Text(
-        '已链接的联系人',
-        style: TextStyle(
-          fontSize: 13,
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondaryLabel,
-            context,
+      children.add(Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: 6,
+        ),
+        child: Text(
+          '已链接的联系人',
+          style: TextStyle(
+            fontSize: 13,
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondaryLabel,
+              context,
+            ),
           ),
         ),
-      ),
-    ));
-    List.generate(10, (index) {
-      children.add(_NormalGroupInfoWidget(
-        name: selections.iPhoneSelection.labelName,
-        value: '联系人',
-        valueColor: actionTextStyle.color,
-        onPressed: () {},
       ));
-    });
+      List.generate(10, (index) {
+        children.add(_LinkedContactGroupInfoWidget(
+          contact: presenter.object,
+        ));
+      });
+    }
 
     var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
       contact: contact,
@@ -386,6 +387,8 @@ class _NormalGroupInfoWidget extends StatelessWidget {
   final Color valueColor;
   final Widget trailing;
   final VoidCallback onPressed;
+  final CrossAxisAlignment crossAxisAlignment;
+  final EdgeInsets padding;
 
   const _NormalGroupInfoWidget({
     Key key,
@@ -394,6 +397,8 @@ class _NormalGroupInfoWidget extends StatelessWidget {
     this.valueColor,
     this.trailing,
     this.onPressed,
+    this.crossAxisAlignment,
+    this.padding,
   })  : assert(name != null),
         super(key: key);
 
@@ -417,15 +422,16 @@ class _NormalGroupInfoWidget extends StatelessWidget {
             CupertinoColors.secondarySystemGroupedBackground,
             context,
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 10,
-          ),
+          padding: padding ??
+              EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
           borderRadius: BorderRadius.zero,
           minSize: 0,
           onPressed: onPressed,
           child: WidgetGroup.spacing(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
             spacing: 80,
             children: <Widget>[
               Expanded(
@@ -451,6 +457,53 @@ class _NormalGroupInfoWidget extends StatelessWidget {
               ),
               if (trailing != null) trailing,
             ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LinkedContactGroupInfoWidget extends StatelessWidget {
+  final Contact contact;
+
+  const _LinkedContactGroupInfoWidget({
+    Key key,
+    this.contact,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var actionTextStyle = CupertinoTheme.of(context).textTheme.actionTextStyle;
+    var selection = selections.iPhoneSelection;
+    return _NormalGroupInfoWidget(
+      name: selection.labelName,
+      value: '联系人',
+      valueColor: actionTextStyle.color,
+      trailing: Icon(
+        CupertinoIcons.forward,
+        color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel,
+          context,
+        ),
+      ),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      padding: EdgeInsets.only(
+        left: 16,
+        top: 10,
+        right: 10,
+        bottom: 10,
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          RouteProvider.buildRoute(
+            ContactDetailPage(
+              identifier: contact.identifier,
+              contact: contact,
+              launchMode: DetailLaunchMode.editView,
+            ),
+            title: selection.labelName,
           ),
         );
       },
