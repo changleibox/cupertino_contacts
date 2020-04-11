@@ -211,41 +211,44 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       minLines: 2,
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
     ));
-    if (hasPhone) {
+    final isNormalMode = widget.launchMode == ContactLaunchMode.normal;
+    if (isNormalMode) {
+      if (hasPhone) {
+        children.add(_NormalButton(
+          text: '发送信息',
+          onPressed: () {
+            showSendMessageDialog(context, phones, emails);
+          },
+        ));
+      }
       children.add(_NormalButton(
-        text: '发送信息',
+        text: '共享联系人',
         onPressed: () {
-          showSendMessageDialog(context, phones, emails);
+          Share.share(
+            contact.displayName,
+            subject: contact.displayName,
+          );
         },
       ));
-    }
-    children.add(_NormalButton(
-      text: '共享联系人',
-      onPressed: () {
-        Share.share(
-          contact.displayName,
-          subject: contact.displayName,
-        );
-      },
-    ));
-    if (hasPhone) {
-      children.add(_NormalButton(
-        text: '添加到个人收藏',
-        onPressed: () {},
-      ));
-      children.add(_NormalButton(
-        text: '添加到紧急联系人',
-        isDestructive: true,
-        onPressed: () {
-          showAddEmergencyContactDialog(context, phones);
-        },
-      ));
-      children.add(_NormalButton(
-        text: '共享我的位置',
-        onPressed: () {
-          showShareLocationDialog(context);
-        },
-      ));
+      if (hasPhone) {
+        children.add(_NormalButton(
+          text: '添加到个人收藏',
+          onPressed: () {},
+        ));
+        children.add(_NormalButton(
+          text: '添加到紧急联系人',
+          isDestructive: true,
+          onPressed: () {
+            showAddEmergencyContactDialog(context, phones);
+          },
+        ));
+        children.add(_NormalButton(
+          text: '共享我的位置',
+          onPressed: () {
+            showShareLocationDialog(context);
+          },
+        ));
+      }
     }
 
     var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
@@ -292,15 +295,15 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
-                      top: isLast && hasPhone ? borderSide : BorderSide.none,
-                      bottom: isLast || (index == length - 2 && hasPhone) ? borderSide : BorderSide.none,
+                      top: isLast && hasPhone && isNormalMode ? borderSide : BorderSide.none,
+                      bottom: isLast || (index == length - 2 && hasPhone && isNormalMode) ? borderSide : BorderSide.none,
                     ),
                   ),
                   child: children[index],
                 );
               },
               separatorBuilder: (context, index) {
-                if (index == children.length - 2 && hasPhone) {
+                if (index == children.length - 2 && hasPhone && isNormalMode) {
                   return SizedBox(
                     height: 40,
                   );
