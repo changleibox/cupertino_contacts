@@ -94,57 +94,59 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         physics: SnappingScrollPhysics(
           midScrollOffset: _kSearchBarHeight,
         ),
-        body: CustomScrollView(
-          slivers: [
-            MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              removeBottom: true,
-              child: _SelectionGroupWidget(
-                selections: presenter.objects,
-                selectedSelection: widget.selectedSelection,
-                footers: [
-                  _ItemButton(
-                    text: '所有标签',
-                    trailing: Icon(
-                      CupertinoIcons.forward,
-                      size: 20,
-                      color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiaryLabel,
-                        context,
+        body: CupertinoScrollbar(
+          child: CustomScrollView(
+            slivers: [
+              MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                removeBottom: true,
+                child: _SelectionGroupWidget(
+                  selections: presenter.objects,
+                  selectedSelection: widget.selectedSelection,
+                  footers: [
+                    _ItemButton(
+                      text: '所有标签',
+                      trailing: Icon(
+                        CupertinoIcons.forward,
+                        size: 20,
+                        color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.tertiaryLabel,
+                          context,
+                        ),
                       ),
+                      onPressed: () {},
                     ),
-                    onPressed: () {},
-                  ),
-                ],
-                onItemPressed: (value) {
-                  Navigator.pop(context, value);
-                },
+                  ],
+                  onItemPressed: (value) {
+                    Navigator.pop(context, value);
+                  },
+                ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 40,
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 40,
+                ),
               ),
-            ),
-            MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: _SelectionGroupWidget(
-                selections: presenter.customSelections,
-                selectedSelection: widget.selectedSelection,
-                headers: [
-                  _ItemButton(
-                    text: '添加自定义标签',
-                    onPressed: () {},
-                  ),
-                ],
-                onItemPressed: (value) {
-                  Navigator.pop(context, value);
-                },
+              MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: _SelectionGroupWidget(
+                  selections: presenter.customSelections,
+                  selectedSelection: widget.selectedSelection,
+                  headers: [
+                    _ItemButton(
+                      text: '添加自定义标签',
+                      onPressed: () {},
+                    ),
+                  ],
+                  onItemPressed: (value) {
+                    Navigator.pop(context, value);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
