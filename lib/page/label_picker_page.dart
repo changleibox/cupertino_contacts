@@ -350,6 +350,7 @@ class _ItemButton extends StatelessWidget {
               child: Text(
                 text,
                 style: textStyle,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             if (trailing != null) trailing,
@@ -379,8 +380,15 @@ class _CustomLabelTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 44,
+      padding: EdgeInsets.only(
+        right: 10,
+      ),
+      color: CupertinoDynamicColor.resolve(
+        CupertinoColors.secondarySystemGroupedBackground,
+        context,
+      ),
       child: CupertinoTextField(
         controller: controller,
         focusNode: focusNode,
@@ -388,12 +396,7 @@ class _CustomLabelTextField extends StatelessWidget {
           horizontal: 16,
           vertical: 10,
         ),
-        decoration: BoxDecoration(
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondarySystemGroupedBackground,
-            context,
-          ),
-        ),
+        decoration: null,
         clearButtonMode: OverlayVisibilityMode.editing,
       ),
     );
