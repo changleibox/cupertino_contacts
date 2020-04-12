@@ -71,6 +71,7 @@ class _SelectionGroup {
   }
 
   Selection operator [](String propertyName) {
+    assert(propertyName != null);
     return _systemSelectionsMap[propertyName] ?? _customSelectionsMap[propertyName];
   }
 }
