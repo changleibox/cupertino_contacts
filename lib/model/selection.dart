@@ -56,6 +56,7 @@ abstract class _Selections {
   static final Map<String, Selection> _relatedPartySelectionsMap = LinkedHashMap();
   static final Map<String, Selection> _socialDataSelectionsMap = LinkedHashMap();
   static final Map<String, Selection> _instantMessagingSelectionsMap = LinkedHashMap();
+  static final Map<String, Selection> _linkContactSelectionsMap = LinkedHashMap();
 
   static final Map<SelectionType, Map<String, Selection>> _selectionsMap = HashMap();
 
@@ -99,6 +100,9 @@ abstract class _Selections {
     instantMessagingSelections?.forEach((element) {
       _instantMessagingSelectionsMap[element.propertyName] = element;
     });
+    linkContactSelections?.forEach((element) {
+      _linkContactSelectionsMap[element.propertyName] = element;
+    });
 
     _selectionsMap[SelectionType.phone] = _phoneSelectionsMap;
     _selectionsMap[SelectionType.email] = _emailSelectionsMap;
@@ -109,6 +113,7 @@ abstract class _Selections {
     _selectionsMap[SelectionType.relatedParty] = _relatedPartySelectionsMap;
     _selectionsMap[SelectionType.socialData] = _socialDataSelectionsMap;
     _selectionsMap[SelectionType.instantMessaging] = _instantMessagingSelectionsMap;
+    _selectionsMap[SelectionType.linkContact] = _linkContactSelectionsMap;
   }
 
   List<Selection> get phoneSelections;
