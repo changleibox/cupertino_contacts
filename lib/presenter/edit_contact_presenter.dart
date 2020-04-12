@@ -284,9 +284,8 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   Contact get value {
-    var birthdayDates = _convertDatetime(itemMap[ContactItemType.birthday]);
-    var dates = _convertDatetime(itemMap[ContactItemType.date]);
-    dates.addAll(birthdayDates);
+    var dates = _convertDatetime(itemMap[ContactItemType.birthday]);
+    dates.addAll(_convertDatetime(itemMap[ContactItemType.date]));
 
     var contact = Contact();
     contact.identifier = _initialContact.identifier;
