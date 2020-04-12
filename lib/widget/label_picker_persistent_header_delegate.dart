@@ -12,7 +12,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final double navigationBarHeight;
   final Color backgroundColor;
   final ValueChanged<String> onQuery;
-  final VoidCallback onEditPressed;
+  final Widget trailing;
 
   const LabelPickePersistentHeaderDelegate({
     @required this.paddingTop,
@@ -20,7 +20,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
     @required this.navigationBarHeight,
     @required this.backgroundColor,
     this.onQuery,
-    this.onEditPressed,
+    this.trailing,
   })  : assert(paddingTop != null),
         assert(searchBarHeight != null),
         assert(navigationBarHeight != null),
@@ -45,10 +45,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
                 Navigator.pop(context);
               },
             ),
-            trailing: NavigationBarAction(
-              child: Text('编辑'),
-              onPressed: onEditPressed,
-            ),
+            trailing: trailing,
           ),
         ),
         Positioned(

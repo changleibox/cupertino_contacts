@@ -9,6 +9,7 @@ import 'package:cupertinocontacts/widget/animated_color_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate.dart';
+import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/sliver_list_view.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
@@ -71,8 +72,13 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     return [
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
-        onEditPressed: () {},
         onQuery: presenter.onQuery,
+        trailing: presenter.customSelections.isNotEmpty
+            ? NavigationBarAction(
+                child: Text('编辑'),
+                onPressed: () {},
+              )
+            : null,
       ),
     ];
   }
@@ -145,13 +151,13 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 }
 
 class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
-  final VoidCallback onEditPressed;
+  final Widget trailing;
   final ValueChanged<String> onQuery;
 
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
-    this.onEditPressed,
+    this.trailing,
     this.onQuery,
   }) : super(key: key, colorTween: colorTween);
 
@@ -165,7 +171,7 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
         navigationBarHeight: _kNavigationBarHeight,
         searchBarHeight: _kSearchBarHeight,
         backgroundColor: color,
-        onEditPressed: onEditPressed,
+        trailing: trailing,
         onQuery: onQuery,
       ),
     );
