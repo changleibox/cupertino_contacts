@@ -46,19 +46,33 @@ class Selection {
 
 final _Selections selections = _Selections.instance;
 
-abstract class _Selections {
-  static final Map<String, Selection> _phoneSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _emailSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _urlSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _addressSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _birthdaySelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _dateSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _relatedPartySelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _socialDataSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _instantMessagingSelectionsMap = LinkedHashMap();
-  static final Map<String, Selection> _linkContactSelectionsMap = LinkedHashMap();
+class _SelectionGroup {
+  final Map<String, Selection> _selectionsMap = LinkedHashMap();
+  final Map<String, Selection> _customSelectionsMap = LinkedHashMap();
 
-  static final Map<SelectionType, Map<String, Selection>> _selectionsMap = HashMap();
+  _SelectionGroup.fromList(List<Selection> selections) {
+    selections?.forEach((element) {
+      _selectionsMap[element.propertyName] = element;
+    });
+  }
+
+  List<Selection> get selections => _selectionsMap.values.toList();
+
+  List<Selection> get customSelections => _customSelectionsMap.values.toList();
+
+  Selection addCustomSelection(String propertyName) {
+    var selection = Selection._(propertyName);
+    _customSelectionsMap[propertyName] = selection;
+    return selection;
+  }
+
+  Selection operator [](String propertyName) {
+    return _selectionsMap[propertyName] ?? _customSelectionsMap[propertyName];
+  }
+}
+
+abstract class _Selections {
+  final Map<SelectionType, _SelectionGroup> _selectionsMap = HashMap();
 
   final iPhoneSelection = Selection._('iPhone');
 
@@ -73,47 +87,16 @@ abstract class _Selections {
   }
 
   _Selections() {
-    phoneSelections?.forEach((element) {
-      _phoneSelectionsMap[element.propertyName] = element;
-    });
-    emailSelections?.forEach((element) {
-      _emailSelectionsMap[element.propertyName] = element;
-    });
-    urlSelections?.forEach((element) {
-      _urlSelectionsMap[element.propertyName] = element;
-    });
-    addressSelections?.forEach((element) {
-      _addressSelectionsMap[element.propertyName] = element;
-    });
-    birthdaySelections?.forEach((element) {
-      _birthdaySelectionsMap[element.propertyName] = element;
-    });
-    dateSelections?.forEach((element) {
-      _dateSelectionsMap[element.propertyName] = element;
-    });
-    relatedPartySelections?.forEach((element) {
-      _relatedPartySelectionsMap[element.propertyName] = element;
-    });
-    socialDataSelections?.forEach((element) {
-      _socialDataSelectionsMap[element.propertyName] = element;
-    });
-    instantMessagingSelections?.forEach((element) {
-      _instantMessagingSelectionsMap[element.propertyName] = element;
-    });
-    linkContactSelections?.forEach((element) {
-      _linkContactSelectionsMap[element.propertyName] = element;
-    });
-
-    _selectionsMap[SelectionType.phone] = _phoneSelectionsMap;
-    _selectionsMap[SelectionType.email] = _emailSelectionsMap;
-    _selectionsMap[SelectionType.url] = _urlSelectionsMap;
-    _selectionsMap[SelectionType.address] = _addressSelectionsMap;
-    _selectionsMap[SelectionType.birthday] = _birthdaySelectionsMap;
-    _selectionsMap[SelectionType.date] = _dateSelectionsMap;
-    _selectionsMap[SelectionType.relatedParty] = _relatedPartySelectionsMap;
-    _selectionsMap[SelectionType.socialData] = _socialDataSelectionsMap;
-    _selectionsMap[SelectionType.instantMessaging] = _instantMessagingSelectionsMap;
-    _selectionsMap[SelectionType.linkContact] = _linkContactSelectionsMap;
+    _selectionsMap[SelectionType.phone] = _SelectionGroup.fromList(phoneSelections);
+    _selectionsMap[SelectionType.email] = _SelectionGroup.fromList(emailSelections);
+    _selectionsMap[SelectionType.url] = _SelectionGroup.fromList(urlSelections);
+    _selectionsMap[SelectionType.address] = _SelectionGroup.fromList(addressSelections);
+    _selectionsMap[SelectionType.birthday] = _SelectionGroup.fromList(birthdaySelections);
+    _selectionsMap[SelectionType.date] = _SelectionGroup.fromList(dateSelections);
+    _selectionsMap[SelectionType.relatedParty] = _SelectionGroup.fromList(relatedPartySelections);
+    _selectionsMap[SelectionType.socialData] = _SelectionGroup.fromList(socialDataSelections);
+    _selectionsMap[SelectionType.instantMessaging] = _SelectionGroup.fromList(instantMessagingSelections);
+    _selectionsMap[SelectionType.linkContact] = _SelectionGroup.fromList(linkContactSelections);
   }
 
   List<Selection> get phoneSelections;
@@ -150,18 +133,26 @@ abstract class _Selections {
 
   Selection get otherSelection;
 
+  Selection addCustomSelection(SelectionType type, String propertyName) {
+    assert(type != null);
+    assert(propertyName != null);
+    var selectionGroup = _selectionsMap[type];
+    assert(selectionGroup != null, 'undefine type=$type');
+    return selectionGroup.addCustomSelection(propertyName);
+  }
+
   bool contains(SelectionType type, String propertyName) {
     assert(type != null);
     assert(propertyName != null);
-    return _selectionsMap[type]?.containsKey(propertyName) ?? false;
+    return _selectionsMap[type][propertyName] != null;
   }
 
   Selection elementAtName(SelectionType type, String propertyName) {
     assert(type != null);
     assert(propertyName != null);
-    var selectionsMap = _selectionsMap[type];
-    assert(selectionsMap != null, 'undefine type=$type');
-    return selectionsMap[propertyName] ?? otherSelection;
+    var selectionGroup = _selectionsMap[type];
+    assert(selectionGroup != null, 'undefine type=$type');
+    return selectionGroup[propertyName] ?? selectionGroup.addCustomSelection(propertyName);
   }
 
   Selection elementAtIndex(SelectionType type, int index) {
@@ -173,9 +164,16 @@ abstract class _Selections {
 
   List<Selection> elementAt(SelectionType type) {
     assert(type != null);
-    var selectionsMap = _selectionsMap[type];
-    assert(selectionsMap != null, 'undefine type=$type');
-    return selectionsMap.values.toList();
+    var selectionGroup = _selectionsMap[type];
+    assert(selectionGroup != null, 'undefine type=$type');
+    return selectionGroup.selections;
+  }
+
+  List<Selection> customElementAt(SelectionType type) {
+    assert(type != null);
+    var selectionGroup = _selectionsMap[type];
+    assert(selectionGroup != null, 'undefine type=$type');
+    return selectionGroup.customSelections;
   }
 }
 

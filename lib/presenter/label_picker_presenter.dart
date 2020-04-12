@@ -19,7 +19,7 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
   @override
   void onLoaded(Iterable<Selection> object) {
     _customSelections.clear();
-    _customSelections.addAll(_query(_customSelections));
+    _customSelections.addAll(_query(selections.customElementAt(widget.selectionType)));
     super.onLoaded(object);
   }
 
