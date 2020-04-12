@@ -13,7 +13,7 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
 
   @override
   Future<List<Selection>> onLoad(bool showProgress) async {
-    return _query(widget.selections);
+    return _query(selections.get(widget.selectionType));
   }
 
   @override
@@ -25,9 +25,17 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
 
   List<Selection> _query(List<Selection> selections) {
     return selections.where((element) {
-      return !_hasQueryText || element.selectionName.contains(queryText);
+      return _filterHideSelection(element) && _matchQueryText(element);
     }).toList();
   }
 
   bool get _hasQueryText => queryText != null && queryText.isNotEmpty;
+
+  bool _matchQueryText(Selection selection) {
+    return !_hasQueryText || selection.selectionName.contains(queryText);
+  }
+
+  bool _filterHideSelection(Selection selection) {
+    return widget.hideSelections == null || !widget.hideSelections.contains(selection);
+  }
 }

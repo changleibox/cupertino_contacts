@@ -160,9 +160,9 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
       changeLabelType = widget.changeLabelInterceptor(context, item);
     }
 
-    var selections = widget.infoGroup.selections;
+    var hideSelections;
     if (widget.selectionsInterceptor != null) {
-      selections = widget.selectionsInterceptor(context, item);
+      hideSelections = widget.selectionsInterceptor(context, item);
     }
 
     Widget child = Container(
@@ -189,13 +189,14 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
         axisAlignment: 1.0,
         child: ContactInfoGroupItemWidget(
           item: item,
-          selections: selections,
+          selectionType: widget.infoGroup.selectionType,
           builder: widget.itemBuilder,
           onDeletePressed: onDeletePressed,
           changeLabelType: changeLabelType,
           labelMaxWidth: _maxLabelWidth,
           labelCacheWidth: labelCacheWidth,
           canCustomLabel: widget.canCustomLabel,
+          hideSelections: hideSelections,
           onLabelWidthChanged: (value) {
             if (index != -1) {
               if (_labelWidts.length <= index) {
@@ -234,8 +235,8 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
       return;
     }
     var length = widget.infoGroup.value.length;
-    var selections = widget.infoGroup.selections;
-    widget.itemFactory(length, selections[length % selections.length]).then((value) {
+    var itemType = widget.infoGroup.selectionType;
+    widget.itemFactory(length, selections.indexOf(itemType, length)).then((value) {
       if (value == null) {
         return;
       }

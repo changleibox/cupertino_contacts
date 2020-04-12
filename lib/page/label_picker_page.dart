@@ -27,16 +27,18 @@ const double _kNavigationBarHeight = 44.0;
 const int _kMaxLabelCount = 20;
 
 class LabelPickerPage extends StatefulWidget {
-  final List<Selection> selections;
+  final SelectionType selectionType;
   final Selection selectedSelection;
+  final List<Selection> hideSelections;
   final bool canCustomLabel;
 
   const LabelPickerPage({
     Key key,
-    @required this.selections,
+    @required this.selectionType,
     @required this.selectedSelection,
+    this.hideSelections,
     this.canCustomLabel = true,
-  })  : assert(selections != null && selections.length > 0),
+  })  : assert(selectionType != null),
         assert(canCustomLabel != null),
         super(key: key);
 
@@ -284,7 +286,7 @@ class _SelectionItemButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeData = CupertinoTheme.of(context);
     return _ItemButton(
-      text: selection.labelName,
+      text: selection.selectionName,
       onPressed: onPressed,
       trailing: selected
           ? Icon(

@@ -38,11 +38,11 @@ class BirthdayContactInfoGroup extends StatelessWidget {
         return changeLabelType;
       },
       selectionsInterceptor: (context, item) {
-        var originalSelections = List.of(infoGroup.selections);
+        var hideSelections;
         if (infoGroup.value.length >= 2) {
-          originalSelections.remove(selections.birthdaySelection);
+          hideSelections = [selections.birthdaySelection];
         }
-        return originalSelections;
+        return hideSelections;
       },
       itemFactory: (index, label) async {
         var value = infoGroup.value;

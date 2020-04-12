@@ -5,6 +5,19 @@
 import 'dart:collection';
 import 'dart:io';
 
+enum SelectionType {
+  phone,
+  email,
+  url,
+  address,
+  birthday,
+  date,
+  relatedParty,
+  socialData,
+  instantMessaging,
+  linkContact,
+}
+
 class Selection {
   final String propertyName;
   final String labelName;
@@ -96,6 +109,8 @@ abstract class _Selections {
 
   List<Selection> get instantMessagingSelections;
 
+  List<Selection> get linkContactSelections => [iPhoneSelection];
+
   Selection get streetSelection;
 
   Selection get citySelection;
@@ -119,6 +134,51 @@ abstract class _Selections {
   Selection operator [](String propertyName) {
     assert(propertyName != null);
     return _selectionsMap[propertyName] ?? otherSelection;
+  }
+
+  Selection indexOf(SelectionType type, int index) {
+    assert(type != null);
+    assert(index != null && index >= 0);
+    var list = get(type);
+    return list[index % list.length];
+  }
+
+  List<Selection> get(SelectionType type) {
+    assert(type != null);
+    switch (type) {
+      case SelectionType.phone:
+        return phoneSelections;
+        break;
+      case SelectionType.email:
+        return emailSelections;
+        break;
+      case SelectionType.url:
+        return urlSelections;
+        break;
+      case SelectionType.address:
+        return addressSelections;
+        break;
+      case SelectionType.birthday:
+        return birthdaySelections;
+        break;
+      case SelectionType.date:
+        return dateSelections;
+        break;
+      case SelectionType.relatedParty:
+        return relatedPartySelections;
+        break;
+      case SelectionType.socialData:
+        return socialDataSelections;
+        break;
+      case SelectionType.instantMessaging:
+        return instantMessagingSelections;
+        break;
+      case SelectionType.linkContact:
+        return linkContactSelections;
+        break;
+    }
+    assert(false, '为定义的标签');
+    return null;
   }
 }
 

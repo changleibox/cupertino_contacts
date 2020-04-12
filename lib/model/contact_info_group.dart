@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:collection/collection.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -95,14 +94,14 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
 
 class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
   final List<T> _items;
-  final List<Selection> selections;
+  final SelectionType selectionType;
 
   ContactInfoGroup({
     @required String name,
-    @required this.selections,
+    @required this.selectionType,
     List<T> items,
   })  : assert(name != null),
-        assert(selections != null && selections.length > 0),
+        assert(selectionType != null),
         this._items = [...?items],
         super(name: name, value: List.unmodifiable([...?items])) {
     _items.forEach((element) => element.addListener(_itemListener));
@@ -143,14 +142,10 @@ class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ContactInfoGroup &&
-          runtimeType == other.runtimeType &&
-          DeepCollectionEquality.unordered().equals(_items, other._items) &&
-          DeepCollectionEquality.unordered().equals(selections, other.selections);
+      identical(this, other) || other is ContactInfoGroup && runtimeType == other.runtimeType && _items == other._items && selectionType == other.selectionType;
 
   @override
-  int get hashCode => _items.hashCode ^ selections.hashCode;
+  int get hashCode => _items.hashCode ^ selectionType.hashCode;
 }
 
 abstract class GroupItem<T> extends ValueNotifier<T> {

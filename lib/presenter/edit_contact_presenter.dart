@@ -68,7 +68,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           value: e.value,
         );
       })?.toList(),
-      selections: selections.phoneSelections,
+      selectionType: SelectionType.phone,
     );
     itemMap[ContactItemType.email] = ContactInfoGroup<EditableItem>(
       name: '电子邮件',
@@ -80,7 +80,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           value: e.value,
         );
       })?.toList(),
-      selections: selections.emailSelections,
+      selectionType: SelectionType.email,
     );
     itemMap[ContactItemType.phoneRinging] = DefaultSelectionContactInfo(
       name: '电话铃声',
@@ -98,7 +98,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           value: e.value,
         );
       })?.toList(),
-      selections: selections.urlSelections,
+      selectionType: SelectionType.url,
     );
     itemMap[ContactItemType.address] = ContactInfoGroup<AddressItem>(
       name: '地址',
@@ -116,7 +116,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           ),
         );
       })?.toList(),
-      selections: selections.addressSelections,
+      selectionType: SelectionType.address,
     );
     itemMap[ContactItemType.birthday] = ContactInfoGroup<DateTimeItem>(
       name: '生日',
@@ -128,7 +128,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           value: e.date.toDateTime(),
         );
       })?.toList(),
-      selections: selections.birthdaySelections,
+      selectionType: SelectionType.birthday,
     );
     itemMap[ContactItemType.date] = ContactInfoGroup<DateTimeItem>(
       name: '日期',
@@ -140,12 +140,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           value: e.date.toDateTime(),
         );
       })?.toList(),
-      selections: selections.dateSelections,
+      selectionType: SelectionType.date,
     );
     itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableSelectionItem>(
       name: '关联人',
       items: List<EditableSelectionItem>(),
-      selections: selections.relatedPartySelections,
+      selectionType: SelectionType.relatedParty,
     );
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
@@ -157,12 +157,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           value: e.value,
         );
       })?.toList(),
-      selections: selections.socialDataSelections,
+      selectionType: SelectionType.socialData,
     );
     itemMap[ContactItemType.instantMessaging] = ContactInfoGroup<EditableItem>(
       name: '即时信息',
       items: List<EditableItem>(),
-      selections: selections.instantMessagingSelections,
+      selectionType: SelectionType.instantMessaging,
     );
     itemMap[ContactItemType.remarks] = MultiEditableContactInfo(
       name: '备注',
@@ -174,7 +174,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     if (widget.contact != null && widget.launchMode == EditLaunchMode.normal) {
       itemMap[ContactItemType.linkContact] = ContactInfoGroup<ContactSelectionItem>(
         name: '链接联系人…',
-        selections: [selections.iPhoneSelection],
+        selectionType: SelectionType.linkContact,
       );
     }
 

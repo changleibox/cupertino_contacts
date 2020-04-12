@@ -29,18 +29,19 @@ const EdgeInsets _buttonPadding = EdgeInsets.only(
 class ContactInfoGroupItemWidget extends StatefulWidget {
   final GroupItemBuilder builder;
   final GroupItem item;
-  final List<Selection> selections;
+  final SelectionType selectionType;
   final VoidCallback onDeletePressed;
   final ValueChanged<double> onLabelWidthChanged;
   final double labelMaxWidth;
   final double labelCacheWidth;
   final ChangeLabelType changeLabelType;
   final bool canCustomLabel;
+  final List<Selection> hideSelections;
 
   const ContactInfoGroupItemWidget({
     Key key,
     @required this.item,
-    @required this.selections,
+    @required this.selectionType,
     this.onDeletePressed,
     this.builder,
     this.onLabelWidthChanged,
@@ -48,8 +49,9 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
     this.labelCacheWidth,
     this.changeLabelType = ChangeLabelType.normal,
     this.canCustomLabel = true,
+    this.hideSelections,
   })  : assert(item != null),
-        assert(selections != null),
+        assert(selectionType != null),
         assert(builder != null),
         assert(changeLabelType != null),
         assert(canCustomLabel != null),
@@ -104,9 +106,10 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       context,
       RouteProvider.buildRoute(
         LabelPickerPage(
-          selections: widget.selections,
+          selectionType: widget.selectionType,
           selectedSelection: widget.item.label,
           canCustomLabel: widget.canCustomLabel,
+          hideSelections: widget.hideSelections,
         ),
         fullscreenDialog: true,
       ),
