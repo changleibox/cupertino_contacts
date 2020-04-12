@@ -91,6 +91,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   @override
   Widget builds(BuildContext context) {
+    var itemCount = min(_kMaxLabelCount, presenter.itemCount);
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -108,7 +109,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                 removeTop: true,
                 removeBottom: widget.canCustomLabel,
                 child: _SelectionGroupWidget(
-                  selections: presenter.objects.toList().sublist(0, min(_kMaxLabelCount, presenter.itemCount)),
+                  selections: presenter.objects.take(itemCount),
                   selectedSelection: widget.selectedSelection,
                   footers: [
                     if (presenter.itemCount > _kMaxLabelCount)
@@ -193,7 +194,7 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
 class _SelectionGroupWidget extends StatelessWidget {
   final List<Widget> headers;
   final List<Widget> footers;
-  final List<Selection> selections;
+  final Iterable<Selection> selections;
   final Selection selectedSelection;
   final ValueChanged<Selection> onItemPressed;
 
