@@ -155,7 +155,7 @@ abstract class _Selections {
     assert(type != null);
     assert(propertyName != null);
     var selectionsMap = _selectionsMap[type];
-    assert(selectionsMap != null, '未定义的标签');
+    assert(selectionsMap != null, 'undefine type=$type');
     return selectionsMap[propertyName] ?? otherSelection;
   }
 
@@ -169,7 +169,7 @@ abstract class _Selections {
   List<Selection> elementAt(SelectionType type) {
     assert(type != null);
     var selectionsMap = _selectionsMap[type];
-    assert(selectionsMap != null, '未定义的标签');
+    assert(selectionsMap != null, 'undefine type=$type');
     return selectionsMap.values.toList();
   }
 }
