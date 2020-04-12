@@ -236,7 +236,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     }
     var length = widget.infoGroup.value.length;
     var itemType = widget.infoGroup.selectionType;
-    widget.itemFactory(length, selections.elementAtIndex(itemType, length)).then((value) {
+    widget.itemFactory(length, selections.systemSelectionAtIndex(itemType, length)).then((value) {
       if (value == null) {
         return;
       }

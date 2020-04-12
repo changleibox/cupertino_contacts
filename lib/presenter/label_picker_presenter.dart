@@ -13,13 +13,13 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
 
   @override
   Future<List<Selection>> onLoad(bool showProgress) async {
-    return _query(selections.systemElementAt(widget.selectionType));
+    return _query(selections.systemSelectionsAt(widget.selectionType));
   }
 
   @override
   void onLoaded(Iterable<Selection> object) {
     _customSelections.clear();
-    _customSelections.addAll(_query(selections.customElementAt(widget.selectionType)));
+    _customSelections.addAll(_query(selections.customSelectionsAt(widget.selectionType)));
     super.onLoaded(object);
   }
 

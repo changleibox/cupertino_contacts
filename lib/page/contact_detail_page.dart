@@ -88,7 +88,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         return selections.contains(SelectionType.phone, element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.phone, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.phone, e.label).labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -102,7 +102,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         return selections.contains(SelectionType.email, element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.email, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.email, e.label).labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -118,7 +118,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         var url = e.value;
         url = url.startsWith('http') ? url : 'http://$url';
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.url, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.url, e.label).labelName,
           value: url,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -139,7 +139,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           e.country,
         ].where((element) => element != null && element.isNotEmpty).join(' ');
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.address, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.address, e.label).labelName,
           value: value,
           trailing: Container(
             width: 80,
@@ -171,7 +171,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }).map((e) {
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.birthday, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.birthday, e.label).labelName,
           value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -188,7 +188,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }).map((e) {
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.date, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.date, e.label).labelName,
           value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -204,7 +204,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
         return selections.contains(SelectionType.socialData, element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
-          name: selections.elementAtName(SelectionType.socialData, e.label).labelName,
+          name: selections.selectionAtName(SelectionType.socialData, e.label).labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {

@@ -64,7 +64,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.phone, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections.elementAtName(SelectionType.phone, e.label),
+          label: selections.selectionAtName(SelectionType.phone, e.label),
           value: e.value,
         );
       })?.toList(),
@@ -76,7 +76,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.email, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections.elementAtName(SelectionType.email, e.label),
+          label: selections.selectionAtName(SelectionType.email, e.label),
           value: e.value,
         );
       })?.toList(),
@@ -94,7 +94,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.url, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections.elementAtName(SelectionType.url, e.label),
+          label: selections.selectionAtName(SelectionType.url, e.label),
           value: e.value,
         );
       })?.toList(),
@@ -106,7 +106,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.address, element.label);
       })?.map((e) {
         return AddressItem(
-          label: selections.elementAtName(SelectionType.address, e.label),
+          label: selections.selectionAtName(SelectionType.address, e.label),
           value: Address(
             street1: e.street,
             city: e.city,
@@ -124,7 +124,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.birthday, element.label);
       })?.map((e) {
         return DateTimeItem(
-          label: selections.elementAtName(SelectionType.birthday, e.label),
+          label: selections.selectionAtName(SelectionType.birthday, e.label),
           value: e.date.toDateTime(),
         );
       })?.toList(),
@@ -136,7 +136,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.date, element.label);
       })?.map((e) {
         return DateTimeItem(
-          label: selections.elementAtName(SelectionType.date, e.label),
+          label: selections.selectionAtName(SelectionType.date, e.label),
           value: e.date.toDateTime(),
         );
       })?.toList(),
@@ -153,7 +153,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return selections.contains(SelectionType.socialData, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections.elementAtName(SelectionType.socialData, e.label),
+          label: selections.selectionAtName(SelectionType.socialData, e.label),
           value: e.value,
         );
       })?.toList(),

@@ -150,7 +150,7 @@ abstract class _Selections {
     return _selectionsMap[type][propertyName] != null;
   }
 
-  Selection elementAtName(SelectionType type, String propertyName) {
+  Selection selectionAtName(SelectionType type, String propertyName) {
     assert(type != null);
     assert(propertyName != null);
     var selectionGroup = _selectionsMap[type];
@@ -158,21 +158,21 @@ abstract class _Selections {
     return selectionGroup[propertyName] ?? selectionGroup.addCustomSelection(propertyName);
   }
 
-  Selection elementAtIndex(SelectionType type, int index) {
+  Selection systemSelectionAtIndex(SelectionType type, int index) {
     assert(type != null);
     assert(index != null && index >= 0);
-    var list = systemElementAt(type);
+    var list = systemSelectionsAt(type);
     return list[index % list.length];
   }
 
-  List<Selection> systemElementAt(SelectionType type) {
+  List<Selection> systemSelectionsAt(SelectionType type) {
     assert(type != null);
     var selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     return selectionGroup.systemSelections;
   }
 
-  List<Selection> customElementAt(SelectionType type) {
+  List<Selection> customSelectionsAt(SelectionType type) {
     assert(type != null);
     var selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
