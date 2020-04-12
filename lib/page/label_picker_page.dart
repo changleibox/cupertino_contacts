@@ -136,7 +136,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                   selectedSelection: widget.selectedSelection,
                   headers: [
                     _ItemButton(
-                      text: '添加自定义标签',
+                      text: '添加自定标签',
                       onPressed: () {},
                     ),
                   ],
