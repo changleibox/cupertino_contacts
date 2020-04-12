@@ -47,27 +47,30 @@ class Selection {
 final _Selections selections = _Selections.instance;
 
 class _SelectionGroup {
-  final Map<String, Selection> _selectionsMap = LinkedHashMap();
+  final Map<String, Selection> _systemSelectionsMap = LinkedHashMap();
   final Map<String, Selection> _customSelectionsMap = LinkedHashMap();
 
   _SelectionGroup.fromList(List<Selection> selections) {
     selections?.forEach((element) {
-      _selectionsMap[element.propertyName] = element;
+      _systemSelectionsMap[element.propertyName] = element;
     });
   }
 
-  List<Selection> get selections => _selectionsMap.values.toList();
+  List<Selection> get systemSelections => _systemSelectionsMap.values.toList();
 
   List<Selection> get customSelections => _customSelectionsMap.values.toList();
 
   Selection addCustomSelection(String propertyName) {
+    if (_customSelectionsMap.containsKey(propertyName)) {
+      return _customSelectionsMap[propertyName];
+    }
     var selection = Selection._(propertyName);
     _customSelectionsMap[propertyName] = selection;
     return selection;
   }
 
   Selection operator [](String propertyName) {
-    return _selectionsMap[propertyName] ?? _customSelectionsMap[propertyName];
+    return _systemSelectionsMap[propertyName] ?? _customSelectionsMap[propertyName];
   }
 }
 
@@ -158,15 +161,15 @@ abstract class _Selections {
   Selection elementAtIndex(SelectionType type, int index) {
     assert(type != null);
     assert(index != null && index >= 0);
-    var list = elementAt(type);
+    var list = systemElementAt(type);
     return list[index % list.length];
   }
 
-  List<Selection> elementAt(SelectionType type) {
+  List<Selection> systemElementAt(SelectionType type) {
     assert(type != null);
     var selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
-    return selectionGroup.selections;
+    return selectionGroup.systemSelections;
   }
 
   List<Selection> customElementAt(SelectionType type) {
