@@ -61,10 +61,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.phone] = ContactInfoGroup<EditableItem>(
       name: '电话',
       items: _initialContact.phones?.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.phone, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.phone, e.label),
           value: e.value,
         );
       })?.toList(),
@@ -73,10 +73,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.email] = ContactInfoGroup<EditableItem>(
       name: '电子邮件',
       items: _initialContact.emails?.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.email, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.email, e.label),
           value: e.value,
         );
       })?.toList(),
@@ -91,10 +91,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.url] = ContactInfoGroup<EditableItem>(
       name: 'URL',
       items: _initialContact.urls?.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.url, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.url, e.label),
           value: e.value,
         );
       })?.toList(),
@@ -103,10 +103,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.address] = ContactInfoGroup<AddressItem>(
       name: '地址',
       items: _initialContact.postalAddresses?.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.address, element.label);
       })?.map((e) {
         return AddressItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.address, e.label),
           value: Address(
             street1: e.street,
             city: e.city,
@@ -121,10 +121,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.birthday] = ContactInfoGroup<DateTimeItem>(
       name: '生日',
       items: _initialContact.dates?.where((element) {
-        return selections.birthdaySelections.contains(selections[element.label]);
+        return selections.contains(SelectionType.birthday, element.label);
       })?.map((e) {
         return DateTimeItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.birthday, e.label),
           value: e.date.toDateTime(),
         );
       })?.toList(),
@@ -133,10 +133,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.date] = ContactInfoGroup<DateTimeItem>(
       name: '日期',
       items: _initialContact.dates?.where((element) {
-        return selections.dateSelections.contains(selections[element.label]);
+        return selections.contains(SelectionType.date, element.label);
       })?.map((e) {
         return DateTimeItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.date, e.label),
           value: e.date.toDateTime(),
         );
       })?.toList(),
@@ -150,10 +150,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
       name: '个人社交资料',
       items: _initialContact.socialProfiles?.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.socialData, element.label);
       })?.map((e) {
         return EditableItem(
-          label: selections[e.label],
+          label: selections.elementAtName(SelectionType.socialData, e.label),
           value: e.value,
         );
       })?.toList(),

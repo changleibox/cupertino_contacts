@@ -85,10 +85,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     final children = List<Widget>();
     if (hasPhone) {
       children.addAll(phones.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.phone, element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
-          name: selections[e.label].labelName,
+          name: selections.elementAtName(SelectionType.phone, e.label).labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -99,10 +99,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (emails != null && emails.isNotEmpty) {
       children.addAll(emails.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.email, element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
-          name: selections[e.label].labelName,
+          name: selections.elementAtName(SelectionType.email, e.label).labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -113,12 +113,12 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (urls != null && urls.isNotEmpty) {
       children.addAll(urls.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.url, element.label);
       }).map((e) {
         var url = e.value;
         url = url.startsWith('http') ? url : 'http://$url';
         return _NormalGroupInfoWidget(
-          name: selections[e.label].labelName,
+          name: selections.elementAtName(SelectionType.url, e.label).labelName,
           value: url,
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -129,7 +129,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (postalAddresses != null && postalAddresses.isNotEmpty) {
       children.addAll(postalAddresses.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.address, element.label);
       }).map((e) {
         final value = [
           e.street,
@@ -139,7 +139,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           e.country,
         ].where((element) => element != null && element.isNotEmpty).join(' ');
         return _NormalGroupInfoWidget(
-          name: selections[e.label].labelName,
+          name: selections.elementAtName(SelectionType.address, e.label).labelName,
           value: value,
           trailing: Container(
             width: 80,
@@ -167,11 +167,28 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (dates != null && dates.isNotEmpty) {
       children.addAll(dates.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.birthday, element.label);
       }).map((e) {
         var dateTime = e.date.toDateTime();
         return _NormalGroupInfoWidget(
-          name: selections[e.label].labelName,
+          name: selections.elementAtName(SelectionType.birthday, e.label).labelName,
+          value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
+          valueColor: actionTextStyle.color,
+          onPressed: () {
+            var currentYear = DateTime.now().year;
+            var currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
+            NativeService.calendar(currentYearBirthday);
+          },
+        );
+      }));
+    }
+    if (dates != null && dates.isNotEmpty) {
+      children.addAll(dates.where((element) {
+        return selections.contains(SelectionType.date, element.label);
+      }).map((e) {
+        var dateTime = e.date.toDateTime();
+        return _NormalGroupInfoWidget(
+          name: selections.elementAtName(SelectionType.date, e.label).labelName,
           value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
           valueColor: actionTextStyle.color,
           onPressed: () {
@@ -184,10 +201,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     }
     if (socialProfiles != null && socialProfiles.isNotEmpty) {
       children.addAll(socialProfiles.where((element) {
-        return selections.contains(element.label);
+        return selections.contains(SelectionType.socialData, element.label);
       }).map((e) {
         return _NormalGroupInfoWidget(
-          name: selections[e.label].labelName,
+          name: selections.elementAtName(SelectionType.socialData, e.label).labelName,
           value: e.value,
           valueColor: actionTextStyle.color,
           onPressed: () {
