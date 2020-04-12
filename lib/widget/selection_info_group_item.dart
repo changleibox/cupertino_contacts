@@ -67,8 +67,9 @@ class SelectionInfoGroupItem extends StatelessWidget {
           ),
           Icon(
             CupertinoIcons.forward,
+            size: 20,
             color: CupertinoDynamicColor.resolve(
-              CupertinoColors.secondaryLabel,
+              CupertinoColors.tertiaryLabel,
               context,
             ),
           ),

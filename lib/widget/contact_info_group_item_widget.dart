@@ -18,8 +18,8 @@ import 'package:flutter/scheduler.dart';
 /// 添加联系人-自定义信息
 const Duration _kDuration = Duration(milliseconds: 300);
 const double _labelSpacing = 2;
-const double _iconSize = 24;
-const double _iconMinSize = 4;
+const double _arrowSize = 20;
+const double _arrowMinSize = 4;
 const EdgeInsets _buttonPadding = EdgeInsets.only(
   left: 8,
   right: 4,
@@ -84,8 +84,8 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         return;
       }
       final showArrow = widget.changeLabelType == ChangeLabelType.normal;
-      final iconSize = showArrow ? _iconSize : _iconMinSize;
-      _labelWidth = renderBox.size.width + iconSize + _labelSpacing;
+      final arrowSize = showArrow ? _arrowSize : _arrowMinSize;
+      _labelWidth = renderBox.size.width + arrowSize + _labelSpacing;
       _labelCacheWidth = null;
       setState(() {});
       widget.onLabelWidthChanged(_labelWidth);
@@ -134,11 +134,11 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       opacity: showArrow ? 1.0 : 0.0,
       child: Icon(
         CupertinoIcons.forward,
+        size: _arrowSize,
         color: CupertinoDynamicColor.resolve(
-          CupertinoColors.secondaryLabel,
+          CupertinoColors.tertiaryLabel,
           context,
         ),
-        size: _iconSize,
       ),
     );
     if (labelWidth != null) {
@@ -180,7 +180,6 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           child: Icon(
             CupertinoIcons.minus_circled,
             color: CupertinoColors.systemRed,
-            size: _iconSize,
           ),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
