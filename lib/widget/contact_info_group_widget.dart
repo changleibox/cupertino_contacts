@@ -193,19 +193,17 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           labelMaxWidth: _maxLabelWidth,
           labelCacheWidth: labelCacheWidth,
           onLabelWidthChanged: (value) {
-            var isAdd = index != -1;
-            if (isAdd) {
+            if (index != -1) {
               if (_labelWidts.length <= index) {
                 _labelWidts.add(value);
               } else {
                 _labelWidts[index] = value;
               }
             }
-            var maxWidth = 0.0;
-            _labelWidts.forEach((element) {
-              maxWidth = max(maxWidth, element);
-            });
-
+            var maxWidth = _labelWidts.reduce(max);
+            if (value < maxWidth) {
+              return;
+            }
             _maxLabelWidth = maxWidth == 0 ? null : maxWidth;
             setState(() {});
           },
