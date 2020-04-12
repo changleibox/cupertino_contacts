@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:math';
+
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/label_picker_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -22,16 +24,20 @@ import 'package:flutter/scheduler.dart';
 /// 选择标签
 const double _kSearchBarHeight = 56.0;
 const double _kNavigationBarHeight = 44.0;
+const int _kMaxLabelCount = 20;
 
 class LabelPickerPage extends StatefulWidget {
   final List<Selection> selections;
   final Selection selectedSelection;
+  final bool canCustomLabel;
 
   const LabelPickerPage({
     Key key,
     @required this.selections,
     @required this.selectedSelection,
+    this.canCustomLabel = true,
   })  : assert(selections != null && selections.length > 0),
+        assert(canCustomLabel != null),
         super(key: key);
 
   @override
@@ -100,51 +106,54 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
               MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                removeBottom: true,
+                removeBottom: widget.canCustomLabel,
                 child: _SelectionGroupWidget(
-                  selections: presenter.objects,
+                  selections: presenter.objects.toList().sublist(0, min(_kMaxLabelCount, presenter.itemCount)),
                   selectedSelection: widget.selectedSelection,
                   footers: [
-                    _ItemButton(
-                      text: '所有标签',
-                      trailing: Icon(
-                        CupertinoIcons.forward,
-                        size: 20,
-                        color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.tertiaryLabel,
-                          context,
+                    if (presenter.itemCount > _kMaxLabelCount)
+                      _ItemButton(
+                        text: '所有标签',
+                        trailing: Icon(
+                          CupertinoIcons.forward,
+                          size: 20,
+                          color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiaryLabel,
+                            context,
+                          ),
                         ),
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
-                    ),
                   ],
                   onItemPressed: (value) {
                     Navigator.pop(context, value);
                   },
                 ),
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 40,
+              if (widget.canCustomLabel)
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 40,
+                  ),
                 ),
-              ),
-              MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: _SelectionGroupWidget(
-                  selections: presenter.customSelections,
-                  selectedSelection: widget.selectedSelection,
-                  headers: [
-                    _ItemButton(
-                      text: '添加自定标签',
-                      onPressed: () {},
-                    ),
-                  ],
-                  onItemPressed: (value) {
-                    Navigator.pop(context, value);
-                  },
+              if (widget.canCustomLabel)
+                MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: _SelectionGroupWidget(
+                    selections: presenter.customSelections,
+                    selectedSelection: widget.selectedSelection,
+                    headers: [
+                      _ItemButton(
+                        text: '添加自定标签',
+                        onPressed: () {},
+                      ),
+                    ],
+                    onItemPressed: (value) {
+                      Navigator.pop(context, value);
+                    },
+                  ),
                 ),
-              ),
             ],
           ),
         ),

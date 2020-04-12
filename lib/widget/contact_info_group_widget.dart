@@ -43,6 +43,7 @@ class ContactInfoGroupWidget extends StatefulWidget {
   final ChangeLabelInterceptor changeLabelInterceptor;
   final SelectionsInterceptor selectionsInterceptor;
   final String addButtonText;
+  final bool canCustomLabel;
 
   const ContactInfoGroupWidget({
     Key key,
@@ -53,9 +54,11 @@ class ContactInfoGroupWidget extends StatefulWidget {
     this.changeLabelInterceptor,
     this.selectionsInterceptor,
     this.addButtonText,
+    this.canCustomLabel = true,
   })  : assert(infoGroup != null),
         assert(itemBuilder != null),
         assert(itemFactory != null),
+        assert(canCustomLabel != null),
         super(key: key);
 
   @override
@@ -192,6 +195,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           changeLabelType: changeLabelType,
           labelMaxWidth: _maxLabelWidth,
           labelCacheWidth: labelCacheWidth,
+          canCustomLabel: widget.canCustomLabel,
           onLabelWidthChanged: (value) {
             if (index != -1) {
               if (_labelWidts.length <= index) {

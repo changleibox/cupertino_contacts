@@ -35,6 +35,7 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
   final double labelMaxWidth;
   final double labelCacheWidth;
   final ChangeLabelType changeLabelType;
+  final bool canCustomLabel;
 
   const ContactInfoGroupItemWidget({
     Key key,
@@ -46,10 +47,12 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
     this.labelMaxWidth,
     this.labelCacheWidth,
     this.changeLabelType = ChangeLabelType.normal,
+    this.canCustomLabel = true,
   })  : assert(item != null),
         assert(selections != null),
         assert(builder != null),
         assert(changeLabelType != null),
+        assert(canCustomLabel != null),
         super(key: key);
 
   @override
@@ -103,6 +106,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
         LabelPickerPage(
           selections: widget.selections,
           selectedSelection: widget.item.label,
+          canCustomLabel: widget.canCustomLabel,
         ),
         fullscreenDialog: true,
       ),

@@ -24,6 +24,7 @@ class BirthdayContactInfoGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return DateTimeContactInfoGroup(
       infoGroup: infoGroup,
+      canCustomLabel: false,
       addInterceptor: (context) {
         return infoGroup.value.length < 2;
       },

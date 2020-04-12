@@ -20,6 +20,7 @@ class DateTimeContactInfoGroup extends StatelessWidget {
   final ChangeLabelInterceptor changeLabelInterceptor;
   final SelectionsInterceptor selectionsInterceptor;
   final ItemFactory itemFactory;
+  final bool canCustomLabel;
 
   const DateTimeContactInfoGroup({
     Key key,
@@ -28,7 +29,9 @@ class DateTimeContactInfoGroup extends StatelessWidget {
     this.changeLabelInterceptor,
     this.selectionsInterceptor,
     this.itemFactory,
+    this.canCustomLabel = true,
   })  : assert(infoGroup != null),
+        assert(canCustomLabel != null),
         super(key: key);
 
   @override
@@ -38,6 +41,7 @@ class DateTimeContactInfoGroup extends StatelessWidget {
       addInterceptor: addInterceptor,
       changeLabelInterceptor: changeLabelInterceptor,
       selectionsInterceptor: selectionsInterceptor,
+      canCustomLabel: canCustomLabel,
       itemFactory: itemFactory ??
           (index, label) async {
             return DateTimeItem(label: label);
