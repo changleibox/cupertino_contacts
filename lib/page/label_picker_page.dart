@@ -3,9 +3,11 @@
  */
 
 import 'package:cupertinocontacts/model/selection.dart';
+import 'package:cupertinocontacts/presenter/label_picker_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/animated_color_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
+import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/sliver_list_view.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
@@ -35,7 +37,9 @@ class LabelPickerPage extends StatefulWidget {
   _LabelPickerPageState createState() => _LabelPickerPageState();
 }
 
-class _LabelPickerPageState extends State<LabelPickerPage> {
+class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
+  _LabelPickerPageState() : super(LabelPickerPresenter());
+
   ColorTween _colorTween;
   ScrollController _scrollController;
 
@@ -68,15 +72,13 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
         onEditPressed: () {},
+        onQuery: presenter.onQuery,
       ),
     ];
   }
 
   @override
-  Widget build(BuildContext context) {
-    final customSelections = List<Selection>();
-    customSelections.add(selections.addCustomSelection);
-
+  Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -93,7 +95,7 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
               removeTop: true,
               removeBottom: true,
               child: _SelectionGroupWidget(
-                selections: widget.selections,
+                selections: presenter.objects,
                 selectedSelection: widget.selectedSelection,
                 onItemPressed: (value) {
                   Navigator.pop(context, value);
@@ -109,7 +111,7 @@ class _LabelPickerPageState extends State<LabelPickerPage> {
               context: context,
               removeTop: true,
               child: _SelectionGroupWidget(
-                selections: customSelections,
+                selections: presenter.customSelections,
                 selectedSelection: widget.selectedSelection,
                 onItemPressed: (value) {
                   if (value == selections.addCustomSelection) {
