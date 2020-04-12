@@ -20,9 +20,6 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
   void onLoaded(Iterable<Selection> object) {
     _customSelections.clear();
     _customSelections.addAll(_query(_customSelections));
-    if (!_hasQueryText) {
-      _customSelections.add(selections.addCustomSelection);
-    }
     super.onLoaded(object);
   }
 

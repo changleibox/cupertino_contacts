@@ -38,8 +38,6 @@ abstract class _Selections {
 
   final iPhoneSelection = Selection._('iPhone');
 
-  final addCustomSelection = Selection._('添加自定义标签');
-
   static _Selections get instance {
     switch (Platform.operatingSystem) {
       case 'android':
@@ -274,7 +272,6 @@ class _IOSSelections extends _Selections {
     Selection._('上司'),
     Selection._('同事'),
     _otherSelection,
-    Selection._('所有标签'),
   ];
   static const _socialDataSelections = [
     Selection._('Twitter'),
@@ -445,7 +442,6 @@ class _AndroidSelections extends _Selections {
     Selection._('上司'),
     Selection._('同事'),
     _otherSelection,
-    Selection._('所有标签'),
   ];
   static const _socialDataSelections = [
     Selection._('Twitter'),

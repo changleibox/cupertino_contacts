@@ -97,6 +97,19 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
               child: _SelectionGroupWidget(
                 selections: presenter.objects,
                 selectedSelection: widget.selectedSelection,
+                footers: [
+                  _ItemButton(
+                    text: '所有标签',
+                    trailing: Icon(
+                      CupertinoIcons.forward,
+                      color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondaryLabel,
+                        context,
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
                 onItemPressed: (value) {
                   Navigator.pop(context, value);
                 },
@@ -113,12 +126,14 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
               child: _SelectionGroupWidget(
                 selections: presenter.customSelections,
                 selectedSelection: widget.selectedSelection,
+                headers: [
+                  _ItemButton(
+                    text: '添加自定义标签',
+                    onPressed: () {},
+                  ),
+                ],
                 onItemPressed: (value) {
-                  if (value == selections.addCustomSelection) {
-                    // TODO 添加自定义标签
-                  } else {
-                    Navigator.pop(context, value);
-                  }
+                  Navigator.pop(context, value);
                 },
               ),
             ),
@@ -158,6 +173,8 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
 }
 
 class _SelectionGroupWidget extends StatelessWidget {
+  final List<Widget> headers;
+  final List<Widget> footers;
   final List<Selection> selections;
   final Selection selectedSelection;
   final ValueChanged<Selection> onItemPressed;
@@ -167,26 +184,51 @@ class _SelectionGroupWidget extends StatelessWidget {
     @required this.selections,
     @required this.selectedSelection,
     this.onItemPressed,
+    this.headers,
+    this.footers,
   })  : assert(selections != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var length = selections.length;
+    final children = List<Widget>();
+    if (headers != null) {
+      children.addAll(headers);
+    }
+    children.addAll(selections.map((selection) {
+      return _SelectionItemButton(
+        selection: selection,
+        selected: selection == selectedSelection,
+        onPressed: () {
+          if (onItemPressed != null) {
+            onItemPressed(selection);
+          }
+        },
+      );
+    }));
+    if (footers != null) {
+      children.addAll(footers);
+    }
+
+    var length = children.length;
     return SliverListView.separated(
       itemCount: length,
       itemBuilder: (context, index) {
-        var selection = selections[index];
-        return _SelectionItemWidget(
-          selection: selection,
-          isFirst: index == 0,
-          isLast: index == length - 1,
-          selected: selection == selectedSelection,
-          onPressed: () {
-            if (onItemPressed != null) {
-              onItemPressed(selection);
-            }
-          },
+        var borderSide = BorderSide(
+          color: CupertinoDynamicColor.resolve(
+            separatorColor,
+            context,
+          ),
+          width: 0.0,
+        );
+        return Container(
+          foregroundDecoration: BoxDecoration(
+            border: Border(
+              top: index == 0 ? borderSide : BorderSide.none,
+              bottom: index == length - 1 ? borderSide : BorderSide.none,
+            ),
+          ),
+          child: children[index],
         );
       },
       separatorBuilder: (context, index) {
@@ -205,24 +247,48 @@ class _SelectionGroupWidget extends StatelessWidget {
   }
 }
 
-class _SelectionItemWidget extends StatelessWidget {
+class _SelectionItemButton extends StatelessWidget {
   final Selection selection;
-  final bool isFirst;
-  final bool isLast;
   final bool selected;
   final VoidCallback onPressed;
 
-  const _SelectionItemWidget({
+  const _SelectionItemButton({
     Key key,
     @required this.selection,
-    @required this.isFirst,
-    @required this.isLast,
     this.selected = false,
     this.onPressed,
   })  : assert(selection != null),
-        assert(isFirst != null),
-        assert(isLast != null),
         assert(selected != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeData = CupertinoTheme.of(context);
+    return _ItemButton(
+      text: selection.labelName,
+      onPressed: onPressed,
+      trailing: selected
+          ? Icon(
+              CupertinoIcons.check_mark,
+              size: 40,
+              color: themeData.primaryColor,
+            )
+          : null,
+    );
+  }
+}
+
+class _ItemButton extends StatelessWidget {
+  final String text;
+  final Widget trailing;
+  final VoidCallback onPressed;
+
+  const _ItemButton({
+    Key key,
+    @required this.text,
+    this.trailing,
+    this.onPressed,
+  })  : assert(text != null),
         super(key: key);
 
   @override
@@ -231,50 +297,29 @@ class _SelectionItemWidget extends StatelessWidget {
     var textTheme = themeData.textTheme;
     var textStyle = textTheme.textStyle;
 
-    var borderSide = BorderSide(
-      color: CupertinoDynamicColor.resolve(
-        separatorColor,
-        context,
-      ),
-      width: 0.0,
-    );
-
-    return Container(
-      foregroundDecoration: BoxDecoration(
-        border: Border(
-          top: isFirst ? borderSide : BorderSide.none,
-          bottom: isLast ? borderSide : BorderSide.none,
-        ),
-      ),
-      child: CupertinoButton(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: WidgetGroup.spacing(
-            alignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  selection.labelName,
-                  style: textStyle,
-                ),
+    return CupertinoButton(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: WidgetGroup.spacing(
+          alignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                text,
+                style: textStyle,
               ),
-              if (selection != selections.addCustomSelection && selected)
-                Icon(
-                  CupertinoIcons.check_mark,
-                  size: 40,
-                  color: themeData.primaryColor,
-                ),
-            ],
-          ),
+            ),
+            if (trailing != null) trailing,
+          ],
         ),
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 8,
-        ),
-        borderRadius: BorderRadius.zero,
-        color: CupertinoColors.secondarySystemGroupedBackground,
-        onPressed: onPressed,
       ),
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 8,
+      ),
+      borderRadius: BorderRadius.zero,
+      color: CupertinoColors.secondarySystemGroupedBackground,
+      onPressed: onPressed,
     );
   }
 }
