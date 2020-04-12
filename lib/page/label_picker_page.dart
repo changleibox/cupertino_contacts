@@ -12,7 +12,6 @@ import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
-import 'package:cupertinocontacts/widget/sliver_list_view.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
@@ -61,10 +60,11 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
       _scrollController?.jumpTo(_kSearchBarHeight);
     });
     _customLabelFocusNode.addListener(() {
+      notifyDataSetChanged();
       var text = _customLabelController.text;
       if (!_customLabelFocusNode.hasFocus && text != null && text.isNotEmpty) {
-        selections.addCustomSelection(widget.selectionType, text);
         _customLabelController.clear();
+        selections.addCustomSelection(widget.selectionType, text);
         presenter.refresh();
       }
     });
@@ -86,6 +86,25 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     super.didChangeDependencies();
   }
 
+  @override
+  void dispose() {
+    _customLabelController.dispose();
+    super.dispose();
+  }
+
+  _onEditingComplete() {
+    var text = _customLabelController.text;
+    if (text != null && text.isNotEmpty) {
+      _customLabelController.clear();
+      var selection = selections.addCustomSelection(widget.selectionType, text);
+      if (selection != null) {
+        Navigator.pop(context, selection);
+      }
+    } else {
+      _customLabelFocusNode.unfocus();
+    }
+  }
+
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     _scrollController = PrimaryScrollController.of(context);
     return [
@@ -105,6 +124,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   @override
   Widget builds(BuildContext context) {
     var itemCount = min(_kMaxLabelCount, presenter.itemCount);
+    final showCustomLabel = widget.canCustomLabel && !presenter.hasQueryText || presenter.customSelections.isNotEmpty;
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -114,71 +134,68 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         physics: SnappingScrollPhysics(
           midScrollOffset: _kSearchBarHeight,
         ),
-        body: CupertinoScrollbar(
-          child: CustomScrollView(
-            slivers: [
-              _SelectionGroupWidget(
-                selections: presenter.objects.take(itemCount),
-                selectedSelection: widget.selectedSelection,
-                footers: [
-                  if (presenter.itemCount > _kMaxLabelCount)
-                    _ItemButton(
-                      text: '所有标签',
-                      trailing: Icon(
-                        CupertinoIcons.forward,
-                        size: 20,
-                        color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.tertiaryLabel,
-                          context,
-                        ),
-                      ),
-                      onPressed: () {},
-                    ),
-                ],
-                onItemPressed: (value) {
-                  Navigator.pop(context, value);
-                },
-              ),
-              if (widget.canCustomLabel)
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 40,
-                  ),
-                ),
-              if (widget.canCustomLabel)
+        body: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: CupertinoScrollbar(
+            child: ListView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              children: [
                 _SelectionGroupWidget(
-                  selections: presenter.customSelections,
+                  selections: presenter.objects.take(itemCount),
                   selectedSelection: widget.selectedSelection,
-                  headers: [
-                    SizedBox(
-                      height: 44,
-                      child: AnimatedCrossFade(
-                        firstChild: _ItemButton(
-                          text: '添加自定标签',
-                          onPressed: () {
-                            _customLabelFocusNode.requestFocus();
-                            notifyDataSetChanged();
-                          },
+                  footers: [
+                    if (presenter.itemCount > _kMaxLabelCount)
+                      _ItemButton(
+                        text: '所有标签',
+                        trailing: Icon(
+                          CupertinoIcons.forward,
+                          size: 20,
+                          color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiaryLabel,
+                            context,
+                          ),
                         ),
-                        secondChild: _CustomLabelTextField(
-                          controller: _customLabelController,
-                          focusNode: _customLabelFocusNode,
-                        ),
-                        crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                        duration: Duration(milliseconds: 300),
+                        onPressed: () {},
                       ),
-                    ),
                   ],
                   onItemPressed: (value) {
                     Navigator.pop(context, value);
                   },
                 ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: MediaQuery.of(context).padding.bottom,
-                ),
-              ),
-            ],
+                if (showCustomLabel)
+                  SizedBox(
+                    height: 40,
+                  ),
+                if (showCustomLabel)
+                  _SelectionGroupWidget(
+                    selections: presenter.customSelections,
+                    selectedSelection: widget.selectedSelection,
+                    headers: [
+                      if (!presenter.hasQueryText)
+                        AnimatedCrossFade(
+                          firstChild: _ItemButton(
+                            text: '添加自定标签',
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              _customLabelFocusNode.requestFocus();
+                            },
+                          ),
+                          secondChild: _CustomLabelTextField(
+                            controller: _customLabelController,
+                            focusNode: _customLabelFocusNode,
+                            onEditingComplete: _onEditingComplete,
+                          ),
+                          crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                          duration: Duration(milliseconds: 300),
+                        ),
+                    ],
+                    onItemPressed: (value) {
+                      Navigator.pop(context, value);
+                    },
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -253,8 +270,8 @@ class _SelectionGroupWidget extends StatelessWidget {
     }
 
     var length = children.length;
-    return SliverListView.separated(
-      padding: EdgeInsets.zero,
+    return WidgetGroup.separated(
+      direction: Axis.vertical,
       itemCount: length,
       itemBuilder: (context, index) {
         var borderSide = BorderSide(
@@ -371,11 +388,13 @@ class _ItemButton extends StatelessWidget {
 class _CustomLabelTextField extends StatelessWidget {
   final TextEditingController controller;
   final FocusScopeNode focusNode;
+  final VoidCallback onEditingComplete;
 
   const _CustomLabelTextField({
     Key key,
     this.controller,
     this.focusNode,
+    this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -398,6 +417,7 @@ class _CustomLabelTextField extends StatelessWidget {
         ),
         decoration: null,
         clearButtonMode: OverlayVisibilityMode.editing,
+        onEditingComplete: onEditingComplete,
       ),
     );
   }

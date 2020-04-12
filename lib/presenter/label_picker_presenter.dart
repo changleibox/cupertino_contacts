@@ -19,7 +19,9 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
   @override
   void onLoaded(Iterable<Selection> object) {
     _customSelections.clear();
-    _customSelections.addAll(_query(selections.customSelectionsAt(widget.selectionType)));
+    if (widget.canCustomLabel) {
+      _customSelections.addAll(_query(selections.customSelectionsAt(widget.selectionType)));
+    }
     super.onLoaded(object);
   }
 
@@ -29,10 +31,10 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
     }).toList();
   }
 
-  bool get _hasQueryText => queryText != null && queryText.isNotEmpty;
+  bool get hasQueryText => queryText != null && queryText.isNotEmpty;
 
   bool _matchQueryText(Selection selection) {
-    return !_hasQueryText || selection.selectionName.contains(queryText);
+    return !hasQueryText || selection.selectionName.contains(queryText);
   }
 
   bool _filterHideSelection(Selection selection) {
