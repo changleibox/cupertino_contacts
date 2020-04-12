@@ -136,7 +136,7 @@ abstract class _Selections {
     return _selectionsMap[propertyName] ?? otherSelection;
   }
 
-  Selection indexOf(SelectionType type, int index) {
+  Selection elementAt(SelectionType type, int index) {
     assert(type != null);
     assert(index != null && index >= 0);
     var list = get(type);
