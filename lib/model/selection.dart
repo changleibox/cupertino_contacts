@@ -146,10 +146,13 @@ abstract class _Selections {
   Selection get otherSelection;
 
   bool contains(SelectionType type, String propertyName) {
-    return elementAtName(type, propertyName) != null;
+    assert(type != null);
+    assert(propertyName != null);
+    return _selectionsMap[type]?.containsKey(propertyName) ?? false;
   }
 
   Selection elementAtName(SelectionType type, String propertyName) {
+    assert(type != null);
     assert(propertyName != null);
     var selectionsMap = _selectionsMap[type];
     assert(selectionsMap != null, '未定义的标签');
