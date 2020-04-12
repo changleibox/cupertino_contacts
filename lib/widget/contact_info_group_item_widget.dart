@@ -18,6 +18,7 @@ import 'package:flutter/scheduler.dart';
 /// 添加联系人-自定义信息
 const Duration _kDuration = Duration(milliseconds: 300);
 const double _labelSpacing = 2;
+const double _labelMaxWidth = 100;
 const double _arrowSize = 20;
 const double _arrowMinSize = 4;
 const EdgeInsets _buttonPadding = EdgeInsets.only(
@@ -85,7 +86,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       }
       final showArrow = widget.changeLabelType == ChangeLabelType.normal;
       final arrowSize = showArrow ? _arrowSize : _arrowMinSize;
-      _labelWidth = renderBox.size.width + arrowSize + _labelSpacing;
+      _labelWidth = min(renderBox.size.width, _labelMaxWidth) + arrowSize + _labelSpacing;
       _labelCacheWidth = null;
       setState(() {});
       widget.onLabelWidthChanged(_labelWidth);
@@ -151,14 +152,18 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       alignment: MainAxisAlignment.spaceBetween,
       spacing: _labelSpacing,
       children: [
-        Text(
-          widget.item.label.labelName,
-          key: _labelGlobalKey,
-          style: actionTextStyle.copyWith(
-            fontSize: 15,
-            color: CupertinoDynamicColor.resolve(
-              labelDisbale ? textStyle.color : themeData.primaryColor,
-              context,
+        LimitedBox(
+          maxWidth: _labelMaxWidth,
+          child: Text(
+            widget.item.label.labelName,
+            key: _labelGlobalKey,
+            overflow: TextOverflow.ellipsis,
+            style: actionTextStyle.copyWith(
+              fontSize: 15,
+              color: CupertinoDynamicColor.resolve(
+                labelDisbale ? textStyle.color : themeData.primaryColor,
+                context,
+              ),
             ),
           ),
         ),
