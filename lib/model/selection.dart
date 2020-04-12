@@ -61,6 +61,7 @@ class _SelectionGroup {
   List<Selection> get customSelections => _customSelectionsMap.values.toList();
 
   Selection addCustomSelection(String propertyName) {
+    assert(propertyName != null && propertyName.isNotEmpty);
     if (_customSelectionsMap.containsKey(propertyName)) {
       return _customSelectionsMap[propertyName];
     }

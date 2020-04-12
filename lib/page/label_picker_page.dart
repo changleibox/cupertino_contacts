@@ -49,6 +49,9 @@ class LabelPickerPage extends StatefulWidget {
 class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
+  final _customLabelFocusNode = FocusScopeNode();
+  final _customLabelController = TextEditingController();
+
   ColorTween _colorTween;
   ScrollController _scrollController;
 
@@ -56,6 +59,14 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController?.jumpTo(_kSearchBarHeight);
+    });
+    _customLabelFocusNode.addListener(() {
+      var text = _customLabelController.text;
+      if (!_customLabelFocusNode.hasFocus && text != null && text.isNotEmpty) {
+        selections.addCustomSelection(widget.selectionType, text);
+        _customLabelController.clear();
+        presenter.refresh();
+      }
     });
     super.initState();
   }
@@ -106,32 +117,27 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         body: CupertinoScrollbar(
           child: CustomScrollView(
             slivers: [
-              MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                removeBottom: widget.canCustomLabel,
-                child: _SelectionGroupWidget(
-                  selections: presenter.objects.take(itemCount),
-                  selectedSelection: widget.selectedSelection,
-                  footers: [
-                    if (presenter.itemCount > _kMaxLabelCount)
-                      _ItemButton(
-                        text: '所有标签',
-                        trailing: Icon(
-                          CupertinoIcons.forward,
-                          size: 20,
-                          color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.tertiaryLabel,
-                            context,
-                          ),
+              _SelectionGroupWidget(
+                selections: presenter.objects.take(itemCount),
+                selectedSelection: widget.selectedSelection,
+                footers: [
+                  if (presenter.itemCount > _kMaxLabelCount)
+                    _ItemButton(
+                      text: '所有标签',
+                      trailing: Icon(
+                        CupertinoIcons.forward,
+                        size: 20,
+                        color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.tertiaryLabel,
+                          context,
                         ),
-                        onPressed: () {},
                       ),
-                  ],
-                  onItemPressed: (value) {
-                    Navigator.pop(context, value);
-                  },
-                ),
+                      onPressed: () {},
+                    ),
+                ],
+                onItemPressed: (value) {
+                  Navigator.pop(context, value);
+                },
               ),
               if (widget.canCustomLabel)
                 SliverToBoxAdapter(
@@ -140,23 +146,38 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                   ),
                 ),
               if (widget.canCustomLabel)
-                MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: _SelectionGroupWidget(
-                    selections: presenter.customSelections,
-                    selectedSelection: widget.selectedSelection,
-                    headers: [
-                      _ItemButton(
-                        text: '添加自定标签',
-                        onPressed: () {},
+                _SelectionGroupWidget(
+                  selections: presenter.customSelections,
+                  selectedSelection: widget.selectedSelection,
+                  headers: [
+                    SizedBox(
+                      height: 44,
+                      child: AnimatedCrossFade(
+                        firstChild: _ItemButton(
+                          text: '添加自定标签',
+                          onPressed: () {
+                            _customLabelFocusNode.requestFocus();
+                            notifyDataSetChanged();
+                          },
+                        ),
+                        secondChild: _CustomLabelTextField(
+                          controller: _customLabelController,
+                          focusNode: _customLabelFocusNode,
+                        ),
+                        crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                        duration: Duration(milliseconds: 300),
                       ),
-                    ],
-                    onItemPressed: (value) {
-                      Navigator.pop(context, value);
-                    },
-                  ),
+                    ),
+                  ],
+                  onItemPressed: (value) {
+                    Navigator.pop(context, value);
+                  },
                 ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).padding.bottom,
+                ),
+              ),
             ],
           ),
         ),
@@ -233,6 +254,7 @@ class _SelectionGroupWidget extends StatelessWidget {
 
     var length = children.length;
     return SliverListView.separated(
+      padding: EdgeInsets.zero,
       itemCount: length,
       itemBuilder: (context, index) {
         var borderSide = BorderSide(
@@ -341,6 +363,39 @@ class _ItemButton extends StatelessWidget {
       borderRadius: BorderRadius.zero,
       color: CupertinoColors.secondarySystemGroupedBackground,
       onPressed: onPressed,
+    );
+  }
+}
+
+class _CustomLabelTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusScopeNode focusNode;
+
+  const _CustomLabelTextField({
+    Key key,
+    this.controller,
+    this.focusNode,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 44,
+      child: CupertinoTextField(
+        controller: controller,
+        focusNode: focusNode,
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
+        decoration: BoxDecoration(
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.secondarySystemGroupedBackground,
+            context,
+          ),
+        ),
+        clearButtonMode: OverlayVisibilityMode.editing,
+      ),
     );
   }
 }
