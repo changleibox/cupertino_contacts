@@ -182,17 +182,20 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var padding = widget.hasCancelButton
-        ? EdgeInsets.only(
-            left: _kPadding,
-            top: 10,
-            bottom: 10,
-          )
-        : EdgeInsets.only(
-            left: _kPadding,
-            top: 4,
-            bottom: _kPadding,
-          );
+    var padding;
+    if (widget.hasCancelButton) {
+      padding = EdgeInsets.only(
+        left: _kPadding,
+        top: 10.0,
+        bottom: 10.0,
+      );
+    } else {
+      padding = EdgeInsets.only(
+        left: _kPadding,
+        top: 4.0,
+        bottom: _kPadding,
+      );
+    }
     var paddingHorizontal = padding.horizontal ?? 0;
     return _wrapWithBackground(
       border: Border(
@@ -218,8 +221,8 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
               width: _kCancelButtonWidth,
               height: widget.height,
               padding: padding.copyWith(
-                left: 0,
-                right: 0,
+                left: 0.0,
+                right: 0.0,
               ),
               child: CupertinoButton(
                 child: Text('取消'),
