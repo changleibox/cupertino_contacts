@@ -12,7 +12,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final double navigationBarHeight;
   final Color backgroundColor;
   final ValueChanged<String> onQuery;
-  final FocusScopeNode focusNode;
+  final FocusNode focusNode;
   final Widget trailing;
 
   const LabelPickePersistentHeaderDelegate({

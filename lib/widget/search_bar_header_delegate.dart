@@ -101,7 +101,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 class SearchBarHeader extends StatelessWidget {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
-  final FocusScopeNode focusNode;
+  final FocusNode focusNode;
   final double height;
   final Color backgroundColor;
   final Color color;

@@ -12,7 +12,7 @@ class SearchBar extends StatelessWidget {
   final double height;
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
-  final FocusScopeNode focusNode;
+  final FocusNode focusNode;
   final Color color;
   final double opacity;
 
