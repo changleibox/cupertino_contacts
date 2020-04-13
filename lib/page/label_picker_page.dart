@@ -24,6 +24,7 @@ import 'package:flutter/scheduler.dart';
 const double _kSearchBarHeight = 56.0;
 const double _kNavigationBarHeight = 44.0;
 const int _kMaxLabelCount = 20;
+const Duration _kDuration = Duration(milliseconds: 300);
 
 class LabelPickerPage extends StatefulWidget {
   final SelectionType selectionType;
@@ -125,6 +126,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   Widget builds(BuildContext context) {
     var itemCount = min(_kMaxLabelCount, presenter.itemCount);
     final showCustomLabel = widget.canCustomLabel && !presenter.hasQueryText || presenter.customSelections.isNotEmpty;
+    var scopeNode = FocusScope.of(context);
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -172,12 +174,12 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                     selections: presenter.customSelections,
                     selectedSelection: widget.selectedSelection,
                     headers: [
-                      if (!presenter.hasQueryText)
+                      if (scopeNode == _customLabelFocusNode || !scopeNode.hasFocus)
                         AnimatedCrossFade(
                           firstChild: _ItemButton(
                             text: '添加自定标签',
                             onPressed: () {
-                              FocusScope.of(context).unfocus();
+                              scopeNode.unfocus();
                               _customLabelFocusNode.requestFocus();
                             },
                           ),
@@ -187,7 +189,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                             onEditingComplete: _onEditingComplete,
                           ),
                           crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                          duration: Duration(milliseconds: 300),
+                          duration: _kDuration,
                         ),
                     ],
                     onItemPressed: (value) {
@@ -206,12 +208,14 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
   final Widget trailing;
   final ValueChanged<String> onQuery;
+  final FocusScopeNode focusNode;
 
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
     this.trailing,
     this.onQuery,
+    this.focusNode,
   }) : super(key: key, colorTween: colorTween);
 
   @override
@@ -226,6 +230,7 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
         backgroundColor: color,
         trailing: trailing,
         onQuery: onQuery,
+        focusNode: focusNode,
       ),
     );
   }
