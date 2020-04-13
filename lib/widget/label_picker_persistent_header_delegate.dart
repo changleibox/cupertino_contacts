@@ -4,6 +4,7 @@
 
 import 'dart:math';
 
+import 'package:cupertinocontacts/page/label_picker_page.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,19 +17,22 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final ValueChanged<String> onQuery;
   final FocusNode focusNode;
   final Widget trailing;
+  final LabelPageStatus status;
 
   const LabelPickePersistentHeaderDelegate({
     @required this.paddingTop,
     @required this.searchBarHeight,
     @required this.navigationBarHeight,
     @required this.backgroundColor,
+    @required this.status,
     this.onQuery,
     this.focusNode,
     this.trailing,
   })  : assert(paddingTop != null),
         assert(searchBarHeight != null),
         assert(navigationBarHeight != null),
-        assert(backgroundColor != null);
+        assert(backgroundColor != null),
+        assert(status != null);
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -57,7 +61,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
           right: 0,
           bottom: 0,
           child: SearchBarHeader(
-            height: max(searchBarHeight - shrinkOffset, 0.0),
+            height: _isEditStatus ? 0 : max(searchBarHeight - shrinkOffset, 0.0),
             onChanged: onQuery,
             color: CupertinoColors.secondarySystemFill,
             backgroundColor: backgroundColor,
@@ -69,8 +73,10 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
     );
   }
 
+  bool get _isEditStatus => status == LabelPageStatus.editCustom;
+
   @override
-  double get maxExtent => minExtent + (searchBarHeight == 0 ? 0.1 : searchBarHeight);
+  double get maxExtent => minExtent + (_isEditStatus ? 0.1 : searchBarHeight);
 
   @override
   double get minExtent => navigationBarHeight + paddingTop;

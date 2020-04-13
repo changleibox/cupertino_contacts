@@ -25,6 +25,12 @@ const double _kNavigationBarHeight = 44.0;
 const double _kLargeSpacing = 40;
 const int _kMaxLabelCount = 20;
 
+enum LabelPageStatus {
+  none,
+  editCustom,
+  query,
+}
+
 class LabelPickerPage extends StatefulWidget {
   final SelectionType selectionType;
   final Selection selectedSelection;
@@ -53,12 +59,25 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   ColorTween _colorTween;
   ScrollController _scrollController;
-  bool isEditMode = false;
+  LabelPageStatus _status;
 
   @override
   void initState() {
+    _status = LabelPageStatus.none;
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController?.jumpTo(_kSearchBarHeight);
+    });
+    _queryFocusNode.addListener(() {
+      if (_queryFocusNode.hasFocus) {
+        _status = LabelPageStatus.query;
+        _scrollController?.animateTo(
+          _kSearchBarHeight,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.linear,
+        );
+      } else {
+        _status = LabelPageStatus.none;
+      }
     });
     super.initState();
   }
@@ -93,9 +112,13 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     Widget trailing;
     if (presenter.customSelections.isNotEmpty) {
       trailing = NavigationBarAction(
-        child: Text(isEditMode ? '完成' : '编辑'),
+        child: Text(_status == LabelPageStatus.editCustom ? '完成' : '编辑'),
         onPressed: () {
-          isEditMode = !isEditMode;
+          if (_status == LabelPageStatus.editCustom) {
+            _status = LabelPageStatus.none;
+          } else {
+            _status = LabelPageStatus.editCustom;
+          }
           _scrollController?.jumpTo(0);
           _queryFocusNode.unfocus();
           notifyDataSetChanged();
@@ -108,8 +131,9 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         onQuery: presenter.onQuery,
         focusNode: _queryFocusNode,
         trailing: trailing,
-        searchBarHeight: isEditMode ? 0 : _kSearchBarHeight,
+        searchBarHeight: _kSearchBarHeight,
         navigationBarHeight: _kNavigationBarHeight,
+        status: _status,
       ),
     ];
   }
@@ -136,8 +160,9 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   @override
   Widget builds(BuildContext context) {
+    var isEditStatus = _status == LabelPageStatus.editCustom;
     final children = List<Widget>();
-    if (!isEditMode && presenter.isNotEmpty) {
+    if (!isEditStatus && presenter.isNotEmpty) {
       children.add(SelectionGroupWidget(
         selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
         selectedSelection: widget.selectedSelection,
@@ -156,7 +181,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         selections: customSelections,
         selectedSelection: widget.selectedSelection,
         hasQueryText: hasQueryText,
-        isEditMode: isEditMode,
+        isEditMode: isEditStatus,
       ));
     }
     var padding = MediaQuery.of(context).padding;
@@ -167,7 +192,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         },
         headerSliverBuilder: _buildHeaderSliver,
         physics: SnappingScrollPhysics(
-          midScrollOffset: isEditMode ? 0 : _kSearchBarHeight,
+          midScrollOffset: isEditStatus ? 0 : _kSearchBarHeight,
         ),
         body: PrimarySlidableController(
           controller: _slidableController,
@@ -184,7 +209,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                 child: CupertinoScrollbar(
                   child: ListView.separated(
                     padding: padding.copyWith(
-                      top: isEditMode ? _kLargeSpacing : 0,
+                      top: isEditStatus ? _kLargeSpacing : 0,
                     ),
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: children.length,

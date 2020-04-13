@@ -5,6 +5,7 @@
 import 'dart:collection';
 
 import 'package:cupertinocontacts/model/selection.dart';
+import 'package:cupertinocontacts/page/label_picker_page.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/widget/animated_color_widget.dart';
@@ -21,6 +22,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final FocusNode focusNode;
   final double navigationBarHeight;
   final double searchBarHeight;
+  final LabelPageStatus status;
 
   const AnimatedLabelPickerNavigationBar({
     Key key,
@@ -30,8 +32,10 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
     this.focusNode,
     @required this.navigationBarHeight,
     @required this.searchBarHeight,
+    @required this.status,
   })  : assert(navigationBarHeight != null),
         assert(searchBarHeight != null),
+        assert(status != null),
         super(key: key, colorTween: colorTween);
 
   @override
@@ -43,10 +47,11 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
         paddingTop: paddingTop,
         navigationBarHeight: navigationBarHeight,
         searchBarHeight: searchBarHeight,
-        backgroundColor: searchBarHeight <= 0 ? colorTween.begin : color,
+        backgroundColor: status != LabelPageStatus.none ? colorTween.begin : color,
         trailing: trailing,
         onQuery: onQuery,
         focusNode: focusNode,
+        status: status,
       ),
     );
   }
