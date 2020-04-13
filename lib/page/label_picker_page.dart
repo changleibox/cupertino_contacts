@@ -158,10 +158,11 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         isEditMode: isEditMode,
       ));
     }
+    var padding = MediaQuery.of(context).padding;
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
-          return _kNavigationBarHeight + MediaQuery.of(context).padding.top;
+          return _kNavigationBarHeight + padding.top;
         },
         headerSliverBuilder: _buildHeaderSliver,
         physics: SnappingScrollPhysics(
@@ -181,6 +182,9 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                 removeTop: true,
                 child: CupertinoScrollbar(
                   child: ListView.separated(
+                    padding: padding.copyWith(
+                      top: isEditMode ? 40 : 0,
+                    ),
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: children.length,
                     itemBuilder: (context, index) {
