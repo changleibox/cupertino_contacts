@@ -156,9 +156,8 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
               _queryFocusNode.unfocus();
               _queryController.clear();
               _scrollController?.jumpTo(0);
-              presenter.onQuery(null);
-              notifyDataSetChanged();
               _animationController.animateTo(1.0);
+              presenter.onQuery(null);
             },
           );
         },
@@ -188,6 +187,8 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   bool get _isEditStatus => _status == LabelPageStatus.editCustom;
 
+  bool get _isQueryStatus => _status == LabelPageStatus.query;
+
   @override
   Widget builds(BuildContext context) {
     final children = List<Widget>();
@@ -215,11 +216,11 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
-          return _kNavigationBarHeight + padding.top;
+          return (_isQueryStatus ? _kSearchBarHeight : _kNavigationBarHeight) + padding.top;
         },
         headerSliverBuilder: _buildHeaderSliver,
         physics: SnappingScrollPhysics(
-          midScrollOffset: _status != LabelPageStatus.none ? 0 : _kSearchBarHeight,
+          midScrollOffset: _isEditStatus || _isQueryStatus ? 0 : _kSearchBarHeight,
         ),
         body: PrimarySlidableController(
           controller: _slidableController,

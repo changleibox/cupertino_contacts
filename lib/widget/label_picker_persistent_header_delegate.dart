@@ -86,11 +86,19 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
 
   bool get _isQueryStatus => status == LabelPageStatus.query;
 
-  @override
-  double get maxExtent => minExtent + (_isEditStatus ? 0.1 : max(searchBarHeight * (offset?.value ?? 1.0), 0.1));
+  double get _differenceValue => searchBarHeight - navigationBarHeight;
 
   @override
-  double get minExtent => navigationBarHeight + paddingTop;
+  double get maxExtent {
+    var value = offset?.value ?? 1.0;
+    return paddingTop + navigationBarHeight + (_isEditStatus ? 0.1 : _differenceValue + max(navigationBarHeight * value, 0.1));
+  }
+
+  @override
+  double get minExtent {
+    var value = offset?.value ?? 1.0;
+    return paddingTop + searchBarHeight - _differenceValue * value;
+  }
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
