@@ -74,19 +74,6 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             focusNode: focusNode,
             hasCancelButton: _isQueryStatus,
             onCancelPressed: onCancelPressed,
-            padding: _isQueryStatus
-                ? EdgeInsets.only(
-                    left: 16,
-                    top: 10,
-                    right: 0,
-                    bottom: 10,
-                  )
-                : EdgeInsets.only(
-                    left: 16,
-                    top: 4,
-                    right: 16,
-                    bottom: 16,
-                  ),
           ),
         ),
       ],

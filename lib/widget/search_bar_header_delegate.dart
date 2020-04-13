@@ -6,11 +6,12 @@ import 'dart:ui';
 
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/search_bar.dart';
-import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 const Duration _kDuration = Duration(milliseconds: 300);
+const double _kPadding = 16;
+const double _kCancelButtonWidth = 68;
 
 Widget _wrapWithBackground({
   Border border,
@@ -149,7 +150,7 @@ class SearchBarHeader extends StatelessWidget {
   }
 }
 
-class AnimatedSearchBarNavigationBar extends StatelessWidget {
+class AnimatedSearchBarNavigationBar extends StatefulWidget {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
   final FocusNode focusNode;
@@ -159,7 +160,6 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
   final double opacity;
   final bool hasCancelButton;
   final VoidCallback onCancelPressed;
-  final EdgeInsets padding;
 
   const AnimatedSearchBarNavigationBar({
     this.queryController,
@@ -171,12 +171,29 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
     this.opacity,
     this.hasCancelButton = false,
     this.onCancelPressed,
-    this.padding,
   })  : assert(height != null),
         assert(hasCancelButton != null);
 
   @override
+  _AnimatedSearchBarNavigationBarState createState() => _AnimatedSearchBarNavigationBarState();
+}
+
+class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNavigationBar> with SingleTickerProviderStateMixin {
+  @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var padding = widget.hasCancelButton
+        ? EdgeInsets.only(
+            left: _kPadding,
+            top: 10,
+            bottom: 10,
+          )
+        : EdgeInsets.only(
+            left: _kPadding,
+            top: 4,
+            bottom: _kPadding,
+          );
+    var paddingHorizontal = padding.horizontal ?? 0;
     return _wrapWithBackground(
       border: Border(
         bottom: BorderSide(
@@ -189,37 +206,45 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
         ),
       ),
       backgroundColor: CupertinoDynamicColor.resolve(
-        backgroundColor,
+        widget.backgroundColor,
         context,
       ),
-      child: WidgetGroup(
+      child: Stack(
         children: [
-          Expanded(
-            child: SizedBox(
-              height: height,
-              child: AnimatedContainer(
-                duration: _kDuration,
-                padding: padding,
-                child: SearchBarTextField(
-                  queryController: queryController,
-                  color: color,
-                  opacity: opacity ?? 1.0,
-                  onChanged: onChanged,
-                  focusNode: focusNode,
-                ),
+          AnimatedPositioned(
+            duration: _kDuration,
+            right: widget.hasCancelButton ? 0 : -(_kCancelButtonWidth - _kPadding),
+            child: Container(
+              width: _kCancelButtonWidth,
+              height: widget.height,
+              padding: padding.copyWith(
+                left: 0,
+                right: 0,
+              ),
+              child: CupertinoButton(
+                child: Text('取消'),
+                minSize: 0,
+                borderRadius: BorderRadius.zero,
+                padding: EdgeInsets.zero,
+                onPressed: widget.onCancelPressed,
               ),
             ),
           ),
-          if (hasCancelButton)
-            CupertinoButton(
-              child: Text('取消'),
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
+          Container(
+            height: widget.height,
+            padding: padding,
+            child: AnimatedContainer(
+              width: width - paddingHorizontal - (widget.hasCancelButton ? _kCancelButtonWidth : _kPadding),
+              duration: _kDuration,
+              child: SearchBarTextField(
+                queryController: widget.queryController,
+                color: widget.color,
+                opacity: widget.opacity ?? 1.0,
+                onChanged: widget.onChanged,
+                focusNode: widget.focusNode,
               ),
-              minSize: 0,
-              borderRadius: BorderRadius.zero,
-              onPressed: onCancelPressed,
             ),
+          ),
         ],
       ),
     );
