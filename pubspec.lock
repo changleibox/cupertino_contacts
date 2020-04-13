@@ -155,7 +155,7 @@ packages:
     source: sdk
     version: "0.0.0"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       url: "https://pub.flutter-io.cn"
@@ -272,7 +272,7 @@ packages:
       name: petitparser
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.4.0"
+    version: "3.0.2"
   platform_detect:
     dependency: transitive
     description:
@@ -459,7 +459,7 @@ packages:
       name: xml
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.6.1"
+    version: "3.7.0"
 sdks:
   dart: ">=2.7.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.5 <2.0.0"

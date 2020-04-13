@@ -60,6 +60,7 @@ Widget _wrapWithBackground({
 class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
+  final FocusScopeNode focusNode;
   final double height;
   final double minHeight;
   final Color backgroundColor;
@@ -68,6 +69,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
   const SearchBarHeaderDelegate({
     this.queryController,
     this.onChanged,
+    this.focusNode,
     @required this.height,
     this.minHeight,
     this.backgroundColor,
@@ -82,6 +84,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
       backgroundColor: backgroundColor,
       queryController: queryController,
       onChanged: onChanged,
+      focusNode: focusNode,
     );
   }
 
@@ -98,6 +101,7 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 class SearchBarHeader extends StatelessWidget {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
+  final FocusScopeNode focusNode;
   final double height;
   final Color backgroundColor;
   final Color color;
@@ -106,6 +110,7 @@ class SearchBarHeader extends StatelessWidget {
   const SearchBarHeader({
     this.queryController,
     this.onChanged,
+    this.focusNode,
     @required this.height,
     this.backgroundColor,
     this.color,
@@ -135,6 +140,7 @@ class SearchBarHeader extends StatelessWidget {
         color: color,
         opacity: opacity ?? 1.0,
         onChanged: onChanged,
+        focusNode: focusNode,
       ),
     );
   }

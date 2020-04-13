@@ -12,6 +12,7 @@ class SearchBar extends StatelessWidget {
   final double height;
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
+  final FocusScopeNode focusNode;
   final Color color;
   final double opacity;
 
@@ -20,6 +21,7 @@ class SearchBar extends StatelessWidget {
     @required this.height,
     this.queryController,
     this.onChanged,
+    this.focusNode,
     this.color,
     this.opacity = 1.0,
   })  : assert(height != null),
@@ -51,6 +53,7 @@ class SearchBar extends StatelessWidget {
               controller: queryController,
               placeholder: '搜索',
               onChanged: onChanged,
+              focusNode: focusNode,
               decoration: null,
               style: TextStyle(
                 fontSize: 17,

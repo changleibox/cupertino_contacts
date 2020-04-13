@@ -12,6 +12,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final double navigationBarHeight;
   final Color backgroundColor;
   final ValueChanged<String> onQuery;
+  final FocusScopeNode focusNode;
   final Widget trailing;
 
   const LabelPickePersistentHeaderDelegate({
@@ -20,6 +21,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
     @required this.navigationBarHeight,
     @required this.backgroundColor,
     this.onQuery,
+    this.focusNode,
     this.trailing,
   })  : assert(paddingTop != null),
         assert(searchBarHeight != null),
@@ -58,6 +60,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             color: CupertinoColors.secondarySystemFill,
             backgroundColor: backgroundColor,
             opacity: (1.0 - shrinkOffset / 16).clamp(0.0, 1.0),
+            focusNode: focusNode,
           ),
         ),
       ],
