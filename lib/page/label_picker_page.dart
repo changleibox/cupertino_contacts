@@ -52,6 +52,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   ColorTween _colorTween;
   ScrollController _scrollController;
+  bool isEditMode = false;
 
   @override
   void initState() {
@@ -91,17 +92,21 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     Widget trailing;
     if (presenter.customSelections.isNotEmpty) {
       trailing = NavigationBarAction(
-        child: Text('编辑'),
-        onPressed: () {},
+        child: Text(isEditMode ? '完成' : '编辑'),
+        onPressed: () {
+          isEditMode = !isEditMode;
+          _scrollController?.jumpTo(0);
+          notifyDataSetChanged();
+        },
       );
     }
     return [
-      AnimatedCupertinoSliverNavigationBar(
+      AnimatedLabelPickerNavigationBar(
         colorTween: _colorTween,
         onQuery: presenter.onQuery,
         focusNode: _queryFocusNode,
         trailing: trailing,
-        searchBarHeight: _kSearchBarHeight,
+        searchBarHeight: isEditMode ? 0 : _kSearchBarHeight,
         navigationBarHeight: _kNavigationBarHeight,
       ),
     ];
@@ -130,7 +135,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   @override
   Widget builds(BuildContext context) {
     final children = List<Widget>();
-    if (presenter.isNotEmpty) {
+    if (!isEditMode && presenter.isNotEmpty) {
       children.add(SelectionGroupWidget(
         selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
         selectedSelection: widget.selectedSelection,
@@ -149,6 +154,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         selections: customSelections,
         selectedSelection: widget.selectedSelection,
         hasQueryText: hasQueryText,
+        isEditMode: isEditMode,
       ));
     }
     return CupertinoPageScaffold(

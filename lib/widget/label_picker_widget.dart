@@ -15,14 +15,14 @@ import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
+class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final Widget trailing;
   final ValueChanged<String> onQuery;
   final FocusNode focusNode;
   final double navigationBarHeight;
   final double searchBarHeight;
 
-  const AnimatedCupertinoSliverNavigationBar({
+  const AnimatedLabelPickerNavigationBar({
     Key key,
     @required ColorTween colorTween,
     this.trailing,
@@ -43,7 +43,7 @@ class AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
         paddingTop: paddingTop,
         navigationBarHeight: navigationBarHeight,
         searchBarHeight: searchBarHeight,
-        backgroundColor: color,
+        backgroundColor: searchBarHeight <= 0 ? colorTween.begin : color,
         trailing: trailing,
         onQuery: onQuery,
         focusNode: focusNode,
