@@ -70,7 +70,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   }
 
   @override
-  double get maxExtent => minExtent + searchBarHeight;
+  double get maxExtent => minExtent + (searchBarHeight == 0 ? 0.1 : searchBarHeight);
 
   @override
   double get minExtent => navigationBarHeight + paddingTop;
