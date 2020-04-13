@@ -6,6 +6,7 @@ import 'dart:math';
 
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/label_picker_presenter.dart';
+import 'package:cupertinocontacts/widget/custom_label_group_widet.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
@@ -20,7 +21,6 @@ import 'package:flutter/scheduler.dart';
 const double _kSearchBarHeight = 56.0;
 const double _kNavigationBarHeight = 44.0;
 const int _kMaxLabelCount = 20;
-const Duration _kDuration = Duration(milliseconds: 300);
 
 class LabelPickerPage extends StatefulWidget {
   final SelectionType selectionType;
@@ -42,55 +42,18 @@ class LabelPickerPage extends StatefulWidget {
   _LabelPickerPageState createState() => _LabelPickerPageState();
 }
 
-class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> with SingleTickerProviderStateMixin {
+class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
   final _queryFocusNode = FocusNode();
-  final _customLabelFocusNode = FocusNode();
-  final _customLabelController = TextEditingController();
 
   ColorTween _colorTween;
   ScrollController _scrollController;
-  AnimationController _animationController;
-  Animation<double> _animation;
 
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController?.jumpTo(_kSearchBarHeight);
-    });
-    _animationController = AnimationController(
-      vsync: this,
-      duration: _kDuration,
-      value: 1.0,
-    );
-    _animationController.addListener(() {
-      if (_animationController.isCompleted) {
-        notifyDataSetChanged();
-      }
-    });
-    _animation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.linear,
-    );
-    _queryFocusNode.addListener(() {
-      if (!widget.canCustomLabel) {
-        return;
-      }
-      if (_queryFocusNode.hasFocus) {
-        _animationController.animateTo(0.0);
-      } else {
-        _animationController.animateTo(1.0);
-      }
-    });
-    _customLabelFocusNode.addListener(() {
-      notifyDataSetChanged();
-      var text = _customLabelController.text;
-      if (!_customLabelFocusNode.hasFocus && text != null && text.isNotEmpty) {
-        _customLabelController.clear();
-        selections.addCustomSelection(widget.selectionType, text);
-        presenter.refresh();
-      }
     });
     super.initState();
   }
@@ -110,39 +73,21 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    _customLabelController.dispose();
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  _onEditingComplete() {
-    var text = _customLabelController.text;
-    if (text != null && text.isNotEmpty) {
-      _customLabelController.clear();
-      var selection = selections.addCustomSelection(widget.selectionType, text);
-      if (selection != null) {
-        Navigator.pop(context, selection);
-      }
-    } else {
-      _customLabelFocusNode.unfocus();
-    }
-  }
-
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     _scrollController = PrimaryScrollController.of(context);
+    Widget trailing;
+    if (presenter.customSelections.isNotEmpty) {
+      trailing = NavigationBarAction(
+        child: Text('编辑'),
+        onPressed: () {},
+      );
+    }
     return [
       AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
         onQuery: presenter.onQuery,
         focusNode: _queryFocusNode,
-        trailing: presenter.customSelections.isNotEmpty
-            ? NavigationBarAction(
-                child: Text('编辑'),
-                onPressed: () {},
-              )
-            : null,
+        trailing: trailing,
         searchBarHeight: _kSearchBarHeight,
         navigationBarHeight: _kNavigationBarHeight,
       ),
@@ -169,37 +114,25 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     ];
   }
 
-  List<Widget> _buildCustomLabelHeaders() {
-    if (_animationController.status == AnimationStatus.completed && _animationController.value == 0) {
-      return null;
-    }
-    return [
-      SizeTransition(
-        sizeFactor: _animation,
-        axisAlignment: -1,
-        child: AnimatedCrossFade(
-          firstChild: LabelItemButton(
-            text: '添加自定标签',
-            onPressed: () {
-              _customLabelFocusNode.requestFocus();
-            },
-          ),
-          secondChild: CustomLabelTextField(
-            controller: _customLabelController,
-            focusNode: _customLabelFocusNode,
-            onEditingComplete: _onEditingComplete,
-          ),
-          crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-          duration: _kDuration,
-        ),
-      ),
-    ];
-  }
-
   @override
   Widget builds(BuildContext context) {
-    var itemCount = min(_kMaxLabelCount, presenter.itemCount);
-    final showCustomLabel = widget.canCustomLabel && !presenter.hasQueryText || presenter.customSelections.isNotEmpty;
+    final children = List<Widget>();
+    children.add(SelectionGroupWidget(
+      selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
+      selectedSelection: widget.selectedSelection,
+      footers: _buildSystemLabelHeaders(),
+      onItemPressed: (value) {
+        Navigator.pop(context, value);
+      },
+    ));
+    var customSelections = presenter.customSelections;
+    if (widget.canCustomLabel && (!presenter.hasQueryText || customSelections.isNotEmpty)) {
+      children.add(CustomLabelGroupWidet(
+        queryFocusNode: _queryFocusNode,
+        selectionType: widget.selectionType,
+        selections: customSelections,
+      ));
+    }
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -213,31 +146,17 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
           context: context,
           removeTop: true,
           child: CupertinoScrollbar(
-            child: ListView(
+            child: ListView.separated(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              children: [
-                SelectionGroupWidget(
-                  selections: presenter.objects.take(itemCount),
-                  selectedSelection: widget.selectedSelection,
-                  footers: _buildSystemLabelHeaders(),
-                  onItemPressed: (value) {
-                    Navigator.pop(context, value);
-                  },
-                ),
-                if (showCustomLabel)
-                  SizedBox(
-                    height: 40,
-                  ),
-                if (showCustomLabel)
-                  SelectionGroupWidget(
-                    selections: presenter.customSelections,
-                    selectedSelection: widget.selectedSelection,
-                    headers: _buildCustomLabelHeaders(),
-                    onItemPressed: (value) {
-                      Navigator.pop(context, value);
-                    },
-                  ),
-              ],
+              itemCount: children.length,
+              itemBuilder: (context, index) {
+                return children[index];
+              },
+              separatorBuilder: (context, index) {
+                return SizedBox(
+                  height: 40,
+                );
+              },
             ),
           ),
         ),
