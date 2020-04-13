@@ -156,12 +156,14 @@ class _SelectionItemButton extends StatelessWidget {
 
 class LabelItemButton extends StatelessWidget {
   final String text;
+  final Widget leading;
   final Widget trailing;
   final VoidCallback onPressed;
 
   const LabelItemButton({
     Key key,
     @required this.text,
+    this.leading,
     this.trailing,
     this.onPressed,
   })  : assert(text != null),
@@ -179,6 +181,7 @@ class LabelItemButton extends StatelessWidget {
         child: WidgetGroup.spacing(
           alignment: MainAxisAlignment.spaceBetween,
           children: [
+            if (leading != null) leading,
             Expanded(
               child: Text(
                 text,
