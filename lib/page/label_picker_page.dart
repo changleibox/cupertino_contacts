@@ -85,6 +85,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     _queryFocusNode.addListener(() {
       if (_queryFocusNode.hasFocus) {
         _status = LabelPageStatus.query;
+        _scrollController?.jumpTo(0);
         _animationController.animateTo(0.0);
       }
     });
@@ -153,6 +154,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
               _status = LabelPageStatus.none;
               _queryFocusNode.unfocus();
               _queryController.clear();
+              _scrollController?.jumpTo(0);
               presenter.onQuery(null);
               notifyDataSetChanged();
               _animationController.animateTo(1.0);

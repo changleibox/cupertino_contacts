@@ -9,7 +9,6 @@ import 'package:cupertinocontacts/widget/search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-const Duration _kDuration = Duration(milliseconds: 300);
 const double _kPadding = 16;
 const double _kCancelButtonWidth = 68;
 
@@ -158,8 +157,8 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
   final Color backgroundColor;
   final Color color;
   final double opacity;
-  final bool hasCancelButton;
   final VoidCallback onCancelPressed;
+  final Animation<double> animation;
 
   const AnimatedSearchBarNavigationBar({
     this.queryController,
@@ -169,28 +168,19 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
     this.backgroundColor,
     this.color,
     this.opacity,
-    this.hasCancelButton = false,
     this.onCancelPressed,
-  })  : assert(height != null),
-        assert(hasCancelButton != null);
+    this.animation,
+  })  : assert(height != null);
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var padding;
-    if (hasCancelButton) {
-      padding = EdgeInsets.only(
-        left: _kPadding,
-        top: 10.0,
-        bottom: 10.0,
-      );
-    } else {
-      padding = EdgeInsets.only(
-        left: _kPadding,
-        top: 4.0,
-        bottom: _kPadding,
-      );
-    }
+    var value = animation?.value ?? 1.0;
+    var padding = EdgeInsets.only(
+      left: _kPadding,
+      top: 10.0 - 6 * value,
+      bottom: 10.0 + 6 * value,
+    );
     return _wrapWithBackground(
       border: Border(
         bottom: BorderSide(
@@ -208,17 +198,15 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          AnimatedPositioned(
-            duration: _kDuration,
-            right: hasCancelButton ? 0 : -(_kCancelButtonWidth - _kPadding),
-            child: AnimatedContainer(
+          Positioned(
+            right: -(_kCancelButtonWidth - _kPadding) * value,
+            child: Container(
               width: _kCancelButtonWidth,
               height: height,
               padding: padding.copyWith(
                 left: 0.0,
                 right: 0.0,
               ),
-              duration: _kDuration,
               child: CupertinoButton(
                 child: Text('取消'),
                 minSize: 0,
@@ -228,19 +216,16 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            width: width - (_kCancelButtonWidth - (_kCancelButtonWidth - _kPadding) * value),
             height: height,
-            child: AnimatedContainer(
-              width: width - (hasCancelButton ? _kCancelButtonWidth : _kPadding),
-              padding: padding,
-              duration: _kDuration,
-              child: SearchBarTextField(
-                queryController: queryController,
-                color: color,
-                opacity: opacity ?? 1.0,
-                onChanged: onChanged,
-                focusNode: focusNode,
-              ),
+            padding: padding,
+            child: SearchBarTextField(
+              queryController: queryController,
+              color: color,
+              opacity: opacity ?? 1.0,
+              onChanged: onChanged,
+              focusNode: focusNode,
             ),
           ),
         ],
