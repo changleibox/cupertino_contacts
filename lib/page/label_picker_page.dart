@@ -219,7 +219,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         },
         headerSliverBuilder: _buildHeaderSliver,
         physics: SnappingScrollPhysics(
-          midScrollOffset: _isEditStatus ? 0 : _kSearchBarHeight,
+          midScrollOffset: _status != LabelPageStatus.none ? 0 : _kSearchBarHeight,
         ),
         body: PrimarySlidableController(
           controller: _slidableController,
