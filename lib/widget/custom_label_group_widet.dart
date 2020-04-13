@@ -44,7 +44,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
     _animationController = AnimationController(
       vsync: this,
       duration: _kDuration,
-      value: 1.0,
+      value: widget.queryFocusNode.hasFocus ? 0.0 : 1.0,
     );
     _animationController.addListener(() {
       if (_animationController.isCompleted) {
