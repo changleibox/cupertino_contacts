@@ -150,7 +150,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
       selections: widget.selections,
       selectedSelection: widget.selectedSelection,
       headers: _buildCustomLabelHeaders(),
-      hasDeleteButton: true,
+      hasDeleteButton: false,
       onItemPressed: (value) {
         Navigator.pop(context, value);
       },
