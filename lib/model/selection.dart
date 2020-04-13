@@ -70,6 +70,11 @@ class _SelectionGroup {
     return selection;
   }
 
+  void removeCustomSelection(Selection selection) {
+    assert(selection != null);
+    _customSelectionsMap.remove(selection.propertyName);
+  }
+
   Selection operator [](String propertyName) {
     assert(propertyName != null);
     return _systemSelectionsMap[propertyName] ?? _customSelectionsMap[propertyName];
@@ -144,6 +149,14 @@ abstract class _Selections {
     var selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     return selectionGroup.addCustomSelection(propertyName);
+  }
+
+  void removeCustomSelection(SelectionType type, Selection selection) {
+    assert(type != null);
+    assert(selection != null);
+    var selectionGroup = _selectionsMap[type];
+    assert(selectionGroup != null, 'undefine type=$type');
+    selectionGroup.removeCustomSelection(selection);
   }
 
   bool contains(SelectionType type, String propertyName) {

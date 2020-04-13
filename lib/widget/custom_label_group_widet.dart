@@ -155,7 +155,9 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
         Navigator.pop(context, value);
       },
       onDeletePressed: (value) {
-
+        selections.removeCustomSelection(widget.selectionType, value);
+        widget.selections.remove(value);
+        setState(() {});
       },
     );
   }
