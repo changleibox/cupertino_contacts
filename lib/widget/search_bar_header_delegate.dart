@@ -196,7 +196,6 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
         bottom: _kPadding,
       );
     }
-    var paddingHorizontal = padding.horizontal ?? 0;
     return _wrapWithBackground(
       border: Border(
         bottom: BorderSide(
@@ -217,13 +216,14 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
           AnimatedPositioned(
             duration: _kDuration,
             right: widget.hasCancelButton ? 0 : -(_kCancelButtonWidth - _kPadding),
-            child: Container(
+            child: AnimatedContainer(
               width: _kCancelButtonWidth,
               height: widget.height,
               padding: padding.copyWith(
                 left: 0.0,
                 right: 0.0,
               ),
+              duration: _kDuration,
               child: CupertinoButton(
                 child: Text('取消'),
                 minSize: 0,
@@ -233,11 +233,11 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
               ),
             ),
           ),
-          Container(
+          SizedBox(
             height: widget.height,
-            padding: padding,
             child: AnimatedContainer(
-              width: width - paddingHorizontal - (widget.hasCancelButton ? _kCancelButtonWidth : _kPadding),
+              width: width - (widget.hasCancelButton ? _kCancelButtonWidth : _kPadding),
+              padding: padding,
               duration: _kDuration,
               child: SearchBarTextField(
                 queryController: widget.queryController,
