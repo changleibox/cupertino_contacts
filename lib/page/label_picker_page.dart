@@ -153,6 +153,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
             offset: _animation,
             onCancelPressed: () {
               _status = LabelPageStatus.none;
+              notifyDataSetChanged();
               _queryFocusNode.unfocus();
               _queryController.clear();
               _scrollController?.jumpTo(0);
