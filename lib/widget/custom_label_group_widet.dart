@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/model/selection.dart';
+import 'package:cupertinocontacts/page/label_picker_page.dart';
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -16,8 +17,7 @@ class CustomLabelGroupWidet extends StatefulWidget {
   final SelectionType selectionType;
   final FocusNode queryFocusNode;
   final Selection selectedSelection;
-  final bool hasQueryText;
-  final bool isEditMode;
+  final LabelPageStatus status;
 
   const CustomLabelGroupWidet({
     Key key,
@@ -25,11 +25,10 @@ class CustomLabelGroupWidet extends StatefulWidget {
     @required this.selectionType,
     @required this.selections,
     this.selectedSelection,
-    this.hasQueryText = false,
-    this.isEditMode = false,
+    @required this.status,
   })  : assert(selectionType != null),
         assert(selections != null),
-        assert(hasQueryText != null),
+        assert(status != null),
         super(key: key);
 
   @override
@@ -81,7 +80,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
       oldWidget.queryFocusNode.removeListener(_onQueryFocusChanged);
       widget.queryFocusNode.addListener(_onQueryFocusChanged);
     }
-    if (widget.hasQueryText != oldWidget.hasQueryText || widget.isEditMode != oldWidget.isEditMode) {
+    if (widget.status != oldWidget.status) {
       _onQueryFocusChanged();
     }
     super.didUpdateWidget(oldWidget);
@@ -95,8 +94,10 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
     super.dispose();
   }
 
+  bool get _isEditStatus => widget.status == LabelPageStatus.editCustom;
+
   bool get _isHideAddCustomLabelButton {
-    return widget.queryFocusNode.hasFocus || widget.hasQueryText || widget.isEditMode;
+    return widget.queryFocusNode.hasFocus || widget.status != LabelPageStatus.none;
   }
 
   _onQueryFocusChanged() {
@@ -154,11 +155,11 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   Widget build(BuildContext context) {
     return DeleteableSelectionGroupWidget(
       selections: widget.selections,
-      selectedSelection: widget.isEditMode ? null : widget.selectedSelection,
+      selectedSelection: _isEditStatus ? null : widget.selectedSelection,
       headers: _buildCustomLabelHeaders(),
-      hasDeleteButton: widget.isEditMode,
+      hasDeleteButton: _isEditStatus,
       onItemPressed: (value) {
-        if (widget.isEditMode) {
+        if (_isEditStatus) {
           return;
         }
         Navigator.pop(context, value);

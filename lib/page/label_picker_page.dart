@@ -56,6 +56,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   final _slidableController = SlidableController();
   final _queryFocusNode = FocusNode();
+  final _queryController = TextEditingController();
 
   ColorTween _colorTween;
   ScrollController _scrollController;
@@ -70,13 +71,6 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     _queryFocusNode.addListener(() {
       if (_queryFocusNode.hasFocus) {
         _status = LabelPageStatus.query;
-        _scrollController?.animateTo(
-          _kSearchBarHeight,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.linear,
-        );
-      } else {
-        _status = LabelPageStatus.none;
       }
     });
     super.initState();
@@ -98,9 +92,9 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   }
 
   @override
-  void onRootTap() {
-    _onDismissSlidable();
-    super.onRootTap();
+  void dispose() {
+    _queryController.dispose();
+    super.dispose();
   }
 
   _onDismissSlidable() {
@@ -112,9 +106,9 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     Widget trailing;
     if (presenter.customSelections.isNotEmpty) {
       trailing = NavigationBarAction(
-        child: Text(_status == LabelPageStatus.editCustom ? '完成' : '编辑'),
+        child: Text(_isEditStatus ? '完成' : '编辑'),
         onPressed: () {
-          if (_status == LabelPageStatus.editCustom) {
+          if (_isEditStatus) {
             _status = LabelPageStatus.none;
           } else {
             _status = LabelPageStatus.editCustom;
@@ -127,6 +121,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     }
     return [
       AnimatedLabelPickerNavigationBar(
+        queryController: _queryController,
         colorTween: _colorTween,
         onQuery: presenter.onQuery,
         focusNode: _queryFocusNode,
@@ -134,6 +129,13 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         searchBarHeight: _kSearchBarHeight,
         navigationBarHeight: _kNavigationBarHeight,
         status: _status,
+        onCancelPressed: () {
+          _status = LabelPageStatus.none;
+          _queryFocusNode.unfocus();
+          _queryController.clear();
+          presenter.onQuery(null);
+          notifyDataSetChanged();
+        },
       ),
     ];
   }
@@ -158,11 +160,14 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     ];
   }
 
+  bool get _isEditStatus => _status == LabelPageStatus.editCustom;
+
+  bool get _isQueryStatus => _status == LabelPageStatus.query;
+
   @override
   Widget builds(BuildContext context) {
-    var isEditStatus = _status == LabelPageStatus.editCustom;
     final children = List<Widget>();
-    if (!isEditStatus && presenter.isNotEmpty) {
+    if (!_isEditStatus && presenter.isNotEmpty) {
       children.add(SelectionGroupWidget(
         selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
         selectedSelection: widget.selectedSelection,
@@ -172,7 +177,6 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         },
       ));
     }
-    var hasQueryText = presenter.hasQueryText;
     var customSelections = presenter.customSelections;
     if (widget.canCustomLabel && (!presenter.hasQueryText || customSelections.isNotEmpty)) {
       children.add(CustomLabelGroupWidet(
@@ -180,19 +184,18 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         selectionType: widget.selectionType,
         selections: customSelections,
         selectedSelection: widget.selectedSelection,
-        hasQueryText: hasQueryText,
-        isEditMode: isEditStatus,
+        status: _status,
       ));
     }
     var padding = MediaQuery.of(context).padding;
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
-          return _kNavigationBarHeight + padding.top;
+          return (_isQueryStatus ? _kSearchBarHeight : _kNavigationBarHeight) + padding.top;
         },
         headerSliverBuilder: _buildHeaderSliver,
         physics: SnappingScrollPhysics(
-          midScrollOffset: isEditStatus ? 0 : _kSearchBarHeight,
+          midScrollOffset: _isEditStatus ? 0 : _kSearchBarHeight,
         ),
         body: PrimarySlidableController(
           controller: _slidableController,
@@ -209,7 +212,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                 child: CupertinoScrollbar(
                   child: ListView.separated(
                     padding: padding.copyWith(
-                      top: isEditStatus ? _kLargeSpacing : 0,
+                      top: _isEditStatus ? _kLargeSpacing : 0,
                     ),
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: children.length,

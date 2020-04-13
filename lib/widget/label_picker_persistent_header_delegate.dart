@@ -14,10 +14,12 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final double searchBarHeight;
   final double navigationBarHeight;
   final Color backgroundColor;
+  final TextEditingController queryController;
   final ValueChanged<String> onQuery;
   final FocusNode focusNode;
   final Widget trailing;
   final LabelPageStatus status;
+  final VoidCallback onCancelPressed;
 
   const LabelPickePersistentHeaderDelegate({
     @required this.paddingTop,
@@ -25,9 +27,11 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
     @required this.navigationBarHeight,
     @required this.backgroundColor,
     @required this.status,
+    this.queryController,
     this.onQuery,
     this.focusNode,
     this.trailing,
+    this.onCancelPressed,
   })  : assert(paddingTop != null),
         assert(searchBarHeight != null),
         assert(navigationBarHeight != null),
@@ -60,13 +64,29 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
           left: 0,
           right: 0,
           bottom: 0,
-          child: SearchBarHeader(
-            height: _isEditStatus ? 0 : max(searchBarHeight - shrinkOffset, 0.0),
+          child: AnimatedSearchBarNavigationBar(
+            height: _isEditStatus ? 0 : _isQueryStatus ? searchBarHeight : max(searchBarHeight - shrinkOffset, 0.0),
+            queryController: queryController,
             onChanged: onQuery,
             color: CupertinoColors.secondarySystemFill,
             backgroundColor: backgroundColor,
-            opacity: (1.0 - shrinkOffset / 16).clamp(0.0, 1.0),
+            opacity: _isQueryStatus ? 1.0 : (1.0 - shrinkOffset / 16).clamp(0.0, 1.0),
             focusNode: focusNode,
+            hasCancelButton: _isQueryStatus,
+            onCancelPressed: onCancelPressed,
+            padding: _isQueryStatus
+                ? EdgeInsets.only(
+                    left: 16,
+                    top: 10,
+                    right: 0,
+                    bottom: 10,
+                  )
+                : EdgeInsets.only(
+                    left: 16,
+                    top: 4,
+                    right: 16,
+                    bottom: 16,
+                  ),
           ),
         ),
       ],
@@ -75,11 +95,13 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
 
   bool get _isEditStatus => status == LabelPageStatus.editCustom;
 
-  @override
-  double get maxExtent => minExtent + (_isEditStatus ? 0.1 : searchBarHeight);
+  bool get _isQueryStatus => status == LabelPageStatus.query;
 
   @override
-  double get minExtent => navigationBarHeight + paddingTop;
+  double get maxExtent => minExtent + (_isEditStatus || _isQueryStatus ? 0.1 : searchBarHeight);
+
+  @override
+  double get minExtent => (_isQueryStatus ? searchBarHeight : navigationBarHeight) + paddingTop;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

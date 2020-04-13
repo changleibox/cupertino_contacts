@@ -6,8 +6,11 @@ import 'dart:ui';
 
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/widget/search_bar.dart';
+import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
+const Duration _kDuration = Duration(milliseconds: 300);
 
 Widget _wrapWithBackground({
   Border border,
@@ -141,6 +144,83 @@ class SearchBarHeader extends StatelessWidget {
         opacity: opacity ?? 1.0,
         onChanged: onChanged,
         focusNode: focusNode,
+      ),
+    );
+  }
+}
+
+class AnimatedSearchBarNavigationBar extends StatelessWidget {
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final FocusNode focusNode;
+  final double height;
+  final Color backgroundColor;
+  final Color color;
+  final double opacity;
+  final bool hasCancelButton;
+  final VoidCallback onCancelPressed;
+  final EdgeInsets padding;
+
+  const AnimatedSearchBarNavigationBar({
+    this.queryController,
+    this.onChanged,
+    this.focusNode,
+    @required this.height,
+    this.backgroundColor,
+    this.color,
+    this.opacity,
+    this.hasCancelButton = false,
+    this.onCancelPressed,
+    this.padding,
+  })  : assert(height != null),
+        assert(hasCancelButton != null);
+
+  @override
+  Widget build(BuildContext context) {
+    return _wrapWithBackground(
+      border: Border(
+        bottom: BorderSide(
+          color: CupertinoDynamicColor.resolve(
+            separatorColor,
+            context,
+          ),
+          width: 0.0, // One physical pixel.
+          style: BorderStyle.solid,
+        ),
+      ),
+      backgroundColor: CupertinoDynamicColor.resolve(
+        backgroundColor,
+        context,
+      ),
+      child: WidgetGroup(
+        children: [
+          Expanded(
+            child: SizedBox(
+              height: height,
+              child: AnimatedContainer(
+                duration: _kDuration,
+                padding: padding,
+                child: SearchBarTextField(
+                  queryController: queryController,
+                  color: color,
+                  opacity: opacity ?? 1.0,
+                  onChanged: onChanged,
+                  focusNode: focusNode,
+                ),
+              ),
+            ),
+          ),
+          if (hasCancelButton)
+            CupertinoButton(
+              child: Text('取消'),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              minSize: 0,
+              borderRadius: BorderRadius.zero,
+              onPressed: onCancelPressed,
+            ),
+        ],
       ),
     );
   }

@@ -18,21 +18,25 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final Widget trailing;
+  final TextEditingController queryController;
   final ValueChanged<String> onQuery;
   final FocusNode focusNode;
   final double navigationBarHeight;
   final double searchBarHeight;
   final LabelPageStatus status;
+  final VoidCallback onCancelPressed;
 
   const AnimatedLabelPickerNavigationBar({
     Key key,
     @required ColorTween colorTween,
     this.trailing,
+    this.queryController,
     this.onQuery,
     this.focusNode,
     @required this.navigationBarHeight,
     @required this.searchBarHeight,
     @required this.status,
+    this.onCancelPressed,
   })  : assert(navigationBarHeight != null),
         assert(searchBarHeight != null),
         assert(status != null),
@@ -44,6 +48,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
     return SliverPersistentHeader(
       pinned: true,
       delegate: LabelPickePersistentHeaderDelegate(
+        queryController: queryController,
         paddingTop: paddingTop,
         navigationBarHeight: navigationBarHeight,
         searchBarHeight: searchBarHeight,
@@ -52,6 +57,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
         onQuery: onQuery,
         focusNode: focusNode,
         status: status,
+        onCancelPressed: onCancelPressed,
       ),
     );
   }
