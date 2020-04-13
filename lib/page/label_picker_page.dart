@@ -46,7 +46,7 @@ class LabelPickerPage extends StatefulWidget {
   _LabelPickerPageState createState() => _LabelPickerPageState();
 }
 
-class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
+class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> with SingleTickerProviderStateMixin {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
   final _queryFocusNode = FocusNode();
@@ -55,11 +55,34 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   ColorTween _colorTween;
   ScrollController _scrollController;
+  AnimationController _animationController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController?.jumpTo(_kSearchBarHeight);
+    });
+    _animationController = AnimationController(
+      vsync: this,
+      duration: _kDuration,
+      value: 1.0,
+    );
+    _animationController.addListener(() {
+      if (_animationController.isCompleted) {
+        notifyDataSetChanged();
+      }
+    });
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.linear,
+    );
+    _queryFocusNode.addListener(() {
+      if (_queryFocusNode.hasFocus) {
+        _animationController.animateTo(0.0);
+      } else {
+        _animationController.animateTo(1.0);
+      }
     });
     _customLabelFocusNode.addListener(() {
       notifyDataSetChanged();
@@ -91,6 +114,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   @override
   void dispose() {
     _customLabelController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -124,6 +148,53 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     ];
   }
 
+  List<Widget> _buildSystemLabelHeaders() {
+    if (presenter.itemCount <= _kMaxLabelCount) {
+      return null;
+    }
+    return [
+      _ItemButton(
+        text: '所有标签',
+        trailing: Icon(
+          CupertinoIcons.forward,
+          size: 20,
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.tertiaryLabel,
+            context,
+          ),
+        ),
+        onPressed: () {},
+      ),
+    ];
+  }
+
+  List<Widget> _buildCustomLabelHeaders() {
+    if (_animationController.status == AnimationStatus.completed && _animationController.value == 0) {
+      return null;
+    }
+    return [
+      SizeTransition(
+        sizeFactor: _animation,
+        axisAlignment: -1,
+        child: AnimatedCrossFade(
+          firstChild: _ItemButton(
+            text: '添加自定标签',
+            onPressed: () {
+              _customLabelFocusNode.requestFocus();
+            },
+          ),
+          secondChild: _CustomLabelTextField(
+            controller: _customLabelController,
+            focusNode: _customLabelFocusNode,
+            onEditingComplete: _onEditingComplete,
+          ),
+          crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: _kDuration,
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget builds(BuildContext context) {
     var itemCount = min(_kMaxLabelCount, presenter.itemCount);
@@ -147,21 +218,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                 _SelectionGroupWidget(
                   selections: presenter.objects.take(itemCount),
                   selectedSelection: widget.selectedSelection,
-                  footers: [
-                    if (presenter.itemCount > _kMaxLabelCount)
-                      _ItemButton(
-                        text: '所有标签',
-                        trailing: Icon(
-                          CupertinoIcons.forward,
-                          size: 20,
-                          color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.tertiaryLabel,
-                            context,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
-                  ],
+                  footers: _buildSystemLabelHeaders(),
                   onItemPressed: (value) {
                     Navigator.pop(context, value);
                   },
@@ -174,24 +231,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                   _SelectionGroupWidget(
                     selections: presenter.customSelections,
                     selectedSelection: widget.selectedSelection,
-                    headers: [
-                      if (!_queryFocusNode.hasFocus)
-                        AnimatedCrossFade(
-                          firstChild: _ItemButton(
-                            text: '添加自定标签',
-                            onPressed: () {
-                              _customLabelFocusNode.requestFocus();
-                            },
-                          ),
-                          secondChild: _CustomLabelTextField(
-                            controller: _customLabelController,
-                            focusNode: _customLabelFocusNode,
-                            onEditingComplete: _onEditingComplete,
-                          ),
-                          crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                          duration: _kDuration,
-                        ),
-                    ],
+                    headers: _buildCustomLabelHeaders(),
                     onItemPressed: (value) {
                       Navigator.pop(context, value);
                     },
