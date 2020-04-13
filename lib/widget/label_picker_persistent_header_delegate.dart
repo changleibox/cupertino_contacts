@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:math';
+
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,7 +57,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
           right: 0,
           bottom: 0,
           child: SearchBarHeader(
-            height: searchBarHeight <= 0 ? 0 : searchBarHeight - shrinkOffset,
+            height: max(searchBarHeight - shrinkOffset, 0.0),
             onChanged: onQuery,
             color: CupertinoColors.secondarySystemFill,
             backgroundColor: backgroundColor,
