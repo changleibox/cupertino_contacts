@@ -10,10 +10,12 @@ import 'package:cupertinocontacts/widget/custom_label_group_widet.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
+import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// Created by box on 2020/4/11.
 ///
@@ -45,6 +47,7 @@ class LabelPickerPage extends StatefulWidget {
 class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
+  final _slidableController = SlidableController();
   final _queryFocusNode = FocusNode();
 
   ColorTween _colorTween;
@@ -71,6 +74,16 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
       ),
     );
     super.didChangeDependencies();
+  }
+
+  @override
+  void onRootTap() {
+    _onDismissSlidable();
+    super.onRootTap();
+  }
+
+  _onDismissSlidable() {
+    _slidableController.activeState?.close();
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
@@ -147,21 +160,33 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         physics: SnappingScrollPhysics(
           midScrollOffset: _kSearchBarHeight,
         ),
-        body: MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: CupertinoScrollbar(
-            child: ListView.separated(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: children.length,
-              itemBuilder: (context, index) {
-                return children[index];
+        body: PrimarySlidableController(
+          controller: _slidableController,
+          child: Listener(
+            onPointerDown: (event) => _onDismissSlidable(),
+            child: NotificationListener<ScrollStartNotification>(
+              onNotification: (notification) {
+                _onDismissSlidable();
+                return false;
               },
-              separatorBuilder: (context, index) {
-                return SizedBox(
-                  height: 40,
-                );
-              },
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: CupertinoScrollbar(
+                  child: ListView.separated(
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    itemCount: children.length,
+                    itemBuilder: (context, index) {
+                      return children[index];
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 40,
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
         ),

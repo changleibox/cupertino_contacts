@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
+import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_item_widget.dart';
 import 'package:cupertinocontacts/widget/edit_contact_info_button.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
@@ -95,6 +96,17 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
       curve: Curves.linear,
     );
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(ContactInfoGroupWidget oldWidget) {
+    if (!Collections.equals(widget.infoGroup.value, oldWidget.infoGroup.value)) {
+      _globalKeys.clear();
+      widget.infoGroup.value.forEach((element) {
+        _globalKeys.add(GlobalKey());
+      });
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

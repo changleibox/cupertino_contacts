@@ -146,12 +146,16 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
 
   @override
   Widget build(BuildContext context) {
-    return SelectionGroupWidget(
+    return DeleteableSelectionGroupWidget(
       selections: widget.selections,
       selectedSelection: widget.selectedSelection,
       headers: _buildCustomLabelHeaders(),
+      hasDeleteButton: true,
       onItemPressed: (value) {
         Navigator.pop(context, value);
+      },
+      onDeletePressed: (value) {
+
       },
     );
   }
