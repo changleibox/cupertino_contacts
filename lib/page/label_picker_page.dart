@@ -49,7 +49,8 @@ class LabelPickerPage extends StatefulWidget {
 class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
-  final _customLabelFocusNode = FocusScopeNode();
+  final _queryFocusNode = FocusNode();
+  final _customLabelFocusNode = FocusNode();
   final _customLabelController = TextEditingController();
 
   ColorTween _colorTween;
@@ -112,6 +113,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
       _AnimatedCupertinoSliverNavigationBar(
         colorTween: _colorTween,
         onQuery: presenter.onQuery,
+        focusNode: _queryFocusNode,
         trailing: presenter.customSelections.isNotEmpty
             ? NavigationBarAction(
                 child: Text('编辑'),
@@ -126,7 +128,6 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   Widget builds(BuildContext context) {
     var itemCount = min(_kMaxLabelCount, presenter.itemCount);
     final showCustomLabel = widget.canCustomLabel && !presenter.hasQueryText || presenter.customSelections.isNotEmpty;
-    var scopeNode = FocusScope.of(context);
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -174,12 +175,11 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                     selections: presenter.customSelections,
                     selectedSelection: widget.selectedSelection,
                     headers: [
-                      if (scopeNode == _customLabelFocusNode || !scopeNode.hasFocus)
+                      if (!_queryFocusNode.hasFocus)
                         AnimatedCrossFade(
                           firstChild: _ItemButton(
                             text: '添加自定标签',
                             onPressed: () {
-                              scopeNode.unfocus();
                               _customLabelFocusNode.requestFocus();
                             },
                           ),
@@ -208,7 +208,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
   final Widget trailing;
   final ValueChanged<String> onQuery;
-  final FocusScopeNode focusNode;
+  final FocusNode focusNode;
 
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
@@ -392,7 +392,7 @@ class _ItemButton extends StatelessWidget {
 
 class _CustomLabelTextField extends StatelessWidget {
   final TextEditingController controller;
-  final FocusScopeNode focusNode;
+  final FocusNode focusNode;
   final VoidCallback onEditingComplete;
 
   const _CustomLabelTextField({
