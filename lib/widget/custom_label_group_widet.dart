@@ -16,6 +16,7 @@ class CustomLabelGroupWidet extends StatefulWidget {
   final SelectionType selectionType;
   final FocusNode queryFocusNode;
   final Selection selectedSelection;
+  final bool hasQueryText;
 
   const CustomLabelGroupWidet({
     Key key,
@@ -23,8 +24,10 @@ class CustomLabelGroupWidet extends StatefulWidget {
     @required this.selectionType,
     @required this.selections,
     this.selectedSelection,
+    this.hasQueryText = false,
   })  : assert(selectionType != null),
         assert(selections != null),
+        assert(hasQueryText != null),
         super(key: key);
 
   @override
@@ -44,7 +47,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
     _animationController = AnimationController(
       vsync: this,
       duration: _kDuration,
-      value: widget.queryFocusNode.hasFocus ? 0.0 : 1.0,
+      value: widget.queryFocusNode.hasFocus || widget.hasQueryText ? 0.0 : 1.0,
     );
     _animationController.addListener(() {
       if (_animationController.isCompleted) {
@@ -76,18 +79,22 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
       oldWidget.queryFocusNode.removeListener(_onQueryFocusChanged);
       widget.queryFocusNode.addListener(_onQueryFocusChanged);
     }
+    if (widget.hasQueryText != oldWidget.hasQueryText) {
+      _onQueryFocusChanged();
+    }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
+    widget.queryFocusNode.removeListener(_onQueryFocusChanged);
     _customLabelController.dispose();
     _animationController.dispose();
     super.dispose();
   }
 
   _onQueryFocusChanged() {
-    if (widget.queryFocusNode.hasFocus) {
+    if (widget.queryFocusNode.hasFocus || widget.hasQueryText) {
       _animationController.animateTo(0.0);
     } else {
       _animationController.animateTo(1.0);

@@ -117,20 +117,25 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   @override
   Widget builds(BuildContext context) {
     final children = List<Widget>();
-    children.add(SelectionGroupWidget(
-      selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
-      selectedSelection: widget.selectedSelection,
-      footers: _buildSystemLabelHeaders(),
-      onItemPressed: (value) {
-        Navigator.pop(context, value);
-      },
-    ));
+    if (presenter.isNotEmpty) {
+      children.add(SelectionGroupWidget(
+        selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
+        selectedSelection: widget.selectedSelection,
+        footers: _buildSystemLabelHeaders(),
+        onItemPressed: (value) {
+          Navigator.pop(context, value);
+        },
+      ));
+    }
+    var hasQueryText = presenter.hasQueryText;
     var customSelections = presenter.customSelections;
     if (widget.canCustomLabel && (!presenter.hasQueryText || customSelections.isNotEmpty)) {
       children.add(CustomLabelGroupWidet(
         queryFocusNode: _queryFocusNode,
         selectionType: widget.selectionType,
         selections: customSelections,
+        selectedSelection: widget.selectedSelection,
+        hasQueryText: hasQueryText,
       ));
     }
     return CupertinoPageScaffold(
