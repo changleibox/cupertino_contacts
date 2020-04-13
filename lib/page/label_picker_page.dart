@@ -78,6 +78,9 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
       curve: Curves.linear,
     );
     _queryFocusNode.addListener(() {
+      if (!widget.canCustomLabel) {
+        return;
+      }
       if (_queryFocusNode.hasFocus) {
         _animationController.animateTo(0.0);
       } else {
@@ -228,7 +231,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                     height: 40,
                   ),
                 if (showCustomLabel)
-                  _SelectionGroupWidget(
+                  _AnimatedSelectionGroupWidget(
                     selections: presenter.customSelections,
                     selectedSelection: widget.selectedSelection,
                     headers: _buildCustomLabelHeaders(),
@@ -284,6 +287,82 @@ class _SelectionGroupWidget extends StatelessWidget {
   final ValueChanged<Selection> onItemPressed;
 
   const _SelectionGroupWidget({
+    Key key,
+    @required this.selections,
+    @required this.selectedSelection,
+    this.onItemPressed,
+    this.headers,
+    this.footers,
+  })  : assert(selections != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final children = List<Widget>();
+    if (headers != null) {
+      children.addAll(headers);
+    }
+    children.addAll(selections.map((selection) {
+      return _SelectionItemButton(
+        selection: selection,
+        selected: selection == selectedSelection,
+        onPressed: () {
+          if (onItemPressed != null) {
+            onItemPressed(selection);
+          }
+        },
+      );
+    }));
+    if (footers != null) {
+      children.addAll(footers);
+    }
+
+    var length = children.length;
+    return WidgetGroup.separated(
+      direction: Axis.vertical,
+      itemCount: length,
+      itemBuilder: (context, index) {
+        var borderSide = BorderSide(
+          color: CupertinoDynamicColor.resolve(
+            separatorColor,
+            context,
+          ),
+          width: 0.0,
+        );
+        return Container(
+          foregroundDecoration: BoxDecoration(
+            border: Border(
+              top: index == 0 ? borderSide : BorderSide.none,
+              bottom: index == length - 1 ? borderSide : BorderSide.none,
+            ),
+          ),
+          child: children[index],
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Container(
+          color: CupertinoDynamicColor.resolve(
+            CupertinoColors.secondarySystemGroupedBackground,
+            context,
+          ),
+          padding: EdgeInsets.only(
+            left: 16,
+          ),
+          child: CupertinoDivider(),
+        );
+      },
+    );
+  }
+}
+
+class _AnimatedSelectionGroupWidget extends StatelessWidget {
+  final List<Widget> headers;
+  final List<Widget> footers;
+  final Iterable<Selection> selections;
+  final Selection selectedSelection;
+  final ValueChanged<Selection> onItemPressed;
+
+  const _AnimatedSelectionGroupWidget({
     Key key,
     @required this.selections,
     @required this.selectedSelection,
