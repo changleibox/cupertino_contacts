@@ -95,9 +95,12 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   }
 
   List<Widget> _buildCustomLabelHeaders() {
-    if (_animationController.status == AnimationStatus.completed && _animationController.value == 0) {
+    var status = _animationController.status;
+    var value = _animationController.value;
+    if (status == AnimationStatus.completed && value == 0) {
       return null;
     }
+    final inEditMode = _customLabelFocusNode.hasFocus;
     return [
       SizeTransition(
         sizeFactor: _animation,
@@ -114,7 +117,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
             focusNode: _customLabelFocusNode,
             onEditingComplete: _onEditingComplete,
           ),
-          crossFadeState: _customLabelFocusNode.hasFocus ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          crossFadeState: inEditMode ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: _kDuration,
         ),
       ),
