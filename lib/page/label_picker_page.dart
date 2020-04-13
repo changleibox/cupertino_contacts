@@ -24,6 +24,7 @@ const double _kSearchBarHeight = 56.0;
 const double _kNavigationBarHeight = 44.0;
 const double _kLargeSpacing = 40;
 const int _kMaxLabelCount = 20;
+const Duration _kDuration = Duration(milliseconds: 300);
 
 enum LabelPageStatus {
   none,
@@ -74,7 +75,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: _kDuration,
       value: 1.0,
     );
     _animation = CurvedAnimation(
