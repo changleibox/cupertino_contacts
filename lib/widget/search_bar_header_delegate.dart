@@ -150,7 +150,7 @@ class SearchBarHeader extends StatelessWidget {
   }
 }
 
-class AnimatedSearchBarNavigationBar extends StatefulWidget {
+class AnimatedSearchBarNavigationBar extends StatelessWidget {
   final TextEditingController queryController;
   final ValueChanged<String> onChanged;
   final FocusNode focusNode;
@@ -175,15 +175,10 @@ class AnimatedSearchBarNavigationBar extends StatefulWidget {
         assert(hasCancelButton != null);
 
   @override
-  _AnimatedSearchBarNavigationBarState createState() => _AnimatedSearchBarNavigationBarState();
-}
-
-class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNavigationBar> with SingleTickerProviderStateMixin {
-  @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var padding;
-    if (widget.hasCancelButton) {
+    if (hasCancelButton) {
       padding = EdgeInsets.only(
         left: _kPadding,
         top: 10.0,
@@ -208,17 +203,17 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
         ),
       ),
       backgroundColor: CupertinoDynamicColor.resolve(
-        widget.backgroundColor,
+        backgroundColor,
         context,
       ),
       child: Stack(
         children: [
           AnimatedPositioned(
             duration: _kDuration,
-            right: widget.hasCancelButton ? 0 : -(_kCancelButtonWidth - _kPadding),
+            right: hasCancelButton ? 0 : -(_kCancelButtonWidth - _kPadding),
             child: AnimatedContainer(
               width: _kCancelButtonWidth,
-              height: widget.height,
+              height: height,
               padding: padding.copyWith(
                 left: 0.0,
                 right: 0.0,
@@ -229,22 +224,22 @@ class _AnimatedSearchBarNavigationBarState extends State<AnimatedSearchBarNaviga
                 minSize: 0,
                 borderRadius: BorderRadius.zero,
                 padding: EdgeInsets.zero,
-                onPressed: widget.onCancelPressed,
+                onPressed: onCancelPressed,
               ),
             ),
           ),
           SizedBox(
-            height: widget.height,
+            height: height,
             child: AnimatedContainer(
-              width: width - (widget.hasCancelButton ? _kCancelButtonWidth : _kPadding),
+              width: width - (hasCancelButton ? _kCancelButtonWidth : _kPadding),
               padding: padding,
               duration: _kDuration,
               child: SearchBarTextField(
-                queryController: widget.queryController,
-                color: widget.color,
-                opacity: widget.opacity ?? 1.0,
-                onChanged: widget.onChanged,
-                focusNode: widget.focusNode,
+                queryController: queryController,
+                color: color,
+                opacity: opacity ?? 1.0,
+                onChanged: onChanged,
+                focusNode: focusNode,
               ),
             ),
           ),
