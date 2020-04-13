@@ -65,7 +65,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
         _customLabelController.clear();
         var selection = selections.addCustomSelection(widget.selectionType, text);
         if (selection != null && !widget.selections.contains(selection)) {
-          widget.selections.add(selection);
+          widget.selections.insert(0, selection);
           setState(() {});
         }
       }
