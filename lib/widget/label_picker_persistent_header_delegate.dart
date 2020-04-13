@@ -20,7 +20,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final Widget trailing;
   final LabelPageStatus status;
   final VoidCallback onCancelPressed;
-  final double maxExtentOffset;
+  final Animation<double> offset;
 
   const LabelPickePersistentHeaderDelegate({
     @required this.paddingTop,
@@ -33,12 +33,11 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
     this.focusNode,
     this.trailing,
     this.onCancelPressed,
-    this.maxExtentOffset = 1.0,
+    this.offset,
   })  : assert(paddingTop != null),
         assert(searchBarHeight != null),
         assert(navigationBarHeight != null),
         assert(backgroundColor != null),
-        assert(maxExtentOffset != null && maxExtentOffset >= 0.0 && maxExtentOffset <= 1.0),
         assert(status != null);
 
   @override
@@ -88,10 +87,10 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   bool get _isQueryStatus => status == LabelPageStatus.query;
 
   @override
-  double get maxExtent => minExtent + (_isEditStatus ? 0.1 : max(searchBarHeight * maxExtentOffset, 0.1));
+  double get maxExtent => minExtent + (_isEditStatus ? 0.1 : max(searchBarHeight * (offset?.value ?? 1.0), 0.1));
 
   @override
-  double get minExtent => (navigationBarHeight) + paddingTop;
+  double get minExtent => navigationBarHeight + paddingTop;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

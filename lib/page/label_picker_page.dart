@@ -148,7 +148,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
             searchBarHeight: _kSearchBarHeight,
             navigationBarHeight: _kNavigationBarHeight,
             status: _status,
-            maxExtentOffset: _animation.value,
+            offset: _animation,
             onCancelPressed: () {
               _status = LabelPageStatus.none;
               _queryFocusNode.unfocus();

@@ -25,7 +25,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final double searchBarHeight;
   final LabelPageStatus status;
   final VoidCallback onCancelPressed;
-  final double maxExtentOffset;
+  final Animation<double> offset;
 
   const AnimatedLabelPickerNavigationBar({
     Key key,
@@ -38,19 +38,18 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
     @required this.searchBarHeight,
     @required this.status,
     this.onCancelPressed,
-    this.maxExtentOffset = 1.0,
+    this.offset,
   })  : assert(navigationBarHeight != null),
         assert(searchBarHeight != null),
         assert(status != null),
-        assert(maxExtentOffset != null && maxExtentOffset >= 0.0 && maxExtentOffset <= 1.0),
         super(key: key, colorTween: colorTween);
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
     final paddingTop = MediaQuery.of(context).padding.top;
     var backgroundColor = color;
-    if (status == LabelPageStatus.query || maxExtentOffset != 1.0) {
-      backgroundColor = colorTween.transform(maxExtentOffset);
+    if (offset != null && (status == LabelPageStatus.query || offset.value != 1.0)) {
+      backgroundColor = colorTween.transform(offset.value);
     } else if (status == LabelPageStatus.editCustom) {
       backgroundColor = colorTween.begin;
     }
@@ -67,7 +66,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
         focusNode: focusNode,
         status: status,
         onCancelPressed: onCancelPressed,
-        maxExtentOffset: maxExtentOffset,
+        offset: offset,
       ),
     );
   }
