@@ -17,6 +17,7 @@ class CustomLabelGroupWidet extends StatefulWidget {
   final FocusNode queryFocusNode;
   final Selection selectedSelection;
   final bool hasQueryText;
+  final bool isEditMode;
 
   const CustomLabelGroupWidet({
     Key key,
@@ -25,6 +26,7 @@ class CustomLabelGroupWidet extends StatefulWidget {
     @required this.selections,
     this.selectedSelection,
     this.hasQueryText = false,
+    this.isEditMode = false,
   })  : assert(selectionType != null),
         assert(selections != null),
         assert(hasQueryText != null),
@@ -47,7 +49,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
     _animationController = AnimationController(
       vsync: this,
       duration: _kDuration,
-      value: widget.queryFocusNode.hasFocus || widget.hasQueryText ? 0.0 : 1.0,
+      value: _isHideAddCustomLabelButton ? 0.0 : 1.0,
     );
     _animationController.addListener(() {
       if (_animationController.isCompleted) {
@@ -79,7 +81,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
       oldWidget.queryFocusNode.removeListener(_onQueryFocusChanged);
       widget.queryFocusNode.addListener(_onQueryFocusChanged);
     }
-    if (widget.hasQueryText != oldWidget.hasQueryText) {
+    if (widget.hasQueryText != oldWidget.hasQueryText || widget.isEditMode != oldWidget.isEditMode) {
       _onQueryFocusChanged();
     }
     super.didUpdateWidget(oldWidget);
@@ -93,8 +95,12 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
     super.dispose();
   }
 
+  bool get _isHideAddCustomLabelButton {
+    return widget.queryFocusNode.hasFocus || widget.hasQueryText || widget.isEditMode;
+  }
+
   _onQueryFocusChanged() {
-    if (widget.queryFocusNode.hasFocus || widget.hasQueryText) {
+    if (_isHideAddCustomLabelButton) {
       _animationController.animateTo(0.0);
     } else {
       _animationController.animateTo(1.0);
@@ -148,10 +154,13 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   Widget build(BuildContext context) {
     return DeleteableSelectionGroupWidget(
       selections: widget.selections,
-      selectedSelection: widget.selectedSelection,
+      selectedSelection: widget.isEditMode ? null : widget.selectedSelection,
       headers: _buildCustomLabelHeaders(),
-      hasDeleteButton: false,
+      hasDeleteButton: widget.isEditMode,
       onItemPressed: (value) {
+        if (widget.isEditMode) {
+          return;
+        }
         Navigator.pop(context, value);
       },
       onDeletePressed: (value) {

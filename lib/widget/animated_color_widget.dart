@@ -31,7 +31,8 @@ class _AnimatedColorWidgetState extends State<AnimatedColorWidget> {
       return;
     }
     var position = _scrollController.position;
-    _value = 1.0 - position.pixels / position.maxScrollExtent;
+    var maxScrollExtent = position.maxScrollExtent;
+    _value = 1.0 - position.pixels / maxScrollExtent;
     setState(() {});
   }
 
@@ -45,7 +46,7 @@ class _AnimatedColorWidgetState extends State<AnimatedColorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.evaluateBuild(context, widget.colorTween.transform(_value));
+    return widget.evaluateBuild(context, widget.colorTween.transform(_value.clamp(0.0, 1.0)));
   }
 }
 

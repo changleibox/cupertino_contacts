@@ -55,7 +55,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
           right: 0,
           bottom: 0,
           child: SearchBarHeader(
-            height: searchBarHeight - shrinkOffset,
+            height: searchBarHeight <= 0 ? 0 : searchBarHeight - shrinkOffset,
             onChanged: onQuery,
             color: CupertinoColors.secondarySystemFill,
             backgroundColor: backgroundColor,
