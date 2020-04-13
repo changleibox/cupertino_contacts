@@ -96,6 +96,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         onPressed: () {
           isEditMode = !isEditMode;
           _scrollController?.jumpTo(0);
+          _queryFocusNode.unfocus();
           notifyDataSetChanged();
         },
       );

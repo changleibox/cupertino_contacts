@@ -110,7 +110,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   List<Widget> _buildCustomLabelHeaders() {
     var status = _animationController.status;
     var value = _animationController.value;
-    if (status == AnimationStatus.completed && value == 0) {
+    if ((status == AnimationStatus.completed || status == AnimationStatus.dismissed) && value == 0) {
       return null;
     }
     final inEditMode = _customLabelFocusNode.hasFocus;
