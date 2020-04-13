@@ -22,6 +22,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// 选择标签
 const double _kSearchBarHeight = 56.0;
 const double _kNavigationBarHeight = 44.0;
+const double _kLargeSpacing = 40;
 const int _kMaxLabelCount = 20;
 
 class LabelPickerPage extends StatefulWidget {
@@ -183,7 +184,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                 child: CupertinoScrollbar(
                   child: ListView.separated(
                     padding: padding.copyWith(
-                      top: isEditMode ? 40 : 0,
+                      top: isEditMode ? _kLargeSpacing : 0,
                     ),
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: children.length,
@@ -192,7 +193,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(
-                        height: 40,
+                        height: _kLargeSpacing,
                       );
                     },
                   ),
