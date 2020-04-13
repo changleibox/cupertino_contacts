@@ -25,6 +25,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final double searchBarHeight;
   final LabelPageStatus status;
   final VoidCallback onCancelPressed;
+  final double maxExtentOffset;
 
   const AnimatedLabelPickerNavigationBar({
     Key key,
@@ -37,14 +38,22 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
     @required this.searchBarHeight,
     @required this.status,
     this.onCancelPressed,
+    this.maxExtentOffset = 1.0,
   })  : assert(navigationBarHeight != null),
         assert(searchBarHeight != null),
         assert(status != null),
+        assert(maxExtentOffset != null && maxExtentOffset >= 0.0 && maxExtentOffset <= 1.0),
         super(key: key, colorTween: colorTween);
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
     final paddingTop = MediaQuery.of(context).padding.top;
+    var backgroundColor = color;
+    if (status == LabelPageStatus.query || maxExtentOffset != 1.0) {
+      backgroundColor = colorTween.transform(maxExtentOffset);
+    } else if (status == LabelPageStatus.editCustom) {
+      backgroundColor = colorTween.begin;
+    }
     return SliverPersistentHeader(
       pinned: true,
       delegate: LabelPickePersistentHeaderDelegate(
@@ -52,12 +61,13 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
         paddingTop: paddingTop,
         navigationBarHeight: navigationBarHeight,
         searchBarHeight: searchBarHeight,
-        backgroundColor: status != LabelPageStatus.none ? colorTween.begin : color,
+        backgroundColor: backgroundColor,
         trailing: trailing,
         onQuery: onQuery,
         focusNode: focusNode,
         status: status,
         onCancelPressed: onCancelPressed,
+        maxExtentOffset: maxExtentOffset,
       ),
     );
   }

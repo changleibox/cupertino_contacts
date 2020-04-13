@@ -51,7 +51,7 @@ class LabelPickerPage extends StatefulWidget {
   _LabelPickerPageState createState() => _LabelPickerPageState();
 }
 
-class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
+class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> with SingleTickerProviderStateMixin {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
   final _slidableController = SlidableController();
@@ -61,16 +61,31 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   ColorTween _colorTween;
   ScrollController _scrollController;
   LabelPageStatus _status;
+  AnimationController _animationController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     _status = LabelPageStatus.none;
+
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController?.jumpTo(_kSearchBarHeight);
     });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+      value: 1.0,
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.linear,
+    );
+
     _queryFocusNode.addListener(() {
       if (_queryFocusNode.hasFocus) {
         _status = LabelPageStatus.query;
+        _animationController.animateTo(0.0);
       }
     });
     super.initState();
@@ -94,6 +109,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   @override
   void dispose() {
     _queryController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -120,21 +136,28 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
       );
     }
     return [
-      AnimatedLabelPickerNavigationBar(
-        queryController: _queryController,
-        colorTween: _colorTween,
-        onQuery: presenter.onQuery,
-        focusNode: _queryFocusNode,
-        trailing: trailing,
-        searchBarHeight: _kSearchBarHeight,
-        navigationBarHeight: _kNavigationBarHeight,
-        status: _status,
-        onCancelPressed: () {
-          _status = LabelPageStatus.none;
-          _queryFocusNode.unfocus();
-          _queryController.clear();
-          presenter.onQuery(null);
-          notifyDataSetChanged();
+      AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return AnimatedLabelPickerNavigationBar(
+            queryController: _queryController,
+            colorTween: _colorTween,
+            onQuery: presenter.onQuery,
+            focusNode: _queryFocusNode,
+            trailing: trailing,
+            searchBarHeight: _kSearchBarHeight,
+            navigationBarHeight: _kNavigationBarHeight,
+            status: _status,
+            maxExtentOffset: _animation.value,
+            onCancelPressed: () {
+              _status = LabelPageStatus.none;
+              _queryFocusNode.unfocus();
+              _queryController.clear();
+              presenter.onQuery(null);
+              notifyDataSetChanged();
+              _animationController.animateTo(1.0);
+            },
+          );
         },
       ),
     ];
@@ -161,8 +184,6 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   }
 
   bool get _isEditStatus => _status == LabelPageStatus.editCustom;
-
-  bool get _isQueryStatus => _status == LabelPageStatus.query;
 
   @override
   Widget builds(BuildContext context) {
@@ -191,7 +212,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
         pinnedHeaderSliverHeightBuilder: (context) {
-          return (_isQueryStatus ? _kSearchBarHeight : _kNavigationBarHeight) + padding.top;
+          return _kNavigationBarHeight + padding.top;
         },
         headerSliverBuilder: _buildHeaderSliver,
         physics: SnappingScrollPhysics(
