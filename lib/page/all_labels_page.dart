@@ -30,7 +30,7 @@ class AllLabelsPage extends StatefulWidget {
   _AllLabelsPageState createState() => _AllLabelsPageState();
 }
 
-class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresenter> with SingleTickerProviderStateMixin {
+class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresenter> {
   _AllLabelsPageState() : super(AllLabelsPresenter());
 
   Widget _buildBody(BuildContext context, LabelPageStatus status, FocusNode queryFoucsNode) {

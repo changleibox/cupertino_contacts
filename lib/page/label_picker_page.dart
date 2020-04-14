@@ -36,7 +36,7 @@ class LabelPickerPage extends StatefulWidget {
   _LabelPickerPageState createState() => _LabelPickerPageState();
 }
 
-class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> with SingleTickerProviderStateMixin {
+class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerPresenter> {
   _LabelPickerPageState() : super(LabelPickerPresenter());
 
   final _slidableController = SlidableController();
