@@ -82,6 +82,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         selections: customSelections,
         selectedSelection: widget.selectedSelection,
         status: status,
+        onItemPressed: presenter.onItemPressed,
       ));
     }
     var padding = MediaQuery.of(context).padding;

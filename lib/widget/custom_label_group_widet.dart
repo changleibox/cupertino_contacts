@@ -32,13 +32,15 @@ class CustomLabelGroupWidet extends StatefulWidget {
   final SelectionType selectionType;
   final Selection selectedSelection;
   final LabelPageStatus status;
+  final ValueChanged<Selection> onItemPressed;
 
   const CustomLabelGroupWidet({
     Key key,
     @required this.selectionType,
     @required this.selections,
-    this.selectedSelection,
     @required this.status,
+    this.selectedSelection,
+    this.onItemPressed,
   })  : assert(selectionType != null),
         assert(selections != null),
         assert(status != null),
@@ -123,8 +125,8 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
     if (text != null && text.isNotEmpty) {
       _customLabelController.clear();
       var selection = selections.addCustomSelection(widget.selectionType, text);
-      if (selection != null) {
-        Navigator.pop(context, selection);
+      if (selection != null && widget.onItemPressed != null) {
+        widget.onItemPressed(selection);
       }
     } else {
       _customLabelFocusNode.unfocus();
@@ -142,10 +144,10 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
       ],
       hasDeleteButton: _isEditStatus,
       onItemPressed: (value) {
-        if (_isEditStatus) {
+        if (_isEditStatus || widget.onItemPressed == null) {
           return;
         }
-        Navigator.pop(context, value);
+        widget.onItemPressed(value);
       },
       onDeletePressed: (value) {
         selections.removeCustomSelection(widget.selectionType, value);
