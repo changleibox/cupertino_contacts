@@ -4,7 +4,7 @@
 
 import 'dart:math';
 
-import 'package:cupertinocontacts/page/label_picker_page.dart';
+import 'package:cupertinocontacts/widget/label_picker_widget.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:flutter/cupertino.dart';

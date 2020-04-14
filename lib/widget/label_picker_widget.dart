@@ -5,16 +5,182 @@
 import 'dart:collection';
 
 import 'package:cupertinocontacts/model/selection.dart';
-import 'package:cupertinocontacts/page/label_picker_page.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/widget/animated_color_widget.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate.dart';
+import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
+import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
+import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+const double _kSearchBarHeight = 56.0;
+const double _kNavigationBarHeight = 44.0;
+const Duration _kDuration = Duration(milliseconds: 300);
+
+enum LabelPageStatus {
+  none,
+  editCustom,
+  query,
+}
+
+typedef LabelPickerBodyBuilder = Widget Function(BuildContext context, LabelPageStatus status, FocusNode queryFoucsNode);
+
+class AnimatedLabelPickerHeaderBody extends StatefulWidget {
+  final LabelPickerBodyBuilder builder;
+  final ValueChanged<String> onQuery;
+  final bool hasEditButton;
+
+  const AnimatedLabelPickerHeaderBody({
+    Key key,
+    @required this.builder,
+    this.onQuery,
+    this.hasEditButton = false,
+  })  : assert(builder != null),
+        assert(hasEditButton != null),
+        super(key: key);
+
+  @override
+  _AnimatedLabelPickerHeaderBodyState createState() => _AnimatedLabelPickerHeaderBodyState();
+}
+
+class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeaderBody> with SingleTickerProviderStateMixin {
+  final _queryFocusNode = FocusNode();
+  final _queryController = TextEditingController();
+
+  ColorTween _colorTween;
+  ScrollController _scrollController;
+  LabelPageStatus _status;
+  AnimationController _animationController;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    _status = LabelPageStatus.none;
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController?.jumpTo(_kSearchBarHeight);
+    });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: _kDuration,
+      value: 1.0,
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.linear,
+    );
+
+    _queryFocusNode.addListener(() {
+      if (_queryFocusNode.hasFocus) {
+        _status = LabelPageStatus.query;
+        _scrollController?.jumpTo(0);
+        _animationController.animateTo(0.0);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _colorTween = ColorTween(
+      begin: CupertinoDynamicColor.resolve(
+        CupertinoColors.secondarySystemGroupedBackground,
+        context,
+      ),
+      end: CupertinoDynamicColor.resolve(
+        CupertinoColors.tertiarySystemGroupedBackground,
+        context,
+      ),
+    );
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _queryController.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  _onTrailingPressed() {
+    if (_isEditStatus) {
+      _status = LabelPageStatus.none;
+    } else {
+      _status = LabelPageStatus.editCustom;
+    }
+    _scrollController?.jumpTo(0);
+    _queryFocusNode.unfocus();
+    setState(() {});
+  }
+
+  _onQueryCancelPressed() {
+    _status = LabelPageStatus.none;
+    setState(() {});
+    _queryFocusNode.unfocus();
+    _scrollController?.jumpTo(0);
+    _animationController.animateTo(1.0);
+    _queryController.clear();
+    if (widget.onQuery != null) {
+      widget.onQuery(null);
+    }
+  }
+
+  List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
+    _scrollController = PrimaryScrollController.of(context);
+    Widget trailing;
+    if (widget.hasEditButton) {
+      trailing = NavigationBarAction(
+        child: Text(_isEditStatus ? '完成' : '编辑'),
+        onPressed: _onTrailingPressed,
+      );
+    }
+    return [
+      AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return AnimatedLabelPickerNavigationBar(
+            queryController: _queryController,
+            colorTween: _colorTween,
+            onQuery: widget.onQuery,
+            focusNode: _queryFocusNode,
+            trailing: trailing,
+            searchBarHeight: _kSearchBarHeight,
+            navigationBarHeight: _kNavigationBarHeight,
+            status: _status,
+            offset: _animation,
+            onCancelPressed: _onQueryCancelPressed,
+          );
+        },
+      ),
+    ];
+  }
+
+  bool get _isEditStatus => _status == LabelPageStatus.editCustom;
+
+  bool get _isQueryStatus => _status == LabelPageStatus.query;
+
+  @override
+  Widget build(BuildContext context) {
+    var padding = MediaQuery.of(context).padding;
+    return SupportNestedScrollView(
+      pinnedHeaderSliverHeightBuilder: (context) {
+        return (_isQueryStatus ? _kSearchBarHeight : _kNavigationBarHeight) + padding.top;
+      },
+      headerSliverBuilder: _buildHeaderSliver,
+      physics: SnappingScrollPhysics(
+        midScrollOffset: _isEditStatus || _isQueryStatus ? 0 : _kSearchBarHeight,
+      ),
+      body: widget.builder(context, _status, _queryFocusNode),
+    );
+  }
+}
 
 class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final Widget trailing;
