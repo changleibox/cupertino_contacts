@@ -288,7 +288,7 @@ class SelectionGroupWidget extends StatelessWidget {
     return Container(
       foregroundDecoration: BoxDecoration(
         border: Border.symmetric(
-          vertical: borderSide,
+          vertical: length == 0 ? BorderSide.none : borderSide,
         ),
       ),
       child: WidgetGroup.separated(
@@ -389,11 +389,14 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
     super.dispose();
   }
 
-  void insertHeaderFooter(int index, bool isHeader) {
+  void insertHeader(int index) {
     assert(index != null && index >= 0);
-    if (!isHeader) {
-      index += _headers.length + _selections.length;
-    }
+    _widgetGroupKey.currentState.insertItem(index);
+  }
+
+  void insertHeaderFooter(int index, int headerLength) {
+    assert(index != null && index >= 0);
+      index += headerLength + _selections.length;
     _widgetGroupKey.currentState.insertItem(index);
   }
 
@@ -542,7 +545,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
     return Container(
       foregroundDecoration: BoxDecoration(
         border: Border.symmetric(
-          vertical: borderSide,
+          vertical: _childrenCount == 0 ? BorderSide.none : borderSide,
         ),
       ),
       child: AnimatedWidgetGroup(

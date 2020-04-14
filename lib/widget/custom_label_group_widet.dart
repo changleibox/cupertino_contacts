@@ -78,7 +78,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
     if (_isHideAddCustomLabelButton) {
       _globalKey.currentState.removeHeaderFooter(0, true);
     } else {
-      _globalKey.currentState.insertHeaderFooter(0, true);
+      _globalKey.currentState.insertHeader(0);
     }
   }
 
