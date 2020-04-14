@@ -341,14 +341,14 @@ class DeleteableSelectionGroupWidget extends StatefulWidget {
 }
 
 class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroupWidget> {
-  final _globalKeyMap = HashMap<Selection, GlobalKey<SlidableState>>();
+  final _slidableKeyMap = HashMap<Selection, GlobalKey<SlidableState>>();
 
   SlidableController _slidableController;
 
   @override
   void initState() {
     widget.selections.forEach((element) {
-      _globalKeyMap[element] = GlobalKey();
+      _slidableKeyMap[element] = GlobalKey();
     });
     super.initState();
   }
@@ -356,9 +356,9 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
   @override
   void didUpdateWidget(DeleteableSelectionGroupWidget oldWidget) {
     if (!Collections.equals(widget.selections, oldWidget.selections)) {
-      _globalKeyMap.clear();
+      _slidableKeyMap.clear();
       widget.selections.forEach((element) {
-        _globalKeyMap[element] = GlobalKey();
+        _slidableKeyMap[element] = GlobalKey();
       });
     }
     super.didUpdateWidget(oldWidget);
@@ -379,7 +379,7 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
   Widget _wrapSlidable({@required Widget child, @required Selection selection}) {
     var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
     return Slidable.builder(
-      key: _globalKeyMap[selection],
+      key: _slidableKeyMap[selection],
       controller: _slidableController,
       actionPane: SlidableDrawerActionPane(),
       secondaryActionDelegate: SlideActionListDelegate(
@@ -434,7 +434,7 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
     children.addAll(widget.selections.map((selection) {
       Widget deleteButton;
       if (widget.hasDeleteButton) {
-        deleteButton = _buildDeleteIconButton(_globalKeyMap[selection]);
+        deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
       }
       return _wrapSlidable(
         selection: selection,
