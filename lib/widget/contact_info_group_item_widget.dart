@@ -111,6 +111,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
           canCustomLabel: widget.canCustomLabel,
           hideSelections: widget.hideSelections,
         ),
+        title: '标签',
         fullscreenDialog: true,
       ),
     ).then((value) {

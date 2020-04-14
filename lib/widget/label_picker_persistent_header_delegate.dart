@@ -42,6 +42,11 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    var route = ModalRoute.of(context);
+    bool fullscreenDialog = false;
+    if (route is PageRoute) {
+      fullscreenDialog = route.fullscreenDialog;
+    }
     return Stack(
       children: [
         Positioned(
@@ -50,15 +55,17 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
           right: 0,
           child: CupertinoNavigationBar(
             backgroundColor: backgroundColor,
-            middle: Text('标签'),
-            automaticallyImplyLeading: false,
+            // middle: Text('标签'),
+            transitionBetweenRoutes: false,
             border: null,
-            leading: NavigationBarAction(
-              child: Text('取消'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            leading: fullscreenDialog
+                ? NavigationBarAction(
+                    child: Text('取消'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                : null,
             trailing: trailing,
           ),
         ),

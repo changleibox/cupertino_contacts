@@ -2,8 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:math';
-
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/label_picker_presenter.dart';
 import 'package:cupertinocontacts/widget/custom_label_group_widet.dart';
@@ -23,7 +21,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 const double _kSearchBarHeight = 56.0;
 const double _kNavigationBarHeight = 44.0;
 const double _kLargeSpacing = 40;
-const int _kMaxLabelCount = 20;
 const Duration _kDuration = Duration(milliseconds: 300);
 
 enum LabelPageStatus {
@@ -119,22 +116,34 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     _slidableController.activeState?.close();
   }
 
+  _onTrailingPressed() {
+    if (_isEditStatus) {
+      _status = LabelPageStatus.none;
+    } else {
+      _status = LabelPageStatus.editCustom;
+    }
+    _scrollController?.jumpTo(0);
+    _queryFocusNode.unfocus();
+    notifyDataSetChanged();
+  }
+
+  _onQueryCancelPressed() {
+    _status = LabelPageStatus.none;
+    notifyDataSetChanged();
+    _queryFocusNode.unfocus();
+    _scrollController?.jumpTo(0);
+    _animationController.animateTo(1.0);
+    _queryController.clear();
+    presenter.onQuery(null);
+  }
+
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     _scrollController = PrimaryScrollController.of(context);
     Widget trailing;
     if (presenter.customSelections.isNotEmpty) {
       trailing = NavigationBarAction(
         child: Text(_isEditStatus ? '完成' : '编辑'),
-        onPressed: () {
-          if (_isEditStatus) {
-            _status = LabelPageStatus.none;
-          } else {
-            _status = LabelPageStatus.editCustom;
-          }
-          _scrollController?.jumpTo(0);
-          _queryFocusNode.unfocus();
-          notifyDataSetChanged();
-        },
+        onPressed: _onTrailingPressed,
       );
     }
     return [
@@ -151,15 +160,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
             navigationBarHeight: _kNavigationBarHeight,
             status: _status,
             offset: _animation,
-            onCancelPressed: () {
-              _status = LabelPageStatus.none;
-              notifyDataSetChanged();
-              _queryFocusNode.unfocus();
-              _queryController.clear();
-              _scrollController?.jumpTo(0);
-              _animationController.animateTo(1.0);
-              presenter.onQuery(null);
-            },
+            onCancelPressed: _onQueryCancelPressed,
           );
         },
       ),
@@ -167,7 +168,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   }
 
   List<Widget> _buildSystemLabelHeaders() {
-    if (presenter.itemCount <= _kMaxLabelCount) {
+    if (!presenter.canViewAllLabels || _status != LabelPageStatus.none) {
       return null;
     }
     return [
@@ -181,7 +182,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
             context,
           ),
         ),
-        onPressed: () {},
+        onPressed: presenter.onAllLabelsPressed,
       ),
     ];
   }
@@ -195,12 +196,10 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     final children = List<Widget>();
     if (!_isEditStatus && presenter.isNotEmpty) {
       children.add(SelectionGroupWidget(
-        selections: presenter.objects.take(min(_kMaxLabelCount, presenter.itemCount)),
+        selections: presenter.objects,
         selectedSelection: widget.selectedSelection,
         footers: _buildSystemLabelHeaders(),
-        onItemPressed: (value) {
-          Navigator.pop(context, value);
-        },
+        onItemPressed: presenter.onItemPressed,
       ));
     }
     var customSelections = presenter.customSelections;

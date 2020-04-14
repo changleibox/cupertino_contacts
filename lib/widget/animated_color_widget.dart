@@ -33,6 +33,9 @@ class _AnimatedColorWidgetState extends State<AnimatedColorWidget> {
     var position = _scrollController.position;
     var maxScrollExtent = position.maxScrollExtent;
     _value = 1.0 - position.pixels / maxScrollExtent;
+    if (!mounted) {
+      return;
+    }
     setState(() {});
   }
 
