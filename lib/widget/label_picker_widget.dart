@@ -489,12 +489,11 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
   }
 
   Widget _wrapBorder({@required int index, @required int length, @required Widget child}) {
-    if (index < length - 1) {
+    if (index > 0) {
       child = WidgetGroup(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         direction: Axis.vertical,
         children: [
-          child,
           Container(
             color: CupertinoDynamicColor.resolve(
               CupertinoColors.secondarySystemGroupedBackground,
@@ -505,6 +504,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
             ),
             child: CupertinoDivider(),
           ),
+          child,
         ],
       );
     }
