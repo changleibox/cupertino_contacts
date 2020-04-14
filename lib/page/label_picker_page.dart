@@ -125,7 +125,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     return CupertinoPageScaffold(
       child: AnimatedLabelPickerHeaderBody(
         onQuery: presenter.onQuery,
-        hasEditButton: presenter.customSelections.isNotEmpty,
+        canEdit: presenter.customSelections.isNotEmpty,
         builder: _buildBody,
       ),
     );

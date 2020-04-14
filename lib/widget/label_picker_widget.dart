@@ -34,15 +34,15 @@ typedef LabelPickerBodyBuilder = Widget Function(BuildContext context, LabelPage
 class AnimatedLabelPickerHeaderBody extends StatefulWidget {
   final LabelPickerBodyBuilder builder;
   final ValueChanged<String> onQuery;
-  final bool hasEditButton;
+  final bool canEdit;
 
   const AnimatedLabelPickerHeaderBody({
     Key key,
     @required this.builder,
     this.onQuery,
-    this.hasEditButton = false,
+    this.canEdit = false,
   })  : assert(builder != null),
-        assert(hasEditButton != null),
+        assert(canEdit != null),
         super(key: key);
 
   @override
@@ -135,7 +135,7 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     _scrollController = PrimaryScrollController.of(context);
     Widget trailing;
-    if (widget.hasEditButton) {
+    if (widget.canEdit) {
       trailing = NavigationBarAction(
         child: Text(_isEditStatus ? '完成' : '编辑'),
         onPressed: _onTrailingPressed,
