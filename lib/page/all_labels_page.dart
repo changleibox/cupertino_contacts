@@ -9,6 +9,7 @@ import 'package:cupertinocontacts/page/label_picker_page.dart';
 import 'package:cupertinocontacts/presenter/all_labels_presenter.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
+import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -154,6 +155,9 @@ class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresent
           return (_isQueryStatus ? _kSearchBarHeight : _kNavigationBarHeight) + padding.top;
         },
         headerSliverBuilder: _buildHeaderSliver,
+        physics: SnappingScrollPhysics(
+          midScrollOffset: _status != LabelPageStatus.none ? 0 : _kSearchBarHeight,
+        ),
         body: MediaQuery.removePadding(
           context: context,
           removeTop: true,
