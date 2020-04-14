@@ -56,6 +56,10 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
     return widget.hideSelections == null || !widget.hideSelections.contains(selection);
   }
 
+  onCancelPressed() {
+    Navigator.pop(context);
+  }
+
   onItemPressed(Selection selection) {
     if (selection != null) {
       Navigator.pop(context, selection);

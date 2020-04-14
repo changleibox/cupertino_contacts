@@ -132,6 +132,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         child: AnimatedLabelPickerHeaderBody(
           onQuery: presenter.onQuery,
           canEdit: presenter.customSelections.isNotEmpty,
+          onCancelPressed: presenter.onCancelPressed,
           builder: _buildBody,
         ),
       ),

@@ -35,12 +35,14 @@ class AnimatedLabelPickerHeaderBody extends StatefulWidget {
   final LabelPickerBodyBuilder builder;
   final ValueChanged<String> onQuery;
   final bool canEdit;
+  final VoidCallback onCancelPressed;
 
   const AnimatedLabelPickerHeaderBody({
     Key key,
     @required this.builder,
     this.onQuery,
     this.canEdit = false,
+    this.onCancelPressed,
   })  : assert(builder != null),
         assert(canEdit != null),
         super(key: key);
@@ -155,7 +157,8 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
             navigationBarHeight: _kNavigationBarHeight,
             status: _status,
             offset: _animation,
-            onCancelPressed: _onQueryCancelPressed,
+            onCancelPressed: widget.onCancelPressed,
+            onQueryCancelPressed: _onQueryCancelPressed,
           );
         },
       ),
@@ -191,6 +194,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
   final double searchBarHeight;
   final LabelPageStatus status;
   final VoidCallback onCancelPressed;
+  final VoidCallback onQueryCancelPressed;
   final Animation<double> offset;
 
   const AnimatedLabelPickerNavigationBar({
@@ -204,6 +208,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
     @required this.searchBarHeight,
     @required this.status,
     this.onCancelPressed,
+    this.onQueryCancelPressed,
     this.offset,
   })  : assert(navigationBarHeight != null),
         assert(searchBarHeight != null),
@@ -232,6 +237,7 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
         focusNode: focusNode,
         status: status,
         onCancelPressed: onCancelPressed,
+        onQueryCancelPressed: onQueryCancelPressed,
         offset: offset,
       ),
     );

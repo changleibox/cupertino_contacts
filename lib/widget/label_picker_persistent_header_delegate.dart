@@ -20,6 +20,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
   final Widget trailing;
   final LabelPageStatus status;
   final VoidCallback onCancelPressed;
+  final VoidCallback onQueryCancelPressed;
   final Animation<double> offset;
 
   const LabelPickePersistentHeaderDelegate({
@@ -33,6 +34,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
     this.focusNode,
     this.trailing,
     this.onCancelPressed,
+    this.onQueryCancelPressed,
     this.offset,
   })  : assert(paddingTop != null),
         assert(searchBarHeight != null),
@@ -58,14 +60,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             // middle: Text('标签'),
             transitionBetweenRoutes: false,
             border: null,
-            leading: fullscreenDialog
-                ? NavigationBarAction(
-                    child: Text('取消'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                : null,
+            leading: fullscreenDialog ? NavigationBarAction(child: Text('取消'), onPressed: onCancelPressed) : null,
             trailing: trailing,
           ),
         ),
@@ -81,7 +76,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
             backgroundColor: backgroundColor,
             opacity: _isQueryStatus ? 1.0 : (1.0 - shrinkOffset / 16).clamp(0.0, 1.0),
             focusNode: focusNode,
-            onCancelPressed: onCancelPressed,
+            onCancelPressed: onQueryCancelPressed,
             animation: offset,
           ),
         ),
