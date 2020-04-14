@@ -32,29 +32,13 @@ class CustomLabelGroupWidet extends StatefulWidget {
   _CustomLabelGroupWidetState createState() => _CustomLabelGroupWidetState();
 }
 
-class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with SingleTickerProviderStateMixin {
+class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
   final _customLabelFocusNode = FocusNode();
   final _customLabelController = TextEditingController();
-
-  AnimationController _animationController;
-  Animation<double> _animation;
+  final _globalKey = GlobalKey<DeleteableSelectionGroupWidgetState>();
 
   @override
   void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: _kDuration,
-      value: _isHideAddCustomLabelButton ? 0.0 : 1.0,
-    );
-    _animationController.addListener(() {
-      if (_animationController.isCompleted) {
-        setState(() {});
-      }
-    });
-    _animation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.linear,
-    );
     _customLabelFocusNode.addListener(() {
       setState(() {});
       var text = _customLabelController.text;
@@ -63,7 +47,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
         var selection = selections.addCustomSelection(widget.selectionType, text);
         if (selection != null && !widget.selections.contains(selection)) {
           widget.selections.insert(0, selection);
-          setState(() {});
+          _globalKey.currentState.insertSelection(selection);
         }
       }
     });
@@ -81,7 +65,6 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   @override
   void dispose() {
     _customLabelController.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -93,40 +76,29 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
 
   _onQueryFocusChanged() {
     if (_isHideAddCustomLabelButton) {
-      _animationController.animateTo(0.0);
+      _globalKey.currentState.removeHeaderFooter(0, true);
     } else {
-      _animationController.animateTo(1.0);
+      _globalKey.currentState.insertHeaderFooter(0, true);
     }
   }
 
-  List<Widget> _buildCustomLabelHeaders() {
-    var status = _animationController.status;
-    var value = _animationController.value;
-    if ((status == AnimationStatus.completed || status == AnimationStatus.dismissed) && value == 0) {
-      return null;
-    }
+  Widget _buildCustomLabel() {
     final inEditMode = _customLabelFocusNode.hasFocus;
-    return [
-      SizeTransition(
-        sizeFactor: _animation,
-        axisAlignment: -1,
-        child: AnimatedCrossFade(
-          firstChild: LabelItemButton(
-            text: '添加自定标签',
-            onPressed: () {
-              _customLabelFocusNode.requestFocus();
-            },
-          ),
-          secondChild: CustomLabelTextField(
-            controller: _customLabelController,
-            focusNode: _customLabelFocusNode,
-            onEditingComplete: _onEditingComplete,
-          ),
-          crossFadeState: inEditMode ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-          duration: _kDuration,
-        ),
+    return AnimatedCrossFade(
+      firstChild: LabelItemButton(
+        text: '添加自定标签',
+        onPressed: () {
+          _customLabelFocusNode.requestFocus();
+        },
       ),
-    ];
+      secondChild: CustomLabelTextField(
+        controller: _customLabelController,
+        focusNode: _customLabelFocusNode,
+        onEditingComplete: _onEditingComplete,
+      ),
+      crossFadeState: inEditMode ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: _kDuration,
+    );
   }
 
   _onEditingComplete() {
@@ -145,9 +117,12 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   @override
   Widget build(BuildContext context) {
     return DeleteableSelectionGroupWidget(
+      key: _globalKey,
       selections: widget.selections,
       selectedSelection: _isEditStatus ? null : widget.selectedSelection,
-      headers: _buildCustomLabelHeaders(),
+      headers: [
+        if (!_isHideAddCustomLabelButton) _buildCustomLabel(),
+      ],
       hasDeleteButton: _isEditStatus,
       onItemPressed: (value) {
         if (_isEditStatus) {
@@ -158,7 +133,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
       onDeletePressed: (value) {
         selections.removeCustomSelection(widget.selectionType, value);
         widget.selections.remove(value);
-        setState(() {});
+        _globalKey.currentState.removeSelection(value);
       },
     );
   }

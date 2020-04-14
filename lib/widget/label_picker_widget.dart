@@ -6,8 +6,8 @@ import 'dart:collection';
 
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
-import 'package:cupertinocontacts/util/collections.dart';
 import 'package:cupertinocontacts/widget/animated_color_widget.dart';
+import 'package:cupertinocontacts/widget/animated_widget_group.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/label_picker_persistent_header_delegate.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
@@ -337,17 +337,28 @@ class DeleteableSelectionGroupWidget extends StatefulWidget {
         super(key: key);
 
   @override
-  _DeleteableSelectionGroupWidgetState createState() => _DeleteableSelectionGroupWidgetState();
+  DeleteableSelectionGroupWidgetState createState() => DeleteableSelectionGroupWidgetState();
 }
 
-class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroupWidget> {
+class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroupWidget> {
   final _slidableKeyMap = HashMap<Selection, GlobalKey<SlidableState>>();
+  final _widgetGroupKey = GlobalKey<AnimatedWidgetGroupState>();
+  final _selections = List<Selection>();
+  final _headers = List<Widget>();
+  final _footers = List<Widget>();
 
   SlidableController _slidableController;
 
   @override
   void initState() {
-    widget.selections.forEach((element) {
+    if (widget.headers != null) {
+      _headers.addAll(widget.headers);
+    }
+    if (widget.footers != null) {
+      _footers.addAll(widget.footers);
+    }
+    _selections.addAll(widget.selections);
+    _selections.forEach((element) {
       _slidableKeyMap[element] = GlobalKey();
     });
     super.initState();
@@ -355,11 +366,13 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
 
   @override
   void didUpdateWidget(DeleteableSelectionGroupWidget oldWidget) {
-    if (!Collections.equals(widget.selections, oldWidget.selections)) {
-      _slidableKeyMap.clear();
-      widget.selections.forEach((element) {
-        _slidableKeyMap[element] = GlobalKey();
-      });
+    _headers.clear();
+    if (widget.headers != null) {
+      _headers.addAll(widget.headers);
+    }
+    _footers.clear();
+    if (widget.footers != null) {
+      _footers.addAll(widget.footers);
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -374,6 +387,63 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
   void dispose() {
     _slidableController?.activeState = null;
     super.dispose();
+  }
+
+  void insertHeaderFooter(int index, bool isHeader) {
+    assert(index != null && index >= 0);
+    if (!isHeader) {
+      index += _headers.length + _selections.length;
+    }
+    _widgetGroupKey.currentState.insertItem(index);
+  }
+
+  void removeHeaderFooter(int index, bool isHeader) {
+    var child;
+    if (isHeader) {
+      assert(index != null && index >= 0 && index < _headers.length);
+      child = _headers[index];
+      _headers.removeAt(index);
+    } else {
+      assert(index != null && index >= 0 && index < _footers.length);
+      child = _footers[index];
+      _footers.removeAt(index);
+      index += _headers.length + _selections.length;
+    }
+    _widgetGroupKey.currentState.removeItem(index, (context, animation) {
+      return SizeTransition(
+        sizeFactor: animation,
+        axisAlignment: 1,
+        child: child,
+      );
+    });
+  }
+
+  void insertSelection(Selection selection) {
+    _selections.insert(0, selection);
+    _slidableKeyMap[selection] = GlobalKey();
+    _widgetGroupKey.currentState.insertItem(_headers.length);
+  }
+
+  void removeSelection(Selection selection) {
+    var index = _selections.indexOf(selection);
+    _selections.remove(selection);
+    _slidableKeyMap.remove(selection);
+    _widgetGroupKey.currentState.removeItem(index + _headers.length, (context, animation) {
+      Widget deleteButton;
+      if (widget.hasDeleteButton) {
+        deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
+      }
+      return SizeTransition(
+        sizeFactor: animation,
+        axisAlignment: 1,
+        child: _SelectionItemButton(
+          selection: selection,
+          selected: selection == widget.selectedSelection,
+          leading: deleteButton,
+          onPressed: () {},
+        ),
+      );
+    });
   }
 
   Widget _wrapSlidable({@required Widget child, @required Selection selection}) {
@@ -427,65 +497,40 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
 
   @override
   Widget build(BuildContext context) {
-    final children = List<Widget>();
-    if (widget.headers != null) {
-      children.addAll(widget.headers);
-    }
-    children.addAll(widget.selections.map((selection) {
-      Widget deleteButton;
-      if (widget.hasDeleteButton) {
-        deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
-      }
-      return _wrapSlidable(
-        selection: selection,
-        child: _SelectionItemButton(
-          selection: selection,
-          selected: selection == widget.selectedSelection,
-          leading: deleteButton,
-          onPressed: () {
-            if (widget.onItemPressed != null) {
-              widget.onItemPressed(selection);
-            }
-          },
-        ),
-      );
-    }));
-    if (widget.footers != null) {
-      children.addAll(widget.footers);
-    }
-
-    var length = children.length;
-    return WidgetGroup.separated(
-      direction: Axis.vertical,
-      itemCount: length,
-      itemBuilder: (context, index) {
-        var borderSide = BorderSide(
-          color: CupertinoDynamicColor.resolve(
-            separatorColor,
-            context,
-          ),
-          width: 0.0,
-        );
-        return Container(
-          foregroundDecoration: BoxDecoration(
-            border: Border(
-              top: index == 0 ? borderSide : BorderSide.none,
-              bottom: index == length - 1 ? borderSide : BorderSide.none,
+    var length = _selections.length + _headers.length + _footers.length;
+    return AnimatedWidgetGroup(
+      key: _widgetGroupKey,
+      initialItemCount: length,
+      itemBuilder: (context, index, animation) {
+        Widget child;
+        if (index < _headers.length) {
+          child = _headers[index];
+        } else if ((index - _headers.length) < _selections.length) {
+          final selection = _selections[index - _headers.length];
+          Widget deleteButton;
+          if (widget.hasDeleteButton) {
+            deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
+          }
+          child = _wrapSlidable(
+            selection: selection,
+            child: _SelectionItemButton(
+              selection: selection,
+              selected: selection == widget.selectedSelection,
+              leading: deleteButton,
+              onPressed: () {
+                if (widget.onItemPressed != null) {
+                  widget.onItemPressed(selection);
+                }
+              },
             ),
-          ),
-          child: children[index],
-        );
-      },
-      separatorBuilder: (context, index) {
-        return Container(
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondarySystemGroupedBackground,
-            context,
-          ),
-          padding: EdgeInsets.only(
-            left: 16,
-          ),
-          child: CupertinoDivider(),
+          );
+        } else {
+          child = _footers[index - _headers.length - _selections.length];
+        }
+        return SizeTransition(
+          sizeFactor: animation,
+          axisAlignment: 1,
+          child: child,
         );
       },
     );
