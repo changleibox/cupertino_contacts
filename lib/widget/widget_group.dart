@@ -169,10 +169,12 @@ class WidgetGroup extends StatelessWidget {
     this.mainAxisSize = MainAxisSize.max,
     @required this.childrenDelegate,
     this.textDirection,
-    this.verticalDirection,
+    this.verticalDirection = VerticalDirection.down,
     this.textBaseline,
-    this.direction,
-  }) : assert(childrenDelegate != null);
+    Axis direction = Axis.horizontal,
+  })  : direction = direction ?? Axis.horizontal,
+        assert(direction != null),
+        assert(childrenDelegate != null);
 
   final MainAxisAlignment alignment;
   final MainAxisSize mainAxisSize;
