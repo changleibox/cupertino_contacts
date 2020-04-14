@@ -262,6 +262,9 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
   @override
   Widget build(BuildContext context) {
     return WidgetGroup.custom(
+      alignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      direction: Axis.vertical,
       childrenDelegate: _createDelegate(),
     );
   }
