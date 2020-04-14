@@ -376,59 +376,68 @@ class _DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGrou
     super.dispose();
   }
 
+  Widget _wrapSlidable({@required Widget child, @required Selection selection}) {
+    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+    return Slidable.builder(
+      key: _globalKeyMap[selection],
+      controller: _slidableController,
+      actionPane: SlidableDrawerActionPane(),
+      secondaryActionDelegate: SlideActionListDelegate(
+        actions: [
+          SlideAction(
+            closeOnTap: true,
+            color: CupertinoColors.destructiveRed,
+            onTap: () {
+              if (widget.onDeletePressed != null) {
+                widget.onDeletePressed(selection);
+              }
+            },
+            child: Text(
+              '删除',
+              style: textStyle.copyWith(
+                color: CupertinoColors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildDeleteIconButton(GlobalKey<SlidableState> globalKey) {
+    return CupertinoButton(
+      padding: EdgeInsets.only(
+        right: 10,
+      ),
+      minSize: 0,
+      borderRadius: BorderRadius.zero,
+      child: Icon(
+        CupertinoIcons.minus_circled,
+        color: CupertinoDynamicColor.resolve(
+          CupertinoColors.destructiveRed,
+          context,
+        ),
+      ),
+      onPressed: () {
+        globalKey?.currentState?.open(actionType: SlideActionType.secondary);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-
     final children = List<Widget>();
     if (widget.headers != null) {
       children.addAll(widget.headers);
     }
     children.addAll(widget.selections.map((selection) {
-      var globalKey = _globalKeyMap[selection];
       Widget deleteButton;
       if (widget.hasDeleteButton) {
-        deleteButton = CupertinoButton(
-          padding: EdgeInsets.only(
-            right: 10,
-          ),
-          minSize: 0,
-          borderRadius: BorderRadius.zero,
-          child: Icon(
-            CupertinoIcons.minus_circled,
-            color: CupertinoDynamicColor.resolve(
-              CupertinoColors.destructiveRed,
-              context,
-            ),
-          ),
-          onPressed: () {
-            globalKey?.currentState?.open(actionType: SlideActionType.secondary);
-          },
-        );
+        deleteButton = _buildDeleteIconButton(_globalKeyMap[selection]);
       }
-      return Slidable.builder(
-        key: globalKey,
-        controller: _slidableController,
-        actionPane: SlidableDrawerActionPane(),
-        secondaryActionDelegate: SlideActionListDelegate(
-          actions: [
-            SlideAction(
-              closeOnTap: true,
-              color: CupertinoColors.destructiveRed,
-              onTap: () {
-                if (widget.onDeletePressed != null) {
-                  widget.onDeletePressed(selection);
-                }
-              },
-              child: Text(
-                '删除',
-                style: textStyle.copyWith(
-                  color: CupertinoColors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
+      return _wrapSlidable(
+        selection: selection,
         child: _SelectionItemButton(
           selection: selection,
           selected: selection == widget.selectedSelection,
