@@ -2,8 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:math';
-
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/all_labels_presenter.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
@@ -14,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 所有labels
 const double _kLargeSpacing = 40;
-const int _kEveryGroupCount = 58;
 
 class AllLabelsPage extends StatefulWidget {
   final SelectionType selectionType;
@@ -33,28 +30,19 @@ class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresent
   _AllLabelsPageState() : super(AllLabelsPresenter());
 
   Widget _buildBody(BuildContext context, LabelPageStatus status) {
-    var selections = presenter.objects.toList();
-    var length = selections.length;
-    var groupCount = length ~/ _kEveryGroupCount + 1;
-    final children = List<Widget>();
-    List.generate(groupCount, (index) {
-      var start = index * _kEveryGroupCount;
-      var end = min((index + 1) * _kEveryGroupCount, length);
-      children.add(SelectionGroupWidget(
-        selections: selections.getRange(start, end),
-        selectedSelection: null,
-        onItemPressed: presenter.onItemPressed,
-      ));
-    });
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
       child: CupertinoScrollbar(
         child: ListView.separated(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          itemCount: children.length,
+          itemCount: presenter.itemCount,
           itemBuilder: (context, index) {
-            return children[index];
+            return SelectionGroupWidget(
+              selections: presenter[index],
+              selectedSelection: null,
+              onItemPressed: presenter.onItemPressed,
+            );
           },
           separatorBuilder: (context, index) {
             return SizedBox(
