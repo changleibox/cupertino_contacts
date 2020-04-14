@@ -11,6 +11,22 @@ import 'package:flutter/cupertino.dart';
 /// 自定义标签列表
 const Duration _kDuration = Duration(milliseconds: 300);
 
+class CustomSelectionChangedNotification extends Notification {
+  const CustomSelectionChangedNotification();
+}
+
+class CustomSelectionAddNotification extends CustomSelectionChangedNotification {
+  final List<Selection> customSelections;
+
+  const CustomSelectionAddNotification(this.customSelections);
+}
+
+class CustomSelectionRemoveNotification extends CustomSelectionChangedNotification {
+  final List<Selection> customSelections;
+
+  const CustomSelectionRemoveNotification(this.customSelections);
+}
+
 class CustomLabelGroupWidet extends StatefulWidget {
   final List<Selection> selections;
   final SelectionType selectionType;
@@ -47,6 +63,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
         var selection = selections.addCustomSelection(widget.selectionType, text);
         if (selection != null && !widget.selections.contains(selection)) {
           widget.selections.insert(0, selection);
+          CustomSelectionAddNotification(widget.selections).dispatch(context);
           _globalKey.currentState.insertSelection(selection);
         }
       }
@@ -133,6 +150,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
       onDeletePressed: (value) {
         selections.removeCustomSelection(widget.selectionType, value);
         widget.selections.remove(value);
+        CustomSelectionRemoveNotification(widget.selections).dispatch(context);
         _globalKey.currentState.removeSelection(value);
       },
     );

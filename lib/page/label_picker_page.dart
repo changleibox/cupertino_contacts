@@ -123,10 +123,16 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   @override
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
-      child: AnimatedLabelPickerHeaderBody(
-        onQuery: presenter.onQuery,
-        canEdit: presenter.customSelections.isNotEmpty,
-        builder: _buildBody,
+      child: NotificationListener<CustomSelectionChangedNotification>(
+        onNotification: (notification) {
+          notifyDataSetChanged();
+          return false;
+        },
+        child: AnimatedLabelPickerHeaderBody(
+          onQuery: presenter.onQuery,
+          canEdit: presenter.customSelections.isNotEmpty,
+          builder: _buildBody,
+        ),
       ),
     );
   }
