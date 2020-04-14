@@ -9,7 +9,6 @@ import 'package:cupertinocontacts/presenter/all_labels_presenter.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 /// Created by box on 2020/4/14.
 ///
@@ -33,7 +32,7 @@ class AllLabelsPage extends StatefulWidget {
 class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresenter> {
   _AllLabelsPageState() : super(AllLabelsPresenter());
 
-  Widget _buildBody(BuildContext context, LabelPageStatus status, FocusNode queryFoucsNode) {
+  Widget _buildBody(BuildContext context, LabelPageStatus status) {
     var selections = presenter.objects.toList();
     var length = selections.length;
     var groupCount = length ~/ _kEveryGroupCount + 1;
@@ -52,6 +51,7 @@ class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresent
       removeTop: true,
       child: CupertinoScrollbar(
         child: ListView.separated(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           itemCount: children.length,
           itemBuilder: (context, index) {
             return children[index];

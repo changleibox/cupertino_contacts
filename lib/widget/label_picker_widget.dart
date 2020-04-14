@@ -29,7 +29,7 @@ enum LabelPageStatus {
   query,
 }
 
-typedef LabelPickerBodyBuilder = Widget Function(BuildContext context, LabelPageStatus status, FocusNode queryFoucsNode);
+typedef LabelPickerBodyBuilder = Widget Function(BuildContext context, LabelPageStatus status);
 
 class AnimatedLabelPickerHeaderBody extends StatefulWidget {
   final LabelPickerBodyBuilder builder;
@@ -177,7 +177,7 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
       physics: SnappingScrollPhysics(
         midScrollOffset: _isEditStatus || _isQueryStatus ? 0 : _kSearchBarHeight,
       ),
-      body: widget.builder(context, _status, _queryFocusNode),
+      body: widget.builder(context, _status),
     );
   }
 }

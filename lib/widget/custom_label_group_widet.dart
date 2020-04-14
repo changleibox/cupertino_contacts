@@ -3,7 +3,6 @@
  */
 
 import 'package:cupertinocontacts/model/selection.dart';
-import 'package:cupertinocontacts/page/label_picker_page.dart';
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,13 +14,11 @@ const Duration _kDuration = Duration(milliseconds: 300);
 class CustomLabelGroupWidet extends StatefulWidget {
   final List<Selection> selections;
   final SelectionType selectionType;
-  final FocusNode queryFocusNode;
   final Selection selectedSelection;
   final LabelPageStatus status;
 
   const CustomLabelGroupWidet({
     Key key,
-    @required this.queryFocusNode,
     @required this.selectionType,
     @required this.selections,
     this.selectedSelection,
@@ -44,7 +41,6 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
 
   @override
   void initState() {
-    widget.queryFocusNode.addListener(_onQueryFocusChanged);
     _animationController = AnimationController(
       vsync: this,
       duration: _kDuration,
@@ -76,10 +72,6 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
 
   @override
   void didUpdateWidget(CustomLabelGroupWidet oldWidget) {
-    if (widget.queryFocusNode != oldWidget.queryFocusNode) {
-      oldWidget.queryFocusNode.removeListener(_onQueryFocusChanged);
-      widget.queryFocusNode.addListener(_onQueryFocusChanged);
-    }
     if (widget.status != oldWidget.status) {
       _onQueryFocusChanged();
     }
@@ -88,7 +80,6 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
 
   @override
   void dispose() {
-    widget.queryFocusNode.removeListener(_onQueryFocusChanged);
     _customLabelController.dispose();
     _animationController.dispose();
     super.dispose();
@@ -97,7 +88,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> with Sing
   bool get _isEditStatus => widget.status == LabelPageStatus.editCustom;
 
   bool get _isHideAddCustomLabelButton {
-    return widget.queryFocusNode.hasFocus || widget.status != LabelPageStatus.none;
+    return widget.status != LabelPageStatus.none;
   }
 
   _onQueryFocusChanged() {

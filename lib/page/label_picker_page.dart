@@ -65,7 +65,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     ];
   }
 
-  Widget _buildBody(BuildContext context, LabelPageStatus status, FocusNode queryFoucsNode) {
+  Widget _buildBody(BuildContext context, LabelPageStatus status) {
     final children = List<Widget>();
     if (status != LabelPageStatus.editCustom && presenter.isNotEmpty) {
       children.add(SelectionGroupWidget(
@@ -78,7 +78,6 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     var customSelections = presenter.customSelections;
     if (widget.canCustomLabel && (!presenter.hasQueryText || customSelections.isNotEmpty)) {
       children.add(CustomLabelGroupWidet(
-        queryFocusNode: queryFoucsNode,
         selectionType: widget.selectionType,
         selections: customSelections,
         selectedSelection: widget.selectedSelection,
