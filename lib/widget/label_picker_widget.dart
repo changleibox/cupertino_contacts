@@ -276,40 +276,40 @@ class SelectionGroupWidget extends StatelessWidget {
       children.addAll(footers);
     }
 
+    var borderSide = BorderSide(
+      color: CupertinoDynamicColor.resolve(
+        separatorColor,
+        context,
+      ),
+      width: 0.0,
+    );
+
     var length = children.length;
-    return WidgetGroup.separated(
-      direction: Axis.vertical,
-      itemCount: length,
-      itemBuilder: (context, index) {
-        var borderSide = BorderSide(
-          color: CupertinoDynamicColor.resolve(
-            separatorColor,
-            context,
-          ),
-          width: 0.0,
-        );
-        return Container(
-          foregroundDecoration: BoxDecoration(
-            border: Border(
-              top: index == 0 ? borderSide : BorderSide.none,
-              bottom: index == length - 1 ? borderSide : BorderSide.none,
+    return Container(
+      foregroundDecoration: BoxDecoration(
+        border: Border.symmetric(
+          vertical: borderSide,
+        ),
+      ),
+      child: WidgetGroup.separated(
+        direction: Axis.vertical,
+        itemCount: length,
+        itemBuilder: (context, index) {
+          return children[index];
+        },
+        separatorBuilder: (context, index) {
+          return Container(
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondarySystemGroupedBackground,
+              context,
             ),
-          ),
-          child: children[index],
-        );
-      },
-      separatorBuilder: (context, index) {
-        return Container(
-          color: CupertinoDynamicColor.resolve(
-            CupertinoColors.secondarySystemGroupedBackground,
-            context,
-          ),
-          padding: EdgeInsets.only(
-            left: 16,
-          ),
-          child: CupertinoDivider(),
-        );
-      },
+            padding: EdgeInsets.only(
+              left: 16,
+            ),
+            child: CupertinoDivider(),
+          );
+        },
+      ),
     );
   }
 }
@@ -399,6 +399,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
 
   void removeHeaderFooter(int index, bool isHeader) {
     var child;
+    var childrenCount = _childrenCount;
     if (isHeader) {
       assert(index != null && index >= 0 && index < _headers.length);
       child = _headers[index];
@@ -410,10 +411,14 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
       index += _headers.length + _selections.length;
     }
     _widgetGroupKey.currentState.removeItem(index, (context, animation) {
-      return SizeTransition(
-        sizeFactor: animation,
-        axisAlignment: 1,
-        child: child,
+      return _wrapBorder(
+        index: index,
+        length: childrenCount,
+        child: SizeTransition(
+          sizeFactor: animation,
+          axisAlignment: 1,
+          child: child,
+        ),
       );
     });
   }
@@ -426,6 +431,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
 
   void removeSelection(Selection selection) {
     var index = _selections.indexOf(selection);
+    var childrenCount = _childrenCount;
     _selections.remove(selection);
     _slidableKeyMap.remove(selection);
     _widgetGroupKey.currentState.removeItem(index + _headers.length, (context, animation) {
@@ -433,14 +439,18 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
       if (widget.hasDeleteButton) {
         deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
       }
-      return SizeTransition(
-        sizeFactor: animation,
-        axisAlignment: 1,
-        child: _SelectionItemButton(
-          selection: selection,
-          selected: selection == widget.selectedSelection,
-          leading: deleteButton,
-          onPressed: () {},
+      return _wrapBorder(
+        index: index + _headers.length,
+        length: childrenCount,
+        child: SizeTransition(
+          sizeFactor: animation,
+          axisAlignment: 1,
+          child: _SelectionItemButton(
+            selection: selection,
+            selected: selection == widget.selectedSelection,
+            leading: deleteButton,
+            onPressed: () {},
+          ),
         ),
       );
     });
@@ -475,6 +485,29 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
     );
   }
 
+  Widget _wrapBorder({@required int index, @required int length, @required Widget child}) {
+    if (index < length - 1) {
+      child = WidgetGroup(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        direction: Axis.vertical,
+        children: [
+          child,
+          Container(
+            color: CupertinoDynamicColor.resolve(
+              CupertinoColors.secondarySystemGroupedBackground,
+              context,
+            ),
+            padding: EdgeInsets.only(
+              left: 16,
+            ),
+            child: CupertinoDivider(),
+          ),
+        ],
+      );
+    }
+    return child;
+  }
+
   Widget _buildDeleteIconButton(GlobalKey<SlidableState> globalKey) {
     return CupertinoButton(
       padding: EdgeInsets.only(
@@ -495,44 +528,63 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
     );
   }
 
+  int get _childrenCount => _selections.length + _headers.length + _footers.length;
+
   @override
   Widget build(BuildContext context) {
-    var length = _selections.length + _headers.length + _footers.length;
-    return AnimatedWidgetGroup(
-      key: _widgetGroupKey,
-      initialItemCount: length,
-      itemBuilder: (context, index, animation) {
-        Widget child;
-        if (index < _headers.length) {
-          child = _headers[index];
-        } else if ((index - _headers.length) < _selections.length) {
-          final selection = _selections[index - _headers.length];
-          Widget deleteButton;
-          if (widget.hasDeleteButton) {
-            deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
-          }
-          child = _wrapSlidable(
-            selection: selection,
-            child: _SelectionItemButton(
+    var borderSide = BorderSide(
+      color: CupertinoDynamicColor.resolve(
+        separatorColor,
+        context,
+      ),
+      width: 0.0,
+    );
+    return Container(
+      foregroundDecoration: BoxDecoration(
+        border: Border.symmetric(
+          vertical: borderSide,
+        ),
+      ),
+      child: AnimatedWidgetGroup(
+        key: _widgetGroupKey,
+        initialItemCount: _childrenCount,
+        itemBuilder: (context, index, animation) {
+          Widget child;
+          if (index < _headers.length) {
+            child = _headers[index];
+          } else if ((index - _headers.length) < _selections.length) {
+            final selection = _selections[index - _headers.length];
+            Widget deleteButton;
+            if (widget.hasDeleteButton) {
+              deleteButton = _buildDeleteIconButton(_slidableKeyMap[selection]);
+            }
+            child = _wrapSlidable(
               selection: selection,
-              selected: selection == widget.selectedSelection,
-              leading: deleteButton,
-              onPressed: () {
-                if (widget.onItemPressed != null) {
-                  widget.onItemPressed(selection);
-                }
-              },
+              child: _SelectionItemButton(
+                selection: selection,
+                selected: selection == widget.selectedSelection,
+                leading: deleteButton,
+                onPressed: () {
+                  if (widget.onItemPressed != null) {
+                    widget.onItemPressed(selection);
+                  }
+                },
+              ),
+            );
+          } else {
+            child = _footers[index - _headers.length - _selections.length];
+          }
+          return _wrapBorder(
+            index: index,
+            length: _childrenCount,
+            child: SizeTransition(
+              sizeFactor: animation,
+              axisAlignment: 1,
+              child: child,
             ),
           );
-        } else {
-          child = _footers[index - _headers.length - _selections.length];
-        }
-        return SizeTransition(
-          sizeFactor: animation,
-          axisAlignment: 1,
-          child: child,
-        );
-      },
+        },
+      ),
     );
   }
 }
