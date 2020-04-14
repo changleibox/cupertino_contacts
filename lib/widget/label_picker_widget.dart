@@ -396,7 +396,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
 
   void insertHeaderFooter(int index, int headerLength) {
     assert(index != null && index >= 0);
-      index += headerLength + _selections.length;
+    index += headerLength + _selections.length;
     _widgetGroupKey.currentState.insertItem(index);
   }
 
