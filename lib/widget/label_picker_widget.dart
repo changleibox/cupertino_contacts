@@ -135,7 +135,7 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {
     _scrollController = PrimaryScrollController.of(context);
     Widget trailing;
-    if (widget.canEdit) {
+    if (widget.canEdit || _isEditStatus) {
       trailing = NavigationBarAction(
         child: Text(_isEditStatus ? '完成' : '编辑'),
         onPressed: _onTrailingPressed,
