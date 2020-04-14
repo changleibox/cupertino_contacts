@@ -57,6 +57,10 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
   }
 
   onCancelPressed() {
+    var selectedSelection = widget.selectedSelection;
+    if (selectedSelection != null && !_customSelections.contains(selectedSelection)) {
+      selections.addCustomSelection(widget.selectionType, selectedSelection.propertyName);
+    }
     Navigator.pop(context);
   }
 
