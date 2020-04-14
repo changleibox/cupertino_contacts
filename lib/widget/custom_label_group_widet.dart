@@ -16,15 +16,15 @@ class CustomSelectionChangedNotification extends Notification {
 }
 
 class CustomSelectionAddNotification extends CustomSelectionChangedNotification {
-  final List<Selection> customSelections;
+  final Selection selection;
 
-  const CustomSelectionAddNotification(this.customSelections);
+  const CustomSelectionAddNotification(this.selection) : assert(selection != null);
 }
 
 class CustomSelectionRemoveNotification extends CustomSelectionChangedNotification {
-  final List<Selection> customSelections;
+  final Selection selection;
 
-  const CustomSelectionRemoveNotification(this.customSelections);
+  const CustomSelectionRemoveNotification(this.selection) : assert(selection != null);
 }
 
 class CustomLabelGroupWidet extends StatefulWidget {
@@ -63,7 +63,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
         var selection = selections.addCustomSelection(widget.selectionType, text);
         if (selection != null && !widget.selections.contains(selection)) {
           widget.selections.insert(0, selection);
-          CustomSelectionAddNotification(widget.selections).dispatch(context);
+          CustomSelectionAddNotification(selection).dispatch(context);
           _globalKey.currentState.insertSelection(selection);
         }
       }
@@ -150,7 +150,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
       onDeletePressed: (value) {
         selections.removeCustomSelection(widget.selectionType, value);
         widget.selections.remove(value);
-        CustomSelectionRemoveNotification(widget.selections).dispatch(context);
+        CustomSelectionRemoveNotification(value).dispatch(context);
         _globalKey.currentState.removeSelection(value);
       },
     );
