@@ -162,6 +162,18 @@ class WidgetGroup extends StatelessWidget {
         ),
         super(key: key);
 
+  const WidgetGroup.custom({
+    Key key,
+    this.alignment = MainAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisSize = MainAxisSize.max,
+    @required this.childrenDelegate,
+    this.textDirection,
+    this.verticalDirection,
+    this.textBaseline,
+    this.direction,
+  }) : assert(childrenDelegate != null);
+
   final MainAxisAlignment alignment;
   final MainAxisSize mainAxisSize;
   final CrossAxisAlignment crossAxisAlignment;
