@@ -16,6 +16,7 @@ import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -33,7 +34,7 @@ typedef LabelPickerBodyBuilder = Widget Function(BuildContext context, LabelPage
 
 class AnimatedLabelPickerHeaderBody extends StatefulWidget {
   final LabelPickerBodyBuilder builder;
-  final ValueChanged<String> onQuery;
+  final AsyncValueSetter<String> onQuery;
   final bool canEdit;
   final VoidCallback onCancelPressed;
 
@@ -123,15 +124,20 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
   }
 
   _onQueryCancelPressed() {
-    _status = LabelPageStatus.none;
-    setState(() {});
     _queryFocusNode.unfocus();
     _scrollController?.jumpTo(0);
     _animationController.animateTo(1.0);
     _queryController.clear();
+    Future<void> future = Future.value();
     if (widget.onQuery != null) {
-      widget.onQuery(null);
+      future = widget.onQuery(_queryController.text);
     }
+    future.whenComplete(() {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+        _status = LabelPageStatus.none;
+        setState(() {});
+      });
+    });
   }
 
   List<Widget> _buildHeaderSliver(BuildContext context, bool innerBoxIsScrolled) {

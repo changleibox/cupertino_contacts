@@ -77,6 +77,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
     }
     if (widget.canCustomLabel) {
       children.add(CustomLabelGroupWidet(
+        key: ObjectKey(presenter.queryText),
         selectionType: widget.selectionType,
         selections: presenter.customSelections,
         selectedSelection: widget.selectedSelection,
