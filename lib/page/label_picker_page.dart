@@ -75,11 +75,10 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         onItemPressed: presenter.onItemPressed,
       ));
     }
-    var customSelections = presenter.customSelections;
-    if (widget.canCustomLabel && (!presenter.hasQueryText || customSelections.isNotEmpty)) {
+    if (widget.canCustomLabel) {
       children.add(CustomLabelGroupWidet(
         selectionType: widget.selectionType,
-        selections: customSelections,
+        selections: presenter.customSelections,
         selectedSelection: widget.selectedSelection,
         status: status,
         onItemPressed: presenter.onItemPressed,
