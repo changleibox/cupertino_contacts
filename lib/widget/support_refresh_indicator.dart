@@ -55,9 +55,10 @@ class SupportSliverRefreshIndicator extends StatelessWidget {
     double refreshIndicatorExtent,
   ) {
     const Curve opacityCurve = Interval(0.4, 1.0, curve: Curves.easeInOut);
-    final offset = math.min(pulledExtent / refreshTriggerPullDistance, 1.0);
+    final opacityOffset = math.min(pulledExtent / refreshIndicatorExtent, 1.0);
+    final progressOffset = math.min(pulledExtent / refreshTriggerPullDistance, 1.0);
     Widget child = Opacity(
-      opacity: opacityCurve.transform(offset),
+      opacity: opacityCurve.transform(opacityOffset),
       child: SupportCupertinoActivityIndicator(
         radius: 12.0,
       ),
@@ -66,14 +67,16 @@ class SupportSliverRefreshIndicator extends StatelessWidget {
       child = SupportCupertinoActivityIndicator(
         radius: 12.0,
         animating: false,
-        position: offset * 0.9,
+        position: progressOffset * 0.9,
       );
     }
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: child,
+    return ClipRect(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: child,
+        ),
       ),
     );
   }
