@@ -32,11 +32,9 @@ class LauncherPresenter extends Presenter<LauncherPage> {
   }
 
   Future<void> _requestPermission() async {
-    var permissionHandler = PermissionHandler();
-    await permissionHandler.requestPermissions([PermissionGroup.contacts]);
-    var permissionStatus = await permissionHandler.checkPermissionStatus(PermissionGroup.contacts);
-    if (permissionStatus != PermissionStatus.granted) {
-      return Future.error('Permission denial.');
+    var status = await Permission.contacts.request();
+    if (status != PermissionStatus.granted) {
+      return Future.error('Permission denied.');
     }
   }
 
@@ -53,7 +51,7 @@ class LauncherPresenter extends Presenter<LauncherPage> {
               child: Text('去设置'),
               onPressed: () {
                 Navigator.pop(context);
-                PermissionHandler().openAppSettings();
+                openAppSettings();
               },
             ),
           ],
