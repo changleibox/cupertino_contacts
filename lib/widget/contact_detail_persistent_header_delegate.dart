@@ -176,7 +176,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                 ),
                 WidgetGroup.spacing(
                   alignment: MainAxisAlignment.center,
-                  spacing: 32,
+                  spacing: 40,
                   children: [
                     _OperationButton(
                       icon: Ionicons.ios_text,
@@ -261,14 +261,17 @@ class _OperationButton extends StatelessWidget {
         children: [
           Builder(
             builder: (context) {
+              final enabled = onPressed != null;
+              var color = IconTheme.of(context).color;
               return Container(
                 width: 36,
                 height: 36,
                 alignment: Alignment.center,
-                foregroundDecoration: ShapeDecoration(
+                decoration: ShapeDecoration(
+                  color: enabled ? color : null,
                   shape: CircleBorder(
                     side: BorderSide(
-                      color: IconTheme.of(context).color,
+                      color: color,
                       width: 1,
                     ),
                   ),
@@ -276,6 +279,7 @@ class _OperationButton extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 24,
+                  color: enabled ? CupertinoColors.white : null,
                 ),
               );
             },
