@@ -36,6 +36,7 @@ dependencies:
   share: ^0.6.3+6
   permission_handler: ^5.0.0+hotfix.3
   image: ^2.1.12
+  flutter_icons: ^1.1.0
 
 dev_dependencies:
   flutter_test:
