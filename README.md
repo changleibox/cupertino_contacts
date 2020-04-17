@@ -252,9 +252,9 @@ bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
 
 ### 联系人详情
 
-![联系人详情](https://oscimg.oschina.net/oscnet/up-b96db5972b9b297e13ca73b58c993aba6c2.png)
+![联系人详情](https://oscimg.oschina.net/oscnet/up-72bfd80d7df15b5174515eb129c6387b113.png)
 
-![长按复制](https://oscimg.oschina.net/oscnet/up-64db0c69ab7526f4a5ce833d865dcb9fdd6.png)
+![长按复制](https://oscimg.oschina.net/oscnet/up-bd8870d8616e771fcc86b26e5c0ba2ca4c6.png)
 
 ### 选择标签
 
