@@ -21,7 +21,8 @@
 NestedScrollView我用的自己重写过的，主要是因为源码中的有两个问题。
 
 1、当列表滑动到底部，然后继续滑动，然后停止，松手，这时候可列表会重新滚动到底部，但是源码没有处理当速度等于0的时候的情况，所以当松手的时候，列表会回弹回去，回弹距离小于`maxScrollExtent`。
-> 源码如下：
+
+#### 源码如下：
 
 ```dart
 @protected
@@ -73,7 +74,7 @@ ScrollActivity createBallisticScrollActivity(
 
 这里`velocity == 0`的时候，执行的是
 
-`
+```
 case _NestedBallisticScrollActivityMode.inner:
   return _NestedInnerBallisticScrollActivity(
     coordinator,
@@ -81,7 +82,7 @@ case _NestedBallisticScrollActivityMode.inner:
     simulation,
      context.vsync,
   );
-`
+```
 
 这时候的`simulation`就是上面通过innerPosition得到的，然后传给了`_NestedInnerBallisticScrollActivity`，我们在继续往下看，
 
@@ -126,7 +127,7 @@ class _NestedInnerBallisticScrollActivity extends BallisticScrollActivity {
 
 ##### 第一种方式：改`_getMetrics`方法
 
-`
+```
 // This handles going forward (fling up) and inner list is
 // underscrolled, OR, going backward (fling down) and inner list is
 // scrolled past zero. We want to skip the pixels we don't need to grow
@@ -145,7 +146,7 @@ minRange = _outerPosition.minScrollExtent;
 maxRange = _outerPosition.maxScrollExtent + extra;
 assert(minRange <= maxRange);
 correctionOffset = 0.0;
-`
+```
 
 这里加上`velocity == 0`的判断。
 
