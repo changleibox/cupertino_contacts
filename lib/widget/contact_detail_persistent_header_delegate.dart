@@ -178,22 +178,22 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                   spacing: 24,
                   children: [
                     _OperationButton(
-                      icon: CupertinoIcons.info,
+                      icon: CupertinoIcons.conversation_bubble,
                       text: '信息',
                       onPressed: _hasPhone || _hasEmail ? () => NativeService.message('account') : null,
                     ),
                     _OperationButton(
-                      icon: CupertinoIcons.info,
+                      icon: CupertinoIcons.phone_solid,
                       text: '呼叫',
                       onPressed: _hasPhone ? () => NativeService.call('phone') : null,
                     ),
                     _OperationButton(
-                      icon: CupertinoIcons.info,
+                      icon: CupertinoIcons.video_camera_solid,
                       text: '视频',
                       onPressed: _hasPhone || _hasEmail ? () => NativeService.faceTime('account') : null,
                     ),
                     _OperationButton(
-                      icon: CupertinoIcons.info,
+                      icon: CupertinoIcons.mail_solid,
                       text: '邮件',
                       onPressed: _hasEmail ? () => NativeService.email('account') : null,
                     ),
@@ -258,9 +258,18 @@ class _OperationButton extends StatelessWidget {
         direction: Axis.vertical,
         spacing: 4,
         children: [
-          Icon(
-            icon,
-            size: 44,
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Icon(
+                CupertinoIcons.circle,
+                size: 44,
+              ),
+              Icon(
+                icon,
+                size: 24,
+              ),
+            ],
           ),
           Text(
             text,

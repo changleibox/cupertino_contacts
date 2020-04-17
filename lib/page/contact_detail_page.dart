@@ -286,6 +286,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
             showShareLocationDialog(context);
           },
         ));
+      } else {
+        bottomExpandedDividerIndexs.add(children.length - 1);
       }
     }
 
