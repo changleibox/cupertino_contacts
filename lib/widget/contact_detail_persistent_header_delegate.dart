@@ -12,11 +12,12 @@ import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 const double _kPaddingBottom = 16.0;
 const double _kSpacing = 16.0;
 const double _kTextSpacing = 4.0;
-const double _kActionButtonHeight = 60;
+const double _kActionButtonHeight = 56;
 const double _kNavigationBarHeight = 32;
 const double _kNormalTextSize = 17.0;
 
@@ -175,25 +176,25 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                 ),
                 WidgetGroup.spacing(
                   alignment: MainAxisAlignment.center,
-                  spacing: 24,
+                  spacing: 32,
                   children: [
                     _OperationButton(
-                      icon: CupertinoIcons.conversation_bubble,
+                      icon: Ionicons.ios_text,
                       text: '信息',
                       onPressed: _hasPhone || _hasEmail ? () => NativeService.message('account') : null,
                     ),
                     _OperationButton(
-                      icon: CupertinoIcons.phone_solid,
+                      icon: Ionicons.ios_call,
                       text: '呼叫',
                       onPressed: _hasPhone ? () => NativeService.call('phone') : null,
                     ),
                     _OperationButton(
-                      icon: CupertinoIcons.video_camera_solid,
+                      icon: Ionicons.ios_videocam,
                       text: '视频',
                       onPressed: _hasPhone || _hasEmail ? () => NativeService.faceTime('account') : null,
                     ),
                     _OperationButton(
-                      icon: CupertinoIcons.mail_solid,
+                      icon: Ionicons.ios_mail,
                       text: '邮件',
                       onPressed: _hasEmail ? () => NativeService.email('account') : null,
                     ),
@@ -256,20 +257,28 @@ class _OperationButton extends StatelessWidget {
       child: WidgetGroup.spacing(
         alignment: MainAxisAlignment.center,
         direction: Axis.vertical,
-        spacing: 4,
+        spacing: 8,
         children: [
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Icon(
-                CupertinoIcons.circle,
-                size: 44,
-              ),
-              Icon(
-                icon,
-                size: 24,
-              ),
-            ],
+          Builder(
+            builder: (context) {
+              return Container(
+                width: 36,
+                height: 36,
+                alignment: Alignment.center,
+                foregroundDecoration: ShapeDecoration(
+                  shape: CircleBorder(
+                    side: BorderSide(
+                      color: IconTheme.of(context).color,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  size: 24,
+                ),
+              );
+            },
           ),
           Text(
             text,

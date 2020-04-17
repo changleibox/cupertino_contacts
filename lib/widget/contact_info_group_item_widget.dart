@@ -12,6 +12,7 @@ import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 /// Created by box on 2020/3/31.
 ///
@@ -191,7 +192,7 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       children: [
         CupertinoButton(
           child: Icon(
-            IconData(0xe15c, fontFamily: 'MaterialIcons'),
+            Ionicons.ios_remove_circle,
             color: CupertinoColors.destructiveRed,
           ),
           padding: EdgeInsets.zero,

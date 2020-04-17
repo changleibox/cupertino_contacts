@@ -4,6 +4,7 @@
 
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 /// Created by box on 2020/3/31.
 ///
@@ -34,7 +35,7 @@ class EditContactInfoButton extends StatelessWidget {
         spacing: 10,
         children: [
           Icon(
-            CupertinoIcons.add_circled_solid,
+            Ionicons.ios_add_circle,
             color: CupertinoColors.systemGreen,
           ),
           Expanded(

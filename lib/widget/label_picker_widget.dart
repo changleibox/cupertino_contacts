@@ -18,6 +18,7 @@ import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 const double _kSearchBarHeight = 56.0;
@@ -548,7 +549,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
       minSize: 0,
       borderRadius: BorderRadius.zero,
       child: Icon(
-        CupertinoIcons.minus_circled,
+        Ionicons.ios_remove_circle,
         color: CupertinoDynamicColor.resolve(
           CupertinoColors.destructiveRed,
           context,
