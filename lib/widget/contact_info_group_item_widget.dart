@@ -191,8 +191,8 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
       children: [
         CupertinoButton(
           child: Icon(
-            CupertinoIcons.minus_circled,
-            color: CupertinoColors.systemRed,
+            IconData(0xe15c, fontFamily: 'MaterialIcons'),
+            color: CupertinoColors.destructiveRed,
           ),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
