@@ -6,7 +6,7 @@ import 'package:cupertinocontacts/presenter/request_presenter.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class IterablePresenter<T extends StatefulWidget, E> extends RequestPresenter<T, Iterable<E>> {
-  final _objects = List<E>();
+  final _objects = <E>[];
 
   Iterable<E> get objects => List.unmodifiable(_objects);
 

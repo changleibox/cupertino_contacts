@@ -85,7 +85,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
 
   @override
   Widget builds(BuildContext context) {
-    final children = List<Widget>();
+    final children = <Widget>[];
     children.add(EditContactGroupContainer(
       itemCount: presenter.baseInfoMap.length,
       itemBuilder: (context, index) {

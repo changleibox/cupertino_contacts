@@ -17,7 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
-  final _proposals = List<Uint8ListAvatar>();
+  final _proposals = <Uint8ListAvatar>[];
 
   Uint8ListAvatar _avatar;
   Uint8ListAvatar _defaultAvatar;
@@ -92,11 +92,11 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   }
 
   onAllPicturePressed() {
-    ImagePicker.pickImage(source: ImageSource.gallery).then((value) {
+    ImagePicker().getImage(source: ImageSource.gallery).then((value) async {
       if (value == null) {
         return;
       }
-      final src = value.readAsBytesSync();
+      final src = await value.readAsBytes();
       Navigator.push(
         context,
         RouteProvider.buildRoute(

@@ -82,6 +82,8 @@ class SimpleTextSelectionOverlay {
             TextSelectionPoint(Offset(0, 0), Directionality.of(context)),
           ],
           delegate,
+          ClipboardStatusNotifier(),
+          null,
         ),
       ),
     );

@@ -66,7 +66,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
   }
 
   Widget _buildBody(BuildContext context, LabelPageStatus status) {
-    final children = List<Widget>();
+    final children = <Widget>[];
     if (status != LabelPageStatus.editCustom && presenter.isNotEmpty) {
       children.add(SelectionGroupWidget(
         selections: presenter.objects,

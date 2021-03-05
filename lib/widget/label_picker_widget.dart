@@ -270,7 +270,7 @@ class SelectionGroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final children = List<Widget>();
+    final children = <Widget>[];
     if (headers != null) {
       children.addAll(headers);
     }
@@ -356,9 +356,9 @@ class DeleteableSelectionGroupWidget extends StatefulWidget {
 class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroupWidget> {
   final _slidableKeyMap = HashMap<Selection, GlobalKey<SlidableState>>();
   final _widgetGroupKey = GlobalKey<AnimatedWidgetGroupState>();
-  final _selections = List<Selection>();
-  final _headers = List<Widget>();
-  final _footers = List<Widget>();
+  final _selections = <Selection>[];
+  final _headers = <Widget>[];
+  final _footers = <Widget>[];
 
   SlidableController _slidableController;
 

@@ -14,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 const int _kMaxLabelCount = 20;
 
 class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
-  final _customSelections = List<Selection>();
+  final _customSelections = <Selection>[];
 
   List<Selection> get customSelections => _customSelections;
 

@@ -240,7 +240,7 @@ class FastIndex extends StatefulWidget {
 }
 
 class _FastIndexState extends State<FastIndex> {
-  final _indexKeys = List<GlobalKey>();
+  final _indexKeys = <GlobalKey>[];
 
   FastIndexDetails _currentDetails = FastIndexDetails.empty;
 

@@ -40,7 +40,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
       width: 0.0,
     );
 
-    final slivers = List<Widget>();
+    final slivers = <Widget>[];
     if (presenter.showProgress) {
       slivers.add(SliverFillRemaining(
         child: CupertinoProgress(),
@@ -109,7 +109,6 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                         if (presenter.isSelected(group))
                           Icon(
                             CupertinoIcons.check_mark,
-                            size: 40,
                             color: CupertinoTheme.of(context).primaryColor,
                           ),
                       ],

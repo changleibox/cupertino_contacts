@@ -33,7 +33,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
       addButtonText: infoGroup.name,
       changeLabelInterceptor: (context, item) => ChangeLabelType.disable,
       itemFactory: (index, label) async {
-        final selectedContactIds = List<String>();
+        final selectedContactIds = <String>[];
         var currentIdentifier = currentContact?.identifier;
         if (currentIdentifier != null) {
           selectedContactIds.add(currentIdentifier);

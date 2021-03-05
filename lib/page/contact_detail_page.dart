@@ -82,7 +82,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
 
     final hasPhone = phones != null && phones.isNotEmpty;
 
-    final children = List<Widget>();
+    final children = <Widget>[];
     if (hasPhone) {
       children.addAll(phones.where((element) {
         return selections.contains(SelectionType.phone, element.label);
@@ -239,9 +239,9 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
     ));
 
-    final largeSpacingIndexs = List<int>();
-    final topExpandedDividerIndexs = List<int>();
-    final bottomExpandedDividerIndexs = List<int>();
+    final largeSpacingIndexs = <int>[];
+    final topExpandedDividerIndexs = <int>[];
+    final bottomExpandedDividerIndexs = <int>[];
 
     final isSelectionMode = widget.launchMode == DetailLaunchMode.selection;
     if (!isSelectionMode) {

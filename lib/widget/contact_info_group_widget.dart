@@ -68,8 +68,8 @@ class ContactInfoGroupWidget extends StatefulWidget {
 
 class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with SingleTickerProviderStateMixin {
   final _animatedListKey = GlobalKey<AnimatedListState>();
-  final _globalKeys = List<GlobalKey<SlidableState>>();
-  final _labelWidts = List<double>();
+  final _globalKeys = <GlobalKey<SlidableState>>[];
+  final _labelWidts = <double>[];
 
   SlidableController _slidableController;
   double _maxLabelWidth;

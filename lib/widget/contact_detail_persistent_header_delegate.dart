@@ -308,14 +308,15 @@ class _PageRoute<T> extends CupertinoPageRoute<T> {
   })  : assert(builder != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
-        assert(opaque),
         super(
           settings: settings,
           fullscreenDialog: fullscreenDialog,
           title: title,
           builder: builder,
           maintainState: maintainState,
-        );
+        ) {
+    assert(opaque);
+  }
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {

@@ -132,7 +132,7 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
   }
 
   @override
-  void hideToolbar() {
+  void hideToolbar([bool hideHandles = true]) {
     _selectionOverlay?.hideToolbar();
     _selectionOverlay = null;
     if (_focusScopeNode.hasFocus) {
@@ -154,6 +154,13 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
 
   @override
   set textEditingValue(TextEditingValue value) {
+    if (widget.valueSetter != null) {
+      widget.valueSetter(value);
+    }
+  }
+
+  @override
+  void userUpdateTextEditingValue(TextEditingValue value, SelectionChangedCause cause) {
     if (widget.valueSetter != null) {
       widget.valueSetter(value);
     }

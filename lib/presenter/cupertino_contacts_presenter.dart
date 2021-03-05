@@ -20,7 +20,7 @@ const String _kOctothorpe = '#';
 
 class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Contact> {
   final _contactsMap = LinkedHashMap<String, List<Contact>>();
-  final _contactKeys = List<GlobalKey>();
+  final _contactKeys = <GlobalKey>[];
 
   List<Group> _selectedGroups;
   StreamSubscription<dynamic> _subscription;
@@ -66,7 +66,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
       var contacts = contactsMap[firstLetter];
       if (contacts == null) {
-        contacts = List<Contact>();
+        contacts = <Contact>[];
       }
       contacts.add(contact);
       contactsMap[firstLetter] = contacts;
@@ -144,7 +144,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
       return contacts;
     }
     var ids = _selectedGroups.expand((e) => e.contacts);
-    final newContacts = List<Contact>();
+    final newContacts = <Contact>[];
     contacts.forEach((element) {
       if (ids.contains(element.identifier)) {
         newContacts.add(element);

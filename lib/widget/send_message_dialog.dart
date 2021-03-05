@@ -9,11 +9,11 @@ import 'package:flutter_contact/contact.dart';
 
 showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item> emails) {
   var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-  final items = List<Item>()..addAll(phones)..addAll(emails);
+  final items = <Item>[]..addAll(phones)..addAll(emails);
   showCupertinoModalPopup(
     context: context,
     builder: (context) {
-      final actions = List<Widget>();
+      final actions = <Widget>[];
       actions.add(Container(
         alignment: Alignment.centerLeft,
         height: 64,

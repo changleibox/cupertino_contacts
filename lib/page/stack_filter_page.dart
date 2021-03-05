@@ -34,7 +34,7 @@ class StackFilterPage extends StatefulWidget {
 }
 
 class _StackFilterPageState extends State<StackFilterPage> {
-  final _filters = List<_ColorMatrixFilter>();
+  final _filters = <_ColorMatrixFilter>[];
 
   @override
   void initState() {

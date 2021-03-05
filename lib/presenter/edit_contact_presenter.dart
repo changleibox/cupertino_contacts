@@ -144,7 +144,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.relatedParty] = ContactInfoGroup<EditableSelectionItem>(
       name: '关联人',
-      items: List<EditableSelectionItem>(),
+      items: <EditableSelectionItem>[],
       selectionType: SelectionType.relatedParty,
     );
     itemMap[ContactItemType.socialData] = ContactInfoGroup<EditableItem>(
@@ -161,7 +161,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     );
     itemMap[ContactItemType.instantMessaging] = ContactInfoGroup<EditableItem>(
       name: '即时信息',
-      items: List<EditableItem>(),
+      items: <EditableItem>[],
       selectionType: SelectionType.instantMessaging,
     );
     itemMap[ContactItemType.remarks] = MultiEditableContactInfo(

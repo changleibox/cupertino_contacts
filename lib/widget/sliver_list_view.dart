@@ -118,7 +118,7 @@ class SliverListView extends StatelessWidget {
     }
     EdgeInsetsGeometry effectivePadding = padding;
     if (padding == null) {
-      final MediaQueryData mediaQuery = MediaQuery.of(context, nullOk: true);
+      final MediaQueryData mediaQuery = MediaQuery.of(context);
       if (mediaQuery != null) {
         // Automatically pad sliver with padding from MediaQuery.
         final EdgeInsets mediaQueryHorizontalPadding = mediaQuery.padding.copyWith(top: 0.0, bottom: 0.0);

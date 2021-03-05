@@ -11,11 +11,11 @@ import 'package:flutter_contact/contacts.dart';
 
 class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
   final _allIPhoneGroup = Group(name: '所有"iPhone"');
-  final _selectedGroups = List<Group>();
+  final _selectedGroups = <Group>[];
 
   @override
   Future<List<Group>> onLoad(bool showProgress) async {
-    final groups = List<Group>();
+    final groups = <Group>[];
     groups.add(_allIPhoneGroup);
     groups.addAll(await Contacts.getGroups());
     return groups;
