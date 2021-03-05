@@ -241,7 +241,6 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
       trailing: NavigationBarAction(
         child: Icon(
           CupertinoIcons.add,
-          size: 35,
         ),
         onPressed: () {
           Navigator.push(
