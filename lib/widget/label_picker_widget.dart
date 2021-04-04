@@ -650,7 +650,6 @@ class _SelectionItemButton extends StatelessWidget {
       trailing: selected
           ? Icon(
               CupertinoIcons.check_mark,
-              size: 40,
               color: themeData.primaryColor,
             )
           : trailing,
