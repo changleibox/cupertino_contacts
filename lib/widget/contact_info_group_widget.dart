@@ -217,7 +217,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
                 _labelWidts[index] = value;
               }
             }
-            var maxWidth = _labelWidts.reduce(max);
+            var maxWidth = _labelWidts.isEmpty ? 0 : _labelWidts.reduce(max);
             if (value < maxWidth) {
               return;
             }
