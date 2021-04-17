@@ -9,10 +9,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 属性输入框
 class NormalPropertyTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final TextInputType inputType;
-  final String name;
-
   const NormalPropertyTextField({
     Key key,
     @required this.controller,
@@ -22,6 +18,10 @@ class NormalPropertyTextField extends StatelessWidget {
         assert(inputType != null),
         assert(name != null),
         super(key: key);
+
+  final TextEditingController controller;
+  final TextInputType inputType;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +37,12 @@ class NormalPropertyTextField extends StatelessWidget {
         ),
       ),
       decoration: null,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 10,
         right: 10,
       ),
       clearButtonMode: OverlayVisibilityMode.editing,
-      scrollPadding: EdgeInsets.only(
+      scrollPadding: const EdgeInsets.only(
         bottom: 54,
       ),
       textInputAction: TextInputAction.next,

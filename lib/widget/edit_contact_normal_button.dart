@@ -8,10 +8,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-常用的按钮
 class EditContactNormalButton extends StatelessWidget {
-  final String text;
-  final bool isDestructiveAction;
-  final VoidCallback onPressed;
-
   const EditContactNormalButton({
     Key key,
     @required this.text,
@@ -21,9 +17,13 @@ class EditContactNormalButton extends StatelessWidget {
         assert(isDestructiveAction != null),
         super(key: key);
 
+  final String text;
+  final bool isDestructiveAction;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
+    final themeData = CupertinoTheme.of(context);
     var actionTextStyle = themeData.textTheme.actionTextStyle;
     if (isDestructiveAction) {
       actionTextStyle = actionTextStyle.copyWith(
@@ -32,7 +32,7 @@ class EditContactNormalButton extends StatelessWidget {
     }
     return CupertinoButton(
       minSize: 44,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 16,
         right: 10,
       ),
@@ -41,6 +41,7 @@ class EditContactNormalButton extends StatelessWidget {
         CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
+      onPressed: onPressed,
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -48,7 +49,6 @@ class EditContactNormalButton extends StatelessWidget {
           style: actionTextStyle,
         ),
       ),
-      onPressed: onPressed,
     );
   }
 }

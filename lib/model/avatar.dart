@@ -5,13 +5,13 @@
 import 'dart:typed_data';
 
 class Avatar<T> {
-  final bool editable;
-  final T src;
-  T target;
-
   Avatar(this.src, {this.editable = true, this.target})
       : assert(src != null),
         assert(editable != null);
+
+  final bool editable;
+  final T src;
+  T target;
 
   T get avatar => target ?? src;
 

@@ -33,10 +33,6 @@ const double _kMaxNameSize = 26;
 const double _kMinNameSize = 15;
 
 class ContactDetailPage extends StatefulWidget {
-  final String identifier;
-  final Contact contact;
-  final DetailLaunchMode launchMode;
-
   const ContactDetailPage({
     Key key,
     @required this.identifier,
@@ -46,6 +42,10 @@ class ContactDetailPage extends StatefulWidget {
         assert(launchMode != null),
         super(key: key);
 
+  final String identifier;
+  final Contact contact;
+  final DetailLaunchMode launchMode;
+
   @override
   _ContactDetailPageState createState() => _ContactDetailPageState();
 }
@@ -54,7 +54,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
   _ContactDetailPageState() : super(ContactDetailPresenter());
 
   String get _routeTitle {
-    var route = ModalRoute.of(context);
+    final route = ModalRoute.of(context);
     String title;
     if (route is CupertinoPageRoute) {
       title = route.title;
@@ -64,21 +64,21 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
 
   @override
   Widget builds(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
-    var actionTextStyle = textTheme.actionTextStyle;
-    var contact = presenter.object;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
+    final actionTextStyle = textTheme.actionTextStyle;
+    final contact = presenter.object;
 
     if (contact == null) {
-      return ErrorTips();
+      return const ErrorTips();
     }
 
-    var phones = contact.phones;
-    var emails = contact.emails;
-    var urls = contact.urls;
-    var postalAddresses = contact.postalAddresses;
-    var dates = contact.dates;
-    var socialProfiles = contact.socialProfiles;
+    final phones = contact.phones;
+    final emails = contact.emails;
+    final urls = contact.urls;
+    final postalAddresses = contact.postalAddresses;
+    final dates = contact.dates;
+    final socialProfiles = contact.socialProfiles;
 
     final hasPhone = phones != null && phones.isNotEmpty;
 
@@ -175,8 +175,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           value: DateFormat('yyyy年MM月dd日').format(dateTime),
           valueColor: actionTextStyle.color,
           onPressed: () {
-            var currentYear = DateTime.now().year;
-            var currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
+            final currentYear = DateTime.now().year;
+            final currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
             NativeService.calendar(currentYearBirthday);
           },
         );
@@ -192,8 +192,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           value: DateFormat('yyyy年MM月dd日').format(dateTime),
           valueColor: actionTextStyle.color,
           onPressed: () {
-            var currentYear = DateTime.now().year;
-            var currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
+            final currentYear = DateTime.now().year;
+            final currentYearBirthday = DateTime(currentYear, dateTime.month, dateTime.day);
             NativeService.calendar(currentYearBirthday);
           },
         );
@@ -296,7 +296,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       topExpandedDividerIndexs.add(children.length + 1);
 
       children.add(Padding(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 16,
           right: 16,
           bottom: 6,
@@ -319,7 +319,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       });
     }
 
-    var persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
+    final persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
       contact: contact,
       maxAvatarSize: _kMaxAvatarSize,
       minAvatarSize: _kMinAvatarSize,
@@ -330,7 +330,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       routeTitle: _routeTitle,
     );
 
-    var borderSide = BorderSide(
+    final borderSide = BorderSide(
       color: CupertinoDynamicColor.resolve(
         separatorColor,
         context,
@@ -359,8 +359,8 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               itemCount: children.length,
               itemBuilder: (context, index) {
-                var length = children.length;
-                var isLast = index == length - 1;
+                final length = children.length;
+                final isLast = index == length - 1;
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
@@ -373,12 +373,12 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
               },
               separatorBuilder: (context, index) {
                 if (largeSpacingIndexs.contains(index + 1)) {
-                  return SizedBox(
+                  return const SizedBox(
                     height: 40,
                   );
                 }
                 if (topExpandedDividerIndexs.contains(index + 1) || bottomExpandedDividerIndexs.contains(index)) {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
                 return Container(
                   width: double.infinity,
@@ -386,10 +386,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
                     CupertinoColors.secondarySystemGroupedBackground,
                     context,
                   ),
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 16,
                   ),
-                  child: CupertinoDivider(),
+                  child: const CupertinoDivider(),
                 );
               },
             ),
@@ -401,14 +401,6 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
 }
 
 class _NormalGroupInfoWidget extends StatelessWidget {
-  final String name;
-  final String value;
-  final Color valueColor;
-  final Widget trailing;
-  final VoidCallback onPressed;
-  final CrossAxisAlignment crossAxisAlignment;
-  final EdgeInsets padding;
-
   const _NormalGroupInfoWidget({
     Key key,
     @required this.name,
@@ -421,9 +413,17 @@ class _NormalGroupInfoWidget extends StatelessWidget {
   })  : assert(name != null),
         super(key: key);
 
+  final String name;
+  final String value;
+  final Color valueColor;
+  final Widget trailing;
+  final VoidCallback onPressed;
+  final CrossAxisAlignment crossAxisAlignment;
+  final EdgeInsets padding;
+
   @override
   Widget build(BuildContext context) {
-    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+    final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
     return Toolbar(
       value: TextEditingValue(
         text: value,
@@ -432,7 +432,7 @@ class _NormalGroupInfoWidget extends StatelessWidget {
           extentOffset: value.length,
         ),
       ),
-      options: ToolbarOptions(
+      options: const ToolbarOptions(
         copy: true,
       ),
       builder: (context) {
@@ -442,7 +442,7 @@ class _NormalGroupInfoWidget extends StatelessWidget {
             context,
           ),
           padding: padding ??
-              EdgeInsets.symmetric(
+              const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 10,
               ),
@@ -484,17 +484,17 @@ class _NormalGroupInfoWidget extends StatelessWidget {
 }
 
 class _LinkedContactGroupInfoWidget extends StatelessWidget {
-  final Contact contact;
-
   const _LinkedContactGroupInfoWidget({
     Key key,
     this.contact,
   }) : super(key: key);
 
+  final Contact contact;
+
   @override
   Widget build(BuildContext context) {
-    var actionTextStyle = CupertinoTheme.of(context).textTheme.actionTextStyle;
-    var selection = selections.iPhoneSelection;
+    final actionTextStyle = CupertinoTheme.of(context).textTheme.actionTextStyle;
+    final selection = selections.iPhoneSelection;
     return _NormalGroupInfoWidget(
       name: selection.labelName,
       value: '联系人',
@@ -508,16 +508,16 @@ class _LinkedContactGroupInfoWidget extends StatelessWidget {
         ),
       ),
       crossAxisAlignment: CrossAxisAlignment.center,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 16,
         top: 10,
         right: 10,
         bottom: 10,
       ),
       onPressed: () {
-        Navigator.push(
+        Navigator.push<dynamic>(
           context,
-          RouteProvider.buildRoute(
+          RouteProvider.buildRoute<dynamic>(
             ContactDetailPage(
               identifier: contact.identifier,
               contact: contact,
@@ -532,10 +532,6 @@ class _LinkedContactGroupInfoWidget extends StatelessWidget {
 }
 
 class _NormalButton extends StatelessWidget {
-  final String text;
-  final bool isDestructive;
-  final VoidCallback onPressed;
-
   const _NormalButton({
     Key key,
     @required this.text,
@@ -545,10 +541,14 @@ class _NormalButton extends StatelessWidget {
         assert(isDestructive != null),
         super(key: key);
 
+  final String text;
+  final bool isDestructive;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
     var actionTextStyle = textTheme.actionTextStyle;
     if (isDestructive) {
       actionTextStyle = actionTextStyle.copyWith(
@@ -557,7 +557,7 @@ class _NormalButton extends StatelessWidget {
     }
     return CupertinoButton(
       minSize: 44,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 16,
         right: 10,
       ),
@@ -566,6 +566,7 @@ class _NormalButton extends StatelessWidget {
         CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
+      onPressed: onPressed,
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
@@ -573,7 +574,6 @@ class _NormalButton extends StatelessWidget {
           style: actionTextStyle,
         ),
       ),
-      onPressed: onPressed,
     );
   }
 }

@@ -14,13 +14,13 @@ const int _kEveryGroupCount = 58;
 class AllLabelsPresenter extends ListPresenter<AllLabelsPage, List<Selection>> {
   @override
   Future<List<List<Selection>>> onLoad(bool showProgress) async {
-    var systemSelections = selections.systemSelectionsAt(widget.selectionType);
-    var querySelection = _query(systemSelections);
-    var length = querySelection.length;
-    var groupCount = length ~/ _kEveryGroupCount + 1;
+    final systemSelections = selections.systemSelectionsAt(widget.selectionType);
+    final querySelection = _query(systemSelections);
+    final length = querySelection.length;
+    final groupCount = length ~/ _kEveryGroupCount + 1;
     return List.generate(groupCount, (index) {
-      var start = index * _kEveryGroupCount;
-      var end = min((index + 1) * _kEveryGroupCount, length);
+      final start = index * _kEveryGroupCount;
+      final end = min((index + 1) * _kEveryGroupCount, length);
       return querySelection.getRange(start, end).toList();
     });
   }
@@ -35,7 +35,7 @@ class AllLabelsPresenter extends ListPresenter<AllLabelsPage, List<Selection>> {
     return !hasQueryText || selection.selectionName.contains(queryText);
   }
 
-  onItemPressed(value) {
-    Navigator.pop(context, value);
+  void onItemPressed(Selection value) {
+    Navigator.pop<Selection>(context, value);
   }
 }

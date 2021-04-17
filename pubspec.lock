@@ -70,14 +70,14 @@ packages:
       name: dartx
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.1"
   dartxx:
     dependency: transitive
     description:
       name: dartxx
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.4+6"
+    version: "0.5.0+2"
   equatable:
     dependency: transitive
     description:
@@ -98,7 +98,7 @@ packages:
       name: flexidate
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.4+5"
+    version: "0.5.0+1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -107,9 +107,11 @@ packages:
   flutter_contact:
     dependency: "direct main"
     description:
-      name: flutter_contact
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: date_components_compat
+      resolved-ref: "24b53c8fa46fca5d0182304ec2c9904e2cf4dfa5"
+      url: "https://github.com/changleibox/flutter_contact.git"
+    source: git
     version: "0.8.1+2"
   flutter_icons:
     dependency: "direct main"
@@ -368,7 +370,7 @@ packages:
       name: time
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.5.0-nullsafety.1"
+    version: "2.0.0"
   timezone:
     dependency: transitive
     description:

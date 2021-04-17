@@ -18,10 +18,6 @@ const double _buttonHeight = 56;
 const double _spacing = 10;
 
 class EditAvatarPage extends StatefulWidget {
-  final Uint8ListAvatar avatar;
-  final bool editable;
-  final bool isFirst;
-
   const EditAvatarPage({
     Key key,
     @required this.avatar,
@@ -31,6 +27,10 @@ class EditAvatarPage extends StatefulWidget {
         assert(editable != null),
         assert(isFirst != null),
         super(key: key);
+
+  final Uint8ListAvatar avatar;
+  final bool editable;
+  final bool isFirst;
 
   @override
   _EditAvatarPageState createState() => _EditAvatarPageState();
@@ -47,13 +47,13 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
         automaticallyImplyLeading: false,
         backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         trailing: CupertinoButton(
-          child: Text('完成'),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
           onPressed: () {
             Navigator.maybePop(context);
           },
+          child: const Text('完成'),
         ),
       ),
       child: SafeArea(
@@ -78,7 +78,7 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
                 alignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 direction: Axis.vertical,
-                divider: SizedBox(
+                divider: const SizedBox(
                   height: _spacing,
                 ),
                 children: [
@@ -113,10 +113,6 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
 }
 
 class _CupertinoSheetAction extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
-  final bool isDestructive;
-
   const _CupertinoSheetAction({
     Key key,
     @required this.text,
@@ -126,13 +122,22 @@ class _CupertinoSheetAction extends StatelessWidget {
         assert(isDestructive != null),
         super(key: key);
 
+  final String text;
+  final VoidCallback onPressed;
+  final bool isDestructive;
+
   @override
   Widget build(BuildContext context) {
-    var textTheme = CupertinoTheme.of(context).textTheme;
-    var actionTextStyle = textTheme.actionTextStyle.copyWith(
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    final actionTextStyle = textTheme.actionTextStyle.copyWith(
       fontSize: 20,
     );
     return CupertinoButton(
+      minSize: _buttonHeight,
+      padding: EdgeInsets.zero,
+      color: CupertinoColors.tertiarySystemGroupedBackground,
+      borderRadius: BorderRadius.circular(_buttonRadius),
+      onPressed: onPressed,
       child: Text(
         text,
         style: isDestructive
@@ -141,11 +146,6 @@ class _CupertinoSheetAction extends StatelessWidget {
               )
             : actionTextStyle,
       ),
-      minSize: _buttonHeight,
-      padding: EdgeInsets.zero,
-      color: CupertinoColors.tertiarySystemGroupedBackground,
-      borderRadius: BorderRadius.circular(_buttonRadius),
-      onPressed: onPressed,
     );
   }
 }

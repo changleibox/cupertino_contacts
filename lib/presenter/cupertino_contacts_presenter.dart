@@ -3,7 +3,6 @@
  */
 
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
@@ -19,7 +18,7 @@ import 'package:lpinyin/lpinyin.dart';
 const String _kOctothorpe = '#';
 
 class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Contact> {
-  final _contactsMap = LinkedHashMap<String, List<Contact>>();
+  final _contactsMap = <String, List<Contact>>{};
   final _contactKeys = <GlobalKey>[];
 
   List<Group> _selectedGroups;
@@ -49,32 +48,29 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
 
   @override
   Future<List<Contact>> onLoad(bool showProgress) async {
-    var total = await Contacts.getTotalContacts(query: queryText);
-    var listContacts = Contacts.listContacts(
+    final total = await Contacts.getTotalContacts(query: queryText);
+    final listContacts = Contacts.listContacts(
       query: queryText,
       bufferSize: total,
-      sortBy: ContactSortOrder.firstName(),
+      sortBy: const ContactSortOrder.firstName(),
     );
-    var contacts = await listContacts.jumpToPage(0);
+    final contacts = await listContacts.jumpToPage(0);
     return _handleContactGroup(contacts);
   }
 
   @override
-  void onLoaded(Iterable<Contact> contacts) {
-    final contactsMap = Map<String, List<Contact>>();
-    for (var contact in contacts) {
-      var firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
-      var contacts = contactsMap[firstLetter];
-      if (contacts == null) {
-        contacts = <Contact>[];
-      }
+  void onLoaded(Iterable<Contact> object) {
+    final contactsMap = <String, List<Contact>>{};
+    for (var contact in object) {
+      final firstLetter = _analysisFirstLetter(contact.familyName ?? contact.displayName);
+      final contacts = contactsMap[firstLetter] ?? <Contact>[];
       contacts.add(contact);
       contactsMap[firstLetter] = contacts;
     }
-    var entries = List.of(contactsMap.entries);
+    final entries = List.of(contactsMap.entries);
     entries.sort((a, b) {
-      var key1 = a.key;
-      var key2 = b.key;
+      final key1 = a.key;
+      final key2 = b.key;
       if (key1 == _kOctothorpe && key2 != _kOctothorpe) {
         return 1;
       }
@@ -89,10 +85,10 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
 
     _contactKeys.clear();
     _contactKeys.addAll(List.generate(contactsMap.length, (index) => GlobalKey()));
-    super.onLoaded(contacts);
+    super.onLoaded(object);
   }
 
-  _analysisFirstLetter(String name) {
+  String _analysisFirstLetter(String name) {
     if (name == null || name.isEmpty) {
       return _kOctothorpe;
     }
@@ -103,11 +99,11 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
     return upperCase;
   }
 
-  onItemPressed(Contact contact) {
+  void onItemPressed(Contact contact) {
     if (widget.launchMode == HomeLaunchMode.onlySelection) {
       Navigator.pop(context, contact);
     } else {
-      Navigator.push(
+      Navigator.push<Contact>(
         context,
         RouteProvider.buildRoute(
           ContactDetailPage(
@@ -124,8 +120,8 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
     }
   }
 
-  onGroupPressed() {
-    Navigator.push(
+  void onGroupPressed() {
+    Navigator.push<List<Group>>(
       context,
       RouteProvider.buildRoute(
         ContactGroupPage(
@@ -143,13 +139,7 @@ class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Co
     if (_selectedGroups == null) {
       return contacts;
     }
-    var ids = _selectedGroups.expand((e) => e.contacts);
-    final newContacts = <Contact>[];
-    contacts.forEach((element) {
-      if (ids.contains(element.identifier)) {
-        newContacts.add(element);
-      }
-    });
-    return newContacts;
+    final ids = _selectedGroups.expand((e) => e.contacts);
+    return contacts.where((element) => ids.contains(element.identifier)).toList();
   }
 }

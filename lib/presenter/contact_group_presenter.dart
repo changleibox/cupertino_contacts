@@ -2,7 +2,6 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:collection';
 
 import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/presenter/list_presenter.dart';
@@ -17,7 +16,11 @@ class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
   Future<List<Group>> onLoad(bool showProgress) async {
     final groups = <Group>[];
     groups.add(_allIPhoneGroup);
-    groups.addAll(await Contacts.getGroups());
+    try {
+      groups.addAll(await Contacts.getGroups());
+    } catch (e) {
+      print(e);
+    }
     return groups;
   }
 
@@ -25,23 +28,16 @@ class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
   void onLoaded(Iterable<Group> object) {
     super.onLoaded(object);
     _selectedGroups.clear();
-    var selectedGroups = widget.selectedGroups;
+    final selectedGroups = widget.selectedGroups;
     if (selectedGroups == null) {
       _selectedGroups.addAll(object);
     } else {
-      final map = HashMap();
-      object.forEach((element) {
-        map[element.identifier] = element;
-      });
-      selectedGroups.forEach((element) {
-        if (map.containsKey(element.identifier)) {
-          _selectedGroups.add(map[element.identifier]);
-        }
-      });
+      final map = Map.fromEntries(object.map((e) => MapEntry(e.identifier, e)));
+      _selectedGroups.addAll(selectedGroups.where((element) => map.containsKey(element.identifier)).map((e) => map[e.identifier]));
     }
   }
 
-  switchSelect(Group group) {
+  void switchSelect(Group group) {
     if (_selectedGroups.contains(group)) {
       if (group == _allIPhoneGroup) {
         _selectedGroups.clear();
@@ -64,7 +60,7 @@ class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
     return _selectedGroups.contains(group);
   }
 
-  onDonePressed() {
+  void onDonePressed() {
     Navigator.pop(context, _selectedGroups.contains(_allIPhoneGroup) ? null : _selectedGroups);
   }
 }

@@ -9,14 +9,14 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 水平分割线
 class CupertinoDivider extends StatelessWidget {
-  final double height;
-  final Color color;
-
   const CupertinoDivider({
     Key key,
     this.height,
     this.color,
   }) : super(key: key);
+
+  final double height;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

@@ -1,54 +1,13 @@
 /*
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
-import 'dart:typed_data';
 import 'dart:math' as math;
-import 'package:vector_math/vector_math_64.dart';
+import 'dart:typed_data';
 
 import 'package:vector_math/hash.dart' as quiver;
+import 'package:vector_math/vector_math_64.dart';
 
 class ColorMatrix {
-  final Float64List _m5storage;
-
-  Float64List get storage => _m5storage;
-
-  ColorMatrix.zero() : _m5storage = Float64List(20);
-
-  factory ColorMatrix.identity() => ColorMatrix.zero()..setIdentity();
-
-  factory ColorMatrix.invert() => ColorMatrix.zero()..setInvert();
-
-  factory ColorMatrix.sepia() => ColorMatrix.zero()..setSepia();
-
-  factory ColorMatrix.greyscale() => ColorMatrix.zero()..setGreyscale();
-
-  factory ColorMatrix.luminosity(double luminosity) => ColorMatrix.zero()..setLuminosity(luminosity);
-
-  factory ColorMatrix.saturation(double saturation) => ColorMatrix.zero()..setSaturation(saturation);
-
-  factory ColorMatrix.contrast(double contrast) => ColorMatrix.zero()..setContrast(contrast);
-
-  factory ColorMatrix.threshold(double threshold) => ColorMatrix.zero()..setThreshold(threshold);
-
-  factory ColorMatrix.copy(ColorMatrix other) => ColorMatrix.zero()..setFrom(other);
-
-  int index(int row, int col) => (row * 5) + col;
-
-  /// Value at [row], [col].
-  double entry(int row, int col) {
-    assert((row >= 0) && (row < 4));
-    assert((col >= 0) && (col < 5));
-
-    return _m5storage[index(row, col)];
-  }
-
-  void setEntry(int row, int col, double v) {
-    assert((row >= 0) && (row < 4));
-    assert((col >= 0) && (col < 5));
-
-    _m5storage[index(row, col)] = v;
-  }
-
   factory ColorMatrix(
     double arg0,
     double arg1,
@@ -130,6 +89,47 @@ class ColorMatrix {
       ColorMatrix.zero()..setColumns(arg0, arg1, arg2, arg3, arg4);
 
   factory ColorMatrix.rows(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3) => ColorMatrix.zero()..setRows(arg0, arg1, arg2, arg3);
+
+  ColorMatrix.zero() : _m5storage = Float64List(20);
+
+  factory ColorMatrix.identity() => ColorMatrix.zero()..setIdentity();
+
+  factory ColorMatrix.invert() => ColorMatrix.zero()..setInvert();
+
+  factory ColorMatrix.sepia() => ColorMatrix.zero()..setSepia();
+
+  factory ColorMatrix.greyscale() => ColorMatrix.zero()..setGreyscale();
+
+  factory ColorMatrix.luminosity(double luminosity) => ColorMatrix.zero()..setLuminosity(luminosity);
+
+  factory ColorMatrix.saturation(double saturation) => ColorMatrix.zero()..setSaturation(saturation);
+
+  factory ColorMatrix.contrast(double contrast) => ColorMatrix.zero()..setContrast(contrast);
+
+  factory ColorMatrix.threshold(double threshold) => ColorMatrix.zero()..setThreshold(threshold);
+
+  factory ColorMatrix.copy(ColorMatrix other) => ColorMatrix.zero()..setFrom(other);
+
+  final Float64List _m5storage;
+
+  Float64List get storage => _m5storage;
+
+  int index(int row, int col) => (row * 5) + col;
+
+  /// Value at [row], [col].
+  double entry(int row, int col) {
+    assert((row >= 0) && (row < 4));
+    assert((col >= 0) && (col < 5));
+
+    return _m5storage[index(row, col)];
+  }
+
+  void setEntry(int row, int col, double v) {
+    assert((row >= 0) && (row < 4));
+    assert((col >= 0) && (col < 5));
+
+    _m5storage[index(row, col)] = v;
+  }
 
   void splatDiagonal(double arg) {
     _m5storage[0] = arg;
@@ -242,7 +242,7 @@ class ColorMatrix {
   }
 
   void setFrom(ColorMatrix arg) {
-    final Float64List argStorage = arg._m5storage;
+    final argStorage = arg._m5storage;
     _m5storage[19] = argStorage[19];
     _m5storage[18] = argStorage[18];
     _m5storage[17] = argStorage[17];
@@ -281,8 +281,8 @@ class ColorMatrix {
     return this;
   }
 
-  setScale(double rScale, double gScale, double bScale, double aScale) {
-    for (int i = 19; i > 0; --i) {
+  void setScale(double rScale, double gScale, double bScale, double aScale) {
+    for (var i = 19; i > 0; --i) {
       _m5storage[i] = 0;
     }
     _m5storage[0] = rScale;
@@ -291,11 +291,11 @@ class ColorMatrix {
     _m5storage[18] = aScale;
   }
 
-  setRotate(int axis, double degrees) {
+  void setRotate(int axis, double degrees) {
     setIdentity();
-    double radians = degrees * math.pi / 180.0;
-    double cosine = math.cos(radians);
-    double sine = math.sin(radians);
+    final radians = degrees * math.pi / 180.0;
+    final cosine = math.cos(radians);
+    final sine = math.sin(radians);
     switch (axis) {
       // Rotation around the red color
       case 0:
@@ -320,7 +320,7 @@ class ColorMatrix {
     }
   }
 
-  setConcat(ColorMatrix matA, ColorMatrix matB) {
+  void setConcat(ColorMatrix matA, ColorMatrix matB) {
     Float64List tmp;
     if (matA == this || matB == this) {
       tmp = Float64List(20);
@@ -328,11 +328,11 @@ class ColorMatrix {
       tmp = _m5storage;
     }
 
-    final Float64List a = matA._m5storage;
-    final Float64List b = matB._m5storage;
-    int index = 0;
-    for (int j = 0; j < 20; j += 5) {
-      for (int i = 0; i < 4; i++) {
+    final a = matA._m5storage;
+    final b = matB._m5storage;
+    var index = 0;
+    for (var j = 0; j < 20; j += 5) {
+      for (var i = 0; i < 4; i++) {
         tmp[index++] = a[j + 0] * b[i + 0] + a[j + 1] * b[i + 5] + a[j + 2] * b[i + 10] + a[j + 3] * b[i + 15];
       }
       tmp[index++] = a[j + 0] * b[4] + a[j + 1] * b[9] + a[j + 2] * b[14] + a[j + 3] * b[19] + a[j + 4];
@@ -343,17 +343,17 @@ class ColorMatrix {
     }
   }
 
-  preConcat(ColorMatrix prematrix) {
+  void preConcat(ColorMatrix prematrix) {
     setConcat(this, prematrix);
   }
 
-  postConcat(ColorMatrix postmatrix) {
+  void postConcat(ColorMatrix postmatrix) {
     setConcat(postmatrix, this);
   }
 
-  setRGB2YUV() {
+  void setRGB2YUV() {
     setIdentity();
-    Float64List m = _m5storage;
+    final m = _m5storage;
     // these coefficients match those in libjpeg
     m[0] = 0.299;
     m[1] = 0.587;
@@ -366,9 +366,9 @@ class ColorMatrix {
     m[12] = -0.08131;
   }
 
-  setYUV2RGB() {
+  void setYUV2RGB() {
     setIdentity();
-    Float64List m = _m5storage;
+    final m = _m5storage;
     // these coefficients match those in libjpeg
     m[2] = 1.402;
     m[5] = 1;
@@ -597,19 +597,17 @@ class ColorMatrix {
 }
 
 class Vector5 {
-  final Float64List _v5storage;
-
-  Vector5.zero() : _v5storage = new Float64List(5);
-
   factory Vector5(double x, double y, double z, double w, double v) => Vector5.zero()..setValues(x, y, z, w, v);
+
+  Vector5.zero() : _v5storage = Float64List(5);
 
   factory Vector5.identity() => Vector5.zero()..setIdentity();
 
   /// Splat [value] into all lanes of the vector.
-  factory Vector5.all(double value) => new Vector5.zero()..splat(value);
+  factory Vector5.all(double value) => Vector5.zero()..splat(value);
 
   /// Copy of [other].
-  factory Vector5.copy(Vector5 other) => new Vector5.zero()..setFrom(other);
+  factory Vector5.copy(Vector5 other) => Vector5.zero()..setFrom(other);
 
   /// Constructs Vector4 with given Float64List as [storage].
   Vector5.fromFloat64List(this._v5storage);
@@ -624,6 +622,8 @@ class Vector5 {
     rng ??= math.Random();
     return Vector5(rng.nextDouble(), rng.nextDouble(), rng.nextDouble(), rng.nextDouble(), rng.nextDouble());
   }
+
+  final Float64List _v5storage;
 
   List<double> get storage => _v5storage;
 
@@ -659,7 +659,7 @@ class Vector5 {
 
   /// Copy [this]
   Vector5 copyInto(Vector5 arg) {
-    final Float64List argStorage = arg._v5storage;
+    final argStorage = arg._v5storage;
     argStorage[0] = _v5storage[0];
     argStorage[1] = _v5storage[1];
     argStorage[2] = _v5storage[2];
@@ -688,7 +688,7 @@ class Vector5 {
 
   /// Set the values by copying them from [other].
   void setFrom(Vector5 other) {
-    final Float64List otherStorage = other._v5storage;
+    final otherStorage = other._v5storage;
     _v5storage[4] = otherStorage[4];
     _v5storage[3] = otherStorage[3];
     _v5storage[2] = otherStorage[2];
@@ -765,7 +765,7 @@ class Vector5 {
   }
 
   void add(Vector5 arg) {
-    final Float64List argStorage = arg._v5storage;
+    final argStorage = arg._v5storage;
     _v5storage[0] = _v5storage[0] + argStorage[0];
     _v5storage[1] = _v5storage[1] + argStorage[1];
     _v5storage[2] = _v5storage[2] + argStorage[2];
@@ -775,7 +775,7 @@ class Vector5 {
 
   /// Subtract [arg] from [this].
   void sub(Vector5 arg) {
-    final Float64List argStorage = arg._v5storage;
+    final argStorage = arg._v5storage;
     _v5storage[0] = _v5storage[0] - argStorage[0];
     _v5storage[1] = _v5storage[1] - argStorage[1];
     _v5storage[2] = _v5storage[2] - argStorage[2];

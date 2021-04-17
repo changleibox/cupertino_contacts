@@ -10,10 +10,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 可编辑的item
 class EditableInfoGroupItem extends StatelessWidget {
-  final TextEditingController controller;
-  final TextInputType inputType;
-  final String name;
-
   const EditableInfoGroupItem({
     Key key,
     @required this.controller,
@@ -23,6 +19,10 @@ class EditableInfoGroupItem extends StatelessWidget {
         assert(inputType != null),
         assert(name != null),
         super(key: key);
+
+  final TextEditingController controller;
+  final TextInputType inputType;
+  final String name;
 
   @override
   Widget build(BuildContext context) {

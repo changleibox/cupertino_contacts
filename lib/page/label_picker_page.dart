@@ -17,11 +17,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 const double _kLargeSpacing = 40;
 
 class LabelPickerPage extends StatefulWidget {
-  final SelectionType selectionType;
-  final Selection selectedSelection;
-  final List<Selection> hideSelections;
-  final bool canCustomLabel;
-
   const LabelPickerPage({
     Key key,
     @required this.selectionType,
@@ -32,6 +27,11 @@ class LabelPickerPage extends StatefulWidget {
         assert(canCustomLabel != null),
         super(key: key);
 
+  final SelectionType selectionType;
+  final Selection selectedSelection;
+  final List<Selection> hideSelections;
+  final bool canCustomLabel;
+
   @override
   _LabelPickerPageState createState() => _LabelPickerPageState();
 }
@@ -41,7 +41,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
 
   final _slidableController = SlidableController();
 
-  _onDismissSlidable() {
+  void _onDismissSlidable() {
     _slidableController.activeState?.close();
   }
 
@@ -85,7 +85,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
         onItemPressed: presenter.onItemPressed,
       ));
     }
-    var padding = MediaQuery.of(context).padding;
+    final padding = MediaQuery.of(context).padding;
     return PrimarySlidableController(
       controller: _slidableController,
       child: Listener(
@@ -109,7 +109,7 @@ class _LabelPickerPageState extends PresenterState<LabelPickerPage, LabelPickerP
                   return children[index];
                 },
                 separatorBuilder: (context, index) {
-                  return SizedBox(
+                  return const SizedBox(
                     height: _kLargeSpacing,
                   );
                 },

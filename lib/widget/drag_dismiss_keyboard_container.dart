@@ -8,10 +8,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 滚动隐藏键盘
 class DragDismissKeyboardContainer extends StatefulWidget {
-  final Widget child;
-  final int depth;
-  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
-
   const DragDismissKeyboardContainer({
     Key key,
     this.depth = 0,
@@ -20,6 +16,10 @@ class DragDismissKeyboardContainer extends StatefulWidget {
   })  : assert(depth != null),
         assert(child != null),
         super(key: key);
+
+  final Widget child;
+  final int depth;
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
 
   @override
   _DragDismissKeyboardContainerState createState() => _DragDismissKeyboardContainerState();
@@ -32,17 +32,17 @@ class _DragDismissKeyboardContainerState extends State<DragDismissKeyboardContai
       return widget.child;
     }
     return NotificationListener<ScrollUpdateNotification>(
-      child: widget.child,
       onNotification: (ScrollUpdateNotification notification) {
         if (widget.depth != notification.depth) {
           return false;
         }
-        final FocusScopeNode focusScope = FocusScope.of(context);
+        final focusScope = FocusScope.of(context);
         if (notification.dragDetails != null && focusScope.hasFocus) {
           focusScope.unfocus();
         }
         return false;
       },
+      child: widget.child,
     );
   }
 }

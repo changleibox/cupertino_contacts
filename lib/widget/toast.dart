@@ -3,7 +3,6 @@
  */
 
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,7 +10,7 @@ import 'package:flutter/widgets.dart';
 const double _kOffset = 15;
 const double _kMargin = 10;
 
-showText(
+void showText(
   String message,
   BuildContext context, {
   ToastDuration duration = ToastDuration.LENGTH_LONG,
@@ -47,16 +46,6 @@ enum ToastDuration {
 }
 
 class _ToastInfo {
-  final String message;
-  final ToastGravity gravity;
-  final Color background;
-  final Color textColor;
-  final double fontSize;
-  final double backgroundRadius;
-  final Border border;
-  final ToastDuration duration;
-  final ToastView toastView;
-
   _ToastInfo(
     this.toastView, {
     this.message,
@@ -68,10 +57,22 @@ class _ToastInfo {
     this.border,
     this.duration,
   });
+
+  final String message;
+  final ToastGravity gravity;
+  final Color background;
+  final Color textColor;
+  final double fontSize;
+  final double backgroundRadius;
+  final Border border;
+  final ToastDuration duration;
+  final ToastView toastView;
 }
 
 class Toast {
-  static LinkedHashMap<String, _ToastInfo> _toastMap = LinkedHashMap();
+  const Toast._();
+
+  static final _toastMap = <String, _ToastInfo>{};
 
   static void show(
     String message,
@@ -85,13 +86,13 @@ class Toast {
     Border border,
     bool single = false,
   }) {
-    showFirst() {
-      var keys = _toastMap.keys;
+    void showFirst() {
+      final keys = _toastMap.keys;
       if (keys.isEmpty) {
         return;
       }
-      var toastInfo = _toastMap[keys.first];
-      var toastView = toastInfo.toastView;
+      final toastInfo = _toastMap[keys.first];
+      final toastView = toastInfo.toastView;
       if (!single && toastView.isShowing) {
         return;
       }
@@ -138,7 +139,7 @@ class Toast {
       }
       _toastMap.clear();
     } else if (single && _toastMap.isNotEmpty) {
-      var toastInfo = _toastMap.values.single;
+      final toastInfo = _toastMap.values.single;
       _toastMap.clear();
       _toastMap[message] = _buildToastInfo(toastView: toastInfo.toastView);
     }
@@ -150,6 +151,10 @@ class Toast {
 }
 
 class ToastView {
+  ToastView(this.context, {this.onDismiss})
+      : assert(context != null),
+        _overlayState = Overlay.of(context);
+
   final BuildContext context;
   final OverlayState _overlayState;
   final VoidCallback onDismiss;
@@ -159,13 +164,9 @@ class ToastView {
   bool _isVisible = false;
   Timer _timer;
 
-  ToastView(this.context, {this.onDismiss})
-      : assert(context != null),
-        _overlayState = Overlay.of(context);
-
   bool get isShowing => _isVisible;
 
-  show(
+  void show(
     String message,
     ToastDuration duration,
     ToastGravity gravity,
@@ -180,7 +181,7 @@ class ToastView {
     ),
     EdgeInsetsGeometry padding,
   }) {
-    if (message == null || message.length == 0) {
+    if (message == null || message.isEmpty) {
       return;
     }
 
@@ -207,7 +208,7 @@ class ToastView {
 
     _animationController = AnimationController(
       vsync: _overlayState,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
 
     int dismissDuration;
@@ -221,19 +222,19 @@ class ToastView {
     _isVisible = true;
     _overlayState.insert(_overlayEntry);
     _animationController.forward(from: value);
-    _timer = new Timer(Duration(seconds: dismissDuration), () {
+    _timer = Timer(Duration(seconds: dismissDuration), () {
       dismiss();
     });
   }
 
-  dismiss() {
+  void dismiss() {
     if (!_isVisible) {
       return;
     }
     _animationController?.reverse()?.whenComplete(_onComplete);
   }
 
-  _onComplete({bool isDismiss = true}) {
+  void _onComplete({bool isDismiss = true}) {
     _animationController?.dispose();
     _animationController = null;
     _timer?.cancel();
@@ -264,7 +265,7 @@ class ToastWidget extends StatelessWidget {
     ),
     this.padding,
   })  : assert(animation != null),
-        assert(message != null && message.length > 0),
+        assert(message != null && message.isNotEmpty),
         assert(gravity != null),
         _curvedAnimation = CurvedAnimation(
           parent: animation,
@@ -286,17 +287,17 @@ class ToastWidget extends StatelessWidget {
   final Animation<double> _curvedAnimation;
 
   Color _themeBackgroundColor(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme colorScheme = theme.colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final onSurface = colorScheme.onSurface;
-    final bool isThemeDark = theme.brightness == Brightness.dark;
+    final isThemeDark = theme.brightness == Brightness.dark;
 
     return isThemeDark ? onSurface : Color.alphaBlend(onSurface.withOpacity(0.80), colorScheme.surface);
   }
 
   @override
   Widget build(BuildContext context) {
-    var child = Center(
+    final child = Center(
       child: Container(
         decoration: BoxDecoration(
           color: background ?? _themeBackgroundColor(context),
@@ -304,9 +305,9 @@ class ToastWidget extends StatelessWidget {
           border: border,
           boxShadow: boxShadow,
         ),
-        constraints: BoxConstraints(),
+        constraints: const BoxConstraints(),
         margin: margin,
-        padding: padding ?? EdgeInsets.all(10),
+        padding: padding ?? const EdgeInsets.all(10),
         child: Text(
           message,
           softWrap: true,

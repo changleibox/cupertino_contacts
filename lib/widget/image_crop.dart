@@ -5,24 +5,18 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as image;
-import 'dart:ui' as ui;
 
 const _kActiveOpacity = 0.3;
 const _kInactiveOpacity = 0.7;
 
 class _CropInfos {
-  final int srcWidth;
-  final int srcHeight;
-  final Uint8List bytes;
-  final double scale;
-  final Rect area;
-
   _CropInfos({
     this.srcWidth,
     this.srcHeight,
@@ -30,30 +24,36 @@ class _CropInfos {
     this.scale,
     this.area,
   });
+
+  final int srcWidth;
+  final int srcHeight;
+  final Uint8List bytes;
+  final double scale;
+  final Rect area;
 }
 
 Uint8List _cropImageAsSync(_CropInfos infos) {
-  var srcRect = Rect.fromLTWH(
+  final srcRect = Rect.fromLTWH(
     0,
     0,
     infos.srcWidth.toDouble(),
     infos.srcHeight.toDouble(),
   );
-  var cropRect = Rect.fromLTRB(
+  final cropRect = Rect.fromLTRB(
     max(srcRect.width * infos.area.left, srcRect.left),
     max(srcRect.height * infos.area.top, srcRect.top),
     min(srcRect.width * infos.area.right, srcRect.right),
     min(srcRect.height * infos.area.bottom, srcRect.bottom),
   );
 
-  var copyCropImage = image.copyCrop(
+  final copyCropImage = image.copyCrop(
     image.decodeImage(infos.bytes),
     cropRect.left.floor(),
     cropRect.top.floor(),
     cropRect.width.floor(),
     cropRect.height.floor(),
   );
-  return image.encodePng(copyCropImage);
+  return Uint8List.fromList(image.encodePng(copyCropImage));
 }
 
 Future<Uint8List> _cropImage(_CropInfos cropInfos) {
@@ -63,16 +63,10 @@ Future<Uint8List> _cropImage(_CropInfos cropInfos) {
 enum _CropAction { none, moving, scaling }
 
 class ImageCrop extends StatefulWidget {
-  final ImageProvider image;
-  final double maximumScale;
-  final ImageErrorListener onImageError;
-  final double chipRadius;
-  final BoxShape chipShape;
-
   const ImageCrop({
     Key key,
-    this.image,
-    this.maximumScale: 2.0,
+    @required this.image,
+    this.maximumScale = 2.0,
     this.onImageError,
     this.chipRadius = 150,
     this.chipShape = BoxShape.circle,
@@ -84,7 +78,7 @@ class ImageCrop extends StatefulWidget {
     File file, {
     Key key,
     double scale = 1.0,
-    this.maximumScale: 2.0,
+    this.maximumScale = 2.0,
     this.onImageError,
     this.chipRadius = 150,
     this.chipShape = BoxShape.circle,
@@ -98,7 +92,7 @@ class ImageCrop extends StatefulWidget {
     AssetBundle bundle,
     String package,
     this.chipRadius = 150,
-    this.maximumScale: 2.0,
+    this.maximumScale = 2.0,
     this.onImageError,
     this.chipShape = BoxShape.circle,
   })  : image = AssetImage(
@@ -108,6 +102,12 @@ class ImageCrop extends StatefulWidget {
         ),
         assert(maximumScale != null),
         super(key: key);
+
+  final ImageProvider image;
+  final double maximumScale;
+  final ImageErrorListener onImageError;
+  final double chipRadius;
+  final BoxShape chipShape;
 
   @override
   State<StatefulWidget> createState() => ImageCropState();
@@ -154,8 +154,8 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     if (_image == null) {
       return Future.error('图片解析失败');
     }
-    var byteData = await _image.toByteData(format: ui.ImageByteFormat.png);
-    var cropInfos = _CropInfos(
+    final byteData = await _image.toByteData(format: ui.ImageByteFormat.png);
+    final cropInfos = _CropInfos(
       srcWidth: _image.width,
       srcHeight: _image.height,
       bytes: Uint8List.view(byteData.buffer),
@@ -206,7 +206,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     _activate(0.0);
   }
 
-  void _getImage({bool force: false}) {
+  void _getImage({bool force = false}) {
     final oldImageStream = _imageStream;
     _imageStream = widget.image.resolve(createLocalImageConfiguration(context));
     if (_imageStream.key != oldImageStream?.key || force) {
@@ -270,7 +270,7 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     }
 
     final _deviceWidth = MediaQuery.of(context).size.width;
-    final _areaOffset = (_deviceWidth - (widget.chipRadius * 2));
+    final _areaOffset = _deviceWidth - (widget.chipRadius * 2);
     final _areaOffsetRadio = _areaOffset / _deviceWidth;
     final width = 1.0 - _areaOffsetRadio;
 
@@ -284,11 +284,11 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
         _image = imageInfo.image;
         _scale = imageInfo.scale;
 
-        var imageWidth = _image.width;
-        var imageHeight = _image.height;
+        final imageWidth = _image.width;
+        final imageHeight = _image.height;
 
-        var boundariesWidth = _boundaries.width;
-        var boundariesHeight = _boundaries.height;
+        final boundariesWidth = _boundaries.width;
+        final boundariesHeight = _boundaries.height;
 
         final chipDiameter = widget.chipRadius * 2;
         _ratio = max(
@@ -334,15 +334,15 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
   }
 
   Rect _getViewInBoundaries(double scale, Rect view) {
-    var left = min(view.left, _area.left * view.width / scale);
-    var right = _area.right * view.width / scale - 1.0;
-    var top = min(view.top, _area.top * view.height / scale);
-    var bottom = _area.bottom * view.height / scale - 1.0;
+    final left = min(view.left, _area.left * view.width / scale);
+    final right = _area.right * view.width / scale - 1.0;
+    final top = min(view.top, _area.top * view.height / scale);
+    final bottom = _area.bottom * view.height / scale - 1.0;
     return Offset(max(left, right), max(top, bottom)) & view.size;
   }
 
   double get _maximumScale {
-    var ratioAsScreen = max(
+    final ratioAsScreen = max(
       _boundaries.width / _image.width,
       _boundaries.height / _image.height,
     );
@@ -362,8 +362,8 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
       return;
     }
 
-    var targetScale;
-    var targetView;
+    double targetScale;
+    Rect targetView;
     if (_scale < _minimumScale) {
       targetScale = _minimumScale;
       targetView = _calculateView(targetScale);
@@ -419,8 +419,8 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
     }
   }
 
-  _calculateView(double targetScale) {
-    var scale = targetScale / _startScale;
+  Rect _calculateView(double targetScale) {
+    final scale = targetScale / _startScale;
     final dx = _boundaries.width * (1.0 - scale) / (_image.width * targetScale * _ratio);
     final dy = _boundaries.height * (1.0 - scale) / (_image.height * targetScale * _ratio);
 
@@ -434,15 +434,6 @@ class ImageCropState extends State<ImageCrop> with TickerProviderStateMixin {
 }
 
 class _CropPainter extends CustomPainter {
-  final ui.Image image;
-  final Rect view;
-  final double ratio;
-  final Rect area;
-  final double scale;
-  final double active;
-  final BoxShape chipShape;
-  final Color borderColor;
-
   const _CropPainter({
     this.image,
     this.view,
@@ -454,6 +445,15 @@ class _CropPainter extends CustomPainter {
     this.borderColor,
   });
 
+  final ui.Image image;
+  final Rect view;
+  final double ratio;
+  final Rect area;
+  final double scale;
+  final double active;
+  final BoxShape chipShape;
+  final Color borderColor;
+
   @override
   bool shouldRepaint(_CropPainter oldDelegate) {
     return oldDelegate.image != image ||
@@ -464,7 +464,7 @@ class _CropPainter extends CustomPainter {
         oldDelegate.scale != scale;
   }
 
-  Rect currentRect(size) {
+  Rect currentRect(Size size) {
     return Rect.fromLTWH(
       0,
       0,
@@ -473,8 +473,8 @@ class _CropPainter extends CustomPainter {
     );
   }
 
-  Rect currentBoundaries(size) {
-    var rect = currentRect(size);
+  Rect currentBoundaries(Size size) {
+    final rect = currentRect(size);
     return Rect.fromLTWH(
       rect.width * area.left,
       rect.height * area.top,
@@ -499,12 +499,12 @@ class _CropPainter extends CustomPainter {
     canvas.restore();
   }
 
-  _drawImage(Canvas canvas, Rect rect, Paint paint) {
+  void _drawImage(Canvas canvas, Rect rect, Paint paint) {
     if (image == null) {
       return;
     }
-    var imageWidth = image.width.toDouble();
-    var imageHeight = image.height.toDouble();
+    final imageWidth = image.width.toDouble();
+    final imageHeight = image.height.toDouble();
 
     final src = Rect.fromLTWH(
       0.0,
@@ -513,8 +513,8 @@ class _CropPainter extends CustomPainter {
       imageHeight,
     );
     final targetScale = scale * ratio;
-    var scaleWidth = imageWidth * targetScale;
-    var scaleHeight = imageHeight * targetScale;
+    final scaleWidth = imageWidth * targetScale;
+    final scaleHeight = imageHeight * targetScale;
     final dst = Rect.fromLTWH(
       view.left * scaleWidth,
       view.top * scaleHeight,
@@ -528,7 +528,7 @@ class _CropPainter extends CustomPainter {
     canvas.restore();
   }
 
-  _drawOverlay(Canvas canvas, Paint paint, Rect rect, Size size) {
+  void _drawOverlay(Canvas canvas, Paint paint, Rect rect, Size size) {
     paint.color = Color.fromRGBO(0x0, 0x0, 0x0, _kActiveOpacity * active + _kInactiveOpacity * (1.0 - active));
     final boundaries = currentBoundaries(size);
     final _path1 = Path()..addRect(Rect.fromLTRB(0.0, 0.0, rect.width, rect.height));
@@ -536,7 +536,7 @@ class _CropPainter extends CustomPainter {
     if (chipShape == BoxShape.rectangle) {
       _path2 = Path()..addRect(boundaries);
     } else {
-      var rRect = RRect.fromLTRBR(
+      final rRect = RRect.fromLTRBR(
         boundaries.left,
         boundaries.top,
         boundaries.right,

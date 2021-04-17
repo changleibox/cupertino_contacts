@@ -14,10 +14,6 @@ const double _defaultRefreshTriggerPullDistance = 100.0;
 const double _defaultRefreshIndicatorExtent = 60.0;
 
 class SupportSliverRefreshIndicator extends StatelessWidget {
-  final RefreshCallback onRefresh;
-  final double refreshTriggerPullDistance;
-  final double refreshIndicatorExtent;
-
   const SupportSliverRefreshIndicator({
     Key key,
     this.onRefresh,
@@ -32,6 +28,10 @@ class SupportSliverRefreshIndicator extends StatelessWidget {
             'The refresh indicator cannot take more space in its final state '
             'than the amount initially created by overscrolling.'),
         super(key: key);
+
+  final RefreshCallback onRefresh;
+  final double refreshTriggerPullDistance;
+  final double refreshIndicatorExtent;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class SupportSliverRefreshIndicator extends StatelessWidget {
     final progressOffset = math.min(pulledExtent / refreshTriggerPullDistance, 1.0);
     Widget child = Opacity(
       opacity: opacityCurve.transform(opacityOffset),
-      child: SupportCupertinoActivityIndicator(
+      child: const SupportCupertinoActivityIndicator(
         radius: 12.0,
       ),
     );

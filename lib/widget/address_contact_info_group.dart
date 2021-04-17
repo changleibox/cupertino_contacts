@@ -14,9 +14,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-信息组
 class AddressContactInfoGroup extends StatelessWidget {
-  final ContactInfoGroup infoGroup;
-  final TextInputType inputType;
-
   const AddressContactInfoGroup({
     Key key,
     @required this.infoGroup,
@@ -24,6 +21,9 @@ class AddressContactInfoGroup extends StatelessWidget {
   })  : assert(infoGroup != null),
         assert(inputType != null),
         super(key: key);
+
+  final ContactInfoGroup infoGroup;
+  final TextInputType inputType;
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +36,18 @@ class AddressContactInfoGroup extends StatelessWidget {
         );
       },
       itemBuilder: (context, item) {
-        var value = (item as AddressItem).value;
-        var street1 = value.street1;
-        var street2 = value.street2;
-        var city = value.city;
-        var region = value.region;
-        var postcode = value.postcode;
-        var country = value.country;
+        final value = (item as AddressItem).value;
+        final street1 = value.street1;
+        final street2 = value.street2;
+        final city = value.city;
+        final region = value.region;
+        final postcode = value.postcode;
+        final country = value.country;
         return WidgetGroup(
           alignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           direction: Axis.vertical,
-          divider: CupertinoDivider(),
+          divider: const CupertinoDivider(),
           children: [
             EditableInfoGroupItem(
               controller: street1.controller,

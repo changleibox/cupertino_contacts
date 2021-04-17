@@ -15,10 +15,10 @@ class LauncherPresenter extends Presenter<LauncherPage> {
 
   @override
   void postFrameCallback() {
-    _timer = Timer(Duration(seconds: 2), () {
+    _timer = Timer(const Duration(seconds: 2), () {
       _requestPermission().then((value) {
         Navigator.pushReplacementNamed(context, RouteProvider.home);
-      }).catchError((_) async {
+      }).catchError((dynamic _) {
         _showNotPermissionDialog();
       });
     });
@@ -32,7 +32,7 @@ class LauncherPresenter extends Presenter<LauncherPage> {
   }
 
   Future<void> _requestPermission() async {
-    var status = await Permission.contacts.request();
+    final status = await Permission.contacts.request();
     if (status != PermissionStatus.granted) {
       return Future.error('Permission denied.');
     }
@@ -43,16 +43,16 @@ class LauncherPresenter extends Presenter<LauncherPage> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: Text('提示'),
-          content: Text('没有通讯录权限，请在设置里授权，才能正常使用'),
+          title: const Text('提示'),
+          content: const Text('没有通讯录权限，请在设置里授权，才能正常使用'),
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
-              child: Text('去设置'),
               onPressed: () {
                 Navigator.pop(context);
                 openAppSettings();
               },
+              child: const Text('去设置'),
             ),
           ],
         );

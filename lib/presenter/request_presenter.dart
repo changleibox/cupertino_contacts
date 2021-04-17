@@ -74,7 +74,7 @@ mixin RequestPresenterMixin<T extends StatefulWidget, E> on Presenter<T> {
   }
 
   @protected
-  Future<dynamic> onLoad(bool showProgress);
+  Future<E> onLoad(bool showProgress);
 
   @protected
   void onLoaded(E object) {}
@@ -87,7 +87,7 @@ mixin RequestPresenterMixin<T extends StatefulWidget, E> on Presenter<T> {
     notifyDataSetChanged();
     return await request(showProgress)?.then((object) {
       _callback(object);
-    })?.catchError((error) {
+    })?.catchError((dynamic error) {
       _callback(null);
     })?.whenComplete(() {
       _isLoading = false;

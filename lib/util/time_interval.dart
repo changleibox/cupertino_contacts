@@ -34,10 +34,10 @@ class TimeInterval {
 
   static DateTime timeIntervalSinceAsIOS(DateTime dateTime, {int year = 2001, bool isUtc = false}) {
     assert(dateTime != null);
-    var currentYear = dateTime.year;
-    var currentMonth = dateTime.month;
+    final currentYear = dateTime.year;
+    final currentMonth = dateTime.month;
     if (currentYear % 4 == 0 && currentYear % 100 != 0 && currentMonth <= 2) {
-      dateTime = dateTime.subtract(Duration(days: 1));
+      dateTime = dateTime.subtract(const Duration(days: 1));
     }
     return timeIntervalSince(dateTime, year: year, isUtc: isUtc);
   }

@@ -6,27 +6,18 @@ import 'package:flutter/cupertino.dart';
 
 ///加载弹框
 class LoadPrompt {
-  final WillPopCallback onWillPop;
-  final Widget child;
-  final BuildContext context;
-  Widget _pageChild;
-
-  _PopRoute _popRoute;
-
   LoadPrompt(
     this.context, {
     this.onWillPop,
     this.child,
   }) {
-    final radius = 5.0;
-    Widget progressChild = child;
-    if (progressChild == null) {
-      progressChild = progress(radius: 12);
-    }
-    this._pageChild = WillPopScope(
+    const radius = 5.0;
+    var progressChild = child;
+    progressChild ??= progress(radius: 12);
+    _pageChild = WillPopScope(
       onWillPop: () async {
         _popRoute = null;
-        return onWillPop == null ? true : onWillPop();
+        return onWillPop == null ? true : await onWillPop();
       },
       child: Center(
         child: _Progress(
@@ -39,7 +30,7 @@ class LoadPrompt {
                 context,
               ),
               borderRadius: BorderRadius.circular(radius),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Color(0x55000000),
                   blurRadius: 3,
@@ -53,9 +44,16 @@ class LoadPrompt {
     );
   }
 
+  final WillPopCallback onWillPop;
+  final Widget child;
+  final BuildContext context;
+  Widget _pageChild;
+
+  _PopRoute _popRoute;
+
   ///展示
   void show() {
-    Navigator.push(
+    Navigator.push<void>(
       context,
       _popRoute = _PopRoute(
         pageBuilder: (context, animation, secondaryAnimation) {
@@ -82,13 +80,13 @@ class LoadPrompt {
 
 ///Widget
 class _Progress extends StatelessWidget {
-  final Widget child;
-
   const _Progress({
     Key key,
     @required this.child,
   })  : assert(child != null),
         super(key: key);
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +97,11 @@ class _Progress extends StatelessWidget {
 }
 
 ///Route
-class _PopRoute extends PopupRoute {
-  final Duration _duration = Duration(milliseconds: 200);
-  final RoutePageBuilder pageBuilder;
-
+class _PopRoute extends PopupRoute<void> {
   _PopRoute({@required this.pageBuilder}) : assert(pageBuilder != null);
+
+  final Duration _duration = const Duration(milliseconds: 200);
+  final RoutePageBuilder pageBuilder;
 
   @override
   Color get barrierColor => null;
@@ -117,15 +115,15 @@ class _PopRoute extends PopupRoute {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return Semantics(
-      child: pageBuilder(context, animation, secondaryAnimation),
       scopesRoute: true,
       explicitChildNodes: true,
+      child: pageBuilder(context, animation, secondaryAnimation),
     );
   }
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    var curvedAnimation = CurvedAnimation(
+    final curvedAnimation = CurvedAnimation(
       parent: animation,
       curve: Curves.linearToEaseOut,
       reverseCurve: Curves.fastLinearToSlowEaseIn,

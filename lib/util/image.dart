@@ -9,14 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as image;
 
 class ImageFilterSrc {
-  final Uint8List image;
-  final List<double> matrix;
-
   ImageFilterSrc({
     @required this.image,
     @required this.matrix,
   })  : assert(image != null),
         assert(matrix != null && matrix.length == 20);
+
+  final Uint8List image;
+  final List<double> matrix;
 }
 
 Future<Uint8List> _colorMatrixFilter(ImageFilterSrc params) {
@@ -24,21 +24,21 @@ Future<Uint8List> _colorMatrixFilter(ImageFilterSrc params) {
 }
 
 Uint8List _colorMatrixFilterAsSync(ImageFilterSrc params) {
-  var src = image.decodeImage(params.image);
-  var matrix = params.matrix;
+  final src = image.decodeImage(params.image);
+  final matrix = params.matrix;
 
-  var tmp = image.Image.from(src);
+  final tmp = image.Image.from(src);
 
   for (var y = 0; y < src.height; ++y) {
     for (var x = 0; x < src.width; ++x) {
-      var c = tmp.getPixel(x, y);
-      var red = image.getRed(c);
-      var green = image.getGreen(c);
-      var blue = image.getBlue(c);
-      var alpha = image.getAlpha(c);
+      final c = tmp.getPixel(x, y);
+      final red = image.getRed(c);
+      final green = image.getGreen(c);
+      final blue = image.getBlue(c);
+      final alpha = image.getAlpha(c);
 
-      var oldColors = [red, green, blue, alpha, 1.0];
-      var newColors = Float64List(4);
+      final oldColors = [red, green, blue, alpha, 1.0];
+      final newColors = Float64List(4);
 
       for (var col = 0; col < 5; ++col) {
         for (var row = 0; row < 4; ++row) {
@@ -60,7 +60,7 @@ Uint8List _colorMatrixFilterAsSync(ImageFilterSrc params) {
     }
   }
 
-  return image.encodePng(src);
+  return Uint8List.fromList(image.encodePng(src));
 }
 
 class ImageFilters {

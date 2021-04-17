@@ -10,9 +10,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-信息组的容器
 class EditContactGroupContainer extends StatelessWidget {
-  final int itemCount;
-  final IndexedWidgetBuilder itemBuilder;
-
   const EditContactGroupContainer({
     Key key,
     @required this.itemCount,
@@ -20,6 +17,9 @@ class EditContactGroupContainer extends StatelessWidget {
   })  : assert(itemCount != null),
         assert(itemBuilder != null),
         super(key: key);
+
+  final int itemCount;
+  final IndexedWidgetBuilder itemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,8 @@ class EditContactGroupContainer extends StatelessWidget {
         itemCount: itemCount,
         itemBuilder: itemBuilder,
         separatorBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(
+          return const Padding(
+            padding: EdgeInsets.only(
               left: 16,
             ),
             child: CupertinoDivider(),

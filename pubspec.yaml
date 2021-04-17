@@ -1,5 +1,6 @@
 name: cupertinocontacts
 description: 一个iOS风格的联系人
+publish_to: none
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -26,7 +27,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.1
   intl: ^0.17.0-nullsafety.2
-  flutter_contact: ^0.8.1+2
+  flutter_contact:
+    git:
+      url: https://github.com/changleibox/flutter_contact.git
+      ref: date_components_compat
   lpinyin: ^2.0.1
   image_picker: ^0.7.2
   collection: ^1.14.13

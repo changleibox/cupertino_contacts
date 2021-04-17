@@ -19,10 +19,10 @@ Widget _wrapWithBackground({
   Widget child,
   bool updateSystemUiOverlay = true,
 }) {
-  Widget result = child;
+  var result = child;
   if (updateSystemUiOverlay) {
-    final bool isDark = backgroundColor.computeLuminance() < 0.179;
-    final Brightness newBrightness = brightness ?? (isDark ? Brightness.dark : Brightness.light);
+    final isDark = backgroundColor.computeLuminance() < 0.179;
+    final newBrightness = brightness ?? (isDark ? Brightness.dark : Brightness.light);
     SystemUiOverlayStyle overlayStyle;
     switch (newBrightness) {
       case Brightness.dark:
@@ -39,7 +39,7 @@ Widget _wrapWithBackground({
       child: result,
     );
   }
-  final DecoratedBox childWithBackground = DecoratedBox(
+  final childWithBackground = DecoratedBox(
     decoration: BoxDecoration(
       border: border,
       color: backgroundColor,
@@ -47,7 +47,9 @@ Widget _wrapWithBackground({
     child: result,
   );
 
-  if (backgroundColor.alpha == 0xFF) return childWithBackground;
+  if (backgroundColor.alpha == 0xFF) {
+    return childWithBackground;
+  }
 
   return ClipRect(
     child: BackdropFilter(
@@ -61,14 +63,6 @@ Widget _wrapWithBackground({
 }
 
 class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final TextEditingController queryController;
-  final ValueChanged<String> onChanged;
-  final FocusScopeNode focusNode;
-  final double height;
-  final double minHeight;
-  final Color backgroundColor;
-  final Color color;
-
   const SearchBarHeaderDelegate({
     this.queryController,
     this.onChanged,
@@ -78,6 +72,14 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
     this.backgroundColor,
     this.color,
   }) : assert(height != null);
+
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final FocusScopeNode focusNode;
+  final double height;
+  final double minHeight;
+  final Color backgroundColor;
+  final Color color;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -102,14 +104,6 @@ class SearchBarHeaderDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class SearchBarHeader extends StatelessWidget {
-  final TextEditingController queryController;
-  final ValueChanged<String> onChanged;
-  final FocusNode focusNode;
-  final double height;
-  final Color backgroundColor;
-  final Color color;
-  final double opacity;
-
   const SearchBarHeader({
     this.queryController,
     this.onChanged,
@@ -119,6 +113,14 @@ class SearchBarHeader extends StatelessWidget {
     this.color,
     this.opacity,
   }) : assert(height != null);
+
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final FocusNode focusNode;
+  final double height;
+  final Color backgroundColor;
+  final Color color;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
@@ -150,16 +152,6 @@ class SearchBarHeader extends StatelessWidget {
 }
 
 class AnimatedSearchBarNavigationBar extends StatelessWidget {
-  final TextEditingController queryController;
-  final ValueChanged<String> onChanged;
-  final FocusNode focusNode;
-  final double height;
-  final Color backgroundColor;
-  final Color color;
-  final double opacity;
-  final VoidCallback onCancelPressed;
-  final Animation<double> animation;
-
   const AnimatedSearchBarNavigationBar({
     this.queryController,
     this.onChanged,
@@ -170,13 +162,23 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
     this.opacity,
     this.onCancelPressed,
     this.animation,
-  })  : assert(height != null);
+  }) : assert(height != null);
+
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final FocusNode focusNode;
+  final double height;
+  final Color backgroundColor;
+  final Color color;
+  final double opacity;
+  final VoidCallback onCancelPressed;
+  final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var value = animation?.value ?? 1.0;
-    var padding = EdgeInsets.only(
+    final width = MediaQuery.of(context).size.width;
+    final value = animation?.value ?? 1.0;
+    final padding = EdgeInsets.only(
       left: _kPadding,
       top: 10.0 - 6 * value,
       bottom: 10.0 + 6 * value,
@@ -208,11 +210,11 @@ class AnimatedSearchBarNavigationBar extends StatelessWidget {
                 right: 0.0,
               ),
               child: CupertinoButton(
-                child: Text('取消'),
                 minSize: 0,
                 borderRadius: BorderRadius.zero,
                 padding: EdgeInsets.zero,
                 onPressed: onCancelPressed,
+                child: const Text('取消'),
               ),
             ),
           ),

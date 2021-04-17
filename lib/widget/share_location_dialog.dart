@@ -4,37 +4,37 @@
 
 import 'package:flutter/cupertino.dart';
 
-showShareLocationDialog(BuildContext context) {
-  showCupertinoModalPopup(
+Future<void> showShareLocationDialog(BuildContext context) {
+  return showCupertinoModalPopup(
     context: context,
     builder: (context) {
       return CupertinoActionSheet(
-        title: Text('共享我的位置'),
+        title: const Text('共享我的位置'),
         actions: [
           CupertinoActionSheetAction(
-            child: Text('共享一小时'),
             onPressed: () {
               Navigator.pop(context);
             },
+            child: const Text('共享一小时'),
           ),
           CupertinoActionSheetAction(
-            child: Text('共享到当天结束'),
             onPressed: () {
               Navigator.pop(context);
             },
+            child: const Text('共享到当天结束'),
           ),
           CupertinoActionSheetAction(
-            child: Text('始终共享'),
             onPressed: () {
               Navigator.pop(context);
             },
+            child: const Text('始终共享'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text('取消'),
           onPressed: () {
             Navigator.pop(context);
           },
+          child: const Text('取消'),
         ),
       );
     },

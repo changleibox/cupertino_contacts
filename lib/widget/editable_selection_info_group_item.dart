@@ -11,11 +11,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 可编辑、可选择的item
 class EditableSelectionInfoGroupItem extends StatelessWidget {
-  final TextEditingController controller;
-  final TextInputType inputType;
-  final String name;
-  final VoidCallback onPressed;
-
   const EditableSelectionInfoGroupItem({
     Key key,
     @required this.controller,
@@ -26,6 +21,11 @@ class EditableSelectionInfoGroupItem extends StatelessWidget {
         assert(inputType != null),
         assert(name != null),
         super(key: key);
+
+  final TextEditingController controller;
+  final TextInputType inputType;
+  final String name;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class EditableSelectionInfoGroupItem extends StatelessWidget {
             onPressed: onPressed,
             borderRadius: BorderRadius.zero,
             padding: EdgeInsets.zero,
-            child: Icon(
+            child: const Icon(
               CupertinoIcons.info,
             ),
           ),

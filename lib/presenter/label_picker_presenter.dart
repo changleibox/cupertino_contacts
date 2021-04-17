@@ -22,9 +22,9 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
 
   @override
   Future<List<Selection>> onLoad(bool showProgress) async {
-    var originalSelections = selections.systemSelectionsAt(widget.selectionType);
-    var systemSelections = originalSelections.take(min(_kMaxLabelCount, originalSelections.length)).toList();
-    var selectedSelection = widget.selectedSelection;
+    final originalSelections = selections.systemSelectionsAt(widget.selectionType);
+    final systemSelections = originalSelections.take(min(_kMaxLabelCount, originalSelections.length)).toList();
+    final selectedSelection = widget.selectedSelection;
     if (selectedSelection != null && originalSelections.contains(selectedSelection) && !systemSelections.contains(selectedSelection)) {
       systemSelections.add(widget.selectedSelection);
     }
@@ -56,22 +56,22 @@ class LabelPickerPresenter extends ListPresenter<LabelPickerPage, Selection> {
     return widget.hideSelections == null || !widget.hideSelections.contains(selection);
   }
 
-  onCancelPressed() {
-    var selectedSelection = widget.selectedSelection;
+  void onCancelPressed() {
+    final selectedSelection = widget.selectedSelection;
     if (selectedSelection != null && !_customSelections.contains(selectedSelection)) {
       selections.addCustomSelection(widget.selectionType, selectedSelection.propertyName);
     }
     Navigator.pop(context);
   }
 
-  onItemPressed(Selection selection) {
+  void onItemPressed(Selection selection) {
     if (selection != null) {
       Navigator.pop(context, selection);
     }
   }
 
-  onAllLabelsPressed() {
-    Navigator.push(
+  void onAllLabelsPressed() {
+    Navigator.push<Selection>(
       context,
       RouteProvider.buildRoute(
         AllLabelsPage(

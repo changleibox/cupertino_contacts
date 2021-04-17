@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:typed_data';
+
 import 'package:cupertinocontacts/model/avatar.dart';
 import 'package:cupertinocontacts/page/crop_image_page.dart';
 import 'package:cupertinocontacts/page/edit_avatar_page.dart';
@@ -33,7 +35,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
   @override
   void initState() {
     rootBundle.load(Images.ic_default_avatar).then((value) {
-      var uint8list = value.buffer.asUint8List();
+      final uint8list = value.buffer.asUint8List();
       _defaultAvatar = Uint8ListAvatar(uint8list, editable: false);
       _proposals.add(_defaultAvatar);
       if (widget.avatar != null) {
@@ -49,9 +51,9 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
     if (avatar == null) {
       return;
     }
-    Navigator.push(
+    Navigator.push<dynamic>(
       context,
-      RouteProvider.buildRoute(
+      RouteProvider.buildRoute<dynamic>(
         EditAvatarPage(
           avatar: avatar,
           editable: avatar.editable,
@@ -59,18 +61,18 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
         ),
         fullscreenDialog: true,
       ),
-    ).then((result) {
+    ).then((dynamic result) {
       _onEditAvatarResult(avatar, result);
     });
   }
 
-  _onEditAvatarResult(Uint8ListAvatar avatar, dynamic result) {
+  void _onEditAvatarResult(Uint8ListAvatar avatar, dynamic result) {
     if (result == null || !(result is Map<String, dynamic>)) {
       return;
     }
-    var editType = result['type'] as EditAvatarType;
-    var data = result['data'] as Uint8ListAvatar;
-    var index = _proposals.indexOf(avatar);
+    final editType = result['type'] as EditAvatarType;
+    final data = result['data'] as Uint8ListAvatar;
+    final index = _proposals.indexOf(avatar);
     switch (editType) {
       case EditAvatarType.formulate:
         _avatar = data;
@@ -84,39 +86,38 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
         break;
       case EditAvatarType.delete:
         _proposals.remove(data);
-        var length = _proposals.length;
+        final length = _proposals.length;
         _avatar = index >= length ? _proposals[length - 1] : _proposals[index];
         break;
     }
     notifyDataSetChanged();
   }
 
-  onAllPicturePressed() {
+  void onAllPicturePressed() {
     ImagePicker().getImage(source: ImageSource.gallery).then((value) async {
       if (value == null) {
         return;
       }
       final src = await value.readAsBytes();
-      Navigator.push(
+      final result = await Navigator.push<Uint8List>(
         context,
         RouteProvider.buildRoute(
           CropImagePage(bytes: src),
           fullscreenDialog: true,
         ),
-      ).then((value) {
-        if (value == null) {
-          return;
-        }
-        _avatar = Uint8ListAvatar(src, target: value);
-        _proposals.removeWhere((element) => Collections.equals(element.src, _defaultAvatar.src));
-        _proposals.insert(0, _defaultAvatar);
-        _proposals.add(_avatar);
-        notifyDataSetChanged();
-      });
+      );
+      if (result == null) {
+        return;
+      }
+      _avatar = Uint8ListAvatar(src, target: result);
+      _proposals.removeWhere((element) => Collections.equals(element.src, _defaultAvatar.src));
+      _proposals.insert(0, _defaultAvatar);
+      _proposals.add(_avatar);
+      notifyDataSetChanged();
     });
   }
 
-  onCancelPressed() {
+  void onCancelPressed() {
     if (!isChanged) {
       Navigator.maybePop(context);
     } else {
@@ -128,7 +129,7 @@ class EditContactAvatarPresenter extends Presenter<EditContactAvatarPage> {
     }
   }
 
-  onDonePressed() {
+  void onDonePressed() {
     Navigator.pop(context, _avatar?.avatar);
   }
 }

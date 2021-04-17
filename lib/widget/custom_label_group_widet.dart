@@ -16,24 +16,18 @@ class CustomSelectionChangedNotification extends Notification {
 }
 
 class CustomSelectionAddNotification extends CustomSelectionChangedNotification {
-  final Selection selection;
-
   const CustomSelectionAddNotification(this.selection) : assert(selection != null);
+
+  final Selection selection;
 }
 
 class CustomSelectionRemoveNotification extends CustomSelectionChangedNotification {
-  final Selection selection;
-
   const CustomSelectionRemoveNotification(this.selection) : assert(selection != null);
+
+  final Selection selection;
 }
 
 class CustomLabelGroupWidet extends StatefulWidget {
-  final List<Selection> selections;
-  final SelectionType selectionType;
-  final Selection selectedSelection;
-  final LabelPageStatus status;
-  final ValueChanged<Selection> onItemPressed;
-
   const CustomLabelGroupWidet({
     Key key,
     @required this.selectionType,
@@ -45,6 +39,12 @@ class CustomLabelGroupWidet extends StatefulWidget {
         assert(selections != null),
         assert(status != null),
         super(key: key);
+
+  final List<Selection> selections;
+  final SelectionType selectionType;
+  final Selection selectedSelection;
+  final LabelPageStatus status;
+  final ValueChanged<Selection> onItemPressed;
 
   @override
   _CustomLabelGroupWidetState createState() => _CustomLabelGroupWidetState();
@@ -59,10 +59,10 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
   void initState() {
     _customLabelFocusNode.addListener(() {
       setState(() {});
-      var text = _customLabelController.text;
+      final text = _customLabelController.text;
       if (!_customLabelFocusNode.hasFocus && text != null && text.isNotEmpty) {
         _customLabelController.clear();
-        var selection = selections.addCustomSelection(widget.selectionType, text);
+        final selection = selections.addCustomSelection(widget.selectionType, text);
         if (selection != null && !widget.selections.contains(selection)) {
           widget.selections.insert(0, selection);
           CustomSelectionAddNotification(selection).dispatch(context);
@@ -93,7 +93,7 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
     return widget.status != LabelPageStatus.none;
   }
 
-  _onQueryFocusChanged() {
+  void _onQueryFocusChanged() {
     if (_isHideAddCustomLabelButton) {
       _globalKey.currentState.removeHeaderFooter(0, true);
     } else {
@@ -120,11 +120,11 @@ class _CustomLabelGroupWidetState extends State<CustomLabelGroupWidet> {
     );
   }
 
-  _onEditingComplete() {
-    var text = _customLabelController.text;
+  void _onEditingComplete() {
+    final text = _customLabelController.text;
     if (text != null && text.isNotEmpty) {
       _customLabelController.clear();
-      var selection = selections.addCustomSelection(widget.selectionType, text);
+      final selection = selections.addCustomSelection(widget.selectionType, text);
       if (selection != null && widget.onItemPressed != null) {
         widget.onItemPressed(selection);
       }

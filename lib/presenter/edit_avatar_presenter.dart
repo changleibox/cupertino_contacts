@@ -2,6 +2,8 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:typed_data';
+
 import 'package:cupertinocontacts/page/crop_image_page.dart';
 import 'package:cupertinocontacts/page/edit_avatar_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
@@ -16,15 +18,15 @@ enum EditAvatarType {
 }
 
 class EditAvatarPresenter extends Presenter<EditAvatarPage> {
-  onFormulatePressed() {
+  void onFormulatePressed() {
     Navigator.pop(context, {
       'data': widget.avatar,
       'type': EditAvatarType.formulate,
     });
   }
 
-  onEditPressed() {
-    Navigator.push(
+  void onEditPressed() {
+    Navigator.push<Uint8List>(
       context,
       RouteProvider.buildRoute(
         CropImagePage(bytes: widget.avatar.src),
@@ -42,38 +44,38 @@ class EditAvatarPresenter extends Presenter<EditAvatarPage> {
     });
   }
 
-  onCopyPressed() {
+  void onCopyPressed() {
     Navigator.pop(context, {
       'data': widget.avatar,
       'type': EditAvatarType.copy,
     });
   }
 
-  onDeletePressed() {
-    showCupertinoModalPopup(
+  void onDeletePressed() {
+    showCupertinoModalPopup<dynamic>(
       context: context,
       builder: (context) {
         return CupertinoActionSheet(
           actions: <Widget>[
             CupertinoActionSheetAction(
-              child: Text('删除'),
               isDestructiveAction: true,
               onPressed: () {
                 Navigator.pop(context, true);
               },
+              child: const Text('删除'),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text('取消'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, false);
             },
+            child: const Text('取消'),
           ),
         );
       },
-    ).then((value) {
-      if (value ?? false) {
+    ).then((dynamic value) {
+      if (value == true) {
         Navigator.pop(context, {
           'data': widget.avatar,
           'type': EditAvatarType.delete,

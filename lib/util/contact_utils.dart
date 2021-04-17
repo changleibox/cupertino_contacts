@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
 
 class ContactUtils {
+  const ContactUtils._();
+
   static final RegExp letterRegExp = RegExp(r'[A-Z|a-z]');
 
   static bool hasSpacing(Contact contact) {
@@ -13,7 +15,7 @@ class ContactUtils {
   }
 
   static List<Widget> buildDisplayNameWidgets(Contact contact) {
-    var hasSpacing = ContactUtils.hasSpacing(contact);
+    final hasSpacing = ContactUtils.hasSpacing(contact);
     final names = [
       Text(
         contact.prefix ?? '',
@@ -32,7 +34,7 @@ class ContactUtils {
       if (hasSpacing)
         Text(
           contact.familyName ?? '',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
           ),
         )

@@ -7,10 +7,10 @@ import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
 
-showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item> emails) {
-  var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-  final items = <Item>[]..addAll(phones)..addAll(emails);
-  showCupertinoModalPopup(
+Future<void> showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item> emails) {
+  final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+  final items = <Item>[...phones, ...emails];
+  return showCupertinoModalPopup(
     context: context,
     builder: (context) {
       final actions = <Widget>[];
@@ -48,10 +48,10 @@ showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item
       return CupertinoActionSheet(
         actions: actions,
         cancelButton: CupertinoActionSheetAction(
-          child: Text('取消'),
           onPressed: () {
             Navigator.pop(context);
           },
+          child: const Text('取消'),
         ),
       );
     },
@@ -59,10 +59,6 @@ showSendMessageDialog(BuildContext context, Iterable<Item> phones, Iterable<Item
 }
 
 class _SheetActionButton extends StatelessWidget {
-  final String label;
-  final String value;
-  final VoidCallback onPressed;
-
   const _SheetActionButton({
     Key key,
     @required this.label,
@@ -72,16 +68,26 @@ class _SheetActionButton extends StatelessWidget {
         assert(value != null),
         super(key: key);
 
+  final String label;
+  final String value;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
-    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+    final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
     return CupertinoButton(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 78,
         top: 10,
         right: 16,
         bottom: 10,
       ),
+      onPressed: () {
+        Navigator.pop(context);
+        if (onPressed != null) {
+          onPressed();
+        }
+      },
       child: Align(
         alignment: Alignment.centerLeft,
         child: WidgetGroup.spacing(
@@ -106,12 +112,6 @@ class _SheetActionButton extends StatelessWidget {
           ],
         ),
       ),
-      onPressed: () {
-        Navigator.pop(context);
-        if (onPressed != null) {
-          onPressed();
-        }
-      },
     );
   }
 }

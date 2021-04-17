@@ -10,10 +10,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-备注
 class EditContactRemarksTextField extends StatelessWidget {
-  final MultiEditableContactInfo info;
-  final int minLines;
-  final Color backgroundColor;
-
   const EditContactRemarksTextField({
     Key key,
     @required this.info,
@@ -23,16 +19,20 @@ class EditContactRemarksTextField extends StatelessWidget {
         assert(minLines != null),
         super(key: key);
 
+  final MultiEditableContactInfo info;
+  final int minLines;
+  final Color backgroundColor;
+
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textStyle = themeData.textTheme.textStyle;
+    final themeData = CupertinoTheme.of(context);
+    final textStyle = themeData.textTheme.textStyle;
     return Container(
       color: CupertinoDynamicColor.resolve(
         backgroundColor ?? CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 10,
       ),

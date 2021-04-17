@@ -14,17 +14,17 @@ Future<bool> showDeleteContactDialog(BuildContext context, Contact contact) {
         actions: [
           CupertinoActionSheetAction(
             isDestructiveAction: true,
-            child: Text('删除联系人'),
             onPressed: () {
               Navigator.pop(context, true);
             },
+            child: const Text('删除联系人'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          child: Text('取消'),
           onPressed: () {
             Navigator.pop(context, false);
           },
+          child: const Text('取消'),
         ),
       );
     },

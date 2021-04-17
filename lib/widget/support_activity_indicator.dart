@@ -61,17 +61,20 @@ class _SupportCupertinoActivityIndicatorState extends State<SupportCupertinoActi
       vsync: this,
     );
 
-    if (widget.animating) _controller.repeat();
+    if (widget.animating) {
+      _controller.repeat();
+    }
   }
 
   @override
   void didUpdateWidget(SupportCupertinoActivityIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.animating != oldWidget.animating) {
-      if (widget.animating)
+      if (widget.animating) {
         _controller.repeat();
-      else
+      } else {
         _controller.stop();
+      }
     }
   }
 
@@ -128,16 +131,16 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint();
+    final paint = Paint();
 
     canvas.save();
     canvas.translate(size.width / 2.0, size.height / 2.0);
 
-    final int activeTick = (_kTickCount * (progress ?? position.value)).floor();
+    final activeTick = (_kTickCount * (progress ?? position.value)).floor();
 
-    for (int i = 0; i < _kTickCount; ++i) {
-      final int t = (i + activeTick + 3) % _kTickCount;
-      int alpha = _alphaValues[t];
+    for (var i = 0; i < _kTickCount; ++i) {
+      final t = (i + activeTick + 3) % _kTickCount;
+      var alpha = _alphaValues[t];
       if (progress != null) {
         alpha = (_kTickCount - i - 3) % _kTickCount <= activeTick ? _alphaValues.first : 0;
       }

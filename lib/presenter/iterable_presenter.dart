@@ -55,6 +55,7 @@ abstract class IterablePresenter<T extends StatefulWidget, E> extends RequestPre
 
   @protected
   @override
+  // ignore: avoid_renaming_method_parameters
   void onCallback(Iterable<E> objects) {
     _objects.clear();
     if (objects != null && objects.isNotEmpty) {

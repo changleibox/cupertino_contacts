@@ -18,13 +18,13 @@ import 'package:flutter/foundation.dart';
 const double _padding = 16;
 
 class CropImagePage extends StatefulWidget {
-  final Uint8List bytes;
-
   const CropImagePage({
     Key key,
     @required this.bytes,
   })  : assert(bytes != null),
         super(key: key);
+
+  final Uint8List bytes;
 
   @override
   _CropImagePageState createState() => _CropImagePageState();
@@ -33,16 +33,16 @@ class CropImagePage extends StatefulWidget {
 class _CropImagePageState extends State<CropImagePage> {
   final _cropKey = GlobalKey<ImageCropState>();
 
-  _onCropPressed() {
-    var currentState = _cropKey.currentState;
+  void _onCropPressed() {
+    final currentState = _cropKey.currentState;
     if (currentState == null) {
       return;
     }
 
-    var loadPrompt = LoadPrompt(context)..show();
+    final loadPrompt = LoadPrompt(context)..show();
     currentState.cropImage().then((value) {
       loadPrompt.dismiss();
-      Navigator.push(
+      Navigator.push<Uint8List>(
         context,
         RouteProvider.buildRoute(
           StackFilterPage(bytes: value),
@@ -51,7 +51,7 @@ class _CropImagePageState extends State<CropImagePage> {
       ).then((value) {
         Navigator.pop(context, value);
       });
-    }).catchError((errot) {
+    }).catchError((dynamic error) {
       loadPrompt.dismiss();
     });
   }
@@ -97,28 +97,28 @@ class _CropImagePageState extends State<CropImagePage> {
                     alignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CupertinoButton(
-                        child: Text(
+                        padding: const EdgeInsets.all(_padding),
+                        onPressed: () {
+                          Navigator.maybePop(context);
+                        },
+                        child: const Text(
                           '取消',
                           style: TextStyle(
                             fontSize: 17,
                             color: CupertinoColors.white,
                           ),
                         ),
-                        padding: EdgeInsets.all(_padding),
-                        onPressed: () {
-                          Navigator.maybePop(context);
-                        },
                       ),
                       CupertinoButton(
-                        child: Text(
+                        padding: const EdgeInsets.all(_padding),
+                        onPressed: _onCropPressed,
+                        child: const Text(
                           '选取',
                           style: TextStyle(
                             fontSize: 17,
                             color: CupertinoColors.white,
                           ),
                         ),
-                        padding: EdgeInsets.all(_padding),
-                        onPressed: _onCropPressed,
                       ),
                     ],
                   ),

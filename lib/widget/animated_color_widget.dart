@@ -8,13 +8,13 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 滚动改变颜色
 abstract class AnimatedColorWidget extends StatefulWidget {
-  final ColorTween colorTween;
-
   const AnimatedColorWidget({
     Key key,
     @required this.colorTween,
   })  : assert(colorTween != null),
         super(key: key);
+
+  final ColorTween colorTween;
 
   Widget evaluateBuild(BuildContext context, Color color);
 
@@ -26,12 +26,12 @@ class _AnimatedColorWidgetState extends State<AnimatedColorWidget> {
   double _value = 1.0;
   ScrollController _scrollController;
 
-  _onScrollListener() {
+  void _onScrollListener() {
     if (_scrollController == null || !_scrollController.hasClients) {
       return;
     }
-    var position = _scrollController.position;
-    var maxScrollExtent = position.maxScrollExtent;
+    final position = _scrollController.position;
+    final maxScrollExtent = position.maxScrollExtent;
     _value = 1.0 - position.pixels / maxScrollExtent;
     if (!mounted) {
       return;
@@ -49,22 +49,21 @@ class _AnimatedColorWidgetState extends State<AnimatedColorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.evaluateBuild(context, widget.colorTween.transform(_value.clamp(0.0, 1.0)));
+    return widget.evaluateBuild(context, widget.colorTween.transform(_value.clamp(0.0, 1.0).toDouble()));
   }
 }
 
 typedef AnimatedColorBuilder = Widget Function(BuildContext context, Color color);
 
 class AnimatedColorWidgetBuilder extends AnimatedColorWidget {
-  final ColorTween colorTween;
-  final AnimatedColorBuilder builder;
-
-  AnimatedColorWidgetBuilder({
+  const AnimatedColorWidgetBuilder({
     Key key,
     @required this.builder,
-    this.colorTween,
+    ColorTween colorTween,
   })  : assert(builder != null),
         super(key: key, colorTween: colorTween);
+
+  final AnimatedColorBuilder builder;
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {

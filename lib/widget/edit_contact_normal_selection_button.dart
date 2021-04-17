@@ -10,15 +10,15 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-常用的选择按钮
 class EditContactNormalSelectionButton extends StatelessWidget {
-  final NormalSelectionContactInfo info;
-  final VoidCallback onPressed;
-
   const EditContactNormalSelectionButton({
     Key key,
     @required this.info,
     this.onPressed,
   })  : assert(info != null),
         super(key: key);
+
+  final NormalSelectionContactInfo info;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {

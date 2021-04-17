@@ -32,7 +32,7 @@ enum ContactItemType {
 }
 
 TextInputType convertInputType(ContactItemType itemType) {
-  TextInputType inputType = TextInputType.text;
+  var inputType = TextInputType.text;
   switch (itemType) {
     case ContactItemType.phone:
       inputType = TextInputType.phone;

@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 启动页
 class LauncherPage extends StatefulWidget {
-  LauncherPage({Key key}) : super(key: key);
+  const LauncherPage({Key key}) : super(key: key);
 
   @override
   _LauncherPageState createState() => _LauncherPageState();

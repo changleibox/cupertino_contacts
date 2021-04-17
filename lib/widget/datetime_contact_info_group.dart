@@ -9,19 +9,12 @@ import 'package:cupertinocontacts/widget/selection_info_group_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
+final _dateFormat = DateFormat('MM月dd日');
+
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
 class DateTimeContactInfoGroup extends StatelessWidget {
-  static final _dateFormat = DateFormat('MM月dd日');
-
-  final ContactInfoGroup<DateTimeItem> infoGroup;
-  final AddInterceptor addInterceptor;
-  final ChangeLabelInterceptor changeLabelInterceptor;
-  final SelectionsInterceptor selectionsInterceptor;
-  final ItemFactory itemFactory;
-  final bool canCustomLabel;
-
   const DateTimeContactInfoGroup({
     Key key,
     @required this.infoGroup,
@@ -33,6 +26,13 @@ class DateTimeContactInfoGroup extends StatelessWidget {
   })  : assert(infoGroup != null),
         assert(canCustomLabel != null),
         super(key: key);
+
+  final ContactInfoGroup<DateTimeItem> infoGroup;
+  final AddInterceptor addInterceptor;
+  final ChangeLabelInterceptor changeLabelInterceptor;
+  final SelectionsInterceptor selectionsInterceptor;
+  final ItemFactory itemFactory;
+  final bool canCustomLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +51,11 @@ class DateTimeContactInfoGroup extends StatelessWidget {
           builder: (context, setState) {
             return SelectionInfoGroupItem(
               item: item,
-              valueGetter: () => _dateFormat.format(item.value),
+              valueGetter: () => _dateFormat.format(item.value as DateTime),
               onPressed: () {
                 showSelectDateDialog(
                   context,
-                  initialDate: item.value,
+                  initialDate: item.value as DateTime,
                   onDateChanged: (value) {
                     item.value = value;
                     setState(() {});

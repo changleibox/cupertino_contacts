@@ -45,7 +45,7 @@ abstract class PageState<T extends StatefulWidget> extends State<T> implements S
   @mustCallSuper
   @override
   Widget build(BuildContext context) {
-    Widget child = onBuild(context);
+    var child = onBuild(context);
     if (needCallBackPressed) {
       child = WillPopScope(
         onWillPop: onBackPressed,
@@ -93,6 +93,7 @@ abstract class PageState<T extends StatefulWidget> extends State<T> implements S
   @override
   void onRootTap() => hideKeyboard();
 
+  @override
   Widget onBuild(BuildContext context) => builds(context);
 
   @protected
@@ -114,11 +115,11 @@ abstract class PageState<T extends StatefulWidget> extends State<T> implements S
 }
 
 abstract class PresenterState<T extends StatefulWidget, P extends Presenter<T>> extends PageState<T> {
-  final P presenter;
-
   PresenterState(this.presenter) : assert(presenter != null) {
     presenter?.state = this;
   }
+
+  final P presenter;
 
   @mustCallSuper
   @protected

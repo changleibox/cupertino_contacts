@@ -8,11 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
 class SliverListView extends StatelessWidget {
-  final Axis scrollDirection;
-  final EdgeInsetsGeometry padding;
-  final double itemExtent;
-  final SliverChildDelegate childrenDelegate;
-
   SliverListView({
     Key key,
     this.scrollDirection = Axis.vertical,
@@ -66,7 +61,7 @@ class SliverListView extends StatelessWidget {
         itemExtent = null,
         childrenDelegate = SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            final int itemIndex = index ~/ 2;
+            final itemIndex = index ~/ 2;
             Widget widget;
             if (index.isEven) {
               widget = itemBuilder(context, itemIndex);
@@ -100,6 +95,11 @@ class SliverListView extends StatelessWidget {
   })  : assert(childrenDelegate != null),
         super(key: key);
 
+  final Axis scrollDirection;
+  final EdgeInsetsGeometry padding;
+  final double itemExtent;
+  final SliverChildDelegate childrenDelegate;
+
   int get estimatedChildCount => childrenDelegate.estimatedChildCount;
 
   @override
@@ -116,13 +116,13 @@ class SliverListView extends StatelessWidget {
     if (estimatedChildCount == 0) {
       return sliver;
     }
-    EdgeInsetsGeometry effectivePadding = padding;
+    var effectivePadding = padding;
     if (padding == null) {
-      final MediaQueryData mediaQuery = MediaQuery.of(context);
+      final mediaQuery = MediaQuery.of(context);
       if (mediaQuery != null) {
         // Automatically pad sliver with padding from MediaQuery.
-        final EdgeInsets mediaQueryHorizontalPadding = mediaQuery.padding.copyWith(top: 0.0, bottom: 0.0);
-        final EdgeInsets mediaQueryVerticalPadding = mediaQuery.padding.copyWith(left: 0.0, right: 0.0);
+        final mediaQueryHorizontalPadding = mediaQuery.padding.copyWith(top: 0.0, bottom: 0.0);
+        final mediaQueryVerticalPadding = mediaQuery.padding.copyWith(left: 0.0, right: 0.0);
         // Consume the main axis padding with SliverPadding.
         effectivePadding = scrollDirection == Axis.vertical ? mediaQueryVerticalPadding : mediaQueryHorizontalPadding;
         // Leave behind the cross axis padding.

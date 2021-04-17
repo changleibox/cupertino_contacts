@@ -19,7 +19,7 @@ abstract class ChildDelegate {
 
   @override
   String toString() {
-    final List<String> description = <String>[];
+    final description = <String>[];
     debugFillDescription(description);
     return '${describeIdentity(this)}(${description.join(", ")})';
   }
@@ -29,8 +29,10 @@ abstract class ChildDelegate {
   @mustCallSuper
   void debugFillDescription(List<String> description) {
     try {
-      final int children = estimatedChildCount;
-      if (children != null) description.add('estimated child count: $children');
+      final children = estimatedChildCount;
+      if (children != null) {
+        description.add('estimated child count: $children');
+      }
     } catch (e) {
       description.add('estimated child count: EXCEPTION (${e.runtimeType})');
     }
@@ -75,22 +77,32 @@ class ChildBuilderDelegate extends ChildDelegate {
   @override
   Widget build(BuildContext context, int index) {
     assert(builder != null);
-    if (index < 0 || (childCount != null && index >= childCount)) return null;
+    if (index < 0 || (childCount != null && index >= childCount)) {
+      return null;
+    }
     Widget child;
     try {
       child = builder(context, index);
     } catch (exception, stackTrace) {
       child = _createErrorWidget(exception, stackTrace);
     }
-    if (child == null) return null;
-    final Key key = child.key != null ? _SaltedValueKey(child.key) : null;
-    if (addRepaintBoundaries) child = RepaintBoundary(child: child);
-    if (addSemanticIndexes) {
-      final int semanticIndex = semanticIndexCallback(child, index);
-      if (semanticIndex != null) child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+    if (child == null) {
+      return null;
     }
-    if (addAutomaticKeepAlives) child = AutomaticKeepAlive(child: child);
-    return addRepaintBoundaries || addSemanticIndexes || addAutomaticKeepAlives ? KeyedSubtree(child: child, key: key) : child;
+    final Key key = child.key != null ? _SaltedValueKey(child.key) : null;
+    if (addRepaintBoundaries) {
+      child = RepaintBoundary(child: child);
+    }
+    if (addSemanticIndexes) {
+      final semanticIndex = semanticIndexCallback(child, index);
+      if (semanticIndex != null) {
+        child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+      }
+    }
+    if (addAutomaticKeepAlives) {
+      child = AutomaticKeepAlive(child: child);
+    }
+    return addRepaintBoundaries || addSemanticIndexes || addAutomaticKeepAlives ? KeyedSubtree(key: key, child: child) : child;
   }
 
   @override
@@ -140,17 +152,25 @@ class ChildListDelegate extends ChildDelegate {
   @override
   Widget build(BuildContext context, int index) {
     assert(children != null);
-    if (index < 0 || index >= children.length) return null;
-    Widget child = children[index];
-    final Key key = child.key != null ? _SaltedValueKey(child.key) : null;
-    assert(child != null, "The children must not contain null values, but a null value was found at index $index");
-    if (addRepaintBoundaries) child = RepaintBoundary(child: child);
-    if (addSemanticIndexes) {
-      final int semanticIndex = semanticIndexCallback(child, index);
-      if (semanticIndex != null) child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+    if (index < 0 || index >= children.length) {
+      return null;
     }
-    if (addAutomaticKeepAlives) child = AutomaticKeepAlive(child: child);
-    return addRepaintBoundaries || addSemanticIndexes || addAutomaticKeepAlives ? KeyedSubtree(child: child, key: key) : child;
+    var child = children[index];
+    final Key key = child.key != null ? _SaltedValueKey(child.key) : null;
+    assert(child != null, 'The children must not contain null values, but a null value was found at index $index');
+    if (addRepaintBoundaries) {
+      child = RepaintBoundary(child: child);
+    }
+    if (addSemanticIndexes) {
+      final semanticIndex = semanticIndexCallback(child, index);
+      if (semanticIndex != null) {
+        child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+      }
+    }
+    if (addAutomaticKeepAlives) {
+      child = AutomaticKeepAlive(child: child);
+    }
+    return addRepaintBoundaries || addSemanticIndexes || addAutomaticKeepAlives ? KeyedSubtree(key: key, child: child) : child;
   }
 
   @override
@@ -159,7 +179,7 @@ class ChildListDelegate extends ChildDelegate {
 
 // Return a Widget for the given Exception
 Widget _createErrorWidget(dynamic exception, StackTrace stackTrace) {
-  final FlutterErrorDetails details = FlutterErrorDetails(
+  final details = FlutterErrorDetails(
     exception: exception,
     stack: stackTrace,
     library: 'widgets library',

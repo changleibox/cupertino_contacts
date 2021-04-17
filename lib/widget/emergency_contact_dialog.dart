@@ -6,14 +6,17 @@ import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contact/contact.dart';
 
-showAddEmergencyContactDialog(BuildContext context, List<Item> phones) {
-  showCupertinoModalPopup(
+Future<void> showAddEmergencyContactDialog(BuildContext context, List<Item> phones) {
+  return showCupertinoModalPopup(
     context: context,
     builder: (context) {
       return CupertinoActionSheet(
-        title: Text('您要为紧急联系人添加哪个电话号码？'),
+        title: const Text('您要为紧急联系人添加哪个电话号码？'),
         actions: phones.map((e) {
           return CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: WidgetGroup.spacing(
               alignment: MainAxisAlignment.center,
               direction: Axis.vertical,
@@ -24,23 +27,20 @@ showAddEmergencyContactDialog(BuildContext context, List<Item> phones) {
                 ),
                 Text(
                   e.value,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
                     color: Color(0xFF8F8F8F),
                   ),
                 ),
               ],
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           );
         }).toList(),
         cancelButton: CupertinoActionSheetAction(
-          child: Text('取消'),
           onPressed: () {
             Navigator.pop(context);
           },
+          child: const Text('取消'),
         ),
       );
     },

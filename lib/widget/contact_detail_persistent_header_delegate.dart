@@ -22,15 +22,6 @@ const double _kNavigationBarHeight = 32;
 const double _kNormalTextSize = 17.0;
 
 class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Contact contact;
-  final double maxAvatarSize;
-  final double minAvatarSize;
-  final double maxNameSize;
-  final double minNameSize;
-  final double paddingTop;
-  final DetailLaunchMode launchMode;
-  final String routeTitle;
-
   const ContactDetailPersistentHeaderDelegate({
     @required this.contact,
     @required this.maxAvatarSize,
@@ -47,17 +38,26 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
         assert(paddingTop != null),
         assert(launchMode != null);
 
+  final Contact contact;
+  final double maxAvatarSize;
+  final double minAvatarSize;
+  final double maxNameSize;
+  final double minNameSize;
+  final double paddingTop;
+  final DetailLaunchMode launchMode;
+  final String routeTitle;
+
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
-    var textStyle = textTheme.textStyle;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
+    final textStyle = textTheme.textStyle;
 
     final isSelection = launchMode == DetailLaunchMode.selection;
 
     final scrollExtent = maxExtent - minExtent;
     final offset = 1.0 - shrinkOffset / scrollExtent;
-    final opacity = (1 - (1.8 * (1 - offset))).clamp(0.0, 1.0);
+    final opacity = (1 - (1.8 * (1 - offset))).clamp(0.0, 1.0).toDouble();
 
     return Container(
       color: CupertinoDynamicColor.resolve(
@@ -76,7 +76,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
           ),
         ),
       ),
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         bottom: _kPaddingBottom,
       ),
       child: Stack(
@@ -90,12 +90,11 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
               border: null,
               previousPageTitle: launchMode != DetailLaunchMode.editView ? '通讯录' : '返回',
               trailing: NavigationBarAction(
-                child: Text(isSelection ? '链接' : '编辑'),
                 onPressed: () {
                   if (isSelection) {
                     Navigator.pop(context, contact);
                   } else {
-                    Navigator.push(
+                    Navigator.push<void>(
                       context,
                       _PageRoute(
                         fullscreenDialog: true,
@@ -110,6 +109,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
                     );
                   }
                 },
+                child: Text(isSelection ? '链接' : '编辑'),
               ),
             ),
           ),
@@ -235,10 +235,6 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
 }
 
 class _OperationButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final VoidCallback onPressed;
-
   const _OperationButton({
     Key key,
     @required this.icon,
@@ -248,12 +244,17 @@ class _OperationButton extends StatelessWidget {
         assert(text != null),
         super(key: key);
 
+  final IconData icon;
+  final String text;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
       padding: EdgeInsets.zero,
       minSize: 0,
       borderRadius: BorderRadius.zero,
+      onPressed: onPressed,
       child: WidgetGroup.spacing(
         alignment: MainAxisAlignment.center,
         direction: Axis.vertical,
@@ -262,7 +263,7 @@ class _OperationButton extends StatelessWidget {
           Builder(
             builder: (context) {
               final enabled = onPressed != null;
-              var color = IconTheme.of(context).color;
+              final color = IconTheme.of(context).color;
               return Container(
                 width: 36,
                 height: 36,
@@ -286,14 +287,13 @@ class _OperationButton extends StatelessWidget {
           ),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               height: 1.0,
             ),
           ),
         ],
       ),
-      onPressed: onPressed,
     );
   }
 }

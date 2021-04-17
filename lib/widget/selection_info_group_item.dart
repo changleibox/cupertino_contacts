@@ -12,11 +12,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 编辑联系人
 class SelectionInfoGroupItem extends StatelessWidget {
-  final GroupItem item;
-  final VoidCallback onPressed;
-  final ValueGetter<String> valueGetter;
-  final bool hasStartDivier;
-
   const SelectionInfoGroupItem({
     Key key,
     @required this.item,
@@ -26,6 +21,11 @@ class SelectionInfoGroupItem extends StatelessWidget {
   })  : assert(item != null),
         assert(hasStartDivier != null),
         super(key: key);
+
+  final GroupItem item;
+  final VoidCallback onPressed;
+  final ValueGetter<String> valueGetter;
+  final bool hasStartDivier;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class SelectionInfoGroupItem extends StatelessWidget {
           Expanded(
             child: Container(
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 10,
               ),
               child: Text(

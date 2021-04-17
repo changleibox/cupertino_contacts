@@ -31,13 +31,6 @@ abstract class EditContactOperation implements ValueListenable<Contact> {
 }
 
 class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double maxAvatarSize;
-  final double minAvatarSize;
-  final double paddingTop;
-  final bool isEditContact;
-  final String routeTitle;
-  final EditContactOperation operation;
-
   const EditContactPersistentHeaderDelegate({
     @required this.maxAvatarSize,
     @required this.minAvatarSize,
@@ -50,6 +43,13 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
         assert(paddingTop != null),
         assert(isEditContact != null),
         assert(operation != null);
+
+  final double maxAvatarSize;
+  final double minAvatarSize;
+  final double paddingTop;
+  final bool isEditContact;
+  final String routeTitle;
+  final EditContactOperation operation;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -73,7 +73,7 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
           ),
         ),
       ),
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         bottom: _kPaddingBottom,
       ),
       child: Stack(
@@ -85,17 +85,17 @@ class EditContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
             child: CupertinoNavigationBar(
               backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
-              middle: isEditContact ? null : Text('新建联系人'),
+              middle: isEditContact ? null : const Text('新建联系人'),
               leading: NavigationBarAction(
-                child: Text('取消'),
                 onPressed: operation.onCancelPressed,
+                child: const Text('取消'),
               ),
               trailing: ValueListenableBuilder<Contact>(
                 valueListenable: operation,
                 builder: (context, value, child) {
                   return NavigationBarAction(
-                    child: Text(isEditContact ? '更新' : '完成'),
                     onPressed: operation.isChanged ? operation.onDonePressed : null,
+                    child: Text(isEditContact ? '更新' : '完成'),
                   );
                 },
               ),

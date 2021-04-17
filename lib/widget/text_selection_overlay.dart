@@ -6,13 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
 class SimpleTextSelectionOverlay {
-  final BuildContext context;
-  final LayerLink toolbarLayerLink;
-  final RenderBox renderObject;
-  final TextSelectionDelegate delegate;
-
-  OverlayEntry _toolbar;
-
   SimpleTextSelectionOverlay({
     @required this.context,
     @required this.toolbarLayerLink,
@@ -22,7 +15,7 @@ class SimpleTextSelectionOverlay {
         assert(toolbarLayerLink != null),
         assert(renderObject != null),
         assert(delegate != null) {
-    final OverlayState overlay = Overlay.of(context, rootOverlay: true);
+    final overlay = Overlay.of(context, rootOverlay: true);
     assert(
         overlay != null,
         'No Overlay widget exists above $context.\n'
@@ -30,6 +23,13 @@ class SimpleTextSelectionOverlay {
         'app content was created above the Navigator with the WidgetsApp builder parameter.');
     _toolbarController = AnimationController(duration: fadeDuration, vsync: overlay);
   }
+
+  final BuildContext context;
+  final LayerLink toolbarLayerLink;
+  final RenderBox renderObject;
+  final TextSelectionDelegate delegate;
+
+  OverlayEntry _toolbar;
 
   bool get toolbarIsVisible => _toolbar != null;
 
@@ -59,9 +59,9 @@ class SimpleTextSelectionOverlay {
 
   Widget _buildToolbar(BuildContext context) {
     if (!renderObject.attached) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
-    final Rect editingRegion = Rect.fromPoints(
+    final editingRegion = Rect.fromPoints(
       renderObject.localToGlobal(Offset.zero),
       renderObject.localToGlobal(renderObject.size.bottomRight(Offset.zero)),
     );
@@ -78,8 +78,8 @@ class SimpleTextSelectionOverlay {
           0,
           Offset(editingRegion.width / 2, 0),
           [
-            TextSelectionPoint(Offset(0, 0), Directionality.of(context)),
-            TextSelectionPoint(Offset(0, 0), Directionality.of(context)),
+            TextSelectionPoint(const Offset(0, 0), Directionality.of(context)),
+            TextSelectionPoint(const Offset(0, 0), Directionality.of(context)),
           ],
           delegate,
           ClipboardStatusNotifier(),

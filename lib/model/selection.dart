@@ -19,17 +19,17 @@ enum SelectionType {
 }
 
 class Selection {
-  final String propertyName;
-  final String labelName;
-  final String selectionName;
-
   const Selection._(
     this.propertyName, {
     String labelName,
     String selectionName,
   })  : assert(propertyName != null),
-        this.labelName = labelName ?? selectionName ?? propertyName,
-        this.selectionName = selectionName ?? labelName ?? propertyName;
+        labelName = labelName ?? selectionName ?? propertyName,
+        selectionName = selectionName ?? labelName ?? propertyName;
+
+  final String propertyName;
+  final String labelName;
+  final String selectionName;
 
   @override
   bool operator ==(Object other) =>
@@ -47,14 +47,14 @@ class Selection {
 final _Selections selections = _Selections.instance;
 
 class _SelectionGroup {
-  final Map<String, Selection> _systemSelectionsMap = LinkedHashMap();
-  final Map<String, Selection> _customSelectionsMap = LinkedHashMap();
-
   _SelectionGroup.fromList(List<Selection> selections) {
-    selections?.forEach((element) {
-      _systemSelectionsMap[element.propertyName] = element;
-    });
+    if (selections != null) {
+      _systemSelectionsMap.addEntries(selections?.map((e) => MapEntry(e.propertyName, e)));
+    }
   }
+
+  final _systemSelectionsMap = <String, Selection>{};
+  final _customSelectionsMap = <String, Selection>{};
 
   List<Selection> get systemSelections => _systemSelectionsMap.values.toList();
 
@@ -65,7 +65,7 @@ class _SelectionGroup {
     if (_customSelectionsMap.containsKey(propertyName)) {
       return _customSelectionsMap[propertyName];
     }
-    var selection = Selection._(propertyName);
+    final selection = Selection._(propertyName);
     _customSelectionsMap[propertyName] = selection;
     return selection;
   }
@@ -82,20 +82,6 @@ class _SelectionGroup {
 }
 
 abstract class _Selections {
-  final Map<SelectionType, _SelectionGroup> _selectionsMap = HashMap();
-
-  final iPhoneSelection = Selection._('iPhone');
-
-  static _Selections get instance {
-    switch (Platform.operatingSystem) {
-      case 'android':
-        return _AndroidSelections.instance;
-      case 'ios':
-        return _IOSSelections.instance;
-    }
-    return _UnsupportedSelections.instance;
-  }
-
   _Selections() {
     _selectionsMap[SelectionType.phone] = _SelectionGroup.fromList(phoneSelections);
     _selectionsMap[SelectionType.email] = _SelectionGroup.fromList(emailSelections);
@@ -107,6 +93,20 @@ abstract class _Selections {
     _selectionsMap[SelectionType.socialData] = _SelectionGroup.fromList(socialDataSelections);
     _selectionsMap[SelectionType.instantMessaging] = _SelectionGroup.fromList(instantMessagingSelections);
     _selectionsMap[SelectionType.linkContact] = _SelectionGroup.fromList(linkContactSelections);
+  }
+
+  final Map<SelectionType, _SelectionGroup> _selectionsMap = HashMap();
+
+  final iPhoneSelection = const Selection._('iPhone');
+
+  static _Selections get instance {
+    switch (Platform.operatingSystem) {
+      case 'android':
+        return _AndroidSelections.instance;
+      case 'ios':
+        return _IOSSelections.instance;
+    }
+    return _UnsupportedSelections.instance;
   }
 
   List<Selection> get phoneSelections;
@@ -146,7 +146,7 @@ abstract class _Selections {
   Selection addCustomSelection(SelectionType type, String propertyName) {
     assert(type != null);
     assert(propertyName != null);
-    var selectionGroup = _selectionsMap[type];
+    final selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     return selectionGroup.addCustomSelection(propertyName);
   }
@@ -154,7 +154,7 @@ abstract class _Selections {
   void removeCustomSelection(SelectionType type, Selection selection) {
     assert(type != null);
     assert(selection != null);
-    var selectionGroup = _selectionsMap[type];
+    final selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     selectionGroup.removeCustomSelection(selection);
   }
@@ -168,7 +168,7 @@ abstract class _Selections {
   Selection selectionAtName(SelectionType type, String propertyName) {
     assert(type != null);
     assert(propertyName != null);
-    var selectionGroup = _selectionsMap[type];
+    final selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     return selectionGroup[propertyName] ?? selectionGroup.addCustomSelection(propertyName);
   }
@@ -176,40 +176,38 @@ abstract class _Selections {
   Selection systemSelectionAtIndex(SelectionType type, int index) {
     assert(type != null);
     assert(index != null && index >= 0);
-    var list = systemSelectionsAt(type);
+    final list = systemSelectionsAt(type);
     return list[index % list.length];
   }
 
   List<Selection> systemSelectionsAt(SelectionType type) {
     assert(type != null);
-    var selectionGroup = _selectionsMap[type];
+    final selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     return selectionGroup.systemSelections;
   }
 
   List<Selection> customSelectionsAt(SelectionType type) {
     assert(type != null);
-    var selectionGroup = _selectionsMap[type];
+    final selectionGroup = _selectionsMap[type];
     assert(selectionGroup != null, 'undefine type=$type');
     return selectionGroup.customSelections;
   }
 }
 
 class _UnsupportedSelections extends _Selections {
+  factory _UnsupportedSelections() => _getInstance();
+
+  _UnsupportedSelections._() : super();
+
   static _UnsupportedSelections get instance => _getInstance();
 
   static _UnsupportedSelections _instance;
 
   static _UnsupportedSelections _getInstance() {
-    if (_instance == null) {
-      _instance = _UnsupportedSelections._();
-    }
+    _instance ??= _UnsupportedSelections._();
     return _instance;
   }
-
-  factory _UnsupportedSelections() => _getInstance();
-
-  _UnsupportedSelections._() : super();
 
   @override
   List<Selection> get phoneSelections => [otherSelection];
@@ -257,10 +255,23 @@ class _UnsupportedSelections extends _Selections {
   Selection get birthdaySelection => otherSelection;
 
   @override
-  Selection get otherSelection => Selection._('不支持');
+  Selection get otherSelection => const Selection._('不支持');
 }
 
 class _IOSSelections extends _Selections {
+  factory _IOSSelections() => _getInstance();
+
+  _IOSSelections._() : super();
+
+  static _IOSSelections get instance => _getInstance();
+
+  static _IOSSelections _instance;
+
+  static _IOSSelections _getInstance() {
+    _instance ??= _IOSSelections._();
+    return _instance;
+  }
+
   static const _birthdaySelection = Selection._('birthday', labelName: '生日', selectionName: '默认生日');
 
   static const _homeSelection = Selection._('住宅');
@@ -580,21 +591,6 @@ class _IOSSelections extends _Selections {
     Selection._('Gadu-Gadu'),
   ];
 
-  static _IOSSelections get instance => _getInstance();
-
-  static _IOSSelections _instance;
-
-  static _IOSSelections _getInstance() {
-    if (_instance == null) {
-      _instance = _IOSSelections._();
-    }
-    return _instance;
-  }
-
-  factory _IOSSelections() => _getInstance();
-
-  _IOSSelections._() : super();
-
   @override
   List<Selection> get phoneSelections => _phoneSelections;
 
@@ -645,6 +641,19 @@ class _IOSSelections extends _Selections {
 }
 
 class _AndroidSelections extends _Selections {
+  factory _AndroidSelections() => _getInstance();
+
+  _AndroidSelections._() : super();
+
+  static _AndroidSelections get instance => _getInstance();
+
+  static _AndroidSelections _instance;
+
+  static _AndroidSelections _getInstance() {
+    _instance ??= _AndroidSelections._();
+    return _instance;
+  }
+
   static const _birthdaySelection = Selection._('birthday', labelName: '生日', selectionName: '默认生日');
 
   static const _homeSelection = Selection._('home', labelName: '住宅');
@@ -749,21 +758,6 @@ class _AndroidSelections extends _Selections {
     Selection._('QQ'),
     Selection._('Gadu-Gadu'),
   ];
-
-  static _AndroidSelections get instance => _getInstance();
-
-  static _AndroidSelections _instance;
-
-  static _AndroidSelections _getInstance() {
-    if (_instance == null) {
-      _instance = _AndroidSelections._();
-    }
-    return _instance;
-  }
-
-  factory _AndroidSelections() => _getInstance();
-
-  _AndroidSelections._() : super();
 
   @override
   List<Selection> get phoneSelections => _phoneSelections;

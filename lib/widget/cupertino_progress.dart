@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class CupertinoProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: CupertinoActivityIndicator(
         radius: 14,
       ),

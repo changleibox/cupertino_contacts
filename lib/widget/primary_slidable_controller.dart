@@ -20,13 +20,13 @@ class PrimarySlidableController extends InheritedWidget {
   final SlidableController controller;
 
   static SlidableController of(BuildContext context) {
-    var primarySlidableController = context.dependOnInheritedWidgetOfExactType<PrimarySlidableController>();
+    final primarySlidableController = context.dependOnInheritedWidgetOfExactType<PrimarySlidableController>();
     return primarySlidableController?.controller;
   }
 
   @override
-  bool updateShouldNotify(PrimarySlidableController old) {
-    return controller != old.controller;
+  bool updateShouldNotify(PrimarySlidableController oldWidget) {
+    return controller != oldWidget.controller;
   }
 
   @override

@@ -37,15 +37,6 @@ enum ChangeLabelType {
 }
 
 class ContactInfoGroupWidget extends StatefulWidget {
-  final ContactInfoGroup infoGroup;
-  final GroupItemBuilder itemBuilder;
-  final ItemFactory itemFactory;
-  final AddInterceptor addInterceptor;
-  final ChangeLabelInterceptor changeLabelInterceptor;
-  final SelectionsInterceptor selectionsInterceptor;
-  final String addButtonText;
-  final bool canCustomLabel;
-
   const ContactInfoGroupWidget({
     Key key,
     @required this.infoGroup,
@@ -61,6 +52,15 @@ class ContactInfoGroupWidget extends StatefulWidget {
         assert(itemFactory != null),
         assert(canCustomLabel != null),
         super(key: key);
+
+  final ContactInfoGroup infoGroup;
+  final GroupItemBuilder itemBuilder;
+  final ItemFactory itemFactory;
+  final AddInterceptor addInterceptor;
+  final ChangeLabelInterceptor changeLabelInterceptor;
+  final SelectionsInterceptor selectionsInterceptor;
+  final String addButtonText;
+  final bool canCustomLabel;
 
   @override
   _ContactInfoGroupWidgetState createState() => _ContactInfoGroupWidgetState();
@@ -78,9 +78,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
 
   @override
   void initState() {
-    widget.infoGroup.value.forEach((element) {
-      _globalKeys.add(GlobalKey());
-    });
+    _globalKeys.addAll(widget.infoGroup.value.map((e) => GlobalKey()));
     _animationController = AnimationController(
       duration: _kDuration,
       vsync: this,
@@ -102,9 +100,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   void didUpdateWidget(ContactInfoGroupWidget oldWidget) {
     if (!Collections.equals(widget.infoGroup.value, oldWidget.infoGroup.value)) {
       _globalKeys.clear();
-      widget.infoGroup.value.forEach((element) {
-        _globalKeys.add(GlobalKey());
-      });
+      _globalKeys.addAll(widget.infoGroup.value.map((e) => GlobalKey()));
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -123,21 +119,15 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   }
 
   Widget _wrapSlidable(int index, GroupItem item, Widget child) {
-    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+    final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
     return Slidable.builder(
       controller: _slidableController,
       key: index < 0 ? null : _globalKeys[index],
       closeOnScroll: false,
-      actionPane: SlidableScrollActionPane(),
+      actionPane: const SlidableScrollActionPane(),
       secondaryActionDelegate: SlideActionListDelegate(
         actions: [
           SlideAction(
-            child: Text(
-              '删除',
-              style: textStyle.copyWith(
-                color: CupertinoColors.white,
-              ),
-            ),
             closeOnTap: true,
             color: CupertinoColors.destructiveRed,
             onTap: () {
@@ -149,6 +139,12 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
                 return _buildItemAsItem(item, animation);
               }, duration: _kDuration);
             },
+            child: Text(
+              '删除',
+              style: textStyle.copyWith(
+                color: CupertinoColors.white,
+              ),
+            ),
           ),
         ],
       ),
@@ -157,27 +153,27 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   }
 
   Widget _buildItemAsItem(GroupItem item, Animation<double> animation, {VoidCallback onDeletePressed}) {
-    var items = widget.infoGroup.value;
-    var index = items.indexOf(item);
+    final items = widget.infoGroup.value;
+    final index = items.indexOf(item);
     var borderStyle = BorderStyle.solid;
     if (index == items.length - 1 && _animation.value == 0.0) {
       borderStyle = BorderStyle.none;
     }
-    var labelCacheWidth;
+    double labelCacheWidth;
     if (index >= 0 && index < _labelWidts.length && _maxLabelWidth != null) {
       labelCacheWidth = max(_labelWidts[index], _maxLabelWidth);
     }
-    ChangeLabelType changeLabelType = ChangeLabelType.normal;
+    var changeLabelType = ChangeLabelType.normal;
     if (widget.changeLabelInterceptor != null) {
       changeLabelType = widget.changeLabelInterceptor(context, item);
     }
 
-    var hideSelections;
+    List<Selection> hideSelections;
     if (widget.selectionsInterceptor != null) {
       hideSelections = widget.selectionsInterceptor(context, item);
     }
 
-    Widget child = Container(
+    final Widget child = Container(
       foregroundDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -190,10 +186,10 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           ),
         ),
       ),
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: 16,
       ),
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         right: 10,
       ),
       child: SizeTransition(
@@ -217,7 +213,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
                 _labelWidts[index] = value;
               }
             }
-            var maxWidth = _labelWidts.isEmpty ? 0 : _labelWidts.reduce(max);
+            final maxWidth = _labelWidts.isEmpty ? 0.0 : _labelWidts.reduce(max);
             if (value < maxWidth) {
               return;
             }
@@ -231,8 +227,8 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   }
 
   Widget _buildItem(int index, Animation<double> animation) {
-    var items = widget.infoGroup.value;
-    var item = items[index];
+    final items = widget.infoGroup.value;
+    final item = items[index];
     return _buildItemAsItem(
       item,
       animation,
@@ -242,12 +238,12 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     );
   }
 
-  _onAddPressed() {
+  void _onAddPressed() {
     if (!_animationController.isCompleted || _animationController.value != 1.0) {
       return;
     }
-    var length = widget.infoGroup.value.length;
-    var itemType = widget.infoGroup.selectionType;
+    final length = widget.infoGroup.value.length;
+    final itemType = widget.infoGroup.selectionType;
     widget.itemFactory(length, selections.systemSelectionAtIndex(itemType, length)).then((value) {
       if (value == null) {
         return;
@@ -259,8 +255,8 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
     });
   }
 
-  _onRemovePressed(int index) {
-    var currentState = _globalKeys[index].currentState;
+  void _onRemovePressed(int index) {
+    final currentState = _globalKeys[index].currentState;
     if (currentState == null) {
       return;
     }
@@ -268,12 +264,12 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
   }
 
   double get _animateToValue {
-    var showButton = widget.addInterceptor == null || widget.addInterceptor(context);
+    final showButton = widget.addInterceptor == null || widget.addInterceptor(context);
     return showButton ? 1.0 : 0.0;
   }
 
-  _notifyButtonState() {
-    var animateToValue = _animateToValue;
+  void _notifyButtonState() {
+    final animateToValue = _animateToValue;
     if (animateToValue != _animationController.value) {
       _animationController.animateTo(animateToValue);
     }
@@ -297,7 +293,7 @@ class _ContactInfoGroupWidgetState extends State<ContactInfoGroupWidget> with Si
           AnimatedList(
             key: _animatedListKey,
             initialItemCount: widget.infoGroup.value.length,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index, animation) {
               return _buildItem(index, animation);

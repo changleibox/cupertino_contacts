@@ -8,23 +8,23 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 标题栏按钮
 class NavigationBarAction extends StatelessWidget {
-  final Widget child;
-  final VoidCallback onPressed;
-
   const NavigationBarAction({
     Key key,
     @required this.child,
     this.onPressed,
   }) : super(key: key);
 
+  final Widget child;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      child: child,
       padding: EdgeInsets.zero,
       borderRadius: BorderRadius.zero,
       minSize: 0,
       onPressed: onPressed,
+      child: child,
     );
   }
 }

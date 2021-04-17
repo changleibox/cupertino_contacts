@@ -16,15 +16,15 @@ import 'package:flutter_contact/contact.dart';
 ///
 /// 链接联系人
 class EditContactLinkContactInfoGroup extends StatelessWidget {
-  final ContactInfoGroup<ContactSelectionItem> infoGroup;
-  final Contact currentContact;
-
   const EditContactLinkContactInfoGroup({
     Key key,
     @required this.infoGroup,
     @required this.currentContact,
   })  : assert(infoGroup != null),
         super(key: key);
+
+  final ContactInfoGroup<ContactSelectionItem> infoGroup;
+  final Contact currentContact;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +34,12 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
       changeLabelInterceptor: (context, item) => ChangeLabelType.disable,
       itemFactory: (index, label) async {
         final selectedContactIds = <String>[];
-        var currentIdentifier = currentContact?.identifier;
+        final currentIdentifier = currentContact?.identifier;
         if (currentIdentifier != null) {
           selectedContactIds.add(currentIdentifier);
         }
         selectedContactIds.addAll(infoGroup.value.map((e) => e.value.identifier));
-        var contact = await Navigator.push(
+        final contact = await Navigator.push<Contact>(
           context,
           RouteProvider.buildRoute(
             CupertinoContactsPage(
@@ -52,7 +52,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
         return contact == null ? null : ContactSelectionItem(label: label, value: contact);
       },
       itemBuilder: (context, item) {
-        var contact = (item as ContactSelectionItem).value;
+        final contact = (item as ContactSelectionItem).value;
         return SelectionInfoGroupItem(
           item: item,
           hasStartDivier: false,
@@ -63,7 +63,7 @@ class EditContactLinkContactInfoGroup extends StatelessWidget {
             if (contact == null) {
               return;
             }
-            Navigator.push(
+            Navigator.push<void>(
               context,
               RouteProvider.buildRoute(
                 ContactDetailPage(

@@ -21,13 +21,13 @@ const double _spacing = 20;
 const double _padding = 16;
 
 class StackFilterPage extends StatefulWidget {
-  final Uint8List bytes;
-
   const StackFilterPage({
     Key key,
     @required this.bytes,
   })  : assert(bytes != null),
         super(key: key);
+
+  final Uint8List bytes;
 
   @override
   _StackFilterPageState createState() => _StackFilterPageState();
@@ -91,12 +91,12 @@ class _StackFilterPageState extends State<StackFilterPage> {
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.tertiarySystemGroupedBackground,
-        middle: Text('选取滤镜'),
+        middle: const Text('选取滤镜'),
         leading: NavigationBarAction(
-          child: Text('取消'),
           onPressed: () {
             Navigator.maybePop(context);
           },
+          child: const Text('取消'),
         ),
       ),
       child: GridView.builder(
@@ -106,26 +106,26 @@ class _StackFilterPageState extends State<StackFilterPage> {
           crossAxisSpacing: _spacing,
           childAspectRatio: imageSize / (imageSize + 8 + 12),
         ),
-        padding: MediaQuery.of(context).padding.copyWith(top: 0) + EdgeInsets.all(_padding),
+        padding: MediaQuery.of(context).padding.copyWith(top: 0) + const EdgeInsets.all(_padding),
         itemCount: _filters.length,
         itemBuilder: (context, index) {
-          var filter = _filters[index];
-          var storage = filter.matrix.storage;
+          final filter = _filters[index];
+          final storage = filter.matrix.storage;
           Widget imageChild = CupertinoCircleAvatar.memory(
             assetName: Images.ic_default_avatar,
             bytes: widget.bytes,
             borderSide: BorderSide.none,
             size: double.infinity,
             onPressed: () {
-              var src = ImageFilterSrc(
+              final src = ImageFilterSrc(
                 image: widget.bytes,
                 matrix: storage,
               );
-              var loadPrompt = LoadPrompt(context)..show();
+              final loadPrompt = LoadPrompt(context)..show();
               ImageFilters.colorMatrixFilter(src).then((value) {
                 loadPrompt.dismiss();
                 Navigator.pop(context, value);
-              }).catchError((_) {
+              }).catchError((dynamic error) {
                 loadPrompt.dismiss();
               });
             },
@@ -160,11 +160,11 @@ class _StackFilterPageState extends State<StackFilterPage> {
 }
 
 class _ColorMatrixFilter {
-  final String name;
-  final ColorMatrix matrix;
-
   const _ColorMatrixFilter({
     @required this.name,
     this.matrix,
   }) : assert(name != null);
+
+  final String name;
+  final ColorMatrix matrix;
 }

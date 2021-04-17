@@ -7,10 +7,6 @@ import 'package:flutter/cupertino.dart';
 typedef SliverPersistentHeaderWidgetBuilder = Widget Function(BuildContext context, double shrinkOffset, bool overlapsContent);
 
 class SliverPersistentHeaderWidget extends SliverPersistentHeaderDelegate {
-  final SliverPersistentHeaderWidgetBuilder builder;
-  final double maxExtent;
-  final double minExtent;
-
   const SliverPersistentHeaderWidget({
     @required this.builder,
     @required this.maxExtent,
@@ -18,6 +14,12 @@ class SliverPersistentHeaderWidget extends SliverPersistentHeaderDelegate {
   })  : assert(builder != null),
         assert(minExtent != null),
         assert(maxExtent != null);
+
+  final SliverPersistentHeaderWidgetBuilder builder;
+  @override
+  final double maxExtent;
+  @override
+  final double minExtent;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {

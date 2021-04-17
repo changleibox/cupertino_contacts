@@ -14,13 +14,6 @@ const double _kHorizontalPadding = 16.0;
 typedef ItemDisableBuilder = bool Function(Contact contact);
 
 class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final MapEntry<String, List<Contact>> contactEntry;
-  final double indexHeight;
-  final double dividerHeight;
-  final double itemHeight;
-  final ValueChanged<Contact> onItemPressed;
-  final ItemDisableBuilder disableBuilder;
-
   const ContactPersistentHeaderDelegate({
     @required this.contactEntry,
     @required this.indexHeight,
@@ -33,6 +26,13 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         assert(dividerHeight != null),
         assert(itemHeight != null);
 
+  final MapEntry<String, List<Contact>> contactEntry;
+  final double indexHeight;
+  final double dividerHeight;
+  final double itemHeight;
+  final ValueChanged<Contact> onItemPressed;
+  final ItemDisableBuilder disableBuilder;
+
   Widget _buildIndex(BuildContext context, String index) {
     return Container(
       height: indexHeight,
@@ -41,14 +41,14 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         labelColor,
         context,
       ),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: _kHorizontalPadding,
       ),
       child: DefaultTextStyle(
         style: CupertinoTheme.of(context).textTheme.textStyle,
         child: Text(
           index,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -81,7 +81,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         itemBuilder: (context, index) {
           final contact = contacts[index];
 
-          var onPressed;
+          VoidCallback onPressed;
           if (disableBuilder == null || disableBuilder(contact)) {
             onPressed = () {
               if (onItemPressed != null) {
@@ -106,16 +106,17 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             padding: EdgeInsets.zero,
             minSize: 0,
             borderRadius: BorderRadius.zero,
+            onPressed: onPressed,
             child: Container(
               height: itemHeight,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: _kHorizontalPadding,
               ),
               alignment: Alignment.centerLeft,
               child: DefaultTextStyle(
                 style: textStyle,
                 child: names.isEmpty
-                    ? Text('无姓名')
+                    ? const Text('无姓名')
                     : WidgetGroup.spacing(
                         alignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,7 +125,6 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                       ),
               ),
             ),
-            onPressed: onPressed,
           );
         },
         separatorBuilder: (context, index) {
@@ -134,7 +134,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
               context,
             ),
             height: dividerHeight,
-            margin: EdgeInsets.symmetric(
+            margin: const EdgeInsets.symmetric(
               horizontal: _kHorizontalPadding,
             ),
           );
@@ -145,8 +145,8 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    var index = contactEntry.key;
-    var contacts = contactEntry.value;
+    final index = contactEntry.key;
+    final contacts = contactEntry.value;
     return WidgetGroup(
       alignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,7 +158,7 @@ class ContactPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         _buildIndex(context, index),
         ClipRect(
           child: Align(
-            alignment: AlignmentDirectional(0.0, 1.0),
+            alignment: const AlignmentDirectional(0.0, 1.0),
             heightFactor: 1.0 - (shrinkOffset / _contentHeight).clamp(0.0, 1.0),
             child: _buildContent(context, contacts),
           ),

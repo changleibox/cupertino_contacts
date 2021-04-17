@@ -31,15 +31,15 @@ const double _kIndexHeight = 26.0;
 const double _kItemHeight = 44.0;
 
 class CupertinoContactsPage extends StatefulWidget {
-  final HomeLaunchMode launchMode;
-  final List<String> selectedIds;
-
   const CupertinoContactsPage({
     Key key,
     this.launchMode = HomeLaunchMode.normal,
     this.selectedIds,
   })  : assert(launchMode != null),
         super(key: key);
+
+  final HomeLaunchMode launchMode;
+  final List<String> selectedIds;
 
   @override
   _CupertinoContactsPageState createState() => _CupertinoContactsPageState();
@@ -91,22 +91,22 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
       return null;
     }
     return CupertinoNavigationBar(
-      middle: Text('通讯录'),
-      padding: EdgeInsetsDirectional.only(
+      middle: const Text('通讯录'),
+      padding: const EdgeInsetsDirectional.only(
         start: 16,
         end: 10,
       ),
       border: null,
       backgroundColor: _colorTween.end,
       leading: NavigationBarAction(
-        child: Text('群组'),
         onPressed: presenter.onGroupPressed,
+        child: const Text('群组'),
       ),
       trailing: NavigationBarAction(
-        child: Text('取消'),
         onPressed: () {
           Navigator.pop(context);
         },
+        child: const Text('取消'),
       ),
     );
   }
@@ -115,8 +115,8 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
     if (presenter.showProgress) {
       return CupertinoProgress();
     }
-    var textTheme = CupertinoTheme.of(context).textTheme;
-    var padding = MediaQuery.of(context).padding;
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    final padding = MediaQuery.of(context).padding;
     final slivers = <Widget>[];
     slivers.add(SupportSliverRefreshIndicator(
       onRefresh: presenter.onRefresh,
@@ -144,7 +144,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
             indexHeight: _kIndexHeight,
             itemHeight: _kItemHeight,
             disableBuilder: (contact) {
-              var ids = widget.selectedIds;
+              final ids = widget.selectedIds;
               return ids == null || !ids.contains(contact.identifier);
             },
             onItemPressed: presenter.onItemPressed,
@@ -182,9 +182,9 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 
   @override
   Widget builds(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
-    var navLargeTitleTextStyle = textTheme.navLargeTitleTextStyle;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
+    final navLargeTitleTextStyle = textTheme.navLargeTitleTextStyle;
     return CupertinoTheme(
       data: themeData.copyWith(
         textTheme: textTheme.copyWith(
@@ -203,7 +203,7 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
             child: SupportNestedScrollView(
               pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
               headerSliverBuilder: _buildHeaderSliver,
-              physics: SnappingScrollPhysics(
+              physics: const SnappingScrollPhysics(
                 midScrollOffset: _kNavBarLargeTitleHeightExtension,
               ),
               body: _buildBody(),
@@ -216,54 +216,54 @@ class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, 
 }
 
 class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
-  final VoidCallback onGroupPressed;
-
   const _AnimatedCupertinoSliverNavigationBar({
     Key key,
     @required ColorTween colorTween,
     this.onGroupPressed,
   }) : super(key: key, colorTween: colorTween);
 
+  final VoidCallback onGroupPressed;
+
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
     return CupertinoSliverNavigationBar(
-      largeTitle: Text('通讯录'),
-      padding: EdgeInsetsDirectional.only(
+      largeTitle: const Text('通讯录'),
+      padding: const EdgeInsetsDirectional.only(
         start: 16,
         end: 10,
       ),
       border: null,
       backgroundColor: color,
       leading: NavigationBarAction(
-        child: Text('群组'),
         onPressed: onGroupPressed,
+        child: const Text('群组'),
       ),
       trailing: NavigationBarAction(
-        child: Icon(
-          CupertinoIcons.add,
-        ),
         onPressed: () {
-          Navigator.push(
+          Navigator.push<void>(
             context,
             RouteProvider.buildRoute(
-              EditContactPage(),
+              const EditContactPage(),
               fullscreenDialog: true,
             ),
           );
         },
+        child: const Icon(
+          CupertinoIcons.add,
+        ),
       ),
     );
   }
 }
 
 class _AnimatedSliverSearchBar extends AnimatedColorWidget {
-  final ValueChanged<String> onQuery;
-
   const _AnimatedSliverSearchBar({
     Key key,
     @required ColorTween colorTween,
     @required this.onQuery,
   }) : super(key: key, colorTween: colorTween);
+
+  final ValueChanged<String> onQuery;
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {

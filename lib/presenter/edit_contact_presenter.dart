@@ -2,13 +2,12 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
-import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
+import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_avatar_page.dart';
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
@@ -20,16 +19,16 @@ import 'package:cupertinocontacts/widget/edit_contact_persistent_header_delegate
 import 'package:cupertinocontacts/widget/give_up_edit_dialog.dart';
 import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/toast.dart';
+import 'package:flexidate/flexidate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_contact/contact.dart';
 import 'package:flutter_contact/contacts.dart';
-import 'package:flexidate/flexidate.dart';
 
 class EditContactPresenter extends Presenter<EditContactPage> implements EditContactOperation {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
-  final baseInfoMap = LinkedHashMap<ContactInfoType, EditableContactInfo>();
-  final itemMap = LinkedHashMap<ContactItemType, ContactInfo>();
+  final baseInfoMap = <ContactInfoType, EditableContactInfo>{};
+  final itemMap = <ContactItemType, ContactInfo>{};
 
   Uint8List _avatar;
 
@@ -124,7 +123,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       items: _initialContact.dates?.where((element) {
         return selections.contains(SelectionType.birthday, element.label);
       })?.map((e) {
-        var dateTime = DateTime.parse(e.dateOrValue);
+        final dateTime = DateTime.parse(e.dateOrValue);
         return DateTimeItem(
           label: selections.selectionAtName(SelectionType.birthday, e.label),
           value: dateTime,
@@ -137,7 +136,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       items: _initialContact.dates?.where((element) {
         return selections.contains(SelectionType.date, element.label);
       })?.map((e) {
-        var dateTime = DateTime.parse(e.dateOrValue);
+        final dateTime = DateTime.parse(e.dateOrValue);
         return DateTimeItem(
           label: selections.selectionAtName(SelectionType.date, e.label),
           value: dateTime,
@@ -181,22 +180,30 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       );
     }
 
-    baseInfoMap.values.forEach((element) => element.addListener(notifyListeners));
-    itemMap.values.forEach((element) => element.addListener(notifyListeners));
+    for (var element in baseInfoMap.values) {
+      element.addListener(notifyListeners);
+    }
+    for (var element in itemMap.values) {
+      element.addListener(notifyListeners);
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     _listeners = null;
-    baseInfoMap.values.forEach((element) => element.dispose());
-    itemMap.values.forEach((element) => element.dispose());
+    for (var element in baseInfoMap.values) {
+      element.dispose();
+    }
+    for (var element in itemMap.values) {
+      element.dispose();
+    }
     super.dispose();
   }
 
   @override
-  onEditAvatarPressed() {
-    Navigator.push(
+  void onEditAvatarPressed() {
+    Navigator.push<Uint8List>(
       context,
       RouteProvider.buildRoute(
         EditContactAvatarPage(
@@ -218,7 +225,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   }
 
   @override
-  onCancelPressed() {
+  void onCancelPressed() {
     if (!isChanged) {
       Navigator.maybePop(context);
     } else {
@@ -231,7 +238,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   }
 
   @override
-  onDonePressed() {
+  void onDonePressed() {
     Future<Contact> future;
     if (value.identifier == null) {
       future = Contacts.addContact(value);
@@ -242,7 +249,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       if (widget.contact != null) {
         Navigator.pop(context, value);
       } else {
-        Navigator.pushReplacement(
+        Navigator.pushReplacement<void, void>(
           context,
           RouteProvider.buildRoute(
             ContactDetailPage(
@@ -252,12 +259,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
           ),
         );
       }
-    }).catchError((error) {
+    }).catchError((dynamic error) {
       showText(error.toString(), context);
     });
   }
 
-  onDeleteContactPressed() {
+  void onDeleteContactPressed() {
     if (widget.contact == null) {
       return;
     }
@@ -265,11 +272,11 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       if (value == null || !value) {
         return;
       }
-      var loadPrompt = LoadPrompt(context)..show();
+      final loadPrompt = LoadPrompt(context)..show();
       Contacts.deleteContact(widget.contact).then((value) {
         loadPrompt.dismiss();
         Navigator.popUntil(context, ModalRoute.withName(RouteProvider.home));
-      }).catchError((_) {
+      }).catchError((dynamic _) {
         loadPrompt.dismiss();
       });
     });
@@ -287,10 +294,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   Contact get value {
-    var dates = _convertDatetime(itemMap[ContactItemType.birthday]);
-    dates.addAll(_convertDatetime(itemMap[ContactItemType.date]));
+    final dates = _convertDatetime(itemMap[ContactItemType.birthday] as ContactInfoGroup<DateTimeItem>);
+    dates.addAll(_convertDatetime(itemMap[ContactItemType.date] as ContactInfoGroup<DateTimeItem>));
 
-    var contact = Contact();
+    final contact = Contact();
     contact.identifier = _initialContact.identifier;
     contact.avatar = _avatar;
     contact.prefix = _initialContact.prefix;
@@ -301,14 +308,14 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.givenName = baseInfoMap[ContactInfoType.givenName].value ?? '';
     contact.company = baseInfoMap[ContactInfoType.company].value ?? '';
     contact.jobTitle = _initialContact.jobTitle;
-    contact.phones = _convert(itemMap[ContactItemType.phone]);
-    contact.emails = _convert(itemMap[ContactItemType.email]);
-    contact.urls = _convert(itemMap[ContactItemType.url]);
+    contact.phones = _convert(itemMap[ContactItemType.phone] as ContactInfoGroup<EditableItem>);
+    contact.emails = _convert(itemMap[ContactItemType.email] as ContactInfoGroup<EditableItem>);
+    contact.urls = _convert(itemMap[ContactItemType.url] as ContactInfoGroup<EditableItem>);
     contact.dates = dates;
     contact.lastModified = _initialContact.lastModified;
-    contact.socialProfiles = _convert(itemMap[ContactItemType.socialData]);
-    contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address]);
-    contact.note = itemMap[ContactItemType.remarks].value ?? '';
+    contact.socialProfiles = _convert(itemMap[ContactItemType.socialData] as ContactInfoGroup<EditableItem>);
+    contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address] as ContactInfoGroup<AddressItem>);
+    contact.note = itemMap[ContactItemType.remarks].value?.toString() ?? '';
     return _alignmentContact(contact);
   }
 
@@ -320,7 +327,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   List<PostalAddress> _convertAddress(ContactInfoGroup<AddressItem> infoGroup) {
     return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
-      var value = e.value;
+      final value = e.value;
       return PostalAddress(
         label: e.label.propertyName,
         street: value.street1.value,
@@ -334,7 +341,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   List<ContactDate> _convertDatetime(ContactInfoGroup<DateTimeItem> infoGroup) {
     return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
-      var dateTime = e.value;
+      final dateTime = e.value;
       return ContactDate(
         label: e.label.propertyName,
         date: FlexiDate.ofDateTime(dateTime),
@@ -346,11 +353,14 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   @visibleForTesting
   void notifyListeners() {
     if (_listeners != null) {
-      final List<VoidCallback> localListeners = List<VoidCallback>.from(_listeners);
-      for (final VoidCallback listener in localListeners) {
+      final localListeners = List<VoidCallback>.from(_listeners);
+      for (final listener in localListeners) {
         try {
-          if (_listeners.contains(listener)) listener();
-        } catch (exception) {}
+          if (_listeners.contains(listener)) {
+            listener();
+          }
+          // ignore: empty_catches
+        } catch (error) {}
       }
     }
   }
@@ -379,5 +389,5 @@ class _LabelItem extends Item {
   }) : super(label: label, value: value);
 
   @override
-  List get props => [label, equalsValue];
+  List<dynamic> get props => <String>[label, equalsValue];
 }

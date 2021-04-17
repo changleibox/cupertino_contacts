@@ -7,12 +7,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class NativeService {
   static Future<bool> url(String url) {
-    var uri = Uri.parse(url.startsWith('http') ? url : 'http://$url');
+    final uri = Uri.parse(url.startsWith('http') ? url : 'http://$url');
     return _launch(uri);
   }
 
   static Future<bool> message(String account) {
-    var uri = Uri(
+    final uri = Uri(
       scheme: 'sms',
       path: account,
     );
@@ -20,7 +20,7 @@ class NativeService {
   }
 
   static Future<bool> call(String phone) {
-    var uri = Uri(
+    final uri = Uri(
       scheme: 'tel',
       path: phone,
     );
@@ -28,7 +28,7 @@ class NativeService {
   }
 
   static Future<bool> faceTime(String account) {
-    var uri = Uri(
+    final uri = Uri(
       scheme: 'facetime',
       path: account,
     );
@@ -36,7 +36,7 @@ class NativeService {
   }
 
   static Future<bool> email(String account) {
-    var uri = Uri(
+    final uri = Uri(
       scheme: 'mailto',
       path: account,
     );
@@ -44,9 +44,9 @@ class NativeService {
   }
 
   static Future<bool> maps(String address) {
-    var uri = Uri(
+    final uri = Uri(
       scheme: 'maps',
-      queryParameters: {
+      queryParameters: <String, dynamic>{
         'q': address,
       },
     );
@@ -54,9 +54,9 @@ class NativeService {
   }
 
   static Future<bool> calendar(DateTime dateTime) {
-    var timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(dateTime, isUtc: true);
-    var timeInterval = timeIntervalSince.millisecondsSinceEpoch / 1000;
-    var uri = Uri(
+    final timeIntervalSince = TimeInterval.timeIntervalSinceAsIOS(dateTime, isUtc: true);
+    final timeInterval = timeIntervalSince.millisecondsSinceEpoch / 1000;
+    final uri = Uri(
       scheme: 'calshow',
       path: timeInterval.toString(),
     );

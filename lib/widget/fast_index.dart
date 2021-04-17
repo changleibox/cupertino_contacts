@@ -16,9 +16,9 @@ const Duration _duration = Duration(milliseconds: 200);
 typedef _FastIndexPositionGetter = FastIndexPosition Function(int index);
 
 class FastIndexNotification extends Notification {
-  final FastIndexDetails details;
-
   const FastIndexNotification({@required this.details}) : assert(details != null);
+
+  final FastIndexDetails details;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is FastIndexNotification && runtimeType == other.runtimeType && details == other.details;
@@ -35,9 +35,9 @@ class FastIndexNotification extends Notification {
 }
 
 class IndexChangedNotification extends Notification {
-  final int index;
-
   const IndexChangedNotification({@required this.index}) : assert(index != null);
+
+  final int index;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is IndexChangedNotification && runtimeType == other.runtimeType && index == other.index;
@@ -54,13 +54,6 @@ class IndexChangedNotification extends Notification {
 }
 
 class FastIndexPosition with Diagnosticable {
-  final Rect globalRect;
-  final Rect localRect;
-  final Offset globalPosition;
-  final Offset localPosition;
-  final Offset containerGlobalPosition;
-  final Offset containerLocalPosition;
-
   const FastIndexPosition({
     @required this.globalRect,
     @required this.localRect,
@@ -74,6 +67,13 @@ class FastIndexPosition with Diagnosticable {
         assert(localPosition != null),
         assert(containerGlobalPosition != null),
         assert(containerLocalPosition != null);
+
+  final Rect globalRect;
+  final Rect localRect;
+  final Offset globalPosition;
+  final Offset localPosition;
+  final Offset containerGlobalPosition;
+  final Offset containerLocalPosition;
 
   FastIndexPosition copyWith({
     Rect globalRect,
@@ -128,16 +128,16 @@ class FastIndexPosition with Diagnosticable {
 }
 
 class FastIndexDetails with Diagnosticable {
-  static const FastIndexDetails empty = FastIndexDetails();
-
-  final int index;
-  final FastIndexPosition position;
-
   const FastIndexDetails({
     this.index = -1,
     this.position,
   })  : assert(index != null),
         assert(index >= 0 || position == null);
+
+  static const FastIndexDetails empty = FastIndexDetails();
+
+  final int index;
+  final FastIndexPosition position;
 
   bool get isValid => index >= 0 && position != null;
 
@@ -206,13 +206,6 @@ class FastIndexController extends ChangeNotifier implements ValueListenable<Fast
 }
 
 class FastIndex extends StatefulWidget {
-  final FastIndexController controller;
-  final List<String> indexs;
-  final Color containerColor;
-  final Color containerActiveColor;
-  final Color indexColor;
-  final Color indexActiveColor;
-
   const FastIndex({
     Key key,
     this.controller,
@@ -223,6 +216,13 @@ class FastIndex extends StatefulWidget {
     this.indexActiveColor,
   })  : assert(indexs != null),
         super(key: key);
+
+  final FastIndexController controller;
+  final List<String> indexs;
+  final Color containerColor;
+  final Color containerActiveColor;
+  final Color indexColor;
+  final Color indexActiveColor;
 
   @override
   _FastIndexState createState() => _FastIndexState();
@@ -244,23 +244,23 @@ class _FastIndexState extends State<FastIndex> {
 
   FastIndexDetails _currentDetails = FastIndexDetails.empty;
 
-  _onVerticalDragDown(DragDownDetails details) {
+  void _onVerticalDragDown(DragDownDetails details) {
     _callback(_analysisIndex(details.globalPosition));
   }
 
-  _onVerticalDragStart(DragStartDetails details) {
+  void _onVerticalDragStart(DragStartDetails details) {
     _callback(_analysisIndex(details.globalPosition));
   }
 
-  _onVerticalDragUpdate(DragUpdateDetails details) {
+  void _onVerticalDragUpdate(DragUpdateDetails details) {
     _callback(_analysisIndex(details.globalPosition));
   }
 
-  _onVerticalDragEnd(DragEndDetails details) {
+  void _onVerticalDragEnd(DragEndDetails details) {
     _callback(FastIndexDetails.empty);
   }
 
-  _onVerticalDragCancel() {
+  void _onVerticalDragCancel() {
     _callback(FastIndexDetails.empty);
   }
 
@@ -269,13 +269,13 @@ class _FastIndexState extends State<FastIndex> {
       return null;
     }
     final key = _indexKeys[index];
-    var renderBox = key.currentContext?.findRenderObject() as RenderBox;
+    final renderBox = key.currentContext?.findRenderObject() as RenderBox;
     if (renderBox == null || !renderBox.hasSize) {
       return null;
     }
     final currentRenderBox = context.findRenderObject() as RenderBox;
     final currentGlobalPosition = currentRenderBox.localToGlobal(Offset.zero);
-    final currentLocalPosition = currentRenderBox.localToGlobal(Offset.zero, ancestor: currentRenderBox.parent);
+    final currentLocalPosition = currentRenderBox.localToGlobal(Offset.zero, ancestor: currentRenderBox.parent as RenderObject);
     final globalPosition = renderBox.localToGlobal(Offset.zero);
     final localPosition = renderBox.localToGlobal(Offset.zero, ancestor: currentRenderBox);
     return FastIndexPosition(
@@ -292,13 +292,13 @@ class _FastIndexState extends State<FastIndex> {
     if (widget.indexs.isEmpty || globalPosition == null) {
       return FastIndexDetails.empty;
     }
-    for (int index = 0; index < _indexKeys.length; index++) {
-      var position = _analysisIndexPosition(index);
+    for (var index = 0; index < _indexKeys.length; index++) {
+      final position = _analysisIndexPosition(index);
       if (position == null) {
         continue;
       }
       final localPosition = globalPosition - position.containerGlobalPosition;
-      var rect = position.localRect;
+      final rect = position.localRect;
       if (rect.contains(Offset(rect.left, localPosition.dy))) {
         return FastIndexDetails(index: index, position: position);
       }
@@ -306,10 +306,10 @@ class _FastIndexState extends State<FastIndex> {
     return FastIndexDetails.empty;
   }
 
-  _recalculationCurrentDetailsPoisition() {
-    int oldIndex = _currentDetails.index;
+  void _recalculationCurrentDetailsPoisition() {
+    final oldIndex = _currentDetails.index;
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      var newIndex = _currentDetails.index;
+      final newIndex = _currentDetails.index;
       if (oldIndex != newIndex) {
         return;
       }
@@ -319,7 +319,7 @@ class _FastIndexState extends State<FastIndex> {
     });
   }
 
-  _callback(FastIndexDetails details) {
+  void _callback(FastIndexDetails details) {
     details ??= FastIndexDetails.empty;
     if (_currentDetails == details) {
       return;
@@ -335,8 +335,8 @@ class _FastIndexState extends State<FastIndex> {
     _recalculationCurrentDetailsPoisition();
   }
 
-  _didChangeFaseIndexDetails() {
-    var value = widget.controller?.value;
+  void _didChangeFaseIndexDetails() {
+    final value = widget.controller?.value;
     if (value == _currentDetails) {
       return;
     }
@@ -344,7 +344,7 @@ class _FastIndexState extends State<FastIndex> {
     _callback(FastIndexDetails.empty);
   }
 
-  _resetIndexKeys() {
+  void _resetIndexKeys() {
     _indexKeys.clear();
     _indexKeys.addAll(List.generate(widget.indexs.length, (index) => GlobalKey()));
   }
@@ -378,7 +378,7 @@ class _FastIndexState extends State<FastIndex> {
 
   @override
   Widget build(BuildContext context) {
-    var primaryColor = CupertinoTheme.of(context).primaryColor;
+    final primaryColor = CupertinoTheme.of(context).primaryColor;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onVerticalDragDown: _onVerticalDragDown,
@@ -399,7 +399,7 @@ class _FastIndexState extends State<FastIndex> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: List.generate(widget.indexs.length, (index) {
-            var isActive = _currentDetails.index == index;
+            final isActive = _currentDetails.index == index;
             return Padding(
               key: _indexKeys[index],
               padding: const EdgeInsets.all(1.0),

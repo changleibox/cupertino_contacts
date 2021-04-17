@@ -50,9 +50,9 @@ class DialogRoute<T> extends PopupRoute<T> {
         FocusScope.of(context)?.unfocus();
       },
       child: Semantics(
-        child: _pageBuilder(context, animation, secondaryAnimation),
         scopesRoute: true,
         explicitChildNodes: true,
+        child: _pageBuilder(context, animation, secondaryAnimation),
       ),
     );
   }

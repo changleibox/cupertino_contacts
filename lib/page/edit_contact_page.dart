@@ -36,15 +36,15 @@ const double _kMaxAvatarSize = 144.0;
 const double _kMinAvatarSize = 48.0;
 
 class EditContactPage extends StatefulWidget {
-  final Contact contact;
-  final EditLaunchMode launchMode;
-
   const EditContactPage({
     Key key,
     this.contact,
     this.launchMode = EditLaunchMode.normal,
   })  : assert(launchMode != null),
         super(key: key);
+
+  final Contact contact;
+  final EditLaunchMode launchMode;
 
   @override
   _EditContactPageState createState() => _EditContactPageState();
@@ -70,12 +70,12 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     super.onRootTap();
   }
 
-  _onDismissSlidable() {
+  void _onDismissSlidable() {
     _slidableController.activeState?.close();
   }
 
   String get _routeTitle {
-    var route = ModalRoute.of(context);
+    final route = ModalRoute.of(context);
     String title;
     if (route is CupertinoPageRoute) {
       title = route.title;
@@ -89,23 +89,23 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
     children.add(EditContactGroupContainer(
       itemCount: presenter.baseInfoMap.length,
       itemBuilder: (context, index) {
-        var values = presenter.baseInfoMap.values;
-        var baseInfo = values.elementAt(index);
+        final values = presenter.baseInfoMap.values;
+        final baseInfo = values.elementAt(index);
         return EditContactNormalTextField(
           info: baseInfo,
         );
       },
     ));
-    var itemKeys = presenter.itemMap.keys;
+    final itemKeys = presenter.itemMap.keys;
     for (var key in itemKeys) {
       final contactInfo = presenter.itemMap[key];
       if (key == ContactItemType.birthday) {
         children.add(
-          BirthdayContactInfoGroup(infoGroup: contactInfo),
+          BirthdayContactInfoGroup(infoGroup: contactInfo as ContactInfoGroup<DateTimeItem>),
         );
       } else if (key == ContactItemType.relatedParty) {
         children.add(
-          RelatedPartyContactInfoGroup(infoGroup: contactInfo),
+          RelatedPartyContactInfoGroup(infoGroup: contactInfo as ContactInfoGroup<DateTimeItem>),
         );
       } else if (contactInfo is ContactInfoGroup<EditableItem>) {
         children.add(EditContactInfoGroup(
@@ -149,7 +149,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       ));
     }
 
-    var persistentHeaderDelegate = EditContactPersistentHeaderDelegate(
+    final persistentHeaderDelegate = EditContactPersistentHeaderDelegate(
       maxAvatarSize: _kMaxAvatarSize,
       minAvatarSize: _kMinAvatarSize,
       paddingTop: MediaQuery.of(context).padding.top,
@@ -158,7 +158,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
       operation: presenter,
     );
 
-    var borderSide = BorderSide(
+    final borderSide = BorderSide(
       color: CupertinoDynamicColor.resolve(
         separatorColor,
         context,
@@ -168,7 +168,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
 
     return CupertinoPageScaffold(
       child: SupportNestedScrollView(
-        physics: SnappingScrollPhysics(
+        physics: const SnappingScrollPhysics(
           midScrollOffset: _kMaxAvatarSize,
         ),
         pinnedHeaderSliverHeightBuilder: (context) {
@@ -241,7 +241,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
                       return child;
                     },
                     separatorBuilder: (context, index) {
-                      return SizedBox(
+                      return const SizedBox(
                         height: 40,
                       );
                     },

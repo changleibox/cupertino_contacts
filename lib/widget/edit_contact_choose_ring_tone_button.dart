@@ -10,18 +10,18 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-选择铃声
 class EditContactChooseRingToneButton extends StatelessWidget {
-  final DefaultSelectionContactInfo info;
-
   const EditContactChooseRingToneButton({
     Key key,
     @required this.info,
   })  : assert(info != null),
         super(key: key);
 
+  final DefaultSelectionContactInfo info;
+
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textStyle = themeData.textTheme.textStyle;
+    final themeData = CupertinoTheme.of(context);
+    final textStyle = themeData.textTheme.textStyle;
     return Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemGroupedBackground,
@@ -29,11 +29,12 @@ class EditContactChooseRingToneButton extends StatelessWidget {
       ),
       child: CupertinoButton(
         minSize: 44,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 16,
           right: 10,
         ),
         borderRadius: BorderRadius.zero,
+        onPressed: () {},
         child: WidgetGroup.spacing(
           spacing: 16,
           children: [
@@ -43,7 +44,7 @@ class EditContactChooseRingToneButton extends StatelessWidget {
                 fontSize: 15,
               ),
             ),
-            Expanded(
+            const Expanded(
               child: Text(
                 '默认',
               ),
@@ -58,7 +59,6 @@ class EditContactChooseRingToneButton extends StatelessWidget {
             ),
           ],
         ),
-        onPressed: () {},
       ),
     );
   }

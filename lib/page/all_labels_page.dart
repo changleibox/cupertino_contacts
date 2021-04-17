@@ -14,13 +14,13 @@ import 'package:flutter/cupertino.dart';
 const double _kLargeSpacing = 40;
 
 class AllLabelsPage extends StatefulWidget {
-  final SelectionType selectionType;
-
   const AllLabelsPage({
     Key key,
     @required this.selectionType,
   })  : assert(selectionType != null),
         super(key: key);
+
+  final SelectionType selectionType;
 
   @override
   _AllLabelsPageState createState() => _AllLabelsPageState();
@@ -45,7 +45,7 @@ class _AllLabelsPageState extends PresenterState<AllLabelsPage, AllLabelsPresent
             );
           },
           separatorBuilder: (context, index) {
-            return SizedBox(
+            return const SizedBox(
               height: _kLargeSpacing,
             );
           },

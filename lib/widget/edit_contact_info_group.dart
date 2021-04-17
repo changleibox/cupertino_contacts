@@ -11,9 +11,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 添加联系人-信息组
 class EditContactInfoGroup extends StatelessWidget {
-  final ContactInfoGroup infoGroup;
-  final TextInputType inputType;
-
   const EditContactInfoGroup({
     Key key,
     @required this.infoGroup,
@@ -21,6 +18,9 @@ class EditContactInfoGroup extends StatelessWidget {
   })  : assert(infoGroup != null),
         assert(inputType != null),
         super(key: key);
+
+  final ContactInfoGroup infoGroup;
+  final TextInputType inputType;
 
   @override
   Widget build(BuildContext context) {

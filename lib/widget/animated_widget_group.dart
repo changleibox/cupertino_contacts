@@ -72,8 +72,10 @@ class AnimatedWidgetGroup extends StatefulWidget {
   static AnimatedWidgetGroupState of(BuildContext context, {bool nullOk = false}) {
     assert(context != null);
     assert(nullOk != null);
-    final AnimatedWidgetGroupState result = context.findAncestorStateOfType<AnimatedWidgetGroupState>();
-    if (nullOk || result != null) return result;
+    final result = context.findAncestorStateOfType<AnimatedWidgetGroupState>();
+    if (nullOk || result != null) {
+      return result;
+    }
     throw FlutterError('SliverAnimatedList.of() called with a context that does not contain a SliverAnimatedList.\n'
         'No SliverAnimatedListState ancestor could be found starting from the '
         'context that was passed to SliverAnimatedListState.of(). This can '
@@ -99,19 +101,19 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
 
   @override
   void dispose() {
-    for (final _ActiveItem item in _incomingItems.followedBy(_outgoingItems)) {
+    for (final item in _incomingItems.followedBy(_outgoingItems)) {
       item.controller.dispose();
     }
     super.dispose();
   }
 
   _ActiveItem _removeActiveItemAt(List<_ActiveItem> items, int itemIndex) {
-    final int i = binarySearch(items, _ActiveItem.index(itemIndex));
+    final i = binarySearch(items, _ActiveItem.index(itemIndex));
     return i == -1 ? null : items.removeAt(i);
   }
 
   _ActiveItem _activeItemAt(List<_ActiveItem> items, int itemIndex) {
-    final int i = binarySearch(items, _ActiveItem.index(itemIndex));
+    final i = binarySearch(items, _ActiveItem.index(itemIndex));
     return i == -1 ? null : items[i];
   }
 
@@ -122,24 +124,26 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
   // and removed from _outgoingItems when the remove animation finishes.
 
   int _indexToItemIndex(int index) {
-    int itemIndex = index;
-    for (final _ActiveItem item in _outgoingItems) {
-      if (item.itemIndex <= itemIndex)
+    var itemIndex = index;
+    for (final item in _outgoingItems) {
+      if (item.itemIndex <= itemIndex) {
         itemIndex += 1;
-      else
+      } else {
         break;
+      }
     }
     return itemIndex;
   }
 
   int _itemIndexToIndex(int itemIndex) {
-    int index = itemIndex;
-    for (final _ActiveItem item in _outgoingItems) {
+    var index = itemIndex;
+    for (final item in _outgoingItems) {
       assert(item.itemIndex != itemIndex);
-      if (item.itemIndex < itemIndex)
+      if (item.itemIndex < itemIndex) {
         index -= 1;
-      else
+      } else {
         break;
+      }
     }
     return index;
   }
@@ -164,23 +168,27 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
     assert(index != null && index >= 0);
     assert(duration != null);
 
-    final int itemIndex = _indexToItemIndex(index);
+    final itemIndex = _indexToItemIndex(index);
     assert(itemIndex >= 0 && itemIndex <= _itemsCount);
 
     // Increment the incoming and outgoing item indices to account
     // for the insertion.
-    for (final _ActiveItem item in _incomingItems) {
-      if (item.itemIndex >= itemIndex) item.itemIndex += 1;
+    for (final item in _incomingItems) {
+      if (item.itemIndex >= itemIndex) {
+        item.itemIndex += 1;
+      }
     }
-    for (final _ActiveItem item in _outgoingItems) {
-      if (item.itemIndex >= itemIndex) item.itemIndex += 1;
+    for (final item in _outgoingItems) {
+      if (item.itemIndex >= itemIndex) {
+        item.itemIndex += 1;
+      }
     }
 
-    final AnimationController controller = AnimationController(
+    final controller = AnimationController(
       duration: duration,
       vsync: this,
     );
-    final _ActiveItem incomingItem = _ActiveItem.incoming(
+    final incomingItem = _ActiveItem.incoming(
       controller,
       itemIndex,
     );
@@ -212,13 +220,13 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
     assert(builder != null);
     assert(duration != null);
 
-    final int itemIndex = _indexToItemIndex(index);
+    final itemIndex = _indexToItemIndex(index);
     assert(itemIndex >= 0 && itemIndex < _itemsCount);
     assert(_activeItemAt(_outgoingItems, itemIndex) == null);
 
-    final _ActiveItem incomingItem = _removeActiveItemAt(_incomingItems, itemIndex);
-    final AnimationController controller = incomingItem?.controller ?? AnimationController(duration: duration, value: 1.0, vsync: this);
-    final _ActiveItem outgoingItem = _ActiveItem.outgoing(controller, itemIndex, builder);
+    final incomingItem = _removeActiveItemAt(_incomingItems, itemIndex);
+    final controller = incomingItem?.controller ?? AnimationController(duration: duration, value: 1.0, vsync: this);
+    final outgoingItem = _ActiveItem.outgoing(controller, itemIndex, builder);
     setState(() {
       _outgoingItems
         ..add(outgoingItem)
@@ -230,11 +238,15 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
 
       // Decrement the incoming and outgoing item indices to account
       // for the removal.
-      for (final _ActiveItem item in _incomingItems) {
-        if (item.itemIndex > outgoingItem.itemIndex) item.itemIndex -= 1;
+      for (final item in _incomingItems) {
+        if (item.itemIndex > outgoingItem.itemIndex) {
+          item.itemIndex -= 1;
+        }
       }
-      for (final _ActiveItem item in _outgoingItems) {
-        if (item.itemIndex > outgoingItem.itemIndex) item.itemIndex -= 1;
+      for (final item in _outgoingItems) {
+        if (item.itemIndex > outgoingItem.itemIndex) {
+          item.itemIndex -= 1;
+        }
       }
 
       setState(() => _itemsCount -= 1);
@@ -242,7 +254,7 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
   }
 
   Widget _itemBuilder(BuildContext context, int itemIndex) {
-    final _ActiveItem outgoingItem = _activeItemAt(_outgoingItems, itemIndex);
+    final outgoingItem = _activeItemAt(_outgoingItems, itemIndex);
     if (outgoingItem != null) {
       return outgoingItem.removedItemBuilder(
         context,
@@ -250,8 +262,8 @@ class AnimatedWidgetGroupState extends State<AnimatedWidgetGroup> with TickerPro
       );
     }
 
-    final _ActiveItem incomingItem = _activeItemAt(_incomingItems, itemIndex);
-    final Animation<double> animation = incomingItem?.controller?.view ?? kAlwaysCompleteAnimation;
+    final incomingItem = _activeItemAt(_incomingItems, itemIndex);
+    final animation = incomingItem?.controller?.view ?? kAlwaysCompleteAnimation;
     return widget.itemBuilder(
       context,
       _itemIndexToIndex(itemIndex),

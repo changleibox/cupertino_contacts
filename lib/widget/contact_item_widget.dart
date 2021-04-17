@@ -14,18 +14,18 @@ import 'package:flutter_contact/contact.dart';
 ///
 /// 联系人列表item
 class ContactItemWidget extends StatelessWidget {
-  final Contact contact;
-
   const ContactItemWidget({
     Key key,
     @required this.contact,
   })  : assert(contact != null),
         super(key: key);
 
+  final Contact contact;
+
   @override
   Widget build(BuildContext context) {
-    var phones = contact.phones;
-    var phone;
+    final phones = contact.phones;
+    String phone;
     if (phones != null && phones.isNotEmpty) {
       phone = phones.first.value;
     }
@@ -38,10 +38,6 @@ class ContactItemWidget extends StatelessWidget {
 }
 
 class CustomContactItemWidget extends StatelessWidget {
-  final Uint8List avatar;
-  final String name;
-  final String describe;
-
   const CustomContactItemWidget({
     Key key,
     @required this.avatar,
@@ -49,11 +45,15 @@ class CustomContactItemWidget extends StatelessWidget {
     @required this.describe,
   }) : super(key: key);
 
+  final Uint8List avatar;
+  final String name;
+  final String describe;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 10,
       ),

@@ -8,13 +8,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_contact/contact.dart';
 
 abstract class ContactInfo<T> extends ValueNotifier<T> {
-  final String name;
-
   ContactInfo({
     @required this.name,
     T value,
   })  : assert(name != null),
         super(value);
+
+  final String name;
 
   @override
   void dispose() {
@@ -23,18 +23,18 @@ abstract class ContactInfo<T> extends ValueNotifier<T> {
 }
 
 class EditableContactInfo extends ContactInfo<String> {
-  final TextEditingController controller;
-
   EditableContactInfo({
     @required String name,
     String value,
-  })  : this.controller = TextEditingController(text: value),
+  })  : controller = TextEditingController(text: value),
         super(name: name, value: value) {
     controller.addListener(() {
-      var text = controller.text;
+      final text = controller.text;
       this.value = text == null || text.isEmpty ? null : text;
     });
   }
+
+  final TextEditingController controller;
 
   @override
   set value(String newValue) {
@@ -64,7 +64,7 @@ class MultiEditableContactInfo extends EditableContactInfo {
   }) : super(name: name, value: value);
 }
 
-abstract class _SelectionContactInfo extends ContactInfo {
+abstract class _SelectionContactInfo extends ContactInfo<dynamic> {
   _SelectionContactInfo({
     @required String name,
   }) : super(name: name);
@@ -92,20 +92,22 @@ class NormalSelectionContactInfo extends _SelectionContactInfo {
   }
 }
 
-class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
-  final List<T> _items;
-  final SelectionType selectionType;
-
+class ContactInfoGroup<T extends GroupItem<dynamic>> extends ContactInfo<List<T>> {
   ContactInfoGroup({
     @required String name,
     @required this.selectionType,
     List<T> items,
   })  : assert(name != null),
         assert(selectionType != null),
-        this._items = [...?items],
-        super(name: name, value: List.unmodifiable([...?items])) {
-    _items.forEach((element) => element.addListener(_itemListener));
+        _items = [...?items],
+        super(name: name, value: List.unmodifiable(<T>[...?items])) {
+    for (var element in _items) {
+      element.addListener(_itemListener);
+    }
   }
+
+  final List<T> _items;
+  final SelectionType selectionType;
 
   void _itemListener() {
     value = List.unmodifiable(_items);
@@ -136,7 +138,9 @@ class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
 
   @override
   void dispose() {
-    _items?.forEach((element) => element.dispose());
+    for (var element in _items) {
+      element.dispose();
+    }
     super.dispose();
   }
 
@@ -149,9 +153,9 @@ class ContactInfoGroup<T extends GroupItem> extends ContactInfo<List<T>> {
 }
 
 abstract class GroupItem<T> extends ValueNotifier<T> {
-  Selection _label;
-
   GroupItem(this._label, {T value}) : super(value);
+
+  Selection _label;
 
   Selection get label => _label;
 
@@ -174,17 +178,17 @@ abstract class GroupItem<T> extends ValueNotifier<T> {
 }
 
 class EditableItem extends GroupItem<String> {
-  final TextEditingController controller;
-
   EditableItem({@required Selection label, String value})
-      : this.controller = TextEditingController(text: value),
+      : controller = TextEditingController(text: value),
         assert(label != null),
         super(label, value: value) {
     controller.addListener(() {
-      var text = controller.text;
+      final text = controller.text;
       this.value = text == null || text.isEmpty ? null : text;
     });
   }
+
+  final TextEditingController controller;
 
   @override
   set value(String newValue) {
@@ -214,17 +218,17 @@ class EditableItem extends GroupItem<String> {
 }
 
 class EditableSelectionItem extends GroupItem<String> {
-  final TextEditingController controller;
-
   EditableSelectionItem({@required Selection label, String value})
-      : this.controller = TextEditingController(text: value),
+      : controller = TextEditingController(text: value),
         assert(label != null),
         super(label, value: value) {
     controller.addListener(() {
-      var text = controller.text;
+      final text = controller.text;
       this.value = text == null || text.isEmpty ? null : text;
     });
   }
+
+  final TextEditingController controller;
 
   @override
   set value(String newValue) {
@@ -262,7 +266,7 @@ class DateTimeItem extends GroupItem<DateTime> {
 }
 
 class SelectionItem extends GroupItem<String> {
-  SelectionItem({@required Selection label, dynamic value})
+  SelectionItem({@required Selection label, String value})
       : assert(label != null),
         super(label, value: value);
 
@@ -279,7 +283,7 @@ class SelectionItem extends GroupItem<String> {
 }
 
 class ContactSelectionItem extends GroupItem<Contact> {
-  ContactSelectionItem({@required Selection label, dynamic value})
+  ContactSelectionItem({@required Selection label, Contact value})
       : assert(label != null),
         super(label, value: value);
 
@@ -336,13 +340,6 @@ class AddressItem extends GroupItem<Address> {
 }
 
 class Address {
-  final EditableItem _street1;
-  final EditableItem _street2;
-  final EditableItem _city;
-  final EditableItem _postcode;
-  final EditableItem _region;
-  final SelectionItem _country;
-
   Address({
     String street1,
     String street2,
@@ -356,6 +353,13 @@ class Address {
         _postcode = EditableItem(label: selections.postcodeSelection, value: postcode),
         _region = EditableItem(label: selections.regionSelection, value: region),
         _country = SelectionItem(label: selections.countrySelection, value: country);
+
+  final EditableItem _street1;
+  final EditableItem _street2;
+  final EditableItem _city;
+  final EditableItem _postcode;
+  final EditableItem _region;
+  final SelectionItem _country;
 
   EditableItem get street1 => _street1;
 

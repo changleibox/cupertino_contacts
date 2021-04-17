@@ -35,7 +35,7 @@ class WidgetGroup extends StatelessWidget {
               )
             : ChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  final int itemIndex = index ~/ 2;
+                  final itemIndex = index ~/ 2;
                   Widget widget;
                   if (index.isEven) {
                     widget = children[itemIndex];
@@ -75,7 +75,6 @@ class WidgetGroup extends StatelessWidget {
       textDirection: textDirection,
       verticalDirection: verticalDirection,
       textBaseline: textBaseline,
-      children: children,
       direction: direction,
       divider: spacing == 0
           ? null
@@ -84,6 +83,7 @@ class WidgetGroup extends StatelessWidget {
               height: direction == Axis.vertical ? spacing : null,
               padding: EdgeInsets.zero,
             ),
+      children: children,
     );
   }
 
@@ -137,7 +137,7 @@ class WidgetGroup extends StatelessWidget {
         assert(itemCount == null || itemCount >= 0),
         childrenDelegate = ChildBuilderDelegate(
           (BuildContext context, int index) {
-            final int itemIndex = index ~/ 2;
+            final itemIndex = index ~/ 2;
             Widget widget;
             if (index.isEven) {
               widget = itemBuilder(context, itemIndex);
@@ -196,10 +196,10 @@ class WidgetGroup extends StatelessWidget {
           mainAxisAlignment: alignment ?? MainAxisAlignment.start,
           mainAxisSize: mainAxisSize ?? MainAxisSize.max,
           crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
-          children: children,
           textDirection: textDirection,
           verticalDirection: verticalDirection,
           textBaseline: textBaseline,
+          children: children,
         );
         break;
       case Axis.vertical:
@@ -207,10 +207,10 @@ class WidgetGroup extends StatelessWidget {
           mainAxisAlignment: alignment ?? MainAxisAlignment.start,
           mainAxisSize: mainAxisSize ?? MainAxisSize.max,
           crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
-          children: children,
           textDirection: textDirection,
           verticalDirection: verticalDirection,
           textBaseline: textBaseline,
+          children: children,
         );
         break;
     }

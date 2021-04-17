@@ -9,12 +9,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 提供粘贴、复制、剪切、全选
 class Toolbar extends StatefulWidget {
-  final WidgetBuilder builder;
-  final TextEditingValue value;
-  final ToolbarOptions options;
-  final ValueSetter<TextEditingValue> valueSetter;
-  final ValueSetter<TextPosition> bringIntoView;
-
   const Toolbar({
     Key key,
     @required this.builder,
@@ -31,6 +25,12 @@ class Toolbar extends StatefulWidget {
         assert(value != null),
         assert(options != null),
         super(key: key);
+
+  final WidgetBuilder builder;
+  final TextEditingValue value;
+  final ToolbarOptions options;
+  final ValueSetter<TextEditingValue> valueSetter;
+  final ValueSetter<TextPosition> bringIntoView;
 
   @override
   ToolbarState createState() => ToolbarState();
@@ -76,7 +76,7 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
             },
             child: AnimatedOpacity(
               opacity: isShowing ? 0.4 : 1.0,
-              duration: Duration(milliseconds: 150),
+              duration: const Duration(milliseconds: 150),
               child: widget.builder(context),
             ),
           ),
@@ -123,7 +123,7 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
     _selectionOverlay = SimpleTextSelectionOverlay(
       context: context,
       toolbarLayerLink: _toolbarLayerLink,
-      renderObject: context.findRenderObject(),
+      renderObject: context.findRenderObject() as RenderBox,
       delegate: this,
     );
     _selectionOverlay.showToolbar();

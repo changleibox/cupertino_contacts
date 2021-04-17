@@ -14,8 +14,8 @@ class CupertinoContactsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
     return CupertinoApp(
       title: '通讯录',
       theme: themeData.copyWith(
@@ -30,11 +30,11 @@ class CupertinoContactsApp extends StatelessWidget {
           ),
         ),
       ),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales: const [
         Locale('zh', 'CN'),
       ],
       routes: RouteProvider.routes,

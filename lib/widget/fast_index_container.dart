@@ -14,10 +14,6 @@ const Size _biggerSize = Size.square(40);
 const Duration _kDefaultDuration = Duration(milliseconds: 200);
 
 class FastIndexContainer extends StatefulWidget {
-  final Widget child;
-  final List<String> indexs;
-  final List<GlobalKey> itemKeys;
-
   const FastIndexContainer({
     Key key,
     @required this.indexs,
@@ -29,6 +25,10 @@ class FastIndexContainer extends StatefulWidget {
         assert(indexs.length == itemKeys.length),
         super(key: key);
 
+  final Widget child;
+  final List<String> indexs;
+  final List<GlobalKey> itemKeys;
+
   @override
   _FastIndexContainerState createState() => _FastIndexContainerState();
 }
@@ -38,22 +38,22 @@ class _FastIndexContainerState extends State<FastIndexContainer> {
   FastIndexController _fastIndexController;
 
   bool _onIndexChangedNotification(IndexChangedNotification notification) {
-    var index = notification.index;
-    var itemKeys = widget.itemKeys;
+    final index = notification.index;
+    final itemKeys = widget.itemKeys;
     if (!_scrollController.hasClients || index < 0 || itemKeys == null || itemKeys.length <= index) {
       return false;
     }
     final position = _scrollController.position;
-    var renderObject = itemKeys[index].currentContext?.findRenderObject() as RenderSliverPersistentHeader;
+    final renderObject = itemKeys[index].currentContext?.findRenderObject() as RenderSliverPersistentHeader;
     if (renderObject != null) {
-      var child = renderObject.child;
-      var maxExtent = renderObject.maxExtent;
-      var dy = child.localToGlobal(Offset.zero, ancestor: context.findRenderObject()).dy;
+      final child = renderObject.child;
+      final maxExtent = renderObject.maxExtent;
+      final dy = child.localToGlobal(Offset.zero, ancestor: context.findRenderObject()).dy;
       var to = dy + position.pixels;
       if (dy < 0) {
         to -= maxExtent - renderObject.minExtent;
       } else if (dy == 0 && child.hasSize) {
-        var childExtent = child.size.height;
+        final childExtent = child.size.height;
         to -= maxExtent - childExtent;
       }
       position.moveTo(to);
@@ -105,9 +105,9 @@ class _FastIndexContainerState extends State<FastIndexContainer> {
           indexs: widget.indexs,
           builder: (context, rect, index, child, animation) {
             if (rect == null) {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
-            var offset = -_biggerSize.centerRight(-rect.centerLeft);
+            final offset = -_biggerSize.centerRight(-rect.centerLeft);
             return AnimatedPositioned(
               duration: _kDefaultDuration,
               left: offset.dx,
@@ -124,7 +124,7 @@ class _FastIndexContainerState extends State<FastIndexContainer> {
                   alignment: Alignment.center,
                   child: Text(
                     widget.indexs[index],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 17,
                       color: CupertinoColors.white,
                       height: 1.0,

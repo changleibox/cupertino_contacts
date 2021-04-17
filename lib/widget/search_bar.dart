@@ -9,13 +9,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 搜索框
 class SearchBar extends StatelessWidget {
-  final double height;
-  final TextEditingController queryController;
-  final ValueChanged<String> onChanged;
-  final FocusNode focusNode;
-  final Color color;
-  final double opacity;
-
   const SearchBar({
     Key key,
     @required this.height,
@@ -28,11 +21,18 @@ class SearchBar extends StatelessWidget {
         assert(opacity >= 0 && opacity <= 1.0),
         super(key: key);
 
+  final double height;
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final FocusNode focusNode;
+  final Color color;
+  final double opacity;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 16,
         top: 6,
         right: 16,
@@ -50,12 +50,6 @@ class SearchBar extends StatelessWidget {
 }
 
 class SearchBarTextField extends StatelessWidget {
-  final TextEditingController queryController;
-  final ValueChanged<String> onChanged;
-  final FocusNode focusNode;
-  final Color color;
-  final double opacity;
-
   const SearchBarTextField({
     Key key,
     this.queryController,
@@ -65,6 +59,12 @@ class SearchBarTextField extends StatelessWidget {
     this.opacity = 1.0,
   })  : assert(opacity >= 0 && opacity <= 1.0),
         super(key: key);
+
+  final TextEditingController queryController;
+  final ValueChanged<String> onChanged;
+  final FocusNode focusNode;
+  final Color color;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class SearchBarTextField extends StatelessWidget {
             onChanged: onChanged,
             focusNode: focusNode,
             decoration: null,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 17,
             ),
             placeholderStyle: TextStyle(
@@ -110,7 +110,7 @@ class SearchBarTextField extends StatelessWidget {
             ),
             textInputAction: TextInputAction.search,
             clearButtonMode: OverlayVisibilityMode.editing,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 4,
             ),
           ),

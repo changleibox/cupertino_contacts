@@ -28,23 +28,12 @@ const EdgeInsets _buttonPadding = EdgeInsets.only(
 );
 
 class ContactInfoGroupItemWidget extends StatefulWidget {
-  final GroupItemBuilder builder;
-  final GroupItem item;
-  final SelectionType selectionType;
-  final VoidCallback onDeletePressed;
-  final ValueChanged<double> onLabelWidthChanged;
-  final double labelMaxWidth;
-  final double labelCacheWidth;
-  final ChangeLabelType changeLabelType;
-  final bool canCustomLabel;
-  final List<Selection> hideSelections;
-
   const ContactInfoGroupItemWidget({
     Key key,
     @required this.item,
     @required this.selectionType,
     this.onDeletePressed,
-    this.builder,
+    @required this.builder,
     this.onLabelWidthChanged,
     this.labelMaxWidth,
     this.labelCacheWidth,
@@ -57,6 +46,17 @@ class ContactInfoGroupItemWidget extends StatefulWidget {
         assert(changeLabelType != null),
         assert(canCustomLabel != null),
         super(key: key);
+
+  final GroupItemBuilder builder;
+  final GroupItem item;
+  final SelectionType selectionType;
+  final VoidCallback onDeletePressed;
+  final ValueChanged<double> onLabelWidthChanged;
+  final double labelMaxWidth;
+  final double labelCacheWidth;
+  final ChangeLabelType changeLabelType;
+  final bool canCustomLabel;
+  final List<Selection> hideSelections;
 
   @override
   _ContactInfoGroupItemWidgetState createState() => _ContactInfoGroupItemWidgetState();
@@ -83,10 +83,10 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     super.didUpdateWidget(oldWidget);
   }
 
-  _measureWidth() {
+  void _measureWidth() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      var currentContext = _labelGlobalKey.currentContext;
-      var renderBox = currentContext?.findRenderObject() as RenderBox;
+      final currentContext = _labelGlobalKey.currentContext;
+      final renderBox = currentContext?.findRenderObject() as RenderBox;
       if (widget.onLabelWidthChanged == null || renderBox == null || !renderBox.hasSize) {
         return;
       }
@@ -99,11 +99,11 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     });
   }
 
-  _onLabelPressed() {
+  void _onLabelPressed() {
     if (widget.changeLabelType != ChangeLabelType.normal) {
       return;
     }
-    Navigator.push(
+    Navigator.push<Selection>(
       context,
       RouteProvider.buildRoute(
         LabelPickerPage(
@@ -126,10 +126,10 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
 
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
-    var textStyle = textTheme.textStyle;
-    var actionTextStyle = textTheme.actionTextStyle;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
+    final textStyle = textTheme.textStyle;
+    final actionTextStyle = textTheme.actionTextStyle;
 
     var labelWidth = _labelCacheWidth;
     if (widget.labelMaxWidth != null && _labelWidth != null) {
@@ -191,21 +191,21 @@ class _ContactInfoGroupItemWidgetState extends State<ContactInfoGroupItemWidget>
     return WidgetGroup.spacing(
       children: [
         CupertinoButton(
-          child: Icon(
-            Ionicons.ios_remove_circle,
-            color: CupertinoColors.destructiveRed,
-          ),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
           onPressed: widget.onDeletePressed,
+          child: const Icon(
+            Ionicons.ios_remove_circle,
+            color: CupertinoColors.destructiveRed,
+          ),
         ),
         CupertinoButton(
           minSize: 0,
           borderRadius: BorderRadius.zero,
           padding: _buttonPadding,
-          child: labelWidget,
           onPressed: labelDisbale ? null : _onLabelPressed,
+          child: labelWidget,
         ),
         Expanded(
           child: DefaultTextStyle(

@@ -6,8 +6,8 @@ import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
-showSelectDateDialog(BuildContext context, {DateTime initialDate, ValueChanged<DateTime> onDateChanged}) {
-  showCupertinoModalPopup(
+Future<void> showSelectDateDialog(BuildContext context, {DateTime initialDate, ValueChanged<DateTime> onDateChanged}) {
+  return showCupertinoModalPopup<void>(
     context: context,
     builder: (context) {
       return Container(
@@ -21,7 +21,7 @@ showSelectDateDialog(BuildContext context, {DateTime initialDate, ValueChanged<D
             crossAxisAlignment: CrossAxisAlignment.stretch,
             direction: Axis.vertical,
             mainAxisSize: MainAxisSize.min,
-            divider: CupertinoDivider(),
+            divider: const CupertinoDivider(),
             children: [
               Container(
                 height: 44,
@@ -31,13 +31,13 @@ showSelectDateDialog(BuildContext context, {DateTime initialDate, ValueChanged<D
                 ),
                 alignment: Alignment.centerLeft,
                 child: CupertinoButton(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                   ),
-                  child: Text('关闭'),
                   onPressed: () {
                     Navigator.pop(context);
                   },
+                  child: const Text('关闭'),
                 ),
               ),
               SizedBox(

@@ -13,24 +13,24 @@ Future<bool> showGriveUpEditDialog(BuildContext context) {
     context: context,
     builder: (context) {
       return CupertinoActionSheet(
-        message: Text('您确定要放弃此新联系人吗？'),
+        message: const Text('您确定要放弃此新联系人吗？'),
         actions: <Widget>[
           CupertinoActionSheetAction(
             isDestructiveAction: true,
-            child: Text('放弃更改'),
             onPressed: () {
               Navigator.pop(context, true);
             },
+            child: const Text('放弃更改'),
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
           isDefaultAction: true,
-          child: Text(
-            '继续编辑',
-          ),
           onPressed: () {
             Navigator.pop(context, false);
           },
+          child: const Text(
+            '继续编辑',
+          ),
         ),
       );
     },

@@ -14,15 +14,10 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 圆形头像
 class CupertinoCircleAvatarContainer extends StatelessWidget {
-  final Widget child;
-  final double size;
-  final BorderSide borderSide;
-  final VoidCallback onPressed;
-
   const CupertinoCircleAvatarContainer({
     Key key,
     @required this.child,
-    this.size,
+    @required this.size,
     this.borderSide = const BorderSide(
       color: separatorColor,
       width: 0.5,
@@ -31,6 +26,11 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
   })  : assert(size != null && size > 0),
         assert(child != null),
         super(key: key);
+
+  final Widget child;
+  final double size;
+  final BorderSide borderSide;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +71,10 @@ class CupertinoCircleAvatarContainer extends StatelessWidget {
 }
 
 class CupertinoCircleAvatar extends StatelessWidget {
-  final double size;
-  final BorderSide borderSide;
-  final Widget _child;
-  final VoidCallback onPressed;
-
-  CupertinoCircleAvatar({
+  const CupertinoCircleAvatar({
     Key key,
     @required Widget child,
-    this.size,
+    @required this.size,
     this.borderSide = const BorderSide(
       color: separatorColor,
       width: 0.5,
@@ -93,7 +88,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
     Key key,
     String assetName,
     @required File file,
-    this.size,
+    @required this.size,
     bool clickable = true,
     dynamic previewTag,
     bool canPreview = true,
@@ -116,7 +111,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
   CupertinoCircleAvatar.asset({
     Key key,
     @required String name,
-    this.size,
+    @required this.size,
     this.borderSide = const BorderSide(
       color: separatorColor,
       width: 0.5,
@@ -134,7 +129,7 @@ class CupertinoCircleAvatar extends StatelessWidget {
     Key key,
     String assetName,
     @required Uint8List bytes,
-    this.size,
+    @required this.size,
     this.borderSide = const BorderSide(
       color: separatorColor,
       width: 0.5,
@@ -149,24 +144,29 @@ class CupertinoCircleAvatar extends StatelessWidget {
         ),
         super(key: key);
 
+  final double size;
+  final BorderSide borderSide;
+  final Widget _child;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoCircleAvatarContainer(
-      child: _child,
       size: size,
       borderSide: borderSide,
       onPressed: onPressed,
+      child: _child,
     );
   }
 }
 
 class DefaultCircleImage extends StatelessWidget {
-  final double size;
-
   const DefaultCircleImage({
     Key key,
     this.size,
   }) : super(key: key);
+
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -180,11 +180,6 @@ class DefaultCircleImage extends StatelessWidget {
 }
 
 class _LocationImage extends StatelessWidget {
-  final String assetName;
-  final File file;
-  final Uint8List bytes;
-  final double size;
-
   const _LocationImage({
     Key key,
     this.assetName,
@@ -219,6 +214,11 @@ class _LocationImage extends StatelessWidget {
     );
   }
 
+  final String assetName;
+  final File file;
+  final Uint8List bytes;
+  final double size;
+
   @override
   Widget build(BuildContext context) {
     final placeHolder = AssetImage(
@@ -233,12 +233,14 @@ class _LocationImage extends StatelessWidget {
     return _image(
       image: imageProvider,
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded) return child;
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
         return AnimatedFadeIn(
           target: child,
           placeholder: _image(image: placeHolder),
           isTargetLoaded: frame != null,
-          fadeInDuration: Duration(milliseconds: 300),
+          fadeInDuration: const Duration(milliseconds: 300),
           fadeInCurve: Curves.easeIn,
         );
       },

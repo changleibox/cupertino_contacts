@@ -9,14 +9,12 @@ import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/editable_selection_info_group_item.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contact/contact.dart';
 
 /// Created by box on 2020/3/31.
 ///
 /// 添加联系人-信息组
 class RelatedPartyContactInfoGroup extends StatelessWidget {
-  final ContactInfoGroup infoGroup;
-  final TextInputType inputType;
-
   const RelatedPartyContactInfoGroup({
     Key key,
     @required this.infoGroup,
@@ -24,6 +22,9 @@ class RelatedPartyContactInfoGroup extends StatelessWidget {
   })  : assert(infoGroup != null),
         assert(inputType != null),
         super(key: key);
+
+  final ContactInfoGroup infoGroup;
+  final TextInputType inputType;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +39,10 @@ class RelatedPartyContactInfoGroup extends StatelessWidget {
           name: item.label.labelName,
           inputType: inputType,
           onPressed: () async {
-            var contact = await Navigator.push(
+            final contact = await Navigator.push<Contact>(
               context,
               RouteProvider.buildRoute(
-                CupertinoContactsPage(
+                const CupertinoContactsPage(
                   launchMode: HomeLaunchMode.onlySelection,
                 ),
                 fullscreenDialog: true,

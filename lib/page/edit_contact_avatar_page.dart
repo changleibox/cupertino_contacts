@@ -21,9 +21,9 @@ const double _padding = 16;
 const double _spacing = 24;
 
 class EditContactAvatarPage extends StatefulWidget {
-  final Uint8List avatar;
-
   const EditContactAvatarPage({Key key, this.avatar}) : super(key: key);
+
+  final Uint8List avatar;
 
   @override
   _EditContactAvatarPageState createState() => _EditContactAvatarPageState();
@@ -34,19 +34,19 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
 
   @override
   Widget builds(BuildContext context) {
-    var textTheme = CupertinoTheme.of(context).textTheme;
+    final textTheme = CupertinoTheme.of(context).textTheme;
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         border: null,
         leading: NavigationBarAction(
-          child: Text('取消'),
           onPressed: presenter.onCancelPressed,
+          child: const Text('取消'),
         ),
         trailing: NavigationBarAction(
-          child: Text('完成'),
           onPressed: presenter.isChanged ? presenter.onDonePressed : null,
+          child: const Text('完成'),
         ),
       ),
       child: SafeArea(
@@ -55,10 +55,10 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
           alignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           direction: Axis.vertical,
-          divider: CupertinoDivider(),
+          divider: const CupertinoDivider(),
           children: [
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 4,
                 bottom: 16,
               ),
@@ -86,7 +86,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                       presenter.editPicture(presenter.avatar);
                     },
                     child: presenter.isOnlyRead
-                        ? SizedBox.shrink()
+                        ? const SizedBox.shrink()
                         : Text(
                             '编辑',
                             style: TextStyle(
@@ -103,7 +103,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
               child: CustomScrollView(
                 slivers: <Widget>[
                   SliverPadding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: _padding,
                       top: 10,
                       right: _padding,
@@ -118,11 +118,11 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                             style: textTheme.textStyle,
                           ),
                           CupertinoButton(
-                            child: Text('所有照片'),
                             borderRadius: BorderRadius.zero,
                             padding: EdgeInsets.zero,
                             minSize: 0,
                             onPressed: presenter.onAllPicturePressed,
+                            child: const Text('所有照片'),
                           ),
                         ],
                       ),
@@ -137,7 +137,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                     sliver: SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          var avatar = presenter.proposals.elementAt(index);
+                          final avatar = presenter.proposals.elementAt(index);
                           return CupertinoCircleAvatar.memory(
                             assetName: Images.ic_default_avatar,
                             bytes: avatar.avatar,
@@ -153,7 +153,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
                         addRepaintBoundaries: true,
                         addSemanticIndexes: true,
                       ),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: _crossCount,
                         crossAxisSpacing: _spacing,
                         mainAxisSpacing: _spacing,

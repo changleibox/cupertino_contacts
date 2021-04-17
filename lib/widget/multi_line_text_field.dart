@@ -9,11 +9,6 @@ import 'package:flutter/cupertino.dart';
 ///
 /// 多行输入
 class MultiLineTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String name;
-  final int minLines;
-  final Color backgroundColor;
-
   const MultiLineTextField({
     Key key,
     @required this.controller,
@@ -25,6 +20,11 @@ class MultiLineTextField extends StatelessWidget {
         assert(minLines != null),
         super(key: key);
 
+  final TextEditingController controller;
+  final String name;
+  final int minLines;
+  final Color backgroundColor;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +32,7 @@ class MultiLineTextField extends StatelessWidget {
         backgroundColor ?? CupertinoColors.tertiarySystemGroupedBackground,
         context,
       ),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 10,
       ),

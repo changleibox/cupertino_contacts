@@ -34,11 +34,6 @@ enum LabelPageStatus {
 typedef LabelPickerBodyBuilder = Widget Function(BuildContext context, LabelPageStatus status);
 
 class AnimatedLabelPickerHeaderBody extends StatefulWidget {
-  final LabelPickerBodyBuilder builder;
-  final AsyncValueSetter<String> onQuery;
-  final bool canEdit;
-  final VoidCallback onCancelPressed;
-
   const AnimatedLabelPickerHeaderBody({
     Key key,
     @required this.builder,
@@ -48,6 +43,11 @@ class AnimatedLabelPickerHeaderBody extends StatefulWidget {
   })  : assert(builder != null),
         assert(canEdit != null),
         super(key: key);
+
+  final LabelPickerBodyBuilder builder;
+  final AsyncValueSetter<String> onQuery;
+  final bool canEdit;
+  final VoidCallback onCancelPressed;
 
   @override
   _AnimatedLabelPickerHeaderBodyState createState() => _AnimatedLabelPickerHeaderBodyState();
@@ -113,7 +113,7 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
     super.dispose();
   }
 
-  _onTrailingPressed() {
+  void _onTrailingPressed() {
     if (_isEditStatus) {
       _status = LabelPageStatus.none;
     } else {
@@ -124,12 +124,12 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
     setState(() {});
   }
 
-  _onQueryCancelPressed() {
+  void _onQueryCancelPressed() {
     _queryFocusNode.unfocus();
     _scrollController?.jumpTo(0);
     _animationController.animateTo(1.0);
     _queryController.clear();
-    Future<void> future = Future.value();
+    var future = Future<void>.value();
     if (widget.onQuery != null) {
       future = widget.onQuery(_queryController.text);
     }
@@ -146,8 +146,8 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
     Widget trailing;
     if (widget.canEdit || _isEditStatus) {
       trailing = NavigationBarAction(
-        child: Text(_isEditStatus ? '完成' : '编辑'),
         onPressed: _onTrailingPressed,
+        child: Text(_isEditStatus ? '完成' : '编辑'),
       );
     }
     return [
@@ -178,7 +178,7 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
 
   @override
   Widget build(BuildContext context) {
-    var padding = MediaQuery.of(context).padding;
+    final padding = MediaQuery.of(context).padding;
     return SupportNestedScrollView(
       pinnedHeaderSliverHeightBuilder: (context) {
         return (_isQueryStatus ? _kSearchBarHeight : _kNavigationBarHeight) + padding.top;
@@ -193,17 +193,6 @@ class _AnimatedLabelPickerHeaderBodyState extends State<AnimatedLabelPickerHeade
 }
 
 class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
-  final Widget trailing;
-  final TextEditingController queryController;
-  final ValueChanged<String> onQuery;
-  final FocusNode focusNode;
-  final double navigationBarHeight;
-  final double searchBarHeight;
-  final LabelPageStatus status;
-  final VoidCallback onCancelPressed;
-  final VoidCallback onQueryCancelPressed;
-  final Animation<double> offset;
-
   const AnimatedLabelPickerNavigationBar({
     Key key,
     @required ColorTween colorTween,
@@ -221,6 +210,17 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
         assert(searchBarHeight != null),
         assert(status != null),
         super(key: key, colorTween: colorTween);
+
+  final Widget trailing;
+  final TextEditingController queryController;
+  final ValueChanged<String> onQuery;
+  final FocusNode focusNode;
+  final double navigationBarHeight;
+  final double searchBarHeight;
+  final LabelPageStatus status;
+  final VoidCallback onCancelPressed;
+  final VoidCallback onQueryCancelPressed;
+  final Animation<double> offset;
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
@@ -252,12 +252,6 @@ class AnimatedLabelPickerNavigationBar extends AnimatedColorWidget {
 }
 
 class SelectionGroupWidget extends StatelessWidget {
-  final List<Widget> headers;
-  final List<Widget> footers;
-  final Iterable<Selection> selections;
-  final Selection selectedSelection;
-  final ValueChanged<Selection> onItemPressed;
-
   const SelectionGroupWidget({
     Key key,
     @required this.selections,
@@ -267,6 +261,12 @@ class SelectionGroupWidget extends StatelessWidget {
     this.footers,
   })  : assert(selections != null),
         super(key: key);
+
+  final List<Widget> headers;
+  final List<Widget> footers;
+  final Iterable<Selection> selections;
+  final Selection selectedSelection;
+  final ValueChanged<Selection> onItemPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +289,7 @@ class SelectionGroupWidget extends StatelessWidget {
       children.addAll(footers);
     }
 
-    var borderSide = BorderSide(
+    final borderSide = BorderSide(
       color: CupertinoDynamicColor.resolve(
         separatorColor,
         context,
@@ -297,7 +297,7 @@ class SelectionGroupWidget extends StatelessWidget {
       width: 0.0,
     );
 
-    var length = children.length;
+    final length = children.length;
     return Container(
       foregroundDecoration: BoxDecoration(
         border: Border.symmetric(
@@ -316,10 +316,10 @@ class SelectionGroupWidget extends StatelessWidget {
               CupertinoColors.secondarySystemGroupedBackground,
               context,
             ),
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: 16,
             ),
-            child: CupertinoDivider(),
+            child: const CupertinoDivider(),
           );
         },
       ),
@@ -328,14 +328,6 @@ class SelectionGroupWidget extends StatelessWidget {
 }
 
 class DeleteableSelectionGroupWidget extends StatefulWidget {
-  final List<Widget> headers;
-  final List<Widget> footers;
-  final Iterable<Selection> selections;
-  final Selection selectedSelection;
-  final ValueChanged<Selection> onItemPressed;
-  final ValueChanged<Selection> onDeletePressed;
-  final bool hasDeleteButton;
-
   const DeleteableSelectionGroupWidget({
     Key key,
     @required this.selections,
@@ -348,6 +340,14 @@ class DeleteableSelectionGroupWidget extends StatefulWidget {
   })  : assert(selections != null),
         assert(hasDeleteButton != null),
         super(key: key);
+
+  final List<Widget> headers;
+  final List<Widget> footers;
+  final Iterable<Selection> selections;
+  final Selection selectedSelection;
+  final ValueChanged<Selection> onItemPressed;
+  final ValueChanged<Selection> onDeletePressed;
+  final bool hasDeleteButton;
 
   @override
   DeleteableSelectionGroupWidgetState createState() => DeleteableSelectionGroupWidgetState();
@@ -371,9 +371,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
       _footers.addAll(widget.footers);
     }
     _selections.addAll(widget.selections);
-    _selections.forEach((element) {
-      _slidableKeyMap[element] = GlobalKey();
-    });
+    _slidableKeyMap.addEntries(_selections.map((e) => MapEntry(e, GlobalKey())));
     super.initState();
   }
 
@@ -416,7 +414,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
   }
 
   void removeHeaderFooter(int index, bool isHeader) {
-    var child;
+    Widget child;
     if (isHeader) {
       assert(index != null && index >= 0 && index < _headers.length);
       child = _headers[index];
@@ -441,7 +439,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
   }
 
   void removeSelection(Selection selection) {
-    var index = _selections.indexOf(selection) + _headers.length;
+    final index = _selections.indexOf(selection) + _headers.length;
     _selections.remove(selection);
     _slidableKeyMap.remove(selection);
     setState(() {});
@@ -469,7 +467,7 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
       axisAlignment: 1,
       child: child,
     );
-    var childrenCount = _childrenCount;
+    final childrenCount = _childrenCount;
     if (childrenCount <= 0) {
       child = Container(
         foregroundDecoration: BoxDecoration(
@@ -490,11 +488,11 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
   }
 
   Widget _wrapSlidable({@required Widget child, @required Selection selection}) {
-    var textStyle = CupertinoTheme.of(context).textTheme.textStyle;
+    final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
     return Slidable.builder(
       key: _slidableKeyMap[selection],
       controller: _slidableController,
-      actionPane: SlidableDrawerActionPane(),
+      actionPane: const SlidableDrawerActionPane(),
       secondaryActionDelegate: SlideActionListDelegate(
         actions: [
           SlideAction(
@@ -520,15 +518,15 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
 
   Widget _wrapBorder({bool hasTop = false, bool hasBottom = false, @required Widget child}) {
     assert(hasTop != null && hasBottom != null && child != null);
-    var divider = Container(
+    final divider = Container(
       color: CupertinoDynamicColor.resolve(
         CupertinoColors.secondarySystemGroupedBackground,
         context,
       ),
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 16,
       ),
-      child: CupertinoDivider(),
+      child: const CupertinoDivider(),
     );
     return WidgetGroup(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -543,11 +541,14 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
 
   Widget _buildDeleteIconButton(GlobalKey<SlidableState> globalKey) {
     return CupertinoButton(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         right: 10,
       ),
       minSize: 0,
       borderRadius: BorderRadius.zero,
+      onPressed: () {
+        globalKey?.currentState?.open(actionType: SlideActionType.secondary);
+      },
       child: Icon(
         Ionicons.ios_remove_circle,
         color: CupertinoDynamicColor.resolve(
@@ -555,9 +556,6 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
           context,
         ),
       ),
-      onPressed: () {
-        globalKey?.currentState?.open(actionType: SlideActionType.secondary);
-      },
     );
   }
 
@@ -623,12 +621,6 @@ class DeleteableSelectionGroupWidgetState extends State<DeleteableSelectionGroup
 }
 
 class _SelectionItemButton extends StatelessWidget {
-  final Selection selection;
-  final bool selected;
-  final VoidCallback onPressed;
-  final Widget leading;
-  final Widget trailing;
-
   const _SelectionItemButton({
     Key key,
     @required this.selection,
@@ -640,9 +632,15 @@ class _SelectionItemButton extends StatelessWidget {
         assert(selected != null),
         super(key: key);
 
+  final Selection selection;
+  final bool selected;
+  final VoidCallback onPressed;
+  final Widget leading;
+  final Widget trailing;
+
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
+    final themeData = CupertinoTheme.of(context);
     return LabelItemButton(
       text: selection.selectionName,
       onPressed: onPressed,
@@ -658,11 +656,6 @@ class _SelectionItemButton extends StatelessWidget {
 }
 
 class LabelItemButton extends StatelessWidget {
-  final String text;
-  final Widget leading;
-  final Widget trailing;
-  final VoidCallback onPressed;
-
   const LabelItemButton({
     Key key,
     @required this.text,
@@ -672,13 +665,25 @@ class LabelItemButton extends StatelessWidget {
   })  : assert(text != null),
         super(key: key);
 
+  final String text;
+  final Widget leading;
+  final Widget trailing;
+  final VoidCallback onPressed;
+
   @override
   Widget build(BuildContext context) {
-    var themeData = CupertinoTheme.of(context);
-    var textTheme = themeData.textTheme;
-    var textStyle = textTheme.textStyle;
+    final themeData = CupertinoTheme.of(context);
+    final textTheme = themeData.textTheme;
+    final textStyle = textTheme.textStyle;
 
     return CupertinoButton(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 8,
+      ),
+      borderRadius: BorderRadius.zero,
+      color: CupertinoColors.secondarySystemGroupedBackground,
+      onPressed: onPressed,
       child: Align(
         alignment: Alignment.centerLeft,
         child: WidgetGroup.spacing(
@@ -696,22 +701,11 @@ class LabelItemButton extends StatelessWidget {
           ],
         ),
       ),
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 8,
-      ),
-      borderRadius: BorderRadius.zero,
-      color: CupertinoColors.secondarySystemGroupedBackground,
-      onPressed: onPressed,
     );
   }
 }
 
 class CustomLabelTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final VoidCallback onEditingComplete;
-
   const CustomLabelTextField({
     Key key,
     this.controller,
@@ -719,11 +713,15 @@ class CustomLabelTextField extends StatelessWidget {
     this.onEditingComplete,
   }) : super(key: key);
 
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final VoidCallback onEditingComplete;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 44,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         right: 10,
       ),
       color: CupertinoDynamicColor.resolve(
@@ -733,7 +731,7 @@ class CustomLabelTextField extends StatelessWidget {
       child: CupertinoTextField(
         controller: controller,
         focusNode: focusNode,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 10,
         ),

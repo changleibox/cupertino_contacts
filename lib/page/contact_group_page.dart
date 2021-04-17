@@ -17,12 +17,12 @@ import 'package:flutter_contact/contacts.dart';
 ///
 /// 群组
 class ContactGroupPage extends StatefulWidget {
-  final List<Group> selectedGroups;
-
   const ContactGroupPage({
     Key key,
     this.selectedGroups,
   }) : super(key: key);
+
+  final List<Group> selectedGroups;
 
   @override
   _ContactGroupPageState createState() => _ContactGroupPageState();
@@ -32,7 +32,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
   _ContactGroupPageState() : super(ContactGroupPresenter());
 
   List<Widget> _buildChildren() {
-    var borderSide = BorderSide(
+    final borderSide = BorderSide(
       color: CupertinoDynamicColor.resolve(
         separatorColor,
         context,
@@ -50,7 +50,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
         onRefresh: presenter.onRefresh,
       ));
       if (presenter.isEmpty) {
-        slivers.add(SliverFillRemaining(
+        slivers.add(const SliverFillRemaining(
           child: ErrorTips(
             exception: '暂无群组',
           ),
@@ -88,7 +88,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
               direction: Axis.vertical,
               itemCount: presenter.itemCount,
               itemBuilder: (context, index) {
-                var group = presenter[index];
+                final group = presenter[index];
                 return Container(
                   foregroundDecoration: BoxDecoration(
                     border: Border(
@@ -97,6 +97,16 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                     ),
                   ),
                   child: CupertinoButton(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 8,
+                    ),
+                    color: CupertinoColors.secondarySystemGroupedBackground,
+                    minSize: 44,
+                    borderRadius: BorderRadius.zero,
+                    onPressed: () {
+                      presenter.switchSelect(group);
+                    },
                     child: WidgetGroup.spacing(
                       alignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -113,21 +123,11 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
                           ),
                       ],
                     ),
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 8,
-                    ),
-                    color: CupertinoColors.secondarySystemGroupedBackground,
-                    minSize: 44,
-                    borderRadius: BorderRadius.zero,
-                    onPressed: () {
-                      presenter.switchSelect(group);
-                    },
                   ),
                 );
               },
               separatorBuilder: (context, index) {
-                return Padding(
+                return const Padding(
                   padding: EdgeInsets.only(
                     left: 16,
                   ),
@@ -146,15 +146,15 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('群组'),
+        middle: const Text('群组'),
         automaticallyImplyLeading: false,
         backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         trailing: CupertinoButton(
-          child: Text('完成'),
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.zero,
           minSize: 0,
           onPressed: presenter.onDonePressed,
+          child: const Text('完成'),
         ),
       ),
       child: CustomScrollView(

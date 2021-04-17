@@ -19,11 +19,6 @@ typedef FastIndexBiggerBuilder = Widget Function(
 const Duration _kDefaultDuration = Duration(milliseconds: 300);
 
 class FastIndexBigger extends StatefulWidget {
-  final FastIndexController controller;
-  final List<String> indexs;
-  final Widget child;
-  final FastIndexBiggerBuilder builder;
-
   const FastIndexBigger({
     Key key,
     @required this.controller,
@@ -34,6 +29,11 @@ class FastIndexBigger extends StatefulWidget {
         assert(indexs != null),
         assert(builder != null),
         super(key: key);
+
+  final FastIndexController controller;
+  final List<String> indexs;
+  final Widget child;
+  final FastIndexBiggerBuilder builder;
 
   @override
   _FastIndexBiggerState createState() => _FastIndexBiggerState();
@@ -65,12 +65,12 @@ class _FastIndexBiggerState extends State<FastIndexBigger> with SingleTickerProv
   }
 
   Widget _buildIndexBigger(BuildContext context, FastIndexDetails details, Widget child) {
-    var position = details.position;
-    var rect;
+    final position = details.position;
+    Rect rect;
     if (position == null) {
       rect = null;
     } else {
-      var containerLocalPosition = position.containerLocalPosition;
+      final containerLocalPosition = position.containerLocalPosition;
       rect = position.localRect.shift(containerLocalPosition);
     }
     if (_oldDetails != null && rect == null) {

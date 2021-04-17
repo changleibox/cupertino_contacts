@@ -9,9 +9,6 @@ import 'package:flutter/material.dart';
 ///
 /// 错误提示
 class ErrorTips extends StatelessWidget {
-  final dynamic exception;
-  final TextStyle style;
-
   const ErrorTips({
     Key key,
     this.exception = '暂无数据',
@@ -19,9 +16,12 @@ class ErrorTips extends StatelessWidget {
   })  : assert(exception != null),
         super(key: key);
 
+  final dynamic exception;
+  final TextStyle style;
+
   @override
   Widget build(BuildContext context) {
-    var textTheme = CupertinoTheme.of(context).textTheme;
+    final textTheme = CupertinoTheme.of(context).textTheme;
     return Center(
       child: Text(
         exception.toString(),
