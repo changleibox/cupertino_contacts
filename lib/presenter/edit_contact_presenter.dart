@@ -24,6 +24,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_contact/contact.dart';
 import 'package:flutter_contact/contacts.dart';
+import 'package:flexidate/flexidate.dart';
 
 class EditContactPresenter extends Presenter<EditContactPage> implements EditContactOperation {
   ObserverList<VoidCallback> _listeners = ObserverList<VoidCallback>();
@@ -123,9 +124,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       items: _initialContact.dates?.where((element) {
         return selections.contains(SelectionType.birthday, element.label);
       })?.map((e) {
+        var dateTime = DateTime.parse(e.dateOrValue);
         return DateTimeItem(
           label: selections.selectionAtName(SelectionType.birthday, e.label),
-          value: e.date.toDateTime(),
+          value: dateTime,
         );
       })?.toList(),
       selectionType: SelectionType.birthday,
@@ -135,9 +137,10 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       items: _initialContact.dates?.where((element) {
         return selections.contains(SelectionType.date, element.label);
       })?.map((e) {
+        var dateTime = DateTime.parse(e.dateOrValue);
         return DateTimeItem(
           label: selections.selectionAtName(SelectionType.date, e.label),
-          value: e.date.toDateTime(),
+          value: dateTime,
         );
       })?.toList(),
       selectionType: SelectionType.date,
@@ -334,7 +337,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       var dateTime = e.value;
       return ContactDate(
         label: e.label.propertyName,
-        date: DateComponents.fromDateTime(dateTime),
+        date: FlexiDate.ofDateTime(dateTime),
       );
     }).toList();
   }

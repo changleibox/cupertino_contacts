@@ -169,10 +169,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       children.addAll(dates.where((element) {
         return selections.contains(SelectionType.birthday, element.label);
       }).map((e) {
-        var dateTime = e.date.toDateTime();
+        final dateTime = DateTime.parse(e.dateOrValue);
         return _NormalGroupInfoWidget(
           name: selections.selectionAtName(SelectionType.birthday, e.label).labelName,
-          value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
+          value: DateFormat('yyyy年MM月dd日').format(dateTime),
           valueColor: actionTextStyle.color,
           onPressed: () {
             var currentYear = DateTime.now().year;
@@ -186,10 +186,10 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       children.addAll(dates.where((element) {
         return selections.contains(SelectionType.date, element.label);
       }).map((e) {
-        var dateTime = e.date.toDateTime();
+        final dateTime = DateTime.parse(e.dateOrValue);
         return _NormalGroupInfoWidget(
           name: selections.selectionAtName(SelectionType.date, e.label).labelName,
-          value: DateFormat('yyyy年MM月dd日').format(e.date.toDateTime()),
+          value: DateFormat('yyyy年MM月dd日').format(dateTime),
           valueColor: actionTextStyle.color,
           onPressed: () {
             var currentYear = DateTime.now().year;

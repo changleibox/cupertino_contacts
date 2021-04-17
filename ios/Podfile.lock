@@ -1,19 +1,9 @@
 PODS:
-  - device_info (0.0.1):
-    - Flutter
-  - devicelocale (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_contact (0.0.1):
     - Flutter
-  - get_ip (0.0.1):
-    - Flutter
   - image_picker (0.0.1):
     - Flutter
-  - libphonenumber (0.0.1):
-    - Flutter
-    - libPhoneNumber-iOS
-  - libPhoneNumber-iOS (0.9.15)
   - "permission_handler (5.1.0+2)":
     - Flutter
   - share (0.0.1):
@@ -22,36 +12,20 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - device_info (from `.symlinks/plugins/device_info/ios`)
-  - devicelocale (from `.symlinks/plugins/devicelocale/ios`)
   - Flutter (from `Flutter`)
   - flutter_contact (from `.symlinks/plugins/flutter_contact/ios`)
-  - get_ip (from `.symlinks/plugins/get_ip/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - libphonenumber (from `.symlinks/plugins/libphonenumber/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
-SPEC REPOS:
-  trunk:
-    - libPhoneNumber-iOS
-
 EXTERNAL SOURCES:
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
-  devicelocale:
-    :path: ".symlinks/plugins/devicelocale/ios"
   Flutter:
     :path: Flutter
   flutter_contact:
     :path: ".symlinks/plugins/flutter_contact/ios"
-  get_ip:
-    :path: ".symlinks/plugins/get_ip/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
-  libphonenumber:
-    :path: ".symlinks/plugins/libphonenumber/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   share:
@@ -60,14 +34,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
-  devicelocale: feebbe5e7a30adb8c4f83185de1b50ff19b44f00
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_contact: 3e9390b4afb2a6af4b8ae968bd8afc2b54b01ec1
-  get_ip: c063133e0a399ae4089048c90d6a232cb2344846
+  flutter_contact: de1260a343986ae87ef21dcda46f4ae584eceb8c
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
-  libphonenumber: bd14d5abfc5939ab0b0767234e2d8e2593af258e
-  libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
