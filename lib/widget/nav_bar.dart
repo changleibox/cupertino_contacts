@@ -2040,7 +2040,6 @@ class _NavigationBarComponentsTransition {
   }
 
   Widget get topBackLabel {
-    final bottomBackLabel = bottomComponents.backLabelKey.currentWidget as KeyedSubtree;
     final bottomMiddle = bottomComponents.middleKey.currentWidget as KeyedSubtree;
     final bottomLargeTitle = bottomComponents.largeTitleKey.currentWidget as KeyedSubtree;
     final topBackLabel = topComponents.backLabelKey.currentWidget as KeyedSubtree;
@@ -2110,34 +2109,28 @@ class _NavigationBarComponentsTransition {
       );
     }
 
-    if (bottomBackLabel != null && topBackLabel != null) {
-      return PositionedTransition(
-        rect: animation.drive(slideFromLeadingEdge(
-          fromKey: bottomComponents.backLabelKey,
-          fromNavBarBox: bottomNavBarBox,
-          toKey: topComponents.backLabelKey,
-          toNavBarBox: topNavBarBox,
+    return Positioned.fromRelativeRect(
+      rect: positionInTransitionBox(
+        topComponents.backLabelKey,
+        from: topNavBarBox,
+      ),
+      child: SlideTransition(
+        position: animation.drive(Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: const Offset(0, 0),
         )),
-        child: SlideTransition(
-          position: animation.drive(Tween<Offset>(
-            begin: const Offset(1, 0),
-            end: const Offset(0, 0),
-          )),
-          child: FadeTransition(
-            opacity: midClickOpacity ?? fadeInFrom(0.0),
-            child: DefaultTextStyleTransition(
-              style: animation.drive(TextStyleTween(
-                begin: bottomBackButtonTextStyle,
-                end: topBackButtonTextStyle,
-              )),
-              child: topBackLabel.child,
-            ),
+        child: FadeTransition(
+          opacity: midClickOpacity ?? fadeInFrom(0.0),
+          child: DefaultTextStyleTransition(
+            style: animation.drive(TextStyleTween(
+              begin: bottomBackButtonTextStyle,
+              end: topBackButtonTextStyle,
+            )),
+            child: topBackLabel.child,
           ),
         ),
-      );
-    }
-
-    return null;
+      ),
+    );
   }
 
   Widget get topMiddle {
