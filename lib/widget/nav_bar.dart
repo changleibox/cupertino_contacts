@@ -1079,7 +1079,7 @@ class _NavigationBarStaticComponents {
       key: leadingKey,
       child: Padding(
         padding: EdgeInsetsDirectional.only(
-          start: padding.start ?? _kNavBarEdgePadding,
+          start: padding?.start ?? _kNavBarEdgePadding,
         ),
         child: IconTheme.merge(
           data: const IconThemeData(

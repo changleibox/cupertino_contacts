@@ -9,6 +9,7 @@ import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/util/image.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/load_prompt.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,7 +90,7 @@ class _StackFilterPageState extends State<StackFilterPage> {
     final imageSize = (MediaQuery.of(context).size.width - _spacing) / 2 - _padding;
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: SupportNavigationBar(
         backgroundColor: CupertinoColors.tertiarySystemGroupedBackground,
         middle: const Text('选取滤镜'),
         leading: NavigationBarAction(

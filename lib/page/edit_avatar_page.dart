@@ -7,6 +7,7 @@ import 'package:cupertinocontacts/presenter/edit_avatar_presenter.dart';
 import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -43,7 +44,7 @@ class _EditAvatarPageState extends PresenterState<EditAvatarPage, EditAvatarPres
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: SupportNavigationBar(
         automaticallyImplyLeading: false,
         backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         trailing: CupertinoButton(

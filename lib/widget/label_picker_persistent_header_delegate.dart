@@ -5,6 +5,7 @@
 import 'dart:math';
 
 import 'package:cupertinocontacts/widget/label_picker_widget.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,7 +56,7 @@ class LabelPickePersistentHeaderDelegate extends SliverPersistentHeaderDelegate 
           left: 0,
           top: 0,
           right: 0,
-          child: CupertinoNavigationBar(
+          child: SupportNavigationBar(
             backgroundColor: backgroundColor,
             // middle: Text('标签'),
             transitionBetweenRoutes: false,

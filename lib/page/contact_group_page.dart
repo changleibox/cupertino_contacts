@@ -8,6 +8,7 @@ import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/cupertino_progress.dart';
 import 'package:cupertinocontacts/widget/error_tips.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/support_refresh_indicator.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -145,7 +146,7 @@ class _ContactGroupPageState extends PresenterState<ContactGroupPage, ContactGro
   @override
   Widget builds(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: SupportNavigationBar(
         middle: const Text('群组'),
         automaticallyImplyLeading: false,
         backgroundColor: CupertinoColors.secondarySystemGroupedBackground,

@@ -91,7 +91,7 @@ class _HomePageState extends PresenterState<HomePage, HomePresenter> {
     if (!presenter.isSelectionMode) {
       return null;
     }
-    return CupertinoNavigationBar(
+    return SupportNavigationBar(
       middle: const Text('通讯录'),
       padding: const EdgeInsetsDirectional.only(
         start: 16,

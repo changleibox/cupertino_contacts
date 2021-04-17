@@ -9,6 +9,7 @@ import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
 import 'package:cupertinocontacts/widget/cupertino_divider.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +38,7 @@ class _EditContactAvatarPageState extends PresenterState<EditContactAvatarPage, 
     final textTheme = CupertinoTheme.of(context).textTheme;
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: SupportNavigationBar(
         backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
         border: null,
         leading: NavigationBarAction(
