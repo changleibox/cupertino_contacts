@@ -16,11 +16,7 @@ class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
   Future<List<Group>> onLoad(bool showProgress) async {
     final groups = <Group>[];
     groups.add(_allIPhoneGroup);
-    try {
-      groups.addAll(await Contacts.getGroups());
-    } catch (e) {
-      print(e);
-    }
+    groups.addAll(await Contacts.getGroups());
     return groups;
   }
 
