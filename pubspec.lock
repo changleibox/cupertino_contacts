@@ -135,9 +135,11 @@ packages:
   flutter_slidable:
     dependency: "direct main"
     description:
-      name: flutter_slidable
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: null_safety
+      resolved-ref: a50ca6501ab72f0caa4d5ba7dba5d8c0839a4acc
+      url: "https://github.com/changleibox/flutter_slidable"
+    source: git
     version: "0.6.0"
   flutter_test:
     dependency: "direct dev"

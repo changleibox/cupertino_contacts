@@ -14,6 +14,7 @@ import 'package:cupertinocontacts/widget/drag_dismiss_keyboard_container.dart';
 import 'package:cupertinocontacts/widget/error_tips.dart';
 import 'package:cupertinocontacts/widget/fast_index_container.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/search_bar_header_delegate.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
@@ -182,32 +183,20 @@ class _HomePageState extends PresenterState<HomePage, HomePresenter> {
 
   @override
   Widget builds(BuildContext context) {
-    final themeData = CupertinoTheme.of(context);
-    final textTheme = themeData.textTheme;
-    final navLargeTitleTextStyle = textTheme.navLargeTitleTextStyle;
-    return CupertinoTheme(
-      data: themeData.copyWith(
-        textTheme: textTheme.copyWith(
-          navLargeTitleTextStyle: navLargeTitleTextStyle.copyWith(
-            height: 0.0,
-          ),
-        ),
-      ),
-      child: CupertinoPageScaffold(
-        navigationBar: _buildNavigationBar(),
-        child: SafeArea(
-          top: presenter.isSelectionMode,
-          bottom: false,
-          child: DragDismissKeyboardContainer(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: SupportNestedScrollView(
-              pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
-              headerSliverBuilder: _buildHeaderSliver,
-              physics: const SnappingScrollPhysics(
-                midScrollOffset: _kNavBarLargeTitleHeightExtension,
-              ),
-              body: _buildBody(),
+    return CupertinoPageScaffold(
+      navigationBar: _buildNavigationBar(),
+      child: SafeArea(
+        top: presenter.isSelectionMode,
+        bottom: false,
+        child: DragDismissKeyboardContainer(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: SupportNestedScrollView(
+            pinnedHeaderSliverHeightBuilder: _buildPinnedHeaderSliverHeight,
+            headerSliverBuilder: _buildHeaderSliver,
+            physics: const SnappingScrollPhysics(
+              midScrollOffset: _kNavBarLargeTitleHeightExtension,
             ),
+            body: _buildBody(),
           ),
         ),
       ),
@@ -226,7 +215,7 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
 
   @override
   Widget evaluateBuild(BuildContext context, Color color) {
-    return CupertinoSliverNavigationBar(
+    return SupportSliverNavigationBar(
       largeTitle: const Text('通讯录'),
       padding: const EdgeInsetsDirectional.only(
         start: 16,

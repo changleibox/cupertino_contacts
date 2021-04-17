@@ -23,7 +23,7 @@ class RelatedPartyContactInfoGroup extends StatelessWidget {
         assert(inputType != null),
         super(key: key);
 
-  final ContactInfoGroup infoGroup;
+  final ContactInfoGroup<EditableSelectionItem> infoGroup;
   final TextInputType inputType;
 
   @override

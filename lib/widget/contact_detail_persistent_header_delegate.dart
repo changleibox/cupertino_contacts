@@ -8,6 +8,7 @@ import 'package:cupertinocontacts/resource/assets.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/util/native_service.dart';
 import 'package:cupertinocontacts/widget/circle_avatar.dart';
+import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
@@ -85,7 +86,7 @@ class ContactDetailPersistentHeaderDelegate extends SliverPersistentHeaderDelega
             left: 0,
             top: 0,
             right: 0,
-            child: CupertinoNavigationBar(
+            child: SupportNavigationBar(
               backgroundColor: CupertinoColors.secondarySystemGroupedBackground,
               border: null,
               previousPageTitle: launchMode != DetailLaunchMode.editView ? '通讯录' : '返回',

@@ -105,7 +105,7 @@ class _EditContactPageState extends PresenterState<EditContactPage, EditContactP
         );
       } else if (key == ContactItemType.relatedParty) {
         children.add(
-          RelatedPartyContactInfoGroup(infoGroup: contactInfo as ContactInfoGroup<DateTimeItem>),
+          RelatedPartyContactInfoGroup(infoGroup: contactInfo as ContactInfoGroup<EditableSelectionItem>),
         );
       } else if (contactInfo is ContactInfoGroup<EditableItem>) {
         children.add(EditContactInfoGroup(

@@ -34,7 +34,10 @@ dependencies:
   lpinyin: ^2.0.1
   image_picker: ^0.7.2
   collection: ^1.14.13
-  flutter_slidable: ^0.6.0
+  flutter_slidable:
+    git:
+      url: https://github.com/changleibox/flutter_slidable
+      ref: null_safety
   url_launcher: ^6.0.2
   share: ^2.0.0
   permission_handler: ^6.1.3
