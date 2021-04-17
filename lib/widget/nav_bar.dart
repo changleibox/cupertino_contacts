@@ -2058,8 +2058,8 @@ class _NavigationBarComponentsTransition {
       ));
     }
 
-    // Pick up from an incoming transition from the large title. This is
-    // duplicated here from the bottomLargeTitle transition widget because the
+    // Pick up to an incoming transition to the large title. This is
+    // duplicated here to the bottomLargeTitle transition widget because the
     // content text might be different. For instance, if the bottomLargeTitle
     // text is too long, the topBackLabel will say 'Back' instead of the original
     // text.
@@ -2086,7 +2086,7 @@ class _NavigationBarComponentsTransition {
       );
     }
 
-    // The topBackLabel always comes from the large title first if available
+    // The topBackLabel always comes to the large title first if available
     // and expanded instead of middle.
     if (bottomMiddle != null && topBackLabel != null) {
       return PositionedTransition(
@@ -2109,25 +2109,23 @@ class _NavigationBarComponentsTransition {
       );
     }
 
-    return Positioned.fromRelativeRect(
-      rect: positionInTransitionBox(
-        topComponents.backLabelKey,
-        from: topNavBarBox,
-      ),
-      child: SlideTransition(
-        position: animation.drive(Tween<Offset>(
-          begin: const Offset(1, 0),
-          end: const Offset(0, 0),
-        )),
-        child: FadeTransition(
-          opacity: midClickOpacity ?? fadeInFrom(0.0),
-          child: DefaultTextStyleTransition(
-            style: animation.drive(TextStyleTween(
-              begin: bottomBackButtonTextStyle,
-              end: topBackButtonTextStyle,
-            )),
-            child: topBackLabel.child,
-          ),
+    final to = positionInTransitionBox(topComponents.backLabelKey, from: topNavBarBox);
+    // Transition away by sliding horizontally to the leading edge off of the screen.
+    final positionTween = RelativeRectTween(
+      begin: to.shift(Offset(forwardDirection * (topNavBarBox.size.width / 4), 0.0)),
+      end: to,
+    );
+
+    return PositionedTransition(
+      rect: animation.drive(positionTween),
+      child: FadeTransition(
+        opacity: midClickOpacity ?? fadeInFrom(0.3, curve: Curves.linear),
+        child: DefaultTextStyleTransition(
+          style: animation.drive(TextStyleTween(
+            begin: bottomBackButtonTextStyle,
+            end: topBackButtonTextStyle,
+          )),
+          child: topBackLabel.child,
         ),
       ),
     );
