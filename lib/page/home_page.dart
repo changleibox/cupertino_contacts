@@ -93,10 +93,6 @@ class _HomePageState extends PresenterState<HomePage, HomePresenter> {
     }
     return SupportNavigationBar(
       middle: const Text('通讯录'),
-      padding: const EdgeInsetsDirectional.only(
-        start: 16,
-        end: 10,
-      ),
       border: null,
       backgroundColor: _colorTween.end,
       leading: NavigationBarAction(

@@ -458,7 +458,12 @@ class _SupportNavigationBarState extends State<SupportNavigationBar> {
         return Hero(
           tag: widget.heroTag == _defaultHeroTag ? _HeroTag(Navigator.of(context)) : widget.heroTag,
           createRectTween: _linearTranslateWithLargestRectSizeTween,
-          placeholderBuilder: _navBarHeroLaunchPadBuilder,
+          placeholderBuilder: (context, heroSize, child) {
+            return Container(
+              color: CupertinoDynamicColor.resolve(backgroundColor, context),
+              child: _navBarHeroLaunchPadBuilder(context, heroSize, child),
+            );
+          },
           flightShuttleBuilder: _navBarHeroFlightShuttleBuilder,
           transitionOnUserGestures: true,
           child: _TransitionableNavigationBar(
