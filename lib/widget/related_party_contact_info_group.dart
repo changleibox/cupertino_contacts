@@ -4,7 +4,7 @@
 
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
-import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/page/home_page.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/contact_info_group_widget.dart';
 import 'package:cupertinocontacts/widget/editable_selection_info_group_item.dart';
@@ -42,7 +42,7 @@ class RelatedPartyContactInfoGroup extends StatelessWidget {
             final contact = await Navigator.push<Contact>(
               context,
               RouteProvider.buildRoute(
-                const CupertinoContactsPage(
+                const HomePage(
                   launchMode: HomeLaunchMode.onlySelection,
                 ),
                 fullscreenDialog: true,

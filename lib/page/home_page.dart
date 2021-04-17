@@ -4,7 +4,7 @@
 
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/page/edit_contact_page.dart';
-import 'package:cupertinocontacts/presenter/cupertino_contacts_presenter.dart';
+import 'package:cupertinocontacts/presenter/home_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:cupertinocontacts/widget/animated_color_widget.dart';
@@ -30,8 +30,8 @@ const double _kNavBarLargeTitleHeightExtension = 52.0;
 const double _kIndexHeight = 26.0;
 const double _kItemHeight = 44.0;
 
-class CupertinoContactsPage extends StatefulWidget {
-  const CupertinoContactsPage({
+class HomePage extends StatefulWidget {
+  const HomePage({
     Key key,
     this.launchMode = HomeLaunchMode.normal,
     this.selectedIds,
@@ -42,11 +42,11 @@ class CupertinoContactsPage extends StatefulWidget {
   final List<String> selectedIds;
 
   @override
-  _CupertinoContactsPageState createState() => _CupertinoContactsPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _CupertinoContactsPageState extends PresenterState<CupertinoContactsPage, CupertinoContactsPresenter> {
-  _CupertinoContactsPageState() : super(CupertinoContactsPresenter());
+class _HomePageState extends PresenterState<HomePage, HomePresenter> {
+  _HomePageState() : super(HomePresenter());
 
   ColorTween _colorTween;
 

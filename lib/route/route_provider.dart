@@ -2,7 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/page/home_page.dart';
 import 'package:cupertinocontacts/page/launcher_page.dart';
 import 'package:cupertinocontacts/route/dialog_route.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +18,7 @@ class RouteProvider {
 
   static Map<String, WidgetBuilder> routes = {
     launcher: (context) => const LauncherPage(),
-    home: (context) => const CupertinoContactsPage(),
+    home: (context) => const HomePage(),
   };
 
   static RouteFactory buildGenerateRoute(BuildContext context) {

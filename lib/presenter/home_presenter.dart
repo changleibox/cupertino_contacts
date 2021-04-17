@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/page/contact_group_page.dart';
-import 'package:cupertinocontacts/page/cupertino_contacts_page.dart';
+import 'package:cupertinocontacts/page/home_page.dart';
 import 'package:cupertinocontacts/presenter/list_presenter.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ import 'package:lpinyin/lpinyin.dart';
 
 const String _kOctothorpe = '#';
 
-class CupertinoContactsPresenter extends ListPresenter<CupertinoContactsPage, Contact> {
+class HomePresenter extends ListPresenter<HomePage, Contact> {
   final _contactsMap = <String, List<Contact>>{};
   final _contactKeys = <GlobalKey>[];
 
