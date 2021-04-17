@@ -832,7 +832,12 @@ class _LargeTitleNavigationBarSliverDelegate extends SliverPersistentHeaderDeleg
       tag: heroTag == _defaultHeroTag ? _HeroTag(Navigator.of(context)) : heroTag,
       createRectTween: _linearTranslateWithLargestRectSizeTween,
       flightShuttleBuilder: _navBarHeroFlightShuttleBuilder,
-      placeholderBuilder: _navBarHeroLaunchPadBuilder,
+      placeholderBuilder: (context, heroSize, child) {
+        return Container(
+          color: CupertinoDynamicColor.resolve(backgroundColor, context),
+          child: _navBarHeroLaunchPadBuilder(context, heroSize, child),
+        );
+      },
       transitionOnUserGestures: true,
       // This is all the way down here instead of being at the top level of
       // CupertinoSliverNavigationBar like CupertinoNavigationBar because it
@@ -1561,21 +1566,21 @@ class _NavigationBarTransition extends StatelessWidget {
     final children = <Widget>[
       // Draw an empty navigation bar box with changing shape behind all the
       // moving components without any components inside it itself.
-      AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget child) {
-          return _wrapWithBackground(
-            // Don't update the system status bar color mid-flight.
-            updateSystemUiOverlay: false,
-            backgroundColor: backgroundTween.evaluate(animation),
-            border: borderTween.evaluate(animation),
-            child: SizedBox(
-              height: heightTween.evaluate(animation),
-              width: double.infinity,
-            ),
-          );
-        },
-      ),
+      // AnimatedBuilder(
+      //   animation: animation,
+      //   builder: (BuildContext context, Widget child) {
+      //     return _wrapWithBackground(
+      //       // Don't update the system status bar color mid-flight.
+      //       updateSystemUiOverlay: false,
+      //       backgroundColor: backgroundTween.evaluate(animation),
+      //       border: borderTween.evaluate(animation),
+      //       child: SizedBox(
+      //         height: heightTween.evaluate(animation),
+      //         width: double.infinity,
+      //       ),
+      //     );
+      //   },
+      // ),
       // Draw all the components on top of the empty bar box.
       if (componentsTransition.bottomBackChevron != null) componentsTransition.bottomBackChevron,
       if (componentsTransition.bottomBackLabel != null) componentsTransition.bottomBackLabel,
