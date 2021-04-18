@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:cupertinocontacts/model/caches.dart';
 import 'package:cupertinocontacts/page/launcher_page.dart';
 import 'package:cupertinocontacts/presenter/presenter.dart';
 import 'package:cupertinocontacts/route/route_provider.dart';
@@ -14,14 +15,17 @@ class LauncherPresenter extends Presenter<LauncherPage> {
   Timer _timer;
 
   @override
-  void postFrameCallback() {
-    _timer = Timer(const Duration(seconds: 2), () {
-      _requestPermission().then((value) {
-        Navigator.pushReplacementNamed(context, RouteProvider.home);
-      }).catchError((dynamic _) {
-        _showNotPermissionDialog();
-      });
-    });
+  Future<void> postFrameCallback() async {
+    await Future.wait<void>([
+      Caches.setup(),
+      Future.delayed(const Duration(seconds: 2)),
+    ]);
+    final status = await Permission.contacts.request();
+    if (status == PermissionStatus.granted) {
+      await Navigator.pushReplacementNamed(context, RouteProvider.home);
+    } else {
+      await _showNotPermissionDialog();
+    }
     super.postFrameCallback();
   }
 
@@ -29,13 +33,6 @@ class LauncherPresenter extends Presenter<LauncherPage> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
-  }
-
-  Future<void> _requestPermission() async {
-    final status = await Permission.contacts.request();
-    if (status != PermissionStatus.granted) {
-      return Future.error('Permission denied.');
-    }
   }
 
   Future<void> _showNotPermissionDialog() {

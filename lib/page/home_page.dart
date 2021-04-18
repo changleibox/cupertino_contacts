@@ -213,10 +213,6 @@ class _AnimatedCupertinoSliverNavigationBar extends AnimatedColorWidget {
   Widget evaluateBuild(BuildContext context, Color color) {
     return SupportSliverNavigationBar(
       largeTitle: const Text('通讯录'),
-      padding: const EdgeInsetsDirectional.only(
-        start: 16,
-        end: 10,
-      ),
       border: null,
       backgroundColor: color,
       leading: NavigationBarAction(

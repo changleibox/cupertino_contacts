@@ -17,6 +17,30 @@ class Caches {
 
   static final _contacts = <String, Contact>{};
 
+  static StreamSubscription<dynamic> _subscription;
+
+  /// 初始化
+  static Future<void> setup() async {
+    await _subscription?.cancel();
+    _subscription = listen((event) => cacheContacts());
+    await cacheContacts();
+  }
+
+  /// 释放缓存
+  static void dispose() {
+    _subscription?.cancel();
+    _subscription = null;
+    _contacts.clear();
+  }
+
+  /// 联系人变更事件
+  static Stream<ContactEvent> get contactEvents => Contacts.contactEvents;
+
+  /// 监听联系人变化
+  static StreamSubscription<ContactEvent> listen(void Function(ContactEvent event) onData) {
+    return contactEvents.listen(onData);
+  }
+
   /// 缓存联系人
   static Future<void> cacheContacts() async {
     _contacts.clear();
@@ -30,7 +54,6 @@ class Caches {
 
   /// 获取联系人
   static Future<List<Contact>> getContacts([String queryText]) async {
-    await cacheContacts();
     final listContacts = Contacts.listContacts(
       query: queryText,
       sortBy: _sort,
@@ -85,21 +108,13 @@ class Caches {
     return future;
   }
 
-  /// 获取联系人分组
-  static Future<Iterable<Group>> getGroups() {
-    return Contacts.getGroups();
-  }
-
-  /// 联系人变更事件
-  static Stream<ContactEvent> get contactEvents => Contacts.contactEvents;
-
-  /// 监听联系人变化
-  static StreamSubscription<ContactEvent> listen(void Function(ContactEvent event) onData) {
-    return contactEvents.listen(onData);
-  }
-
   /// 删除联系人
   static Future<bool> deleteContact(Contact contact) async {
     return Contacts.deleteContact(contact);
+  }
+
+  /// 获取联系人分组
+  static Future<Iterable<Group>> getGroups() {
+    return Contacts.getGroups();
   }
 }

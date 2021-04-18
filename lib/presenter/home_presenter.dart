@@ -44,6 +44,7 @@ class HomePresenter extends ListPresenter<HomePage, Contact> {
   @override
   void dispose() {
     _subscription?.cancel();
+    Caches.dispose();
     super.dispose();
   }
 
