@@ -252,7 +252,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   void onDonePressed() {
-    Caches.editContact(value).then((value) {
+    Caches.editContact(value, widget.launchMode).then((value) {
       if (widget.contact != null) {
         Navigator.pop(context, value);
       } else {
@@ -280,7 +280,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return;
       }
       final loadPrompt = LoadPrompt(context)..show();
-      Caches.deleteContact(widget.contact).then((value) {
+      Caches.deleteContact(widget.contact, widget.launchMode).then((value) {
         loadPrompt.dismiss();
         Navigator.popUntil(context, ModalRoute.withName(RouteProvider.home));
       }).catchError((dynamic _) {

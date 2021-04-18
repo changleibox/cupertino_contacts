@@ -69,8 +69,8 @@ class Caches {
   static Contact getCachedContact(String identifier) => _contacts[identifier];
 
   /// 根据id获取详情页面的[Contact]
-  static Future<Contact> getDetailContact(String identifier, DetailLaunchMode model) {
-    final single = model == DetailLaunchMode.editView;
+  static Future<Contact> getDetailContact(String identifier, DetailLaunchMode mode) {
+    final single = mode == DetailLaunchMode.editView;
     return getContact(identifier, single: single);
   }
 
@@ -98,19 +98,23 @@ class Caches {
   }
 
   /// 新增编辑联系人
-  static Future<Contact> editContact(Contact contact) {
+  static Future<Contact> editContact(Contact contact, EditLaunchMode mode) {
+    final single = mode == EditLaunchMode.other;
+    final service = single ? SingleContacts : Contacts;
     Future<Contact> future;
     if (contact.identifier == null) {
-      future = Contacts.addContact(contact);
+      future = service.addContact(contact);
     } else {
-      future = Contacts.updateContact(contact);
+      future = service.updateContact(contact);
     }
     return future;
   }
 
   /// 删除联系人
-  static Future<bool> deleteContact(Contact contact) async {
-    return Contacts.deleteContact(contact);
+  static Future<bool> deleteContact(Contact contact, EditLaunchMode mode) {
+    final single = mode == EditLaunchMode.other;
+    final service = single ? SingleContacts : Contacts;
+    return service.deleteContact(contact);
   }
 
   /// 获取联系人分组
