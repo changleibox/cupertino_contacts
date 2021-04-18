@@ -21,7 +21,13 @@ class Caches {
     );
     _contacts.clear();
     await for (var contact in streamContacts) {
-      _contacts[contact.identifier] = contact;
+      final completeContact = await Contacts.getContact(contact.identifier);
+      _contacts[completeContact.identifier] = completeContact;
+      final linkedContactIds = completeContact.linkedContactIds;
+      if (linkedContactIds?.isNotEmpty == true) {
+        final linkedContacts = await Future.wait(linkedContactIds.map((e) => Contacts.getContact(e)));
+        _contacts.addEntries(linkedContacts.map((e) => MapEntry(e.identifier, e)));
+      }
     }
     final listContacts = Contacts.listContacts(
       query: queryText,
@@ -29,7 +35,7 @@ class Caches {
       sortBy: const ContactSortOrder.firstName(),
     );
     final contacts = await listContacts.jumpToPage(0);
-    return contacts;
+    return contacts.map((e) => _contacts[e.identifier] ?? e).toList();
   }
 
   /// 根据id获取[Contact]
