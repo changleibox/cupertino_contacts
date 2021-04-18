@@ -394,6 +394,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.emails = contact.emails?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
     contact.urls = contact.urls?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
     contact.socialProfiles = contact.socialProfiles?.map((e) => _LabelItem(label: e.label, value: e.value))?.toList();
+    contact.linkedContactIds ??= [];
     return contact;
   }
 }
