@@ -3,6 +3,7 @@
  */
 
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
+import 'package:cupertinocontacts/model/caches.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/presenter/contact_detail_presenter.dart';
 import 'package:cupertinocontacts/resource/colors.dart';
@@ -79,6 +80,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
     final postalAddresses = contact.postalAddresses;
     final dates = contact.dates;
     final socialProfiles = contact.socialProfiles;
+    final linkedContacts = Caches.getLinkedContacts(contact);
 
     final hasPhone = phones != null && phones.isNotEmpty;
 
@@ -291,7 +293,7 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
       }
     }
 
-    if (widget.launchMode == DetailLaunchMode.normal) {
+    if (widget.launchMode == DetailLaunchMode.normal && linkedContacts.isNotEmpty) {
       largeSpacingIndexs.add(children.length);
       topExpandedDividerIndexs.add(children.length + 1);
 
@@ -312,11 +314,11 @@ class _ContactDetailPageState extends PresenterState<ContactDetailPage, ContactD
           ),
         ),
       ));
-      List.generate(10, (index) {
-        children.add(_LinkedContactGroupInfoWidget(
-          contact: presenter.object,
-        ));
-      });
+      children.addAll(linkedContacts.map((e) {
+        return _LinkedContactGroupInfoWidget(
+          contact: e,
+        );
+      }));
     }
 
     final persistentHeaderDelegate = ContactDetailPersistentHeaderDelegate(
@@ -497,7 +499,7 @@ class _LinkedContactGroupInfoWidget extends StatelessWidget {
     final selection = selections.iPhoneSelection;
     return _NormalGroupInfoWidget(
       name: selection.labelName,
-      value: '联系人',
+      value: contact.displayName,
       valueColor: actionTextStyle.color,
       trailing: Icon(
         CupertinoIcons.forward,

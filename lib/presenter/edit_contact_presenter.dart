@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:cupertinocontacts/enums/contact_item_type.dart';
 import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
+import 'package:cupertinocontacts/model/caches.dart';
 import 'package:cupertinocontacts/model/contact_info_group.dart';
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
@@ -38,7 +39,12 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   Uint8List get avatar => _avatar;
 
   @override
-  bool get isChanged => _initialContact != value || !Collections.equals(_avatar, _initialContact.avatar);
+  bool get isChanged {
+    final contact = value;
+    return _initialContact != contact ||
+        !Collections.equals(_avatar, _initialContact.avatar) ||
+        !Collections.equals(Caches.getLinkedContactIds(_initialContact), Caches.getLinkedContactIds(contact));
+  }
 
   @override
   void initState() {
@@ -174,9 +180,16 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
       name: '添加信息栏',
     );
     if (widget.contact != null && widget.launchMode == EditLaunchMode.normal) {
+      final propertyName = selections.iPhoneSelection.propertyName;
       itemMap[ContactItemType.linkContact] = ContactInfoGroup<ContactSelectionItem>(
         name: '链接联系人…',
         selectionType: SelectionType.linkContact,
+        items: Caches.getLinkedContacts(_initialContact)?.map((e) {
+          return ContactSelectionItem(
+            label: selections.selectionAtName(SelectionType.linkContact, propertyName),
+            value: e,
+          );
+        })?.toList(),
       );
     }
 
@@ -297,7 +310,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     final dates = _convertDatetime(itemMap[ContactItemType.birthday] as ContactInfoGroup<DateTimeItem>);
     dates.addAll(_convertDatetime(itemMap[ContactItemType.date] as ContactInfoGroup<DateTimeItem>));
 
-    final contact = Contact();
+    final contact = Contact(keys: _initialContact.keys);
     contact.identifier = _initialContact.identifier;
     contact.avatar = _avatar;
     contact.prefix = _initialContact.prefix;
@@ -316,6 +329,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     contact.socialProfiles = _convert(itemMap[ContactItemType.socialData] as ContactInfoGroup<EditableItem>);
     contact.postalAddresses = _convertAddress(itemMap[ContactItemType.address] as ContactInfoGroup<AddressItem>);
     contact.note = itemMap[ContactItemType.remarks].value?.toString() ?? '';
+    contact.linkedContactIds = _convertLinkedContact(itemMap[ContactItemType.linkContact] as ContactInfoGroup<ContactSelectionItem>);
     return _alignmentContact(contact);
   }
 
@@ -342,10 +356,16 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   List<ContactDate> _convertDatetime(ContactInfoGroup<DateTimeItem> infoGroup) {
     return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
       final dateTime = e.value;
-      return ContactDate(
+      return ContactDate.ofDate(
         label: e.label.propertyName,
         date: FlexiDate.ofDateTime(dateTime),
       );
+    }).toList();
+  }
+
+  List<String> _convertLinkedContact(ContactInfoGroup<ContactSelectionItem> infoGroup) {
+    return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
+      return e.value.identifier;
     }).toList();
   }
 
