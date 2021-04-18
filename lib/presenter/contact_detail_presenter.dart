@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:cupertinocontacts/model/caches.dart';
 import 'package:cupertinocontacts/page/contact_detail_page.dart';
 import 'package:cupertinocontacts/presenter/object_presenter.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class ContactDetailPresenter extends ObjectPresenter<ContactDetailPage, Contact>
   @override
   void initState() {
     setObject(widget.contact);
-    _subscription = Contacts.contactEvents.listen((event) => onDefaultRefresh());
+    _subscription = Caches.listen((event) => onDefaultRefresh());
     super.initState();
   }
 
@@ -29,8 +30,8 @@ class ContactDetailPresenter extends ObjectPresenter<ContactDetailPage, Contact>
   }
 
   @override
-  Future<Contact> onLoad(bool showProgress) {
-    return Contacts.getContact(widget.identifier);
+  Future<Contact> onLoad(bool showProgress) async {
+    return Caches.getContact(widget.identifier);
   }
 
   @override

@@ -179,7 +179,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
     itemMap[ContactItemType.addInfo] = NormalSelectionContactInfo(
       name: '添加信息栏',
     );
-    if (widget.contact != null && widget.launchMode == EditLaunchMode.normal) {
+    if (widget.launchMode == EditLaunchMode.normal) {
       final propertyName = selections.iPhoneSelection.propertyName;
       itemMap[ContactItemType.linkContact] = ContactInfoGroup<ContactSelectionItem>(
         name: '链接联系人…',
@@ -252,13 +252,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
 
   @override
   void onDonePressed() {
-    Future<Contact> future;
-    if (value.identifier == null) {
-      future = Contacts.addContact(value);
-    } else {
-      future = Contacts.updateContact(value);
-    }
-    future.then((value) {
+    Caches.editContact(value).then((value) {
       if (widget.contact != null) {
         Navigator.pop(context, value);
       } else {
@@ -286,7 +280,7 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
         return;
       }
       final loadPrompt = LoadPrompt(context)..show();
-      Contacts.deleteContact(widget.contact).then((value) {
+      Caches.deleteContact(widget.contact).then((value) {
         loadPrompt.dismiss();
         Navigator.popUntil(context, ModalRoute.withName(RouteProvider.home));
       }).catchError((dynamic _) {
@@ -364,6 +358,9 @@ class EditContactPresenter extends Presenter<EditContactPage> implements EditCon
   }
 
   List<String> _convertLinkedContact(ContactInfoGroup<ContactSelectionItem> infoGroup) {
+    if (infoGroup == null) {
+      return null;
+    }
     return infoGroup.value.where((element) => element.isNotEmpty).map((e) {
       return e.value.identifier;
     }).toList();

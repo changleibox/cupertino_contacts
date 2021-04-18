@@ -2,7 +2,7 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-
+import 'package:cupertinocontacts/model/caches.dart';
 import 'package:cupertinocontacts/page/contact_group_page.dart';
 import 'package:cupertinocontacts/presenter/list_presenter.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +16,7 @@ class ContactGroupPresenter extends ListPresenter<ContactGroupPage, Group> {
   Future<List<Group>> onLoad(bool showProgress) async {
     final groups = <Group>[];
     groups.add(_allIPhoneGroup);
-    groups.addAll(await Contacts.getGroups());
+    groups.addAll(await Caches.getGroups());
     return groups;
   }
 

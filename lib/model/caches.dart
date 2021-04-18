@@ -2,6 +2,8 @@
  * Copyright (c) 2021 CHANGLEI. All rights reserved.
  */
 
+import 'dart:async';
+
 import 'package:flutter_contact/contacts.dart';
 
 /// Created by box on 4/18/21.
@@ -14,28 +16,25 @@ class Caches {
 
   /// 获取联系人
   static Future<List<Contact>> getContacts([String queryText]) async {
-    final total = await Contacts.getTotalContacts(query: queryText);
-    final streamContacts = Contacts.streamContacts(
-      bufferSize: total,
+    final streamContacts = SingleContacts.streamContacts(
       sortBy: const ContactSortOrder.firstName(),
     );
     _contacts.clear();
     await for (var contact in streamContacts) {
-      final completeContact = await Contacts.getContact(contact.identifier);
-      _contacts[completeContact.identifier] = completeContact;
-      final linkedContactIds = completeContact.linkedContactIds;
-      if (linkedContactIds?.isNotEmpty == true) {
-        final linkedContacts = await Future.wait(linkedContactIds.map((e) => Contacts.getContact(e)));
-        _contacts.addEntries(linkedContacts.map((e) => MapEntry(e.identifier, e)));
-      }
+      _contacts[contact.identifier] = contact;
     }
     final listContacts = Contacts.listContacts(
       query: queryText,
-      bufferSize: total,
       sortBy: const ContactSortOrder.firstName(),
     );
-    final contacts = await listContacts.jumpToPage(0);
-    return contacts.map((e) => _contacts[e.identifier] ?? e).toList();
+    final contacts = <Contact>[];
+    while (await listContacts.moveNext()) {
+      final identifier = (await listContacts.current).identifier;
+      final contact = await Contacts.getContact(identifier);
+      contacts.add(contact);
+      _contacts[identifier] = contact;
+    }
+    return contacts;
   }
 
   /// 根据id获取[Contact]
@@ -55,5 +54,34 @@ class Caches {
     })?.where((element) {
       return element != null && element.identifier != contact.identifier;
     })?.toList();
+  }
+
+  /// 新增编辑联系人
+  static Future<Contact> editContact(Contact contact) {
+    Future<Contact> future;
+    if (contact.identifier == null) {
+      future = Contacts.addContact(contact);
+    } else {
+      future = Contacts.updateContact(contact);
+    }
+    return future;
+  }
+
+  /// 获取联系人分组
+  static Future<Iterable<Group>> getGroups() {
+    return Contacts.getGroups();
+  }
+
+  /// 联系人变更事件
+  static Stream<ContactEvent> get contactEvents => Contacts.contactEvents;
+
+  /// 监听联系人变化
+  static StreamSubscription<ContactEvent> listen(void Function(ContactEvent event) onData) {
+    return contactEvents.listen(onData);
+  }
+
+  /// 删除联系人
+  static Future<bool> deleteContact(Contact contact) async {
+    return Contacts.deleteContact(contact);
   }
 }

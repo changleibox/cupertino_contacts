@@ -38,7 +38,7 @@ class HomePresenter extends ListPresenter<HomePage, Contact> {
   @override
   void initState() {
     super.initState();
-    _subscription = Contacts.contactEvents.listen((event) => refresh());
+    _subscription = Caches.listen((event) => refresh());
   }
 
   @override
