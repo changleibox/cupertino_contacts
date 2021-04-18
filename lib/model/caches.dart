@@ -4,7 +4,10 @@
 
 import 'dart:async';
 
+import 'package:cupertinocontacts/enums/contact_launch_mode.dart';
 import 'package:flutter_contact/contacts.dart';
+
+const _sort = ContactSortOrder.firstName();
 
 /// Created by box on 4/18/21.
 ///
@@ -14,31 +17,46 @@ class Caches {
 
   static final _contacts = <String, Contact>{};
 
-  /// 获取联系人
-  static Future<List<Contact>> getContacts([String queryText]) async {
-    final streamContacts = SingleContacts.streamContacts(
-      sortBy: const ContactSortOrder.firstName(),
-    );
+  /// 缓存联系人
+  static Future<void> cacheContacts() async {
     _contacts.clear();
-    await for (var contact in streamContacts) {
+    await for (var contact in SingleContacts.streamContacts(sortBy: _sort)) {
       _contacts[contact.identifier] = contact;
     }
+    await for (var contact in Contacts.streamContacts(sortBy: _sort)) {
+      _contacts[contact.identifier] = contact;
+    }
+  }
+
+  /// 获取联系人
+  static Future<List<Contact>> getContacts([String queryText]) async {
+    await cacheContacts();
     final listContacts = Contacts.listContacts(
       query: queryText,
-      sortBy: const ContactSortOrder.firstName(),
+      sortBy: _sort,
     );
     final contacts = <Contact>[];
     while (await listContacts.moveNext()) {
-      final identifier = (await listContacts.current).identifier;
-      final contact = await Contacts.getContact(identifier);
-      contacts.add(contact);
-      _contacts[identifier] = contact;
+      contacts.add(await listContacts.current);
     }
     return contacts;
   }
 
   /// 根据id获取[Contact]
-  static Contact getContact(String identifier) => _contacts[identifier];
+  static Contact getCachedContact(String identifier) => _contacts[identifier];
+
+  /// 根据id获取详情页面的[Contact]
+  static Future<Contact> getDetailContact(String identifier, DetailLaunchMode model) {
+    final single = model == DetailLaunchMode.editView;
+    return getContact(identifier, single: single);
+  }
+
+  /// 根据id获取[Contact]
+  static Future<Contact> getContact(String identifier, {bool single = false}) {
+    assert(single != null);
+    final service = single ? SingleContacts : Contacts;
+    return service.getContact(identifier);
+  }
 
   /// 获取联系人关联的联系人
   static List<String> getLinkedContactIds(Contact contact) {
@@ -50,7 +68,7 @@ class Caches {
   /// 获取联系人关联的联系人
   static List<Contact> getLinkedContacts(Contact contact) {
     return contact.linkedContactIds?.map((e) {
-      return Caches.getContact(e);
+      return Caches.getCachedContact(e);
     })?.where((element) {
       return element != null && element.identifier != contact.identifier;
     })?.toList();

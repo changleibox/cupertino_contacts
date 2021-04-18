@@ -31,7 +31,7 @@ class ContactDetailPresenter extends ObjectPresenter<ContactDetailPage, Contact>
 
   @override
   Future<Contact> onLoad(bool showProgress) async {
-    return Caches.getContact(widget.identifier);
+    return Caches.getDetailContact(widget.identifier, widget.launchMode);
   }
 
   @override
