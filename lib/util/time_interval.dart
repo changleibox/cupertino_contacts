@@ -3,6 +3,8 @@
  */
 
 class TimeInterval {
+  const TimeInterval._();
+
   static DateTime timeIntervalSince(DateTime dateTime, {int year = 1970, bool isUtc = false}) {
     assert(dateTime != null);
     assert(year >= 1970);

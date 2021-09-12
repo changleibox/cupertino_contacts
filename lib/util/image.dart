@@ -64,6 +64,8 @@ Uint8List _colorMatrixFilterAsSync(ImageFilterSrc params) {
 }
 
 class ImageFilters {
+  const ImageFilters._();
+
   static Future<Uint8List> colorMatrixFilter(ImageFilterSrc src) {
     return _colorMatrixFilter(src);
   }

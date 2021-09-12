@@ -2,18 +2,11 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
-
-/**
- * Created by box on 2020/3/24.
- */
-/*
- * Copyright (c) 2020 CHANGLEI. All rights reserved.
- */
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
+/// Created by box on 2020/3/24.
 class AnimatedFadeIn extends ImplicitlyAnimatedWidget {
   const AnimatedFadeIn({
     Key key,

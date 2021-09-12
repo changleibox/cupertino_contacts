@@ -17,11 +17,11 @@ import 'package:cupertinocontacts/widget/edit_contact_link_contact_info_group.da
 import 'package:cupertinocontacts/widget/edit_contact_normal_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_selection_button.dart';
 import 'package:cupertinocontacts/widget/edit_contact_normal_text_field.dart';
-import 'package:cupertinocontacts/widget/edit_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/edit_contact_persistent_header_delegate.dart';
-import 'package:cupertinocontacts/widget/related_party_contact_info_group.dart';
+import 'package:cupertinocontacts/widget/edit_contact_remarks_text_field.dart';
 import 'package:cupertinocontacts/widget/framework.dart';
 import 'package:cupertinocontacts/widget/primary_slidable_controller.dart';
+import 'package:cupertinocontacts/widget/related_party_contact_info_group.dart';
 import 'package:cupertinocontacts/widget/snapping_scroll_physics.dart';
 import 'package:cupertinocontacts/widget/support_nested_scroll_view.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';

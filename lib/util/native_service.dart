@@ -6,6 +6,8 @@ import 'package:cupertinocontacts/util/time_interval.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NativeService {
+  const NativeService._();
+
   static Future<bool> url(String url) {
     final uri = Uri.parse(url.startsWith('http') ? url : 'http://$url');
     return _launch(uri);
