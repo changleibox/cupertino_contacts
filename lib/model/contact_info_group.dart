@@ -4,7 +4,6 @@
 
 import 'package:cupertinocontacts/model/selection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_contact/contact.dart';
 
 abstract class ContactInfo<T> extends ValueNotifier<T> {

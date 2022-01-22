@@ -4,7 +4,6 @@
 
 import 'package:cupertinocontacts/widget/child_delegate.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 

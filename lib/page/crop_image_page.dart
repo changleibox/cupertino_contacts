@@ -10,7 +10,6 @@ import 'package:cupertinocontacts/widget/image_crop.dart';
 import 'package:cupertinocontacts/widget/load_prompt.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 /// Created by box on 2020/4/2.
 ///

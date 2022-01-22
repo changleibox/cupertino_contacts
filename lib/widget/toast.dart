@@ -5,7 +5,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 const double _kOffset = 15;
 const double _kMargin = 10;

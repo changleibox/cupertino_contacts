@@ -13,7 +13,6 @@ import 'package:cupertinocontacts/widget/nav_bar.dart';
 import 'package:cupertinocontacts/widget/navigation_bar_action.dart';
 import 'package:cupertinocontacts/widget/widget_group.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 /// Created by box on 2020/4/4.
 ///

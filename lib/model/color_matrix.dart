@@ -4,7 +4,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:vector_math/hash.dart' as quiver;
 import 'package:vector_math/vector_math_64.dart';
 
 class ColorMatrix {
@@ -88,7 +87,8 @@ class ColorMatrix {
   factory ColorMatrix.columns(Vector4 arg0, Vector4 arg1, Vector4 arg2, Vector4 arg3, Vector4 arg4) =>
       ColorMatrix.zero()..setColumns(arg0, arg1, arg2, arg3, arg4);
 
-  factory ColorMatrix.rows(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3) => ColorMatrix.zero()..setRows(arg0, arg1, arg2, arg3);
+  factory ColorMatrix.rows(Vector5 arg0, Vector5 arg1, Vector5 arg2, Vector5 arg3) =>
+      ColorMatrix.zero()..setRows(arg0, arg1, arg2, arg3);
 
   ColorMatrix.zero() : _m5storage = Float64List(20);
 
@@ -593,7 +593,7 @@ class ColorMatrix {
   }
 
   @override
-  int get hashCode => quiver.hashObjects(_m5storage);
+  int get hashCode => Object.hashAll(_m5storage);
 }
 
 class Vector5 {
@@ -721,7 +721,7 @@ class Vector5 {
       (_v5storage[4] == other._v5storage[4]);
 
   @override
-  int get hashCode => quiver.hashObjects(_v5storage);
+  int get hashCode => Object.hashAll(_v5storage);
 
   /// Negate.
   Vector5 operator -() => clone()..negate();

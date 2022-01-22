@@ -27,10 +27,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.3
   intl: ^0.17.0
-  flutter_contact:
-    git:
-      url: https://github.com/changleibox/flutter_contact.git
-      ref: date_components_compat
+  flutter_contact: ^0.9.1+8
   lpinyin: ^2.0.1
   image_picker: ^0.7.2
   collection: ^1.14.13

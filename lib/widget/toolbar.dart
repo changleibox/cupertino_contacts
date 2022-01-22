@@ -165,4 +165,16 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
       widget.valueSetter(value);
     }
   }
+
+  @override
+  void copySelection(SelectionChangedCause cause) {}
+
+  @override
+  void cutSelection(SelectionChangedCause cause) {}
+
+  @override
+  Future<void> pasteText(SelectionChangedCause cause) async {}
+
+  @override
+  void selectAll(SelectionChangedCause cause) {}
 }
