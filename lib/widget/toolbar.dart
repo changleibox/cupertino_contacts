@@ -2,8 +2,15 @@
  * Copyright (c) 2020 CHANGLEI. All rights reserved.
  */
 
+import 'dart:math';
+
 import 'package:cupertinocontacts/widget/text_selection_overlay.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+
+/// [TextSelectionDelegate.userUpdateTextEditingValue]
+typedef UserUpdateTextEditingValue = void Function(TextEditingValue value, SelectionChangedCause cause);
 
 /// Created by box on 2020/4/8.
 ///
@@ -19,7 +26,8 @@ class Toolbar extends StatefulWidget {
       paste: true,
       selectAll: true,
     ),
-    this.valueSetter,
+    this.setTextEditingValue,
+    this.userUpdateTextEditingValue,
     this.bringIntoView,
   })  : assert(builder != null),
         assert(value != null),
@@ -29,7 +37,8 @@ class Toolbar extends StatefulWidget {
   final WidgetBuilder builder;
   final TextEditingValue value;
   final ToolbarOptions options;
-  final ValueSetter<TextEditingValue> valueSetter;
+  final ValueSetter<TextEditingValue> setTextEditingValue;
+  final UserUpdateTextEditingValue userUpdateTextEditingValue;
   final ValueSetter<TextPosition> bringIntoView;
 
   @override
@@ -154,27 +163,142 @@ class ToolbarState extends State<Toolbar> with AutomaticKeepAliveClientMixin<Too
 
   @override
   set textEditingValue(TextEditingValue value) {
-    if (widget.valueSetter != null) {
-      widget.valueSetter(value);
+    if (widget.setTextEditingValue != null) {
+      widget.setTextEditingValue(value);
     }
   }
 
   @override
   void userUpdateTextEditingValue(TextEditingValue value, SelectionChangedCause cause) {
-    if (widget.valueSetter != null) {
-      widget.valueSetter(value);
+    if (widget.userUpdateTextEditingValue != null) {
+      widget.userUpdateTextEditingValue(value, cause);
     }
   }
 
   @override
-  void copySelection(SelectionChangedCause cause) {}
+  void copySelection(SelectionChangedCause cause) {
+    final selection = textEditingValue.selection;
+    final text = textEditingValue.text;
+    assert(selection != null);
+    if (selection.isCollapsed || !selection.isValid) {
+      return;
+    }
+    Clipboard.setData(ClipboardData(text: selection.textInside(text)));
+
+    bringIntoView(textEditingValue.selection.extent);
+    hideToolbar(false);
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        break;
+      case TargetPlatform.macOS:
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        // Collapse the selection and hide the toolbar and handles.
+        userUpdateTextEditingValue(
+          TextEditingValue(
+            text: textEditingValue.text,
+            selection: TextSelection.collapsed(offset: textEditingValue.selection.end),
+          ),
+          SelectionChangedCause.toolbar,
+        );
+        break;
+    }
+  }
 
   @override
-  void cutSelection(SelectionChangedCause cause) {}
+  void cutSelection(SelectionChangedCause cause) {
+    final selection = textEditingValue.selection;
+    if (!selection.isValid) {
+      return;
+    }
+    final text = textEditingValue.text;
+    assert(selection != null);
+    if (selection.isCollapsed) {
+      return;
+    }
+    Clipboard.setData(ClipboardData(text: selection.textInside(text)));
+    setTextEditingValue(
+      TextEditingValue(
+        text: selection.textBefore(text) + selection.textAfter(text),
+        selection: TextSelection.collapsed(
+          offset: min(selection.start, selection.end),
+          affinity: selection.affinity,
+        ),
+      ),
+      cause,
+    );
+
+    bringIntoView(textEditingValue.selection.extent);
+    hideToolbar();
+  }
 
   @override
-  Future<void> pasteText(SelectionChangedCause cause) async {}
+  Future<void> pasteText(SelectionChangedCause cause) async {
+    final selection = textEditingValue.selection;
+    if (!selection.isValid) {
+      return;
+    }
+    final text = textEditingValue.text;
+    assert(selection != null);
+    if (!selection.isValid) {
+      return;
+    }
+    // Snapshot the input before using `await`.
+    // See https://github.com/flutter/flutter/issues/11427
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data == null) {
+      return;
+    }
+    setTextEditingValue(
+      TextEditingValue(
+        text: selection.textBefore(text) + data.text + selection.textAfter(text),
+        selection: TextSelection.collapsed(
+          offset: min(selection.start, selection.end) + data.text.length,
+          affinity: selection.affinity,
+        ),
+      ),
+      cause,
+    );
+
+    bringIntoView(textEditingValue.selection.extent);
+    hideToolbar();
+  }
 
   @override
-  void selectAll(SelectionChangedCause cause) {}
+  void selectAll(SelectionChangedCause cause) {
+    setSelection(
+      textEditingValue.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textEditingValue.text.length,
+      ),
+      cause,
+    );
+
+    bringIntoView(textEditingValue.selection.extent);
+  }
+
+  /// {@macro flutter.widgets.TextEditingActionTarget.setTextEditingValue}
+  void setTextEditingValue(TextEditingValue newValue, SelectionChangedCause cause) {
+    if (newValue == textEditingValue) {
+      return;
+    }
+    textEditingValue = newValue;
+    userUpdateTextEditingValue(newValue, cause);
+  }
+
+  /// {@template flutter.widgets.TextEditingActionTarget.setSelection}
+  /// Called to update the [TextSelection] in the current [TextEditingValue].
+  /// {@endtemplate}
+  void setSelection(TextSelection nextSelection, SelectionChangedCause cause) {
+    if (nextSelection == textEditingValue.selection) {
+      return;
+    }
+    setTextEditingValue(
+      textEditingValue.copyWith(selection: nextSelection),
+      cause,
+    );
+  }
 }
